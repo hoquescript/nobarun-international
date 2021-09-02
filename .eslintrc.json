@@ -1,3 +1,14 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["airbnb-typescript", "airbnb/hooks", "prettier", "next/core-web-vitals"],
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": ["error", { "endOfLine": "auto" }],
+    "react/jsx-filename-extension": [1, { "extensions": [".tsx", ".ts"] }],
+    "func-names": "off",
+    "no-console":"off",
+    "no-unused-vars": "warn"
+  },
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  }
 }
