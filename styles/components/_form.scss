@@ -1,0 +1,134 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  label {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+}
+
+.custom-input {
+  border: 1px solid $darkGrey;
+  padding: 16px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  transition: 0.3s;
+  font-family: $font;
+  &::placeholder {
+    color: rgba($color: $lightTextColor, $alpha: 0.7);
+  }
+
+  &:focus {
+    border-color: $primaryColor;
+  }
+}
+
+.custom-radio {
+  display: flex;
+  align-items: flex-start;
+  input {
+    display: none;
+
+    &:checked ~ .content:after {
+      transform: scale(0.5);
+    }
+  }
+
+  .content {
+    padding-left: 45px;
+    position: relative;
+    line-height: 30px;
+
+    h5 {
+      font-size: 20px;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      color: #666666;
+    }
+
+    &::before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid $primaryColor;
+      background-color: white;
+      border-radius: 50%;
+      left: 0;
+      top: 0;
+    }
+
+    &:after {
+      background-color: $primaryColor;
+      transform: scale(0);
+      transition: 0.3s;
+    }
+  }
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: flex-start;
+  input {
+    display: none;
+
+    &:checked ~ .content:after {
+      transform: scale(1);
+    }
+  }
+
+  .content {
+    padding-left: 45px;
+    position: relative;
+    line-height: 30px;
+
+    a {
+      color: $primaryColor;
+    }
+
+    h5 {
+      font-size: 20px;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      color: #666666;
+    }
+
+    &::before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 1px solid $darkGrey;
+      background-color: white;
+      border-radius: 5px;
+      left: 0;
+      top: 0;
+    }
+
+    &:after {
+      background: $primaryColor url(../../public/images/checkmark.svg) no-repeat
+        center;
+      border-color: $primaryColor;
+      transform: scale(0);
+      transition: 0.3s;
+    }
+  }
+}
+
+textarea.custom-input {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.big-field {
+  padding-bottom: 30px;
+  border-bottom: 1px solid $darkGrey;
+  margin-bottom: 30px;
+}
