@@ -18,7 +18,8 @@
 @import './library';
 
 // Some common components reusable css styles
-@import './components';
+@import './components/component';
+@import './components/form';
 
 // Utils classes
 @import './utils';

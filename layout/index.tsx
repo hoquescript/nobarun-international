@@ -14,7 +14,7 @@ const Layout = (props: LayoutProps) => {
       <Header />
       <div style={{ display: 'flex' }}>
         <Sidebar />
-        <main>{children}</main>
+        <main style={{ width: '100%' }}>{children}</main>
       </div>
     </>
   );

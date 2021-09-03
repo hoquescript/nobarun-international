@@ -18,6 +18,7 @@ const MENU: { [key: string]: string[] } = {
     'Add Script',
     'Accounts',
   ],
+  Admin: ['Add Admin', 'Add Role', 'Add Permission'],
 };
 
 const resetState = () => {
@@ -68,7 +69,7 @@ const Sidebar = () => {
             >
               {MENU[menu].map((submenu) => (
                 <li className={styles.sidebar__subitem}>
-                  <Link href={`${slug(menu)}/${slug(submenu)}`}>
+                  <Link href={`/${slug(menu)}/${slug(submenu)}`}>
                     <a
                       className={`${styles.sidebar__link} ${styles.sidebar__sublink}`}
                     >
