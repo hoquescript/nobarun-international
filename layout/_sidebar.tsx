@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { BiDownArrow } from 'react-icons/bi';
 
 import styles from './_sidebar.module.scss';
+import slug from '../helpers/slugGenerator';
+import { useRouter } from 'next/dist/client/router';
 
-const MENU = {
+const MENU: { [key: string]: string[] } = {
   Dashboard: [],
   Shop: ['Categories', 'Products', 'Add product'],
   Blog: ['Categories', 'Blog Post'],
@@ -18,28 +20,58 @@ const MENU = {
   ],
 };
 
+const resetState = () => {
+  const state: { [key: string]: boolean } = {};
+  Object.keys(MENU).map((menu) => {
+    state[menu] = false;
+  });
+  return state;
+};
+
 const Sidebar = () => {
+  const router = useRouter();
+
+  const [open, setOpen] = useState(resetState());
+  const menuOpenHandler = (key: string) => {
+    if (key === 'Dashboard') return router.push('/');
+    setOpen({
+      ...resetState(),
+      [key]: !open[key],
+    });
+  };
   return (
     <div className={styles.sidebar}>
       <ul className={styles.sidebar__list}>
         {Object.keys(MENU).map((menu) => (
-          <li key={menu} className={styles.sidebar__item}>
-            <Link href={menu}>
-              <a className={styles.sidebar__link}>
-                <div>
-                  <span>
-                    <i />
-                  </span>
-                  {menu}
-                </div>
+          <li
+            key={menu}
+            className={`${styles.sidebar__item} ${
+              open[menu] ? styles.sidebar__item_active : ''
+            }`}
+            onClick={() => menuOpenHandler(menu)}
+          >
+            <a className={styles.sidebar__link}>
+              <div>
+                <span>
+                  <i />
+                </span>
+                {menu}
+              </div>
+              {menu !== 'Dashboard' && (
                 <BiDownArrow className={styles.sidebar__collapse_icon} />
-              </a>
-            </Link>
-            <ul style={{ marginLeft: '2rem', marginTop: '.5rem' }}>
+              )}
+            </a>
+            <ul
+              className={`${styles.sidebar__sublist} ${
+                open[menu] ? styles.sidebar__sublist_active : ''
+              }`}
+            >
               {MENU[menu].map((submenu) => (
                 <li className={styles.sidebar__subitem}>
-                  <Link href={menu}>
-                    <a className={styles.sidebar__link}>
+                  <Link href={`${slug(menu)}/${slug(submenu)}`}>
+                    <a
+                      className={`${styles.sidebar__link} ${styles.sidebar__sublink}`}
+                    >
                       <div>
                         <span>
                           <i />

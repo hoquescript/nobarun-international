@@ -3,12 +3,23 @@
   width: 30rem;
   border-right: 2px solid #eee;
   &__list {
-    padding: 3rem;
+    padding: 3rem 2rem;
   }
   &__item {
-    padding: 1rem 0;
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  &__item_active > &__link {
+    background-color: #eee;
+    border-radius: 8px;
+  }
+  &__item:hover > &__link {
+    background-color: #eee;
+    border-radius: 8px;
   }
   &__link {
+    transition: background-color 0.5s;
+    padding: 1rem 1.8rem 1rem 1rem;
     color: #aaa;
     font-size: 1.8rem;
     display: flex;
@@ -36,8 +47,27 @@
       }
     }
   }
+  &__sublist {
+    background-color: #fff;
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+    height: 0;
+    transform: scaleY(0);
+    transition: height 0.2s ease-in;
+    &_active {
+      transform: scaleY(1);
+      height: auto;
+    }
+  }
   &__subitem {
     padding: 0.5rem 0;
+  }
+  &__sublink {
+    padding: 0.1rem 2rem !important;
+    transition: color 0.2s;
+    &:hover {
+      color: #333;
+    }
   }
   &_collapse_icon {
   }
