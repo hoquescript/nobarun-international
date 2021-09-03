@@ -12,7 +12,7 @@ const Layout = (props: LayoutProps) => {
   return (
     <>
       <Header />
-      <div>
+      <div style={{ display: 'flex' }}>
         <Sidebar />
         <main>{children}</main>
       </div>

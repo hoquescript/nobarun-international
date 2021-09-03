@@ -1,0 +1,44 @@
+.sidebar {
+  height: calc(100vh - 7rem);
+  width: 30rem;
+  border-right: 2px solid #eee;
+  &__list {
+    padding: 3rem;
+  }
+  &__item {
+    padding: 1rem 0;
+  }
+  &__link {
+    color: #aaa;
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & > div {
+      display: flex;
+      align-items: center;
+      & > span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        height: 1.8rem;
+        width: 1.8rem;
+        border: 1px solid #ececec;
+        margin-right: 1.5rem;
+        & > i {
+          display: inline-block;
+          height: 1.2rem;
+          width: 1.2rem;
+          background-color: #dbdbdb;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
+  &__subitem {
+    padding: 0.5rem 0;
+  }
+  &_collapse_icon {
+  }
+}

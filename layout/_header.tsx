@@ -5,7 +5,6 @@ import { BsBell } from 'react-icons/bs';
 import styles from './_header.module.scss';
 
 import logo from '../public/images/logo.png';
-import profile from '../public/images/profile.jpg';
 
 const Header = () => {
   return (
