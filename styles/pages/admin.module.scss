@@ -1,0 +1,17 @@
+.addAdmin {
+  margin: 5rem 10rem;
+  &__wrapper {
+    display: flex;
+  }
+  &__form {
+    flex-basis: 75%;
+  }
+  &__upload {
+    flex-basis: 25%;
+  }
+  &__seperator {
+    border-left: 1px solid #ddd;
+    margin: 0 15rem 0 8rem;
+    transform: translateY(-30px);
+  }
+}
