@@ -1,0 +1,45 @@
+// ============================  React Range Date Picker ===============================
+
+//Reducing width of date and month block
+.rdrMonth {
+  width: 20.85em !important;
+}
+.rdrDay {
+  line-height: 2.8em !important;
+  height: 2.8em !important;
+}
+.rdrStaticRange:hover .rdrStaticRangeLabel,
+.rdrStaticRange:focus .rdrStaticRangeLabel {
+  background: #eee !important;
+}
+// Removing Cutom Defined Input Field
+.rdrInputRanges {
+  display: none;
+}
+//Removing the default padding of defined range Button
+.rdrStaticRangeLabel {
+  padding: 0 0px !important;
+}
+//Changing the Defined Range Lists width
+.rdrDefinedRangesWrapper {
+  width: 219px !important;
+}
+//Toggling the Custom Range Picker Calender
+.rdrCalendarWrapper.rdrDateRangeWrapper {
+  transform: scaleX(0) !important;
+  height: 0 !important;
+  width: 0 !important;
+}
+.custom-date-range .rdrCalendarWrapper.rdrDateRangeWrapper {
+  transform: scaleX(1) !important;
+  height: auto !important;
+  width: auto !important;
+}
+@media (max-width: 465px) {
+  .custom-date-range {
+    flex-direction: column;
+    & .rdrDefinedRangesWrapper {
+      width: 100% !important;
+    }
+  }
+}

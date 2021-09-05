@@ -1,0 +1,13 @@
+.search {
+  &__icon {
+    height: 3rem;
+    width: 3rem;
+    position: absolute;
+    top: 50%;
+    transform: translate(1.5rem, -50%);
+    color: #777;
+  }
+  &__input {
+    padding-left: 6rem;
+  }
+}

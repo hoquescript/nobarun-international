@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Textfield from '../../components/utils/forms/textfield';
-import Textarea from '../../components/utils/forms/textarea';
+import Textfield from '../../components/controls/textfield';
+import Textarea from '../../components/controls/textarea';
 
 import styles from '../../styles/pages/admin.module.scss';
 
