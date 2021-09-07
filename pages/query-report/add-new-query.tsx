@@ -18,7 +18,11 @@ const AddNewQuery = () => {
         <Textfield label="Address" placeholder="Enter your Address" />
       </div>
       <div className="grid two mb-20">
-        <Textfield label="Phone" placeholder="Enter your Number" />
+        <Textfield
+          type="file"
+          label="Attachments"
+          placeholder="Enter your Number"
+        />
         <Textfield label="Company Name" placeholder="Enter your Company Name" />
       </div>
       <div className="grid one mb-20">

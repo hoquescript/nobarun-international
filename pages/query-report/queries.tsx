@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import { sub, format } from 'date-fns';
+import { FaPlusCircle } from 'react-icons/fa';
 
-import Textfield from '../../components/controls/textfield';
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
 import styles from '../../styles/pages/query-report.module.scss';
+import Table from '../../components/shared/Table';
+import Checkbox from '../../components/controls/checkbox';
+import Radio from '../../components/controls/radio';
 
 const Queries = () => {
   const [period, setPeriod] = useState(
@@ -23,22 +26,33 @@ const Queries = () => {
           <TimePeriod period={period} setPeriod={setPeriod} />
         </div>
       </div>
-      <h1 className="heading-primary mt-40 mb-40">Customers Query</h1>
-      <div className="grid two mb-20">
-        <Textfield label="Full Name" placeholder="Enter your Name" />
-        <Textfield type="tel" label="Phone" placeholder="Enter your Number" />
+      <div className={styles.query__btnWrapper}>
+        <h1 className="heading-primary mt-40 mb-40">Customers Query</h1>
+        <div>
+          <button type="button" className="btn-outline-green mr-20">
+            <FaPlusCircle className="btn-icon" />
+            Add Query
+          </button>
+          <button type="button" className="btn-outline-green">
+            <FaPlusCircle className="btn-icon" />
+            Export
+          </button>
+        </div>
       </div>
-      <div className="grid two mb-20">
-        <Textfield type="email" label="Email" placeholder="Enter your Email" />
-        <Textfield label="Address" placeholder="Enter your Address" />
-      </div>
-      <div className="grid two mb-20">
-        <Textfield label="Phone" placeholder="Enter your Number" />
-        <Textfield label="Company Name" placeholder="Enter your Company Name" />
-      </div>
-      <div className="center mt-30">
-        <button className="btn-green">Save</button>
-      </div>
+      {/* <Checkbox>
+        <h5>
+          I agree to the <a href="#">Terms & Conditions</a>
+        </h5>
+      </Checkbox>
+      <Radio>
+        <div className="content mb-20">
+          <h5>Standard</h5>
+        </div>
+      </Radio>
+      <button className="btn-green">
+        <AiOutlineSearch className="mr-10" /> Save
+      </button> */}
+      <Table />
     </div>
   );
 };

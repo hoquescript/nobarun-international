@@ -8,17 +8,17 @@ import { useRouter } from 'next/dist/client/router';
 
 const MENU: { [key: string]: string[] } = {
   Dashboard: [],
-  Shop: ['Categories', 'Products', 'Add product'],
-  Blog: ['Categories', 'Blog Post'],
+  Products: ['Add New Products', 'Products', 'Categories', 'Collections'],
+  Blogs: ['Add New Post', 'Blog Post', 'Categories'],
   'Query Report': ['Add New Query', 'Queries'],
-  'Media & Menus': ['Media', 'Menus'],
+  Appearance: ['Pages', 'Menus', 'Media'],
   Settings: [
-    'Contacts, Stock Status',
-    '101 Redirect',
-    'Add Script',
     'Accounts',
+    'Contact Person',
+    'Stock Status',
+    'Add Script',
+    '301 Redirect',
   ],
-  Admin: ['Add Admin', 'Add Role', 'Add Permission'],
 };
 
 const resetState = () => {

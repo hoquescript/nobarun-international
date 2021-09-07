@@ -6,6 +6,11 @@
 .query {
   width: 140rem;
   margin: 5rem auto;
+  &__btnWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 // const DatePickerWrapper = styled.div<{ isCustomRange: boolean }>`

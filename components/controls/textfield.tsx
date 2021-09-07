@@ -3,7 +3,7 @@ import React from 'react';
 interface TextfieldProps {
   label: string;
   placeholder?: string;
-  type?: 'text' | 'number' | 'tel' | 'email' | 'password';
+  type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file';
   required?: boolean;
 }
 const Textfield = (props: TextfieldProps) => {

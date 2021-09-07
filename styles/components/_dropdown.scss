@@ -1,0 +1,44 @@
+.dropdown {
+  position: relative;
+}
+
+.dropdown__menu {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-color: white;
+  border-radius: 0.8rem;
+  box-shadow: 1px 2px 4px $shadowGrey;
+  border: 1px solid $lightBgGrey;
+  padding: 1rem;
+  min-width: 15rem;
+  z-index: 9;
+  transform: scale(0);
+  transform-origin: right top;
+  transition: 0.3s;
+
+  a {
+    display: flex;
+    align-items: center;
+    color: $textColor;
+    padding: 1rem;
+    border-radius: 0.8rem;
+
+    &:hover {
+      background-color: rgba($color: $textColor, $alpha: 0.05);
+    }
+
+    i {
+      margin-right: 1rem;
+    }
+  }
+
+  .stats {
+    border: 0;
+    padding: 0;
+  }
+
+  .show & {
+    transform: scale(1);
+  }
+}
