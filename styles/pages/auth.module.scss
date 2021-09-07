@@ -1,0 +1,48 @@
+.auth {
+  height: 100vh;
+  width: 100vw;
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &__form {
+    height: 65rem;
+    width: 60rem;
+    padding: 5rem 8rem;
+    background-color: #fff;
+  }
+  &__logo {
+    margin-bottom: 5rem;
+    text-align: center;
+    transform: translateX(-15px);
+  }
+  &__button {
+    background-color: #1c90cf;
+    width: 100%;
+    margin-top: 4rem;
+    padding: 2rem 1rem;
+    border-radius: 30px;
+    border: none;
+    color: #eee;
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  &__forgetPassword {
+    text-align: right;
+    margin-top: 2.5rem;
+    display: block;
+    &:hover {
+      color: #086ca2;
+    }
+  }
+}
+
+.forget {
+  &__info {
+    text-align: center;
+    & p {
+      font-size: 1.6rem;
+      margin: 1rem 0 3.5rem;
+    }
+  }
+}
