@@ -51,17 +51,19 @@ const Sidebar = () => {
             }`}
             onClick={() => menuOpenHandler(menu)}
           >
-            <a className={styles.sidebar__link}>
-              <div>
-                <span>
-                  <i />
-                </span>
-                {menu}
-              </div>
-              {menu !== 'Dashboard' && (
-                <BiDownArrow className={styles.sidebar__collapse_icon} />
-              )}
-            </a>
+            <Link href={menu !== 'Dashboard' ? '' : '/'}>
+              <a className={styles.sidebar__link}>
+                <div>
+                  <span>
+                    <i />
+                  </span>
+                  {menu}
+                </div>
+                {menu !== 'Dashboard' && (
+                  <BiDownArrow className={styles.sidebar__collapse_icon} />
+                )}
+              </a>
+            </Link>
             <ul
               className={`${styles.sidebar__sublist} ${
                 open[menu] ? styles.sidebar__sublist_active : ''

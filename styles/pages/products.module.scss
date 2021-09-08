@@ -55,3 +55,21 @@
   margin: 5rem;
   width: 110rem;
 }
+
+.category {
+  &__wrapper {
+    width: 140rem;
+    margin: 7rem auto;
+  }
+  &__image {
+    // position: absolute;
+    // top: 0;
+    // left: 0;
+    width: 6rem;
+    height: 6rem;
+    object-fit: cover;
+    border-radius: 0.8rem;
+  }
+  &__menu {
+  }
+}

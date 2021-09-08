@@ -4,8 +4,9 @@ import { FaPlusCircle } from 'react-icons/fa';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
-import styles from '../../styles/pages/query-report.module.scss';
 import Table from '../../components/shared/Table';
+
+import styles from '../../styles/pages/query-report.module.scss';
 
 const Queries = () => {
   const [period, setPeriod] = useState(

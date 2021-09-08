@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { FaEye } from 'react-icons/fa';
-import About from '../../components/products/tab/about';
-import Variants from '../../components/products/tab/variants';
+import Description from '../../components/products/tab/description';
+import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import styles from '../../styles/pages/products.module.scss';
 
 const AddProduct = () => {
-  const [tabValue, setTabValue] = useState('about');
+  const [tabValue, setTabValue] = useState('description');
   console.log(tabValue);
   return (
     <div className={styles.addProduct}>
@@ -30,16 +30,15 @@ const AddProduct = () => {
         </div>
       </div>
       <TabMenu
-        menus={['About', 'Specifications', 'SEO', 'Variants']}
+        menus={['Description', 'SEO']}
         value={tabValue}
         setTabValue={setTabValue}
       >
-        <TabContent id="about" value={tabValue}>
-          <About />
+        <TabContent id="description" value={tabValue}>
+          <Description />
         </TabContent>
-        {/* <h1>Hello</h1> */}
-        <TabContent id="variants" value={tabValue}>
-          <Variants />
+        <TabContent id="seo" value={tabValue}>
+          <SEO />
         </TabContent>
       </TabMenu>
     </div>
