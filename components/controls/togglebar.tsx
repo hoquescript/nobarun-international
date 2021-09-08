@@ -1,14 +1,14 @@
 import React from 'react';
 
 interface TogglebarProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 const Togglebar = (props: TogglebarProps) => {
   const { children } = props;
   return (
     <label htmlFor="publish" className="custom-switch">
       <input type="checkbox" id="publish" />
-      {children}
+      <span>{children}</span>
     </label>
   );
 };

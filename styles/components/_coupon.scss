@@ -1,0 +1,27 @@
+.top-info__div {
+  display: flex;
+  align-items: center;
+
+
+  figure {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    background-color: white;
+    display: grid;
+    place-items: center;
+    margin-right: 1.5rem;
+    box-shadow: 1px 2px 4px $shadowGrey;
+
+    i {
+      font-size: 1.8rem;
+    }
+  }
+}
+
+.top-info__div__details {
+  h5 {
+    font-weight: normal;
+    margin-top: 1rem;
+  }
+}

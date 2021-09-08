@@ -1,0 +1,32 @@
+.accordion__title {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $darkGrey;
+  padding: 2rem 0;
+  cursor: pointer;
+
+  h5 {
+      font-weight: 500;
+  }
+
+  > i {
+      margin-left: auto;
+      transition: .3s;
+  }
+
+  &.active {
+      i {
+          transform: rotate(90deg);
+      }
+  }
+
+
+  &.has-actions {
+    padding: 1rem 0;
+  }
+}
+.accordion__content {
+  display: none;
+  padding-bottom: 3rem;
+  padding-top: 1.5rem;
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CheckboxProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 const Checkbox = (props: CheckboxProps) => {
   const { children } = props;

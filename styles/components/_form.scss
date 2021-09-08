@@ -22,6 +22,9 @@
   &:focus {
     border-color: $primaryColor;
   }
+  &.small {
+    height: 2rem;
+  }
 }
 
 .custom-radio {

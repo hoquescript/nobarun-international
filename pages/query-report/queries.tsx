@@ -6,8 +6,6 @@ import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
 import styles from '../../styles/pages/query-report.module.scss';
 import Table from '../../components/shared/Table';
-import Checkbox from '../../components/controls/checkbox';
-import Radio from '../../components/controls/radio';
 
 const Queries = () => {
   const [period, setPeriod] = useState(

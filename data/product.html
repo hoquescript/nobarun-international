@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <main className="main">
+    <div className="main__content">
+      <div className="main__content__header">
+        <a href="#" className="btn-icon-white mr-20">
+          <i className="chevron-left-icon"></i>
+        </a>
+        <h2>Almonds, Organic Raw Sprouted</h2>
+        <label htmlFor="publish" className="custom-switch ml-auto">
+          <input type="checkbox" id="publish" />
+          <span>Publish</span>
+        </label>
+        <button type="button" className="btn-icon-white ml-20">
+          <i className="eye-icon"></i>
+        </button>
+      </div>
+      <div className="custom-tabs">
+        <div className="custom-tabs__links">
+          <a href="#about" className="active">
+            About
+          </a>
+          <a href="#specifications">Specifications</a>
+          <a href="#seo">SEO</a>
+          <a href="#variants">Variants</a>
+        </div>
+        <div className="custom-tabs__content mt-30">
+          <div id="about">
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Info</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="grid three">
+                  <div className="field">
+                    <label htmlFor="">Cateogory</label>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Brand</label>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Variant</label>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="product-specs">
+                  <div>
+                    <p>25.60</p>
+                    <span>Price</span>
+                  </div>
+                  <div>
+                    <p>29.99</p>
+                    <span>Original Prce</span>
+                  </div>
+                  <div>
+                    <p>10%</p>
+                    <span>Discount</span>
+                  </div>
+                  <div>
+                    <p>PMM3449494</p>
+                    <span>SKU</span>
+                  </div>
+                </div>
+                <div className="product-images">
+                  <figure>
+                    <button type="button" className="remove-image">
+                      <i className="times-icon"></i>
+                    </button>
+                    <img src="images/product-img.jpg" alt="" />
+                  </figure>
+                  <figure>
+                    <button type="button" className="remove-image">
+                      <i className="times-icon"></i>
+                    </button>
+                    <img src="images/product-img.jpg" alt="" />
+                  </figure>
+                  <figure>
+                    <button type="button" className="remove-image">
+                      <i className="times-icon"></i>
+                    </button>
+                    <img src="images/product-img.jpg" alt="" />
+                  </figure>
+                  <figure>
+                    <button type="button" className="remove-image">
+                      <i className="times-icon"></i>
+                    </button>
+                    <img src="images/product-img.jpg" alt="" />
+                  </figure>
+                  <a href="#" className="add-new-image">
+                    <i className="plus-icon"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Description</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="field">
+                  <input
+                    type="text"
+                    className="custom-input"
+                    value="Organic whole soaked"
+                  />
+                </div>
+                <div className="field mt-20">
+                  <textarea
+                    cols="30"
+                    rows="10"
+                    class="custom-input"
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Stock</h3>
+                <div className="wrapper-section__actions">
+                  <button type="button" className="btn-darkBlue">
+                    <i className="boxes-alt-icon"></i>
+                    Manage Stock
+                  </button>
+                </div>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="grid two">
+                  <div className="field">
+                    <label htmlFor="">Stock Quantity</label>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      readOnly
+                      value="1,300"
+                    />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Low Stock Notification</label>
+                    <input type="text" className="custom-input" value="100" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Product Plans</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="grid two">
+                  <div className="field">
+                    <label htmlFor="">Tax</label>
+                    <select className="custom-input">
+                      <option value="">1</option>
+                      <option value="">2</option>
+                      <option value="">3</option>
+                    </select>
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Shipping</label>
+                    <select className="custom-input">
+                      <option value="">1</option>
+                      <option value="">2</option>
+                      <option value="">3</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="specifications">
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Specification</h3>
+                <div className="wrapper-section__actions">
+                  <button type="button" className="btn-icon-fade">
+                    <i className="pen-icon"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="wrapper-section__content">
+                <div>
+                  <h4 className="mb-10">Dimension</h4>
+                  <div className="grid auto-fit">
+                    <div className="field">
+                      <label htmlFor="">Length</label>
+                      <div className="field-with-unit">
+                        <input type="text" className="custom-input" />
+                        <span className="field-with-unit__unit">cm</span>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label htmlFor="">Width</label>
+                      <div className="field-with-unit">
+                        <input type="text" className="custom-input" />
+                        <span className="field-with-unit__unit">cm</span>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label htmlFor="">Height</label>
+                      <div className="field-with-unit">
+                        <input type="text" className="custom-input" />
+                        <span className="field-with-unit__unit">cm</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-30">
+                  <h4 className="mb-10">Weight</h4>
+                  <div className="grid auto-fit">
+                    <div className="field">
+                      <label htmlFor="">Product</label>
+                      <div className="field-with-unit">
+                        <input type="text" className="custom-input" />
+                        <span className="field-with-unit__unit">kg</span>
+                      </div>
+                    </div>
+                    <div className="field">
+                      <label htmlFor="">Shipping</label>
+                      <div className="field-with-unit">
+                        <input type="text" className="custom-input" />
+                        <span className="field-with-unit__unit">kg</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-30">
+                  <h4 className="mb-10">Product Codes</h4>
+                  <div className="grid auto-fit">
+                    <div className="field">
+                      <label htmlFor="">UPC</label>
+                      <input type="text" className="custom-input" />
+                    </div>
+                    <div className="field">
+                      <label htmlFor="">ASIN</label>
+                      <input type="text" className="custom-input" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Attributes</h3>
+                <div className="wrapper-section__actions">
+                  <button type="button" className="btn-icon-fade">
+                    <i className="times-icon"></i>
+                  </button>
+                </div>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="specs-fields">
+                  <div className="specs-fields__field">
+                    <button
+                      type="button"
+                      className="btn-icon-fade btn-icon-small"
+                    >
+                      <i className="grip-vertical-icon"></i>
+                    </button>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      placeholder="Field Name"
+                    />
+                    <div className="field-with-unit-btn">
+                      <button type="button">kg</button>
+                      <select className="custom-input">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <label htmlFor="rating" className="custom-checkbox">
+                      <input type="checkbox" id="rating" />
+                      <div className="content">&nbsp;</div>
+                    </label>
+                    <div className="specs-fields__field__actions">
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-red"
+                      >
+                        <i className="trash-icon"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-green"
+                      >
+                        <i className="plus-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="specs-fields__field">
+                    <button
+                      type="button"
+                      className="btn-icon-fade btn-icon-small"
+                    >
+                      <i className="grip-vertical-icon"></i>
+                    </button>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      placeholder="Field Name"
+                    />
+                    <div className="field-with-unit-btn">
+                      <button type="button">kg</button>
+                      <select className="custom-input">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <label htmlFor="showfield" className="custom-checkbox">
+                      <input type="checkbox" id="showfield" />
+                      <div className="content">&nbsp;</div>
+                    </label>
+                    <div className="specs-fields__field__actions">
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-red"
+                      >
+                        <i className="trash-icon"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-green"
+                      >
+                        <i className="plus-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="specs-fields__field">
+                    <button
+                      type="button"
+                      className="btn-icon-fade btn-icon-small"
+                    >
+                      <i className="grip-vertical-icon"></i>
+                    </button>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      placeholder="Field Name"
+                    />
+                    <div className="field-with-unit-btn">
+                      <button type="button">kg</button>
+                      <select className="custom-input">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <label htmlFor="showfield2" className="custom-checkbox">
+                      <input type="checkbox" id="showfield2" />
+                      <div className="content">&nbsp;</div>
+                    </label>
+                    <div className="specs-fields__field__actions">
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-red"
+                      >
+                        <i className="trash-icon"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-green"
+                      >
+                        <i className="plus-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="specs-fields__field">
+                    <button
+                      type="button"
+                      className="btn-icon-fade btn-icon-small"
+                    >
+                      <i className="grip-vertical-icon"></i>
+                    </button>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      placeholder="Field Name"
+                    />
+                    <div className="field-with-unit-btn">
+                      <button type="button">kg</button>
+                      <select className="custom-input">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <label htmlFor="showfield3" className="custom-checkbox">
+                      <input type="checkbox" id="showfield3" />
+                      <div className="content">&nbsp;</div>
+                    </label>
+                    <div className="specs-fields__field__actions">
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-red"
+                      >
+                        <i className="trash-icon"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-green"
+                      >
+                        <i className="plus-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="specs-fields__field">
+                    <button
+                      type="button"
+                      className="btn-icon-fade btn-icon-small"
+                    >
+                      <i className="grip-vertical-icon"></i>
+                    </button>
+                    <input
+                      type="text"
+                      className="custom-input"
+                      placeholder="Field Name"
+                    />
+                    <div className="field-with-unit-btn">
+                      <button type="button">kg</button>
+                      <select className="custom-input">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                      </select>
+                    </div>
+                    <select className="custom-input">
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <label htmlFor="showfield4" className="custom-checkbox">
+                      <input type="checkbox" id="showfield4" />
+                      <div className="content">&nbsp;</div>
+                    </label>
+                    <div className="specs-fields__field__actions">
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-red"
+                      >
+                        <i className="trash-icon"></i>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-icon btn-outline-green"
+                      >
+                        <i className="plus-icon"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="seo">
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>SEO Settings</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <div className="grid one">
+                  <div className="field">
+                    <div className="d-flex">
+                      <label htmlFor="" className="flex-1">
+                        Title
+                      </label>
+                      <span className="chr-count ml-10">26 of 70</span>
+                    </div>
+                    <input type="text" className="custom-input" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Slug</label>
+                    <input type="text" className="custom-input" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Canonical URL</label>
+                    <input type="text" className="custom-input" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Site Map Priority</label>
+                    <input type="text" className="custom-input" />
+                  </div>
+                  <div className="field">
+                    <label htmlFor="">Keywords</label>
+                    <input type="text" className="custom-input" />
+                  </div>
+                  <div className="field">
+                    <div className="d-flex">
+                      <label htmlFor="" className="flex-1">
+                        Meta Description
+                      </label>
+                      <span className="chr-count ml-10">26 of 70</span>
+                    </div>
+                    <input type="text" className="custom-input" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div id="variants">
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Variants</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Options</th>
+                      <th>Values</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <input
+                          type="text"
+                          className="custom-input"
+                          value="Size"
+                        />
+                      </td>
+                      <td>
+                        <div className="chips">
+                          <div className="chip">
+                            <span className="chip__title">5lb bag</span>
+                            <button type="button" className="chip__remove">
+                              <i className="times-icon"></i>
+                            </button>
+                          </div>
+                          <div className="chip">
+                            <span className="chip__title">10lb bag</span>
+                            <button type="button" className="chip__remove">
+                              <i className="times-icon"></i>
+                            </button>
+                          </div>
+                          <div className="chip">
+                            <span className="chip__title">12- 8oz Pods </span>
+                            <button type="button" className="chip__remove">
+                              <i className="times-icon"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="btn-group">
+                          <button type="button" className="btn-icon-darkBlue">
+                            <i className="plus-icon"></i>
+                          </button>
+                          <button type="button" className="btn-icon-red">
+                            <i className="trash-icon"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <input
+                          type="text"
+                          className="custom-input"
+                          value="Organic"
+                        />
+                      </td>
+                      <td>
+                        <div className="chips">
+                          <div className="chip">
+                            <span className="chip__title">Orgnanic</span>
+                            <button type="button" className="chip__remove">
+                              <i className="times-icon"></i>
+                            </button>
+                          </div>
+                          <div className="chip">
+                            <span className="chip__title">Non-Orgnanic</span>
+                            <button type="button" className="chip__remove">
+                              <i className="times-icon"></i>
+                            </button>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="btn-group">
+                          <button type="button" className="btn-icon-darkBlue">
+                            <i className="plus-icon"></i>
+                          </button>
+                          <button type="button" className="btn-icon-red">
+                            <i className="trash-icon"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="wrapper-section">
+              <div className="wrapper-section__title">
+                <h3>Variations</h3>
+              </div>
+              <div className="wrapper-section__content">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>&nbsp;</th>
+                      <th>Variantions</th>
+                      <th>SKU</th>
+                      <th>Price</th>
+                      <th>Discount</th>
+                      <th>Stock</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                      <th>&nbsp;</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        <label htmlFor="variant1" className="custom-radio">
+                          <input
+                            type="radio"
+                            id="variant1"
+                            name="default-variant"
+                          />
+                          <div className="content">&nbsp;</div>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          className="custom-input"
+                          readOnly
+                        />
+                      </td>
+                      <td>
+                        <img src="images/product-img.jpg" alt="" />
+                      </td>
+                      <td>
+                        <label
+                          htmlFor="publish2"
+                          className="custom-switch ml-auto"
+                        >
+                          <input type="checkbox" id="publish2" />
+                          <span>&nbsp;</span>
+                        </label>
+                      </td>
+                      <td>
+                        <div className="dropdown">
+                          <button
+                            type="button"
+                            className="btn-icon-fade dropdown__toggle"
+                          >
+                            <i className="ellipsis-v-icon"></i>
+                          </button>
+                          <div className="dropdown__menu">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="pen-icon"></i>
+                                  Edit Stock
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#" className="text-red">
+                                  <i className="trash-icon"></i>
+                                  Delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label htmlFor="variant1" className="custom-radio">
+                          <input
+                            type="radio"
+                            id="variant1"
+                            name="default-variant"
+                          />
+                          <div className="content">&nbsp;</div>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          className="custom-input"
+                          readOnly
+                        />
+                      </td>
+                      <td>
+                        <img src="images/product-img.jpg" alt="" />
+                      </td>
+                      <td>
+                        <label
+                          htmlFor="publish2"
+                          className="custom-switch ml-auto"
+                        >
+                          <input type="checkbox" id="publish2" />
+                          <span>&nbsp;</span>
+                        </label>
+                      </td>
+                      <td>
+                        <div className="dropdown">
+                          <button
+                            type="button"
+                            className="btn-icon-fade dropdown__toggle"
+                          >
+                            <i className="ellipsis-v-icon"></i>
+                          </button>
+                          <div className="dropdown__menu">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="pen-icon"></i>
+                                  Edit Stock
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#" className="text-red">
+                                  <i className="trash-icon"></i>
+                                  Delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <label htmlFor="variant1" className="custom-radio">
+                          <input
+                            type="radio"
+                            id="variant1"
+                            name="default-variant"
+                          />
+                          <div className="content">&nbsp;</div>
+                        </label>
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input type="text" className="custom-input" />
+                      </td>
+                      <td>
+                        <input
+                          type="text"
+                          className="custom-input"
+                          readOnly
+                        />
+                      </td>
+                      <td>
+                        <img src="images/product-img.jpg" alt="" />
+                      </td>
+                      <td>
+                        <label
+                          htmlFor="publish2"
+                          className="custom-switch ml-auto"
+                        >
+                          <input type="checkbox" id="publish2" />
+                          <span>&nbsp;</span>
+                        </label>
+                      </td>
+                      <td>
+                        <div className="dropdown">
+                          <button
+                            type="button"
+                            className="btn-icon-fade dropdown__toggle"
+                          >
+                            <i className="ellipsis-v-icon"></i>
+                          </button>
+                          <div className="dropdown__menu">
+                            <ul>
+                              <li>
+                                <a href="#">
+                                  <i className="pen-icon"></i>
+                                  Edit Stock
+                                </a>
+                              </li>
+                              <li>
+                                <a href="#" className="text-red">
+                                  <i className="trash-icon"></i>
+                                  Delete
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</body>
+</html>

@@ -8,7 +8,7 @@ import { useRouter } from 'next/dist/client/router';
 
 const MENU: { [key: string]: string[] } = {
   Dashboard: [],
-  Products: ['Add New Products', 'Products', 'Categories', 'Collections'],
+  Products: ['Add New Product', 'Products', 'Categories', 'Collections'],
   Blogs: ['Add New Post', 'Blog Post', 'Categories'],
   'Query Report': ['Add New Query', 'Queries'],
   Appearance: ['Pages', 'Menus', 'Media'],
@@ -41,7 +41,7 @@ const Sidebar = () => {
     });
   };
   return (
-    <div className={styles.sidebar}>
+    <aside className={styles.sidebar}>
       <ul className={styles.sidebar__list}>
         {Object.keys(MENU).map((menu) => (
           <li
@@ -87,7 +87,7 @@ const Sidebar = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </aside>
   );
 };
 

@@ -1,149 +1,94 @@
-import React from 'react';
-import { FaEye, FaStar } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { sub, format } from 'date-fns';
+import { FaPlusCircle, FaGripHorizontal, FaList } from 'react-icons/fa';
 
-import Textfield from '../../components/controls/textfield';
-import Togglebar from '../../components/controls/togglebar';
+import TimePeriod from '../../components/controls/period';
+import Search from '../../components/controls/search';
+import Product from '../../components/products/product';
 
-import styles from '../../styles/pages/shop.module.scss';
+import styles from '../../styles/pages/products.module.scss';
 
-const Product = () => (
-  <div className={styles.product}>
-    <h3 className="heading-tertiary">Multipurpose Commercial Masala</h3>
-    <div className="row">
-      <figure className="col-4">
-        <img src="/images/blender.png" alt="" />
-      </figure>
-      <div className="col-8">
-        <div>
-          <input
-            type="text"
-            className="custom-input"
-            value="Commercial Kitchen"
-            disabled
-          />
-          {/* <Togglebar /> */}
-        </div>
-        <p>Our Multipurpose Commercial Masala Spice Grinding Machine</p>
-        <h4>
-          SKU
-          <input
-            type="text"
-            className="custom-input"
-            value="R5003y32"
-            disabled
-          />
-        </h4>
-      </div>
-      <div className="col-12">
-        <div className={styles.product__info}>
-          <span className={styles.product__meta}>
-            <span></span>
-            Shuvo Islam
-          </span>
-          <span className={styles.product__meta}>
-            <FaEye />
-            3.5k
-          </span>
-          <span className={styles.product__meta}>
-            <FaStar />
-            4.9 (71)
-          </span>
-        </div>
-      </div>
-    </div>
-  </div>
-);
-const ProdcutPreview = () => {
-  return (
-    <div className="product">
-      <div className="product__title">
-        <h4>Almonds</h4>
-        <div className="dropdown">
-          <button
-            type="button"
-            className="btn-icon-fade btn-icon-small dropdown__toggle"
-          >
-            <i className="ellipsis-v-icon"></i>
-          </button>
-          <div className="dropdown__menu">
-            <ul>
-              <li>
-                <a href="#">
-                  <i className="pen-icon"></i>
-                  Edit
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <i className="clone-icon"></i>
-                  Clone
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-red">
-                  <i className="trash-icon"></i>
-                  Delete
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <figure className="product__img">
-        <img src="images/product-img.jpg" alt="" />
-      </figure>
-      <div className="product__content">
-        <div className="d-flex align-items-center">
-          <div className="product__tags">
-            <span className="product__tags__tag">ingredients</span>
-          </div>
-          <label htmlFor="publish2" class="custom-switch ml-auto">
-            <input type="checkbox" id="publish2" />
-            <span>&nbsp;</span>
-          </label>
-        </div>
-        <p>Organic whole soaked</p>
-      </div>
-      <div className="product__footer">
-        <img src="images/company-logo.svg" alt="" />
-        <div className="product__footer__actions">
-          <button
-            type="button"
-            className="btn-icon-fade btn-icon-small show-panel"
-            data-target="#item-coupons-panel"
-          >
-            <i className="ticket-alt-icon"></i>
-          </button>
-          <button
-            type="button"
-            className="btn-icon-fade btn-icon-small show-panel"
-            data-target="#tags-panel"
-          >
-            <i className="tags-icon"></i>
-          </button>
-          <button type="button" className="btn-icon-fade btn-icon-small">
-            <i className="layer-plus-icon"></i>
-          </button>
-          <button type="button" className="btn-icon-fade btn-icon-small">
-            <i className="chart-bar-icon"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
 const Products = () => {
+  const [period, setPeriod] = useState(
+    `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
+      new Date(),
+      'yyyy-MM-dd',
+    )}`,
+  );
+
   return (
-    <div className="row ml-50 mt-50">
-      <div className="col-4">
-        <Product />
+    <div className={styles.products}>
+      <div className="row mb-30">
+        <div className="col-6">
+          <Search />
+        </div>
+        <div className="col-2">
+          <TimePeriod period={period} setPeriod={setPeriod} />
+        </div>
       </div>
-      <div className="col-4">
-        <ProdcutPreview />
+      <div className={styles.products__header}>
+        <h2 className="heading-primary">50 Results</h2>
+        <div className={styles.products__viewWrapper}>
+          <div className="sort-by">
+            <span className="mr-10">Sort by</span>
+            <select className="custom-input">
+              <option value="">Name</option>
+              <option value="">Date</option>
+              <option value="">Stock Id</option>
+            </select>
+          </div>
+          <div className={styles.products__btnWrapper}>
+            <button className={styles.products__view_btn}>
+              <FaGripHorizontal className="mr-10" />
+              Card
+            </button>
+            <button className={styles.products__view_btn}>
+              <FaList className="mr-10" />
+              List
+            </button>
+          </div>
+        </div>
+        <div>
+          <button type="button" className="btn-outline-green mr-20">
+            <FaPlusCircle className="btn-icon" />
+            Add Query
+          </button>
+        </div>
       </div>
-      {/* <div className="col-4">
+      <div className="row">
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+        <div className="col-4">
+          <Product />
+        </div>
+
+        {/* <div className="col-4"></div> */}
+        {/* <div className="col-4">
         <Product />
       </div> */}
+      </div>
     </div>
   );
 };
