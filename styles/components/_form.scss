@@ -153,7 +153,7 @@ textarea.custom-input {
     display: none;
   }
   & input:checked ~ span::before {
-    background-color: #80c627;
+    background-color: $primaryColor;
   }
   & input:checked ~ span::after {
     right: 0.5rem;

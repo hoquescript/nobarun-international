@@ -18,7 +18,7 @@ const AddProduct = () => {
           alignItems: 'center',
         }}
       >
-        <h2 className="heading-primary">Product Editor</h2>
+        <h2 className="page-title">Product Editor</h2>
         <div>
           <label htmlFor="publish" className="custom-switch ml-auto">
             <input type="checkbox" id="publish" />
