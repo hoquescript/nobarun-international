@@ -25,6 +25,14 @@
   &.small {
     height: 2rem;
   }
+  &.large {
+    font-size: 2rem;
+    width: 60rem;
+    &::placeholder {
+      color: #433;
+      font-weight: 600;
+    }
+  }
 }
 
 .custom-radio {

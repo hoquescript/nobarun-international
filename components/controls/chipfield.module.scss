@@ -10,6 +10,7 @@
   &__chips {
     margin-left: 2rem;
     display: flex;
+    flex-wrap: wrap;
   }
   &__search_icon {
     height: 2rem;

@@ -1,6 +1,25 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
+
+import Chip from '../../controls/chip';
+import Textarea from '../../controls/textarea';
+
+const ChipItem = ({ children }) => (
+  <div className="chip ml-10 mr-10">
+    <span className="chip__title">{children}</span>
+  </div>
+);
 
 const SEO = () => {
+  const [value, setValue] = useState('');
+  const [chips, setChips] = useState<string[]>([]);
+  const textArea = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    console.log(textArea.current);
+    if (textArea.current && textArea.current.style) {
+      textArea.current.style.border = '1px solid #070606';
+    }
+  }, []);
   return (
     <>
       <div className="wrapper-section">
@@ -32,16 +51,25 @@ const SEO = () => {
             </div>
             <div className="field">
               <label htmlFor="">Keywords</label>
-              <input type="text" className="custom-input" />
+              <Chip chips={chips} setChips={setChips} />
             </div>
             <div className="field">
               <div className="d-flex">
                 <label htmlFor="" className="flex-1">
                   Meta Description
                 </label>
-                <span className="chr-count ml-10">26 of 70</span>
+                <span className="chr-count ml-10">{value.length} of 70</span>
               </div>
-              <input type="text" className="custom-input" />
+              <textarea
+                className="custom-input"
+                placeholder="Enter Meta Description"
+              ></textarea>
+              {/* <HighlightWithinTextarea
+                ref={textArea}
+                highlight={[{ highlight: chips, component: ChipItem }]}
+                value={value}
+                onChange={(value) => setValue(value)}
+              /> */}
             </div>
           </div>
         </div>
