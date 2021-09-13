@@ -15,8 +15,9 @@ const EditorComponent = dynamic(
   { ssr: false },
 ) as any as Editor;
 
-const TextEditor = () => {
+const TextEditor = (props) => {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const { bodyClass } = props;
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
   };
@@ -26,7 +27,7 @@ const TextEditor = () => {
         editorState={editorState}
         wrapperClassName="editor"
         toolbarClassName="editor__toolbar"
-        editorClassName="editor__body"
+        editorClassName={`editor__body ${bodyClass}`}
         onEditorStateChange={onEditorStateChange}
         toolbar={{
           options: [

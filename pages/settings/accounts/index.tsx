@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 
-import TimePeriod from '../../components/controls/period';
-import Search from '../../components/controls/search';
-import Table from '../../components/shared/Table';
+import TimePeriod from '../../../components/controls/period';
+import Search from '../../../components/controls/search';
+import Table from '../../../components/shared/Table';
 
-import styles from '../../styles/pages/query-report.module.scss';
+import styles from '../../../styles/pages/query-report.module.scss';
 
-const BlogPost = () => {
+const Queries = () => {
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -26,12 +26,12 @@ const BlogPost = () => {
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
-        <h1 className="heading-primary mt-40 mb-40">Blog Post (4 post)</h1>
+        <h1 className="heading-primary mt-40 mb-40">All Admins</h1>
         <div>
-          <button type="button" className="btn-outline-green mr-20">
+          <a href="/settings/accounts/form" className="btn-outline-green mr-20">
             <FaPlusCircle className="btn-icon-small" />
-            Add Post
-          </button>
+            Add Admin
+          </a>
         </div>
       </div>
       <Table />
@@ -39,4 +39,4 @@ const BlogPost = () => {
   );
 };
 
-export default BlogPost;
+export default Queries;

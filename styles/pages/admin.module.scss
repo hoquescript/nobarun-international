@@ -14,4 +14,20 @@
     margin: 0 15rem 0 8rem;
     transform: translateY(-30px);
   }
+  &__image_upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+    height: 15rem;
+    width: 15rem;
+    border: 1px dashed #333;
+    cursor: pointer;
+    & > svg {
+      height: 3rem;
+      width: 3rem;
+      margin-bottom: 1rem;
+    }
+  }
 }

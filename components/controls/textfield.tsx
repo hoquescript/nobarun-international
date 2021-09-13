@@ -7,6 +7,7 @@ interface TextfieldProps {
   type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file';
   required?: boolean;
 }
+
 const Textfield = (props: TextfieldProps) => {
   const { type, label, placeholder, required, className } = props;
   return (

@@ -10,10 +10,14 @@ const Description = () => {
     <div id="description">
       <div className="wrapper-section">
         <div className="wrapper-section__title">
-          <h3>Info</h3>
+          <input
+            className="page-headline-input mb-30"
+            placeholder="Product Name"
+            // value="Plastic Aluminum Solar Reflective Motorway Road Studs"
+          />
         </div>
         <div className="wrapper-section__content">
-          <div className="grid four">
+          <div className="grid four mb-60">
             <div className="field">
               <label htmlFor="">Cateogory</label>
               <select className="custom-input">
@@ -47,7 +51,7 @@ const Description = () => {
               </select>
             </div>
           </div>
-          <div className="product-specs">
+          <div className="product-specs mt-30 mb-50">
             <div>
               <p>25.60</p>
               <span>Price</span>
@@ -65,7 +69,9 @@ const Description = () => {
               <span>Product Code</span>
             </div>
           </div>
-          <Chipfield />
+          <div className="mb-50">
+            <Chipfield />
+          </div>
           <div className="product-images">
             <figure>
               <button type="button" className="remove-image">

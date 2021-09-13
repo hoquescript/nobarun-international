@@ -16,7 +16,7 @@ const AddCategory = () => {
           alignItems: 'center',
         }}
       >
-        <h2 className="heading-primary">Product Editor</h2>
+        <h2 className="heading-primary">Add Category</h2>
         <div>
           <label htmlFor="publish" className="custom-switch ml-auto">
             <input type="checkbox" id="publish" />
@@ -30,10 +30,10 @@ const AddCategory = () => {
       <div className="wrapper-section">
         <div className="wrapper-section__content">
           <div className="grid one mb-20">
-            <Textfield label="Full Name" placeholder="Enter your Name" />
+            <Textfield label="Name" placeholder="Enter Category Name" />
           </div>
           <div className="grid one mb-20">
-            <Textfield label="Full Name" placeholder="Enter your Name" />
+            <Textfield label="Slug" placeholder="Enter Category Slug" />
           </div>
           <div className="grid three mb-20">
             <div className="field">

@@ -50,7 +50,7 @@ const Products = () => {
         </div>
         <div>
           <button type="button" className="btn-outline-green mr-20">
-            <FaPlusCircle className="btn-icon" />
+            <FaPlusCircle className="btn-icon-small" />
             Add Query
           </button>
         </div>

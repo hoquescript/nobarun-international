@@ -29,11 +29,11 @@ const Queries = () => {
         <h1 className="heading-primary mt-40 mb-40">Customers Query</h1>
         <div>
           <button type="button" className="btn-outline-green mr-20">
-            <FaPlusCircle className="btn-icon" />
+            <FaPlusCircle className="btn-icon-small" />
             Add Query
           </button>
           <button type="button" className="btn-outline-green">
-            <FaPlusCircle className="btn-icon" />
+            <FaPlusCircle className="btn-icon-small" />
             Export
           </button>
         </div>
