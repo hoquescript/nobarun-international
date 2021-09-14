@@ -12,6 +12,7 @@ import 'react-nestable/dist/styles/index.css';
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
+import { gql, useQuery } from '@apollo/client';
 
 const items = [
   {
@@ -35,9 +36,22 @@ const items = [
   // { id: 3, text: 'Lisa' },
 ];
 
+const GET_ALL_CATEGORY = gql`
+  query allCategory {
+    getAllTheCategory {
+      name
+      description
+      id
+      image
+      isPublished
+    }
+  }
+`;
+
 const renderItem = (props) => {
   const { item, index, collapseIcon, handler } = props;
-  console.log(props);
+  const { loading, error, data: categories } = useQuery(GET_ALL_CATEGORY);
+
   return (
     <div className="row">
       <div className="col-1 flex ct" style={{ cursor: 'move' }}>

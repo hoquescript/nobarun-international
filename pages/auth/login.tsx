@@ -1,32 +1,55 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useForm, FormProvider, useFormContext } from 'react-hook-form';
+import { signIn } from 'next-auth/client';
+
 import Textfield from '../../components/controls/textfield';
 
 import styles from '../../styles/pages/auth.module.scss';
 
 const Login = () => {
+  const methods = useForm();
+  const onSubmit = (data: any) => {
+    const { email, password } = data;
+    signIn('credentials', {
+      email,
+      password,
+      callbackUrl: `${window.location.origin}/`,
+    });
+  };
   return (
     <div className={styles.auth}>
-      <form className={styles.auth__form}>
-        <img
-          src="/images/logo.png"
-          alt="Logo of Nobarun"
-          className={styles.auth__logo}
-        />
-        <Textfield
-          className="mb-30"
-          label="Name"
-          placeholder="Enter your Name"
-        />
-        <Textfield
-          type="password"
-          label="Password"
-          placeholder="Enter your Password"
-        />
-        <a href="/auth/forget-password" className={styles.auth__forgetPassword}>
-          Forgot Password?
-        </a>
-        <button className={styles.auth__button}>Login</button>
-      </form>
+      <FormProvider {...methods}>
+        <button onClick={methods.handleSubmit(onSubmit)}>Hello</button>
+        <form className={styles.auth__form}>
+          <img
+            src="/images/logo.png"
+            alt="Logo of Nobarun"
+            className={styles.auth__logo}
+          />
+          <Textfield
+            className="mb-30"
+            label="Email"
+            type="email"
+            name="email"
+            value="azim@gmail.com"
+            placeholder="Enter your Name"
+          />
+          <Textfield
+            type="password"
+            label="Password"
+            value="iwilldoit"
+            placeholder="Enter your Password"
+            name="password"
+          />
+          <a
+            href="/auth/forget-password"
+            className={styles.auth__forgetPassword}
+          >
+            Forgot Password?
+          </a>
+          <button className={styles.auth__button}>Login</button>
+        </form>
+      </FormProvider>
     </div>
   );
 };

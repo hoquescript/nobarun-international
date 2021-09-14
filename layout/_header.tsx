@@ -1,12 +1,17 @@
 import React from 'react';
 import Image from 'next/image';
+import { signOut } from 'next-auth/client';
 import { BsBell } from 'react-icons/bs';
 
 import styles from './_header.module.scss';
 
 import logo from '../public/images/logo.png';
+import { AiOutlineLogout } from 'react-icons/ai';
 
 const Header = () => {
+  const logoutHandler = () => {
+    signOut();
+  };
   return (
     <div className={styles.header}>
       {/* ---------Logo---------- */}
@@ -22,6 +27,9 @@ const Header = () => {
       <div className={styles.profileWrapper}>
         <div className={styles.notification}>
           <BsBell />
+        </div>
+        <div className={`ml-20 ${styles.notification}`} onClick={logoutHandler}>
+          <AiOutlineLogout />
         </div>
         <span className={styles.seperator} />
         <div className={styles.profile}>

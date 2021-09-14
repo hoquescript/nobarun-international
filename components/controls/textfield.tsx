@@ -1,21 +1,31 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
 interface TextfieldProps {
   label: string;
+  name: string;
   className?: string;
   placeholder?: string;
   type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file';
   required?: boolean;
+  value?: string;
 }
 
 const Textfield = (props: TextfieldProps) => {
-  const { type, label, placeholder, required, className } = props;
+  const { type, name, label, value, placeholder, required, className } = props;
+  const { register } = useFormContext();
   return (
     <div className={`field ${className}`}>
       <label>
         {label} {required && <sup style={{ color: 'red' }}>*</sup>}
       </label>
-      <input type={type} className="custom-input" placeholder={placeholder} />
+      <input
+        type={type}
+        className="custom-input"
+        placeholder={placeholder}
+        value={value}
+        {...register(name)}
+      />
     </div>
   );
 };
