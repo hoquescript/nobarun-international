@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import {
   FaPlusCircle,
   FaHome,
@@ -60,13 +61,49 @@ const StockItem = () => {
   );
 };
 
+type IStockStatus = {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  isPublished: boolean;
+}[];
+
 const StockStatus = () => {
+  const [stocks, setStocks] = useState([
+    {
+      id: '1',
+      title: 'Ready Stock',
+      description: 'Hello Notes',
+      image: '',
+      isPublished: true,
+    },
+  ]);
+  const [newStocks, setNewStocks] = useState<IStockStatus>([]);
+
+  const addNewStockHandler = () => {
+    setNewStocks([
+      ...newStocks,
+      {
+        id: uuid(),
+        title: '',
+        description: '',
+        image: '',
+        isPublished: true,
+      },
+    ]);
+  };
+
   return (
     <div className="container center">
       <div className="flex sb">
         <h1 className="heading-primary mt-40 mb-40">Stock Status</h1>
         <div>
-          <button type="button" className="btn-outline-green mr-20">
+          <button
+            type="button"
+            className="btn-outline-green mr-20"
+            onClick={addNewStockHandler}
+          >
             <FaPlusCircle className="btn-icon-small" />
             Add Stock
           </button>

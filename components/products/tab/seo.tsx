@@ -1,31 +1,41 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { HighlightWithinTextarea } from 'react-highlight-within-textarea';
+import {
+  Control,
+  FieldValues,
+  UseFormRegister,
+  useWatch,
+} from 'react-hook-form';
 
 import Chip from '../../controls/chip';
-import Textarea from '../../controls/textarea';
+import Textfield from '../../controls/textfield';
 
-const ChipItem = ({ children }) => (
-  <div className="chip ml-10 mr-10">
-    <span className="chip__title">{children}</span>
-  </div>
-);
+interface WordCountProps {
+  control: Control<FieldValues, object>;
+  name: string;
+}
+const WordCount = (props: WordCountProps) => {
+  const { control, name } = props;
+  const count = useWatch({
+    control,
+    name,
+    defaultValue: '',
+  });
+  console.log(count);
+  return <span className="chr-count ml-10">{count.length} of 70</span>;
+};
 
-const SEO = () => {
-  const [value, setValue] = useState('');
-  const [chips, setChips] = useState<string[]>([]);
-  const textArea = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    console.log(textArea.current);
-    if (textArea.current && textArea.current.style) {
-      textArea.current.style.border = '1px solid #070606';
-    }
-  }, []);
+interface SEOProps {
+  register: UseFormRegister<FieldValues>;
+  control: Control<FieldValues, object>;
+  chips: string[];
+  setChips: React.Dispatch<React.SetStateAction<string[]>>;
+}
+const SEO = (props: SEOProps) => {
+  const { register, control, chips, setChips } = props;
+
   return (
     <>
       <div className="wrapper-section">
-        <div className="wrapper-section__title">
-          <h3>SEO Settings</h3>
-        </div>
         <div className="wrapper-section__content">
           <div className="grid one">
             <div className="field">
@@ -33,22 +43,17 @@ const SEO = () => {
                 <label htmlFor="" className="flex-1">
                   Title
                 </label>
-                <span className="chr-count ml-10">26 of 70</span>
               </div>
-              <input type="text" className="custom-input" />
+              <WordCount control={control} name="seoTitle" />
+              <input
+                type="text"
+                className="custom-input"
+                {...register('seoTitle')}
+              />
             </div>
-            <div className="field">
-              <label htmlFor="">Slug</label>
-              <input type="text" className="custom-input" />
-            </div>
-            <div className="field">
-              <label htmlFor="">Canonical URL</label>
-              <input type="text" className="custom-input" />
-            </div>
-            <div className="field">
-              <label htmlFor="">Site Map Priority</label>
-              <input type="text" className="custom-input" />
-            </div>
+            <Textfield name="slug" label="Slug" />
+            <Textfield name="url" label="Canonical URL" />
+            <Textfield name="siteMap" label="Site Map Priority" />
             <div className="field">
               <label htmlFor="">Keywords</label>
               <Chip chips={chips} setChips={setChips} />
@@ -58,18 +63,13 @@ const SEO = () => {
                 <label htmlFor="" className="flex-1">
                   Meta Description
                 </label>
-                <span className="chr-count ml-10">{value.length} of 70</span>
+                <WordCount control={control} name="title" />
               </div>
               <textarea
                 className="custom-input"
                 placeholder="Enter Meta Description"
+                {...register('title')}
               ></textarea>
-              {/* <HighlightWithinTextarea
-                ref={textArea}
-                highlight={[{ highlight: chips, component: ChipItem }]}
-                value={value}
-                onChange={(value) => setValue(value)}
-              /> */}
             </div>
           </div>
         </div>
@@ -78,4 +78,4 @@ const SEO = () => {
   );
 };
 
-export default SEO;
+export default React.memo(SEO);

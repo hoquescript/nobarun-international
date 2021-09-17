@@ -28,7 +28,7 @@ const Chip = (props) => {
             ref={ref}
           />
           {chips.map((chip) => (
-            <div className="chip">
+            <div className="chip" key={chip}>
               <span className="chip__title">{chip}</span>
               <button type="button" className="chip__remove">
                 <AiOutlineClose />

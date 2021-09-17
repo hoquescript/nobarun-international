@@ -31,9 +31,15 @@ const Combobox = (props: ComboboxProps) => {
   return (
     <div className="field">
       <label htmlFor={name}>{label}</label>
+
       <select className="custom-input" id={name} {...register(name)}>
+        <option disabled selected value="">
+          {/* -- select an option --{' '} */}
+        </option>
         {Object.keys(data).map((option) => (
-          <option value={data[option]}>{option}</option>
+          <option key={option} value={data[option]}>
+            {option}
+          </option>
         ))}
       </select>
     </div>

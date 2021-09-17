@@ -7,6 +7,7 @@ export const TabMenu = (props) => {
       <div className="custom-tabs__links">
         {menus.map((menu) => (
           <Tab
+            key={menu}
             id={menu.toLowerCase()}
             value={value}
             changeHandler={() => {

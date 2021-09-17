@@ -61,6 +61,7 @@ const Chipfield = () => {
         >
           {Object.keys(suggestions).map((suggestion: any) => (
             <li
+              key={suggestion}
               className={styles.chip__searchItem}
               dangerouslySetInnerHTML={{
                 __html: suggestions[suggestion] || suggestion,

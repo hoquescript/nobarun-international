@@ -16,17 +16,24 @@ const EditorComponent = dynamic(
 ) as any as Editor;
 
 interface TextEditorProps {
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  setValue?: React.Dispatch<React.SetStateAction<string>>;
   bodyClass?: string;
+  onChange?: any;
+  multiple?: boolean;
 }
 const TextEditor = (props: TextEditorProps) => {
-  const { setValue, bodyClass } = props;
+  const { setValue, bodyClass, onChange } = props;
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
-    setValue(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+
+    onChange &&
+      onChange(draftToHtml(convertToRaw(editorState.getCurrentContent())));
+
+    setValue &&
+      setValue(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
   console.log();
   return (

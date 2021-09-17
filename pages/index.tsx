@@ -1,21 +1,11 @@
+import React from 'react';
 import type { NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 import { AiOutlineAppstore, AiOutlineStar } from 'react-icons/ai';
 
 import styles from '../styles/pages/dashboard.module.scss';
-
-const Summary = () => {
-  return (
-    <div className={styles.summary}>
-      <AiOutlineAppstore className={styles.summary__icon} />
-      <div>
-        <h2 className="heading-primary">13,856</h2>
-        <h5>Total Products</h5>
-      </div>
-    </div>
-  );
-};
+import Summary from '../components/dashboard/Summary';
 
 const Product = () => {
   return (
@@ -43,10 +33,10 @@ const Home: NextPage = () => {
   return (
     <div className={styles.dashboard}>
       <div className="grid four">
-        <Summary />
-        <Summary />
-        <Summary />
-        <Summary />
+        <Summary title="Total Products" ammount="13,856" />
+        <Summary title="Customer Enquiry" ammount="1,850" />
+        <Summary title="Blog Post" ammount="856" />
+        <Summary title="Reviews" ammount="35,856" />
       </div>
       <div className="grid three" style={{ marginTop: '10rem' }}>
         <div className={styles.product_wrapper}>
@@ -57,14 +47,14 @@ const Home: NextPage = () => {
           <Product />
         </div>
         <div className={styles.product_wrapper}>
-          <h3 className="heading-secondary">Top Product Enquiry</h3>
+          <h3 className="heading-secondary">Recent Products</h3>
           <Product />
           <Product />
           <Product />
           <Product />
         </div>
         <div className={styles.product_wrapper}>
-          <h3 className="heading-secondary">Top Product Enquiry</h3>
+          <h3 className="heading-secondary">Recent Reviews</h3>
           <Product />
           <Product />
           <Product />

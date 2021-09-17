@@ -8,8 +8,9 @@ import { useRouter } from 'next/dist/client/router';
 
 const MENU: { [key: string]: string[] } = {
   Dashboard: [],
-  Products: ['Add New Product', 'Products', 'Categories', 'Collections'],
+  Product: ['Add New Product', 'Products', 'Categories', 'Collections'],
   Blogs: ['Add New Post', 'Blog Post', 'Categories'],
+  Review: ['Add New Review', 'Reviews'],
   'Query Report': ['Add New Query', 'Queries'],
   Appearance: ['Pages', 'Menus', 'Media'],
   Settings: [
@@ -51,26 +52,26 @@ const Sidebar = () => {
             }`}
             onClick={() => menuOpenHandler(menu)}
           >
-            <Link href={menu !== 'Dashboard' ? '' : '/'}>
-              <a className={styles.sidebar__link}>
-                <div>
-                  <span>
-                    <i />
-                  </span>
-                  {menu}
-                </div>
-                {menu !== 'Dashboard' && (
-                  <BiDownArrow className={styles.sidebar__collapse_icon} />
-                )}
-              </a>
-            </Link>
+            {/* <Link href={menu !== 'Dashboard' ? '' : '/'}> */}
+            <a className={styles.sidebar__link}>
+              <div>
+                <span>
+                  <i />
+                </span>
+                {menu}
+              </div>
+              {menu !== 'Dashboard' && (
+                <BiDownArrow className={styles.sidebar__collapse_icon} />
+              )}
+            </a>
+            {/* </Link> */}
             <ul
               className={`${styles.sidebar__sublist} ${
                 open[menu] ? styles.sidebar__sublist_active : ''
               }`}
             >
               {MENU[menu].map((submenu) => (
-                <li className={styles.sidebar__subitem}>
+                <li key={submenu} className={styles.sidebar__subitem}>
                   <Link href={`/${slug(menu)}/${slug(submenu)}`}>
                     <a
                       className={`${styles.sidebar__link} ${styles.sidebar__sublink}`}
