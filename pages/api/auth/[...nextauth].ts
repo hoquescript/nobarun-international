@@ -5,7 +5,6 @@ import { gql } from '@apollo/client';
 
 import Providers from 'next-auth/providers';
 import client from '../../../apollo-client';
-import useAuthProvider from '../../../hooks/useAuthProvider';
 
 const LOGIN_QUERY = gql`
   query {
@@ -18,6 +17,7 @@ const LOGIN_QUERY = gql`
 const providers = [
   Providers.Credentials({
     name: 'Credentials',
+    // @ts-ignore
     authorize: async (credentials) => {
       try {
         const { email, password } = credentials;

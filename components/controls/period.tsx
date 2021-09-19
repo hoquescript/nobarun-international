@@ -33,10 +33,10 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
     setScreenWidth(window.screen.width);
   }, [setScreenWidth]);
 
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
+      if (ref.current && !ref.current?.contains(event.target)) {
         setShowDatePicker(false);
       }
     }
@@ -52,7 +52,7 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
     return `${startDate} - ${endDate}`;
   };
 
-  const handleDateChange = (item: { Periods: ISelectionRange }) => {
+  const handleDateChange = (item) => {
     setSelectionRange([item.Periods]);
     setPeriod(showFormattedDate(item.Periods));
   };
@@ -78,7 +78,9 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
       />
       {showDatePicker && (
         <div
-          className={`${styles.period__picker} ${timePeriod === 'Custom Range' && styles.period__picker_active}`}
+          className={`${styles.period__picker} ${
+            timePeriod === 'Custom Range' && styles.period__picker_active
+          }`}
         >
           <DateRangePicker
             showDateDisplay={screenWidth > 465}
@@ -94,8 +96,9 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
                 className={`
                   custom-date-picker-range-btn 
                   ${styles.period__picker_button} 
-                  ${timePeriod === label && styles.period__picker_button_active
-                }`}
+                  ${
+                    timePeriod === label && styles.period__picker_button_active
+                  }`}
                 type="button"
                 onClick={() => handleDefinedRange(label)}
               >

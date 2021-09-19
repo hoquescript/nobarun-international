@@ -9,7 +9,7 @@ export default function useProvideAuth() {
     async function getToken() {
       const session = await getSession();
       console.log(session);
-      if (session) setAuthToken(session?.accessToken);
+      if (session) setAuthToken(session?.accessToken as string);
     }
     getToken();
   }, []);

@@ -1,11 +1,16 @@
 import React, { useMemo } from 'react';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  usePagination,
+  Column,
+  TableInstance,
+} from 'react-table';
 import {
   FaGripVertical,
   FaEllipsisH,
   FaSortUp,
   FaSortDown,
-  FaSortAmountUpAlt,
   FaTrash,
   FaPen,
   FaBackward,
@@ -21,6 +26,7 @@ const Table = () => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => tableData, []);
 
+  // @ts-ignore
   const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
 
   const {
@@ -40,6 +46,7 @@ const Table = () => {
     state,
   } = tableInstance;
 
+  // @ts-ignore
   const { pageIndex, pageSize } = state;
 
   return (

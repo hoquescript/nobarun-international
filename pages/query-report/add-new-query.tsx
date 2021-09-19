@@ -52,10 +52,10 @@ const AddNewQuery = () => {
           />
         </div>
         <div className="grid one mb-20">
-          <Textarea label="Message" />
+          <Textarea name="message" label="Message" />
         </div>
         <div className="grid one mb-20">
-          <Textarea label="Add your Notes" />
+          <Textarea name="notes" label="Add your Notes" />
         </div>
         <div className="center mt-30">
           <button className="btn-green">Save</button>

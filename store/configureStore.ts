@@ -13,6 +13,7 @@ const store = configureStore({
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });
 
+// @ts-ignore
 store.sagaTask = sagaMiddleware.run(rootSaga);
 
 export type RootState = ReturnType<typeof store.getState>;

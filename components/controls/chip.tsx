@@ -2,7 +2,11 @@ import React, { useRef, useState } from 'react';
 import { AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
 import styles from './chipfield.module.scss';
 
-const Chip = (props) => {
+interface ChipProps {
+  chips: string[];
+  setChips: any;
+}
+const Chip = (props: ChipProps) => {
   const { chips, setChips } = props;
   const ref = useRef<HTMLInputElement>(null);
 

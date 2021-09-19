@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useForm, FormProvider, useFormContext } from 'react-hook-form';
+import React from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { signIn } from 'next-auth/client';
 
 import Textfield from '../../components/controls/textfield';
@@ -19,7 +19,6 @@ const Login = () => {
   return (
     <div className={styles.auth}>
       <FormProvider {...methods}>
-        <button onClick={methods.handleSubmit(onSubmit)}>Hello</button>
         <form className={styles.auth__form}>
           <img
             src="/images/logo.png"
@@ -47,7 +46,12 @@ const Login = () => {
           >
             Forgot Password?
           </a>
-          <button className={styles.auth__button}>Login</button>
+          <button
+            className={styles.auth__button}
+            onClick={methods.handleSubmit(onSubmit)}
+          >
+            Login
+          </button>
         </form>
       </FormProvider>
     </div>

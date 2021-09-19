@@ -1,5 +1,14 @@
 import { format } from 'date-fns';
+import { Column } from 'react-table';
 
+// interface ColumnProps {
+//   Header: string;
+//   Footer: string;
+//   accessor: string;
+//   disableFilters?: boolean;
+//   sticky?: string;
+//   Cell?: any;
+// }
 export const COLUMNS = [
   {
     Header: 'Id',

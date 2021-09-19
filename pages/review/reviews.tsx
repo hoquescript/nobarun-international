@@ -38,6 +38,7 @@ const BlogPost = () => {
   const columns = useMemo(() => COLUMNS, []);
   const data = useMemo(() => tableData, []);
 
+  // @ts-ignore
   const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
 
   const {

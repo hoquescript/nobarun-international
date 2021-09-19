@@ -35,9 +35,11 @@ const TextEditor = (props: TextEditorProps) => {
     setValue &&
       setValue(draftToHtml(convertToRaw(editorState.getCurrentContent())));
   };
-  console.log();
+
   return (
     <div>
+      {/* 
+  // @ts-ignore */}
       <EditorComponent
         editorState={editorState}
         wrapperClassName="editor"
@@ -63,10 +65,6 @@ const TextEditor = (props: TextEditorProps) => {
           history: { inDropdown: true },
         }}
       />
-      {/* <textarea
-        disabled
-        value={draftToHtml(convertToRaw(editorState.getCurrentContent()))}
-      /> */}
     </div>
   );
 };
