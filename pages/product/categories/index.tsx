@@ -109,7 +109,7 @@ const Categories = () => {
     <div className={styles.category__wrapper}>
       <div className="flex sb mb-60">
         <h1 className="heading-primary">Categories</h1>
-        <Link href="/products/categories/add">
+        <Link href="/product/categories/add">
           <a className="btn-outline-green small mr-20">
             <FaPlusCircle className="btn-icon-small" />
             Add Category

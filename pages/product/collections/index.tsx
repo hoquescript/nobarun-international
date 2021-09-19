@@ -79,7 +79,7 @@ const Collections = () => {
     <div className={styles.category__wrapper}>
       <div className="flex sb mb-60">
         <h1 className="page-title">Collections</h1>
-        <Link href="/products/collections/add">
+        <Link href="/product/collections/add">
           <a className="btn-outline-green small mr-20">
             <FaPlusCircle className="btn-icon-small" />
             Add Collection

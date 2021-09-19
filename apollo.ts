@@ -24,7 +24,7 @@ export default function useProvideAuth() {
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: 'https://nobarun.herokuapp.com/graphql',
+      uri: 'https://naubaun.herokuapp.com/graphql',
       headers: getAuthHeaders(),
     });
     console.log(link);

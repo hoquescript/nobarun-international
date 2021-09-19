@@ -55,7 +55,7 @@ const AddReview = () => {
                   <Textfield name="name" label="Your e-Mail Address" />
                 </div>
                 <div className="col-12 mb-10">
-                  <Textarea label="Your Reviews" />
+                  <Textarea name="review" label="Your Reviews" />
                 </div>
                 <div className="col-4">
                   <Textfield

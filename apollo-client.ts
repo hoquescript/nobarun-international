@@ -13,13 +13,13 @@ const getAuthHeaders = async () => {
 };
 
 const link = new HttpLink({
-  uri: 'https://nobarun.herokuapp.com/graphql',
+  uri: 'https://naubaun.herokuapp.com/graphql',
   headers: getAuthHeaders().then((res) => res),
 });
 console.log(link);
 
 const client = new ApolloClient({
-  uri: 'https://nobarun.herokuapp.com/graphql',
+  uri: 'https://naubaun.herokuapp.com/graphql',
   cache: new InMemoryCache(),
 });
 

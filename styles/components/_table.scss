@@ -99,6 +99,22 @@
   & tr:hover &__icon {
     visibility: visible;
   }
+  td.actions {
+    & > span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 3.5rem;
+      width: 3.5rem;
+      background-color: #dbdbdb;
+      margin-right: 1rem;
+      border-radius: 50%;
+    }
+    & svg {
+      height: 1.7rem;
+      width: 1.7rem;
+    }
+  }
 }
 
 .pagination {
