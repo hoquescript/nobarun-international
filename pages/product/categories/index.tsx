@@ -39,14 +39,7 @@ const items = [
 
 const GET_ALL_CATEGORY = gql`
   query allCategory {
-    getAllTheCategory {
-      name
-      description
-      id
-      image
-      parentCategory
-      slug
-    }
+    getCategories
   }
 `;
 
@@ -101,16 +94,18 @@ const renderItem = (props: renderItemProps) => {
 const Categories = () => {
   const router = useRouter();
   const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
-  const categories = data?.getAllTheCategory;
   if (loading) return 'Loading...';
   if (error) return `Fetching error! ${error.message}`;
+  const categories = JSON.parse(data?.getCategories);
+  console.log(categories);
 
   return (
+    <>
     <div className={styles.category__wrapper}>
       <div className="flex sb mb-60">
         <h1 className="heading-primary">Categories</h1>
         <Link href="/product/categories/add">
-          <a className="btn-outline-green small mr-20">
+          <a className="btn-outline-green small mr-20"></a>
             <FaPlusCircle className="btn-icon-small" />
             Add Category
           </a>
@@ -124,7 +119,7 @@ const Categories = () => {
           <div className="col-5 center">Image</div>
           <div className="col-7 center">Status</div>
         </div>
-        <div className="col-12">
+        {/* <div className="col-12">
           <Nestable
             items={categories}
             renderItem={renderItem}
@@ -132,9 +127,10 @@ const Categories = () => {
               // console.log(items);
             }}
           />
-        </div>
+        </div> */}
       </div>
-    </div>
+    {/* </div> */}
+    </>
   );
 };
 

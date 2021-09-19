@@ -1,18 +1,50 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { AiOutlineSearch } from 'react-icons/ai';
+import { v4 as uuid } from 'uuid';
 
 import MenuDragger from '../../components/appearance/MenuDragger';
 import MenuList from '../../components/appearance/MenuList';
-import Textfield from '../../components/controls/textfield';
 import { TabMenu, TabContent } from '../../components/shared/Tabmenu';
 
 import styles from '../../styles/pages/appearance.module.scss';
 
+const items = [
+  {
+    id: uuid(),
+    label: 'Pages',
+    url: 'https://amarstock.com',
+    isOpen: false,
+    isHeader: false,
+    isFooter: false,
+    children: [
+      {
+        id: uuid(),
+        label: 'Collection',
+        url: 'https://bigly24.com',
+        isOpen: false,
+        isHeader: false,
+        isFooter: false,
+      },
+    ],
+  },
+  {
+    id: uuid(),
+    label: 'Custom Link',
+    url: 'https://nobarun.com',
+    isOpen: false,
+    isHeader: false,
+    isFooter: false,
+  },
+];
+
 const Menus = () => {
-  const methods = useForm();
+  const { register, handleSubmit } = useForm();
   const [tabValue, setTabValue] = useState('header');
 
+  const [menus, setMenus] = useState(items);
+  const menuAddHandler = (data) => {
+    setMenus([...menus, { id: uuid(), ...data, isOpen: false }]);
+  };
   return (
     <div className="container center">
       <div className="main__content__header mb-40">
@@ -26,8 +58,7 @@ const Menus = () => {
             setTabValue={setTabValue}
           >
             <TabContent id="header" value={tabValue}>
-              {/* <AccountInfo /> */}
-              <MenuDragger />
+              <MenuDragger items={menus} setItems={setMenus} />
             </TabContent>
             <TabContent id="footer" value={tabValue}>
               {/* <AccountAccess /> */}
@@ -36,37 +67,28 @@ const Menus = () => {
         </div>
         <div className="col-4">
           <div>
-            <MenuList />
-            <FormProvider {...methods}>
-              <div className={styles.menu__custom}>
-                <h4 className={styles.menu__custom_title}>Custom Link</h4>
-                <div className={styles.menu__custom_wrapper}>
-                  <div className={styles.menu__custom_input}>
-                    <label>Url</label>
-                    <input
-                      // type={type}
-                      className="custom-input"
-                      // placeholder={placeholder}
-                      // value={value}
-                      {...methods.register('url')}
-                    />
-                  </div>
-                  <div className={styles.menu__custom_input}>
-                    <label>Link Text</label>
-                    <input
-                      // type={type}
-                      className="custom-input"
-                      // placeholder={placeholder}
-                      // value={value}
-                      {...methods.register('link')}
-                    />
-                  </div>
-                  <div className="center mt-30">
-                    <button className="btn-green">Add</button>
-                  </div>
+            <MenuList menuFor={tabValue} menus={menus} />
+            <div className={styles.menu__custom}>
+              <h4 className={styles.menu__custom_title}>Custom Link</h4>
+              <div className={styles.menu__custom_wrapper}>
+                <div className={styles.menu__custom_input}>
+                  <label>Url</label>
+                  <input className="custom-input" {...register('url')} />
+                </div>
+                <div className={styles.menu__custom_input}>
+                  <label>Link Text</label>
+                  <input className="custom-input" {...register('label')} />
+                </div>
+                <div className="center mt-30">
+                  <button
+                    className="btn-green"
+                    onClick={handleSubmit(menuAddHandler)}
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
-            </FormProvider>
+            </div>
           </div>
         </div>
       </div>
