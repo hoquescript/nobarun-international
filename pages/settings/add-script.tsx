@@ -1,15 +1,7 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
-import {
-  FaEllipsisH,
-  FaSave,
-  FaEdit,
-  FaPlusCircle,
-  FaTrash,
-  FaPlus,
-} from 'react-icons/fa';
-import Textarea from '../../components/controls/textarea';
+import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
 
 const AddScript = () => {
   const methods = useForm();
@@ -68,6 +60,12 @@ const AddScript = () => {
     setScripts(newScripts);
   };
 
+  // name: '',
+  //       whatsapp: '',
+  //       logo: '',
+  //       email: '',
+  //       address: '',
+  //       isDisabled: true,
   return (
     <div className="container center">
       <FormProvider {...methods}>

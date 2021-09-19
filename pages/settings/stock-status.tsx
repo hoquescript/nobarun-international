@@ -7,7 +7,9 @@ import {
   FaTrash,
   FaPen,
   FaGripVertical,
+  FaSave,
 } from 'react-icons/fa';
+
 import Textfield from '../../components/controls/textfield';
 
 const StockItem = () => {
@@ -61,37 +63,68 @@ const StockItem = () => {
   );
 };
 
-type IStockStatus = {
-  id: string;
-  title: string;
-  description: string;
-  image: string;
-  isPublished: boolean;
-}[];
-
 const StockStatus = () => {
-  const [stocks, setStocks] = useState([
-    {
-      id: '1',
+  const [stocks, setStocks] = useState({
+    [uuid()]: {
       title: 'Ready Stock',
-      description: 'Hello Notes',
+      notes: 'Hello Notes',
       image: '',
       isPublished: true,
+      isDisabled: true,
     },
-  ]);
-  const [newStocks, setNewStocks] = useState<IStockStatus>([]);
+  });
 
   const addNewStockHandler = () => {
-    setNewStocks([
-      ...newStocks,
-      {
-        id: uuid(),
+    setStocks({
+      [uuid()]: {
         title: '',
-        description: '',
+        notes: '',
         image: '',
         isPublished: true,
+        isDisabled: false,
       },
-    ]);
+      ...stocks,
+    });
+  };
+
+  console.log(stocks);
+
+  const handleChangeInput = (
+    id: string,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    // @ts-ignore
+    const { name, value, checked } = event.target;
+    const stock = stocks[id];
+    if (name === 'isPublished') {
+      stock[name] = checked;
+    } else {
+      // @ts-ignore
+      stock[name] = value;
+    }
+    setStocks({ ...stocks, [id]: stock });
+  };
+
+  const saveHandler = (id: string) => {
+    const stock = stocks[id];
+    stock.isDisabled = true;
+    setStocks({ ...stocks, [id]: stock });
+  };
+
+  const editHandler = (id: string) => {
+    const stock = stocks[id];
+    stock.isDisabled = false;
+    setStocks({ ...stocks, [id]: stock });
+  };
+
+  const deleteHandler = (id: string) => {
+    const newStocks = Object.keys(stocks).reduce((object, key) => {
+      if (key !== id) {
+        object[key] = stocks[key];
+      }
+      return object;
+    }, {});
+    setStocks(newStocks);
   };
 
   return (
@@ -119,9 +152,89 @@ const StockStatus = () => {
             <div className="col-2">Status</div>
           </div>
         </li>
-        <StockItem />
-        <StockItem />
-        <StockItem />
+        {Object.keys(stocks).map((key) => (
+          <li>
+            <div className="row flex">
+              <div className="col-1">
+                <FaGripVertical />
+              </div>
+              <div className="col-3">
+                <div className="field">
+                  <input
+                    type="text"
+                    className="custom-input"
+                    placeholder="Title"
+                    name="title"
+                    disabled={stocks[key].isDisabled}
+                    value={stocks[key].title}
+                    onChange={(e) => handleChangeInput(key, e)}
+                  />
+                </div>
+              </div>
+              <div className="col-5">
+                <div className="field">
+                  <input
+                    type="text"
+                    className="custom-input"
+                    placeholder="Notes"
+                    name="notes"
+                    disabled={stocks[key].isDisabled}
+                    value={stocks[key].notes}
+                    onChange={(e) => handleChangeInput(key, e)}
+                  />
+                </div>
+              </div>
+              <div className="col-1">
+                <figure>
+                  <img src="/images/product-img.jpg" alt="" />
+                </figure>
+              </div>
+              <div
+                className="col-2"
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <label htmlFor={key} className="custom-switch">
+                  <input
+                    type="checkbox"
+                    id={key}
+                    name="isPublished"
+                    disabled={stocks[key].isDisabled}
+                    checked={stocks[key].isPublished}
+                    onChange={(e) => handleChangeInput(key, e)}
+                  />
+                  <span>&nbsp;</span>
+                </label>
+                <span
+                  className="table__icon menu"
+                  style={{ marginLeft: '3rem', visibility: 'visible' }}
+                >
+                  <FaEllipsisH />
+                  <div className="table__action_menu">
+                    <button
+                      className="big-icon"
+                      onClick={() => deleteHandler(key)}
+                    >
+                      <FaTrash />
+                    </button>
+                    <button
+                      onClick={
+                        stocks[key].isDisabled
+                          ? (e) => editHandler(key)
+                          : (e) => saveHandler(key)
+                      }
+                    >
+                      {stocks[key].isDisabled ? <FaPen /> : <FaSave />}
+                    </button>
+                  </div>
+                </span>
+              </div>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
   );
