@@ -37,10 +37,10 @@ const AddProduct = () => {
     console.log(question[0]);
   };
   return (
-    <>
+    <div className="container">
       <Toolbar />
       <FormProvider {...methods}>
-        <div className={styles.addProduct}>
+        <div>
           <div
             className="main__content__header"
             style={{
@@ -92,7 +92,7 @@ const AddProduct = () => {
           </TabMenu>
         </div>
       </FormProvider>
-    </>
+    </div>
   );
 };
 

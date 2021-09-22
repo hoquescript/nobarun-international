@@ -25,6 +25,7 @@
     "react-highlight-within-textarea": "^2.1.0",
     "react-hook-form": "^7.15.3",
     "react-icons": "^4.2.0",
+    "react-keyed-file-browser": "^1.13.1",
     "react-nestable": "^2.0.0",
     "react-redux": "^7.2.4",
     "react-star-ratings": "^2.3.0",

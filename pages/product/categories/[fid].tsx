@@ -84,7 +84,7 @@ const CategoryForm = () => {
   if (loading) return 'Submitting...';
   if (error) return `Submission error! ${error.message}`;
   return (
-    <div className={styles.addProduct}>
+    <div className="container center">
       <div
         className="main__content__header"
         style={{

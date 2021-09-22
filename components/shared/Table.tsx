@@ -50,73 +50,63 @@ const Table = () => {
   const { pageIndex, pageSize } = state;
 
   return (
-    <div style={{ paddingBottom: 50 }}>
-      <table {...getTableProps()} className="table">
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                  {column.render('Header')}
-                  {column.isSorted ? (
-                    column.isSortedDesc ? (
-                      <FaSortUp style={{ transform: 'translateY(7px)' }} />
+    <div>
+      <div className="table__wrapper">
+        <table {...getTableProps()} className="table">
+          <thead>
+            {headerGroups.map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                <th>&nbsp;</th>
+                {headerGroup.headers.map((column) => (
+                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                    {column.render('Header')}
+                    {column.isSorted ? (
+                      column.isSortedDesc ? (
+                        <FaSortUp style={{ transform: 'translateY(7px)' }} />
+                      ) : (
+                        <FaSortDown />
+                      )
                     ) : (
-                      <FaSortDown />
-                    )
-                  ) : (
-                    ''
-                  )}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {page.map((row) => {
-            prepareRow(row);
-            return (
-              <tr {...row.getRowProps()}>
-                {row.cells.map((cell, index) => {
-                  const grip = index === 0 && (
-                    <span
-                      className="table__icon grip"
-                      style={{ marginRight: '2rem' }}
-                    >
+                      ''
+                    )}
+                  </th>
+                ))}
+                <th>&nbsp;</th>
+              </tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()}>
+            {page.map((row) => {
+              prepareRow(row);
+              return (
+                <tr {...row.getRowProps()}>
+                  <td style={{ padding: '.5rem' }}>
+                    <span className="table__icon grip">
                       <FaGripVertical />
                     </span>
-                  );
-                  const menu = index === row.cells.length - 1 && (
-                    <>
-                      <span
-                        className="table__icon menu"
-                        style={{ marginLeft: '3rem' }}
-                      >
-                        <FaEllipsisH />
-                        <div className="table__action_menu">
-                          <button>
-                            <FaTrash />
-                          </button>
-                          <button>
-                            <FaPen />
-                          </button>
-                        </div>
-                      </span>
-                    </>
-                  );
-                  return (
-                    <td {...cell.getCellProps()}>
-                      {grip}
-                      {cell.render('Cell')}
-                      {menu}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  </td>
+                  {row.cells.map((cell) => (
+                    <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  ))}
+                  <td style={{ padding: '.5rem' }}>
+                    <span className="table__icon menu">
+                      <FaEllipsisH />
+                      <div className="table__action_menu">
+                        <button>
+                          <FaTrash />
+                        </button>
+                        <button>
+                          <FaPen />
+                        </button>
+                      </div>
+                    </span>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <div className="pagination">
         <div className="pagination__noOfRow">
           <h4 className="heading-tertiary mr-20">Rows Per Page</h4>

@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { BiDownArrow } from 'react-icons/bi';
+import {
+  BiDownArrow,
+  BiCart,
+  BiAt,
+  BiCommentDots,
+  BiCog,
+  BiCustomize,
+} from 'react-icons/bi';
+import { RiQuestionAnswerLine } from 'react-icons/ri';
+import { BsFillGridFill } from 'react-icons/bs';
 
 import styles from './_sidebar.module.scss';
 import slug from '../helpers/slugGenerator';
@@ -21,6 +30,15 @@ const MENU: { [key: string]: string[] } = {
     '301 Redirect',
   ],
 };
+const ICONS = [
+  <BsFillGridFill />,
+  <BiCart />,
+  <BiAt />,
+  <BiCommentDots />,
+  <RiQuestionAnswerLine />,
+  <BiCustomize />,
+  <BiCog />,
+];
 
 const resetState = () => {
   const state: { [key: string]: boolean } = {};
@@ -44,7 +62,7 @@ const Sidebar = () => {
   return (
     <aside className={styles.sidebar}>
       <ul className={styles.sidebar__list}>
-        {Object.keys(MENU).map((menu) => (
+        {Object.keys(MENU).map((menu, idx) => (
           <li
             key={menu}
             className={`${styles.sidebar__item} ${
@@ -55,9 +73,7 @@ const Sidebar = () => {
             {/* <Link href={menu !== 'Dashboard' ? '' : '/'}> */}
             <a className={styles.sidebar__link}>
               <div>
-                <span>
-                  <i />
-                </span>
+                <span>{ICONS[idx]}</span>
                 {menu}
               </div>
               {menu !== 'Dashboard' && (

@@ -80,63 +80,77 @@ const BlogPost = () => {
         </div>
       </div>
       <div style={{ paddingBottom: 50 }}>
-        <table {...getTableProps()} className="table">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
-                    {column.render('Header')}
-                    {column.isSorted ? (
-                      column.isSortedDesc ? (
-                        <FaSortUp style={{ transform: 'translateY(7px)' }} />
+        <div className="table__wrapper">
+          <table {...getTableProps()} className="table">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  <th>&nbsp;</th>
+                  {headerGroup.headers.map((column) => (
+                    <th
+                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                    >
+                      {column.render('Header')}
+                      {column.isSorted ? (
+                        column.isSortedDesc ? (
+                          <FaSortUp style={{ transform: 'translateY(7px)' }} />
+                        ) : (
+                          <FaSortDown />
+                        )
                       ) : (
-                        <FaSortDown />
-                      )
-                    ) : (
-                      ''
-                    )}
-                  </th>
-                ))}
-                <th>Action</th>
-              </tr>
-            ))}
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell, index) => {
-                    const grip = index === 0 && (
-                      <span
-                        className="table__icon grip"
-                        style={{ marginRight: '2rem' }}
-                      >
+                        ''
+                      )}
+                    </th>
+                  ))}
+                  <th>Action</th>
+                </tr>
+              ))}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {page.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    <td style={{ padding: '0.5rem' }}>
+                      <span className="table__icon grip">
                         <FaGripVertical />
                       </span>
-                    );
-                    return (
-                      <td {...cell.getCellProps()}>
-                        {grip}
-                        {cell.render('Cell')}
-                      </td>
-                    );
-                  })}
-                  <td className="actions">
-                    <span>
-                      <FaEye />
-                    </span>
-                    <span>
-                      <FaEdit />
-                    </span>
-                    <Togglebar />
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+                    </td>
+                    {row.cells.map((cell, index) => {
+                      const grip = index === 0 && (
+                        <span
+                          className="table__icon grip"
+                          style={{ marginRight: '2rem' }}
+                        >
+                          <FaGripVertical />
+                        </span>
+                      );
+                      return (
+                        <td {...cell.getCellProps()}>
+                          {/* {grip} */}
+                          {cell.render('Cell')}
+                        </td>
+                      );
+                    })}
+                    <td>
+                      <div className="actions" style={{ padding: '0.5rem' }}>
+                        <div>
+                          <span>
+                            <FaEye />
+                          </span>
+                          <span>
+                            <FaEdit />
+                          </span>
+                        </div>
+                        <Togglebar />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
         <div className="pagination">
           <div className="pagination__noOfRow">
             <h4 className="heading-tertiary mr-20">Rows Per Page</h4>

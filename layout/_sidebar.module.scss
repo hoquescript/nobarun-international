@@ -1,9 +1,17 @@
+@import '../styles/mixins';
+
 .sidebar {
   height: calc(100vh - 7rem);
   width: 42rem;
+  @include respond(1400px) {
+    width: 35rem;
+  }
   border-right: 2px solid #eee;
   &__list {
     padding: 3rem 2rem;
+    @include respond(1400px) {
+      padding: 2.5rem 1rem;
+    }
   }
   &__item {
     cursor: pointer;
@@ -20,7 +28,7 @@
   &__link {
     transition: background-color 0.5s;
     padding: 1rem 1.8rem 1rem 1rem;
-    color: #aaa;
+    color: #968c8c;
     font-size: 1.8rem;
     display: flex;
     justify-content: space-between;
@@ -32,17 +40,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        border-radius: 50%;
-        height: 1.8rem;
-        width: 1.8rem;
-        border: 1px solid #ececec;
         margin-right: 1.5rem;
-        & > i {
-          display: inline-block;
-          height: 1.2rem;
-          width: 1.2rem;
-          background-color: #dbdbdb;
-          border-radius: 50%;
+        & > svg {
+          height: 2.5rem;
+          width: 2.5rem;
+          color: #777;
         }
       }
     }

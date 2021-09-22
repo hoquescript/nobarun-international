@@ -1,7 +1,9 @@
 .table {
   border-collapse: collapse;
   width: 100%;
-  & > thead {
+  &__wrapper {
+    max-width: 100%;
+    overflow-x: auto;
   }
   & th {
     // border: 1px solid #ddd;
@@ -59,6 +61,7 @@
     flex-direction: row;
     align-items: center;
     border-radius: 50%;
+    position: relative;
     &.grip {
       cursor: grab;
     }
@@ -66,11 +69,12 @@
       background-color: #777;
       color: #fff;
       cursor: pointer;
+      cursor: pointer;
     }
   }
   &__action_menu {
     display: none;
-    transform: translate(-15px, 33px);
+    transform: translate(-15px, 30px);
     position: absolute;
     background: transparent;
     & > button {
@@ -103,8 +107,14 @@
   & tr:hover &__icon {
     visibility: visible;
   }
-  td.actions {
-    & > span {
+  td > .actions {
+    display: flex;
+    align-items: center;
+    & > div {
+      display: flex;
+      flex-direction: row;
+    }
+    & > div > span {
       display: inline-flex;
       align-items: center;
       justify-content: center;

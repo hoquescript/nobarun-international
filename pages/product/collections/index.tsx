@@ -76,7 +76,7 @@ const renderItem = (props) => {
 
 const Collections = () => {
   return (
-    <div className={styles.category__wrapper}>
+    <div className="container center mt-30">
       <div className="flex sb mb-60">
         <h1 className="page-title">Collections</h1>
         <Link href="/product/collections/add">

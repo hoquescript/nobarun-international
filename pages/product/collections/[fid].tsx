@@ -31,7 +31,7 @@ const CollectionForm = () => {
   };
 
   return (
-    <div className={styles.addProduct}>
+    <div className="container center">
       <div
         className="main__content__header"
         style={{

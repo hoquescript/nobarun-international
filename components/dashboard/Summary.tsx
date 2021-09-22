@@ -10,11 +10,13 @@ interface SummaryProps {
 const Summary = (props: SummaryProps) => {
   const { title, ammount, icon } = props;
   return (
-    <div className={styles.summary}>
-      <AiOutlineAppstore className={styles.summary__icon} />
-      <div>
-        <h2 className="heading-primary">{ammount}</h2>
-        <h5>{title}</h5>
+    <div className="col-xxl-3 col-lg-6">
+      <div className={styles.summary}>
+        <AiOutlineAppstore className={styles.summary__icon} />
+        <div>
+          <h2 className="heading-primary">{ammount}</h2>
+          <h5>{title}</h5>
+        </div>
       </div>
     </div>
   );

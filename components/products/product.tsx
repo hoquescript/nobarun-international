@@ -12,10 +12,10 @@ const Product = () => (
         <img src="/images/blender.png" alt="" />
       </figure>
       <div className="col-8">
-        <div>
+        <div className="flex mb-20">
           <input
             type="text"
-            className="custom-input small mr-20 mb-20"
+            className="custom-input small mr-20"
             value="Commercial Kitchen"
             disabled
             style={{ width: '20rem' }}

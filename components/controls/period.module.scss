@@ -1,7 +1,7 @@
 .period {
   &__input {
-    width: 100%;
-    height: 5.3rem;
+    width: 22.1rem;
+    height: 6rem;
     outline: none;
     background-color: transparent;
     cursor: pointer;
@@ -10,39 +10,40 @@
   }
   &__picker {
     position: absolute;
-    top: 5.3rem;
+    top: 6rem;
+    right: -6rem;
     border: 1px solid #ccc;
     background-color: #fff;
     z-index: 1100;
-    &_active{
-      @media (max-width: 1160px) {
-        right: -240px
-      }
-      @media (max-width: 890px) {
-        right: -160px
-      }
-      @media (max-width: 780px) {
-        right: -35px
-      }
-      @media (max-width: 675px) {
-        right: 30px
-      }
-      @media (max-width: 644px) {
-        right: -232px
-      }
-      @media (max-width: 465px) {
-        right: -80px
-      }
-      @media (max-width: 385px) {
-        right: -35px
-      }
-      @media (max-width: 355px) {
-        right: -25px
-      }
-      @media (max-width: 345px) {
-        right: -88px
-      }
-    }
+    // &_active {
+    //   @media (max-width: 1160px) {
+    //     right: -240px;
+    //   }
+    //   @media (max-width: 890px) {
+    //     right: -160px;
+    //   }
+    //   @media (max-width: 780px) {
+    //     right: -35px;
+    //   }
+    //   @media (max-width: 675px) {
+    //     right: 30px;
+    //   }
+    //   @media (max-width: 644px) {
+    //     right: -232px;
+    //   }
+    //   @media (max-width: 465px) {
+    //     right: -80px;
+    //   }
+    //   @media (max-width: 385px) {
+    //     right: -35px;
+    //   }
+    //   @media (max-width: 355px) {
+    //     right: -25px;
+    //   }
+    //   @media (max-width: 345px) {
+    //     right: -88px;
+    //   }
+    // }
   }
   &__picker_button {
     width: 100%;

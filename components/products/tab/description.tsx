@@ -108,27 +108,35 @@ const Description = (props: DescriptionProps) => {
           />
         </div>
         <div className="wrapper-section__content">
-          <div className="grid four mb-60">
-            <Combobox
-              name="category"
-              label="Category"
-              options={['Car Parking Management', '2', '3']}
-            />
-            <Combobox
-              name="collection"
-              label="Collection"
-              options={['Flash Sale', '2', '3']}
-            />
-            <Combobox
-              name="stockStatus"
-              label="Stock Status"
-              options={['Ready Stock', '2', '3']}
-            />
-            <Combobox
-              name="contactPerson"
-              label="Contact Person"
-              options={['Shuvo Islam', '2', '3']}
-            />
+          <div className="row mb-60">
+            <div className="col-3">
+              <Combobox
+                name="category"
+                label="Category"
+                options={['Car Parking Management', '2', '3']}
+              />
+            </div>
+            <div className="col-3">
+              <Combobox
+                name="collection"
+                label="Collection"
+                options={['Flash Sale', '2', '3']}
+              />
+            </div>
+            <div className="col-3">
+              <Combobox
+                name="stockStatus"
+                label="Stock Status"
+                options={['Ready Stock', '2', '3']}
+              />
+            </div>
+            <div className="col-3">
+              <Combobox
+                name="contactPerson"
+                label="Contact Person"
+                options={['Shuvo Islam', '2', '3']}
+              />
+            </div>
           </div>
           <div className="product-specs mt-30 mb-50">
             <div>

@@ -76,7 +76,7 @@ const renderItem = (props) => {
 
 const Categories = () => {
   return (
-    <div className={styles.category__wrapper}>
+    <div className="container center">
       <div className="flex sb mb-60">
         <h1 className="heading-primary">Categories</h1>
         <Link href="/products/categories/add">
@@ -91,8 +91,8 @@ const Categories = () => {
         <div className="col-3 center">Name</div>
         <div className="col-5 center">Description</div>
         <div className="col-3 row">
-          <div className="col-5 center">Image</div>
-          <div className="col-7 center">Status</div>
+          <div className="col-6 center">Image</div>
+          <div className="col-6 center">Status</div>
         </div>
         <div className="col-12">
           <Nestable

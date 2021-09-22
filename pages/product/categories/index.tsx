@@ -26,11 +26,20 @@ const items = [
     name: 'Coffee & Tea Business',
     description:
       'Sustainability and freshness is assured with our branded glass bottles',
+    // children: null,
+    // children:[ '1','2'],
     children: [
       {
         id: 2,
         name: 'Commercial Kitchen Equipment',
         description: 'The freshest organic ingredients for milk making',
+        children: [
+          {
+            id: 2,
+            name: 'Commercial Kitchen Equipment',
+            description: 'The freshest organic ingredients for milk making',
+          },
+        ],
       },
     ],
   },
@@ -100,12 +109,11 @@ const Categories = () => {
   console.log(categories);
 
   return (
-    <>
-    <div className={styles.category__wrapper}>
+    <div className="container center">
       <div className="flex sb mb-60">
         <h1 className="heading-primary">Categories</h1>
         <Link href="/product/categories/add">
-          <a className="btn-outline-green small mr-20"></a>
+          <a className="btn-outline-green small mr-20">
             <FaPlusCircle className="btn-icon-small" />
             Add Category
           </a>
@@ -119,7 +127,7 @@ const Categories = () => {
           <div className="col-5 center">Image</div>
           <div className="col-7 center">Status</div>
         </div>
-        {/* <div className="col-12">
+        <div className="col-12">
           <Nestable
             items={categories}
             renderItem={renderItem}
@@ -127,10 +135,9 @@ const Categories = () => {
               // console.log(items);
             }}
           />
-        </div> */}
+        </div>
       </div>
-    {/* </div> */}
-    </>
+    </div>
   );
 };
 

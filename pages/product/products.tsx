@@ -17,7 +17,7 @@ const Products = () => {
   );
 
   return (
-    <div className={styles.products}>
+    <div className="container">
       <div className="row mb-30">
         <div className="col-6">
           <Search />
@@ -56,31 +56,31 @@ const Products = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
-        <div className="col-4">
+        <div className="col-xxl-4 col-xl-6 col-xs-12">
           <Product />
         </div>
 

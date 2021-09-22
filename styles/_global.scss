@@ -10,10 +10,17 @@
 }
 
 .container {
-  width: 140rem;
+  max-width: 140rem;
   margin: 5rem 2rem;
+  padding: 0 2.5rem;
   &.center {
     margin: 5rem auto;
+    @include respond(1400px) {
+      margin: 2rem auto;
+    }
+  }
+  @include respond(1400px) {
+    margin: 2rem 2rem;
   }
 }
 

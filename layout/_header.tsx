@@ -7,6 +7,7 @@ import styles from './_header.module.scss';
 
 import logo from '../public/images/logo.png';
 import { AiOutlineLogout } from 'react-icons/ai';
+import { BsFillGridFill } from 'react-icons/bs';
 
 const Header = () => {
   const logoutHandler = () => {
@@ -18,9 +19,13 @@ const Header = () => {
       <Image src={logo} height="50" width="250" alt="Logo of Nobarun" />
       {/* ---------Title---------- */}
       <div className={styles.title}>
+        {/* <span>
+          <BsFillGridFill />
+        </span> */}
         <span>
           <i />
         </span>
+
         <h2>Dashboard</h2>
       </div>
       {/* ---------Profile---------- */}
