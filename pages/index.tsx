@@ -55,6 +55,7 @@ const Home: NextPage = () => {
             <Product />
             <Product />
             <Product />
+            <Product />
           </div>
         </div>
         <div className="col-4">
@@ -64,11 +65,13 @@ const Home: NextPage = () => {
             <Product />
             <Product />
             <Product />
+            <Product />
           </div>
         </div>
         <div className="col-4">
           <div className={styles.product_wrapper}>
             <h3 className="heading-secondary">Recent Reviews</h3>
+            <Product />
             <Product />
             <Product />
             <Product />

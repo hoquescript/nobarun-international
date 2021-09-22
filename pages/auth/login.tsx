@@ -19,7 +19,10 @@ const Login = () => {
   return (
     <div className={styles.auth}>
       <FormProvider {...methods}>
-        <form className={styles.auth__form}>
+        <form
+          className={styles.auth__form}
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
           <img
             src="/images/logo.png"
             alt="Logo of Nobarun"
@@ -46,12 +49,8 @@ const Login = () => {
           >
             Forgot Password?
           </a>
-          <button
-            className={styles.auth__button}
-            onClick={methods.handleSubmit(onSubmit)}
-          >
-            Login
-          </button>
+          <input type="submit" className={styles.auth__button} value="Login" />
+          {/* <button onClick={methods.handleSubmit(onSubmit)}>Login</button> */}
         </form>
       </FormProvider>
     </div>
