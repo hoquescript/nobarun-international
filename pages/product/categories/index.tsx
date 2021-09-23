@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { v4 as uuid } from 'uuid';
+
 import {
   FaGripVertical,
   FaEllipsisV,
@@ -12,7 +14,7 @@ import 'react-nestable/dist/styles/index.css';
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
-import { gql, useQuery } from '@apollo/client';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 
 const items = [
@@ -47,7 +49,7 @@ const items = [
 ];
 
 const GET_ALL_CATEGORY = gql`
-  query allCategory {
+  query GetCategoryTree {
     getCategories
   }
 `;
@@ -61,6 +63,7 @@ interface renderItemProps {
 const renderItem = (props: renderItemProps) => {
   const { item, index, collapseIcon, handler } = props;
   // const [published, setPublished] = useState(false);
+
   return (
     <div className="row">
       <div className="col-1 flex ct" style={{ cursor: 'move' }}>
@@ -81,8 +84,16 @@ const renderItem = (props: renderItemProps) => {
             <img src="/images/product-img.jpg" alt="" />
           </figure>
         </div>
-        <div className="col-7 flex ct">
-          <Togglebar checked={true} />
+        <div className="col-7 flex">
+          <label htmlFor="publish" className="custom-switch">
+            <input
+              type="checkbox"
+              id="publish"
+              checked={true}
+              onChange={() => {}}
+            />
+            <span>&nbsp;</span>
+          </label>
           <span className={`ml-20 ${styles.category__menu}`}>
             <FaEllipsisV />
             <div className="table__action_menu">
@@ -100,13 +111,64 @@ const renderItem = (props: renderItemProps) => {
   );
 };
 
+const SET_CATEGORIES_TREE = gql`
+  mutation setCategoriesTree($items: [CreateNewCategoryInput!]!) {
+    setCategoriesTree(items: $items)
+  }
+`;
+
 const Categories = () => {
   const router = useRouter();
+  const [categoryItem, setCategoryItem] = useState();
+
+  const [createCategory, { data: d, loading: l, error: e }] =
+    useMutation(SET_CATEGORIES_TREE);
+
+  // console.log(uuid());
+
   const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
   if (loading) return 'Loading...';
   if (error) return `Fetching error! ${error.message}`;
-  const categories = JSON.parse(data?.getCategories);
-  console.log(categories);
+  // console.log(JSON.parse(data?.getCategories));
+
+  // useEffect(() => {
+
+  const categories = JSON.parse(data?.getCategories).map((category) => ({
+    id: category.id,
+    name: category.name,
+    description: category.description,
+    slug: category.slug,
+    children: category.children,
+  }));
+
+  // console.log(categories);
+
+  // useEffect(() => {
+  // setCategoryItem(categories);
+  // }, []);
+  // }, []);
+
+  // console.log(categoryItem);
+
+  const setCategoryTreeHandler = (dragInfo) => {
+    const { items } = dragInfo;
+    console.log(items);
+
+    // items.map(item => {
+    //   const
+    // });
+    // createCategory();
+
+    createCategory({
+      variables: {
+        items,
+      },
+    });
+    // setCategoryItem('Please Rerender again');
+    // router.reload(window.location.pathname);
+    // router.reload(window.location.pathname);
+    // console.log(d);
+  };
 
   return (
     <div className="container center">
@@ -129,11 +191,10 @@ const Categories = () => {
         </div>
         <div className="col-12">
           <Nestable
-            items={categories}
+            items={items}
+            threshold={5}
             renderItem={renderItem}
-            onChange={(items) => {
-              // console.log(items);
-            }}
+            onChange={setCategoryTreeHandler}
           />
         </div>
       </div>

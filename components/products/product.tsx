@@ -34,22 +34,22 @@ const Product = () => (
           />
         </h4>
       </div>
-      <div className="col-12">
-        <div className={styles.product__info}>
-          <span className={styles.product__meta}>
-            <span></span>
-            <h5 style={{ color: '#e81f1f' }}>Shuvo Islam</h5>
-          </span>
-          <span className={styles.product__meta}>
-            <FaEye className="mr-10" />
-            3.5k
-          </span>
-          <span className={styles.product__meta}>
-            <FaStar className="mr-10 mb-5" />
-            4.9 (71)
-          </span>
-        </div>
+      {/* <div className="col-12"> */}
+      <div className={styles.product__info}>
+        <span className={styles.product__meta}>
+          <span></span>
+          <h5 style={{ color: '#e81f1f' }}>Shuvo Islam</h5>
+        </span>
+        <span className={styles.product__meta}>
+          <FaEye className="mr-10" />
+          3.5k
+        </span>
+        <span className={styles.product__meta}>
+          <FaStar className="mr-10 mb-5" />
+          4.9 (71)
+        </span>
       </div>
+      {/* </div> */}
     </div>
   </div>
 );

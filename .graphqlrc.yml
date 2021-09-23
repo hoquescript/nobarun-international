@@ -2,4 +2,4 @@ schema: 'api/src/schema.graphql'
 extensions:
   endpoints:
     default:
-      url: http://nobarun.herokuapp.com/graphql
+      url: http://naubaun.herokuapp.com/graphql

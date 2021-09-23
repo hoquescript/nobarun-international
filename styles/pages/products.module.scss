@@ -1,6 +1,6 @@
 .products {
-  width: 140rem;
-  margin: 5rem auto;
+  max-width: 120rem;
+  margin: 5rem;
   &__header {
     margin: 2rem 0 4rem;
     display: flex;
@@ -34,7 +34,9 @@
 }
 .product {
   margin-bottom: 3rem;
+  padding: 1rem 1.5rem;
   width: 100%;
+  box-shadow: 0px 0px 8px -2px #ccc;
   &__info {
     display: flex;
     width: 100%;

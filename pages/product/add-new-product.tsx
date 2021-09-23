@@ -37,7 +37,7 @@ const AddProduct = () => {
     console.log(question[0]);
   };
   return (
-    <div className="container">
+    <div className="container ml-50" style={{ maxWidth: '120rem' }}>
       <Toolbar />
       <FormProvider {...methods}>
         <div>

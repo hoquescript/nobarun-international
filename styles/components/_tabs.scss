@@ -1,11 +1,11 @@
 .custom-tabs__links {
   background-color: white;
-  box-shadow: 1px 2px 4px $shadowGrey;
+  box-shadow: 1px 1px 7px #ccc;
   border: 1px solid $lightBgGrey;
   border-radius: 0.8rem;
   padding: 0.5rem 0;
   display: flex;
-
+  cursor: pointer;
   > a {
     border-radius: 0.8rem;
     display: flex;

@@ -6,7 +6,7 @@
 }
 
 .summary {
-  background-color: #f7f7f7;
+  box-shadow: 0px 0px 10px -2px #ccc;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -15,6 +15,7 @@
   &__icon {
     height: 6rem;
     width: 6rem;
+    color: #1e8cc5;
   }
 }
 
@@ -27,7 +28,7 @@
     border-bottom: 2px solid #ddd;
   }
   &_wrapper {
-    border: 2px solid #ccc;
+    box-shadow: 0px 0px 10px -2px #ccc;
     border-radius: 15px;
     padding: 3rem 2rem 2rem;
     @include respond(1400px) {
@@ -64,7 +65,7 @@
     height: 1rem;
     width: 1rem;
     border-radius: 50%;
-    background-color: #555;
+    background-color: #ed252d;
     margin-left: 1rem;
   }
 }

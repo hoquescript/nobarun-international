@@ -2,9 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 7rem;
-  background-color: #eee;
+  height: 8rem;
+  // background-color: #eee;
+  box-shadow: 1px 2px 4px #ececec;
   padding: 0 7rem;
+  position: relative;
 }
 .title {
   display: flex;
@@ -44,11 +46,12 @@
   height: 4rem !important;
   width: 4rem !important;
   border-radius: 50%;
-  background-color: #dfdfdf;
+  background-color: #f7f7f7;
   cursor: pointer;
   & > svg {
     height: 2rem;
     width: 2rem;
+    color: #1e8cc5;
   }
 }
 .seperator {

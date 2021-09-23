@@ -66,7 +66,7 @@ const Menus = () => {
           </TabMenu>
         </div>
         <div className="col-4">
-          <div>
+          <div style={{ padding: '1rem 3rem' }}>
             <MenuList menuFor={tabValue} menus={menus} />
             <div className={styles.menu__custom}>
               <h4 className={styles.menu__custom_title}>Custom Link</h4>

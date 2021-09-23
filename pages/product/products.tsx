@@ -17,7 +17,7 @@ const Products = () => {
   );
 
   return (
-    <div className="container">
+    <div className="container center">
       <div className="row mb-30">
         <div className="col-6">
           <Search />
@@ -31,7 +31,7 @@ const Products = () => {
         <div className={styles.products__viewWrapper}>
           <div className="sort-by">
             <span className="mr-10">Sort by</span>
-            <select className="custom-input">
+            <select className="custom-input" style={{ padding: '1rem' }}>
               <option value="">Name</option>
               <option value="">Date</option>
               <option value="">Stock Id</option>

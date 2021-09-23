@@ -18,6 +18,9 @@
     @include respond(1400px) {
       margin: 2rem auto;
     }
+    &.t-center {
+      text-align: left;
+    }
   }
   @include respond(1400px) {
     margin: 2rem 2rem;
@@ -38,7 +41,7 @@
   font-family: $font;
   width: 100%;
   font-size: 2rem;
-  background-color: #eee;
+  background-color: #fff;
   &::placeholder {
     color: #433;
   }

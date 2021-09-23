@@ -6,7 +6,7 @@
   @include respond(1400px) {
     width: 35rem;
   }
-  border-right: 2px solid #eee;
+  box-shadow: 1px 3px 6px #ececec;
   &__list {
     padding: 3rem 2rem;
     @include respond(1400px) {
@@ -27,7 +27,7 @@
   }
   &__link {
     transition: background-color 0.5s;
-    padding: 1rem 1.8rem 1rem 1rem;
+    padding: 1.7rem 1.8rem 1.7rem 1rem;
     color: #968c8c;
     font-size: 1.8rem;
     display: flex;
@@ -40,11 +40,11 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-right: 1.5rem;
+        margin-right: 2rem;
         & > svg {
           height: 2.5rem;
           width: 2.5rem;
-          color: #777;
+          color: #1e8cc5;
         }
       }
     }
@@ -62,7 +62,7 @@
     }
   }
   &__subitem {
-    padding: 0.5rem 0;
+    padding: 1rem 0;
   }
   &__sublink {
     padding: 0.1rem 2rem !important;

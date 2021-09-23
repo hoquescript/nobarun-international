@@ -1,6 +1,7 @@
 .field {
   display: flex;
   flex-direction: column;
+  text-align: left;
   label {
     font-size: 20px;
     font-weight: 500;
@@ -16,6 +17,7 @@
   border-radius: 5px;
   transition: 0.3s;
   font-family: $font;
+  background-color: #fff;
   &::placeholder {
     color: rgba($color: $lightTextColor, $alpha: 0.7);
   }

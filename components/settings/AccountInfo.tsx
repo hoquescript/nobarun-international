@@ -71,9 +71,6 @@ const AccountInfo = () => {
         <div className="grid one mb-20">
           <Textarea name="notes" label="Add your Notes" />
         </div>
-        <div className="center mt-30">
-          <button className="btn-green">Save</button>
-        </div>
       </div>
       <div className={styles.addAdmin__seperator} />
       <div className={styles.addAdmin__upload}>

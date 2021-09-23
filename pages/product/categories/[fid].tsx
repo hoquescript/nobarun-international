@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider, useFormContext } from 'react-hook-form';
 import { gql, useQuery, useMutation } from '@apollo/client';
+import { v4 as uuid } from 'uuid';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
 
 import Combobox from '../../../components/controls/combobox';
@@ -11,22 +12,22 @@ import TextEditor from '../../../components/shared/TextEditor';
 import styles from '../../../styles/pages/products.module.scss';
 
 const CREATE_CATEGORY = gql`
-  mutation createCategory(
+  mutation addNewCategory(
     $name: String!
     $description: String!
     $image: String!
-    $isPublished: Boolean!
-    $parentCategory: ID
     $slug: String
+    $isPublished: Boolean!
+    $id: String!
   ) {
-    createNewCategory(
+    addNewCategory(
       data: {
         name: $name
         description: $description
         image: $image
-        isPublished: $isPublished
-        parentCategory: $parentCategory
         slug: $slug
+        isPublished: $isPublished
+        id: $id
       }
     ) {
       id
@@ -75,8 +76,9 @@ const CategoryForm = () => {
         image:
           'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
         isPublished: true,
-        parentCategory: parentCategory,
+        // parentCategory: parentCategory,
         slug: categorySlug,
+        id: uuid(),
       },
     });
   };
@@ -125,7 +127,9 @@ const CategoryForm = () => {
               <Combobox
                 name="parentCategory"
                 label="Parent Category"
-                options={l ? [] : categories}
+                placeholder="Select Category"
+                // options={l ? ['hello'] : categories}
+                options={['hello', '614b80e450b42484f8461df4']}
               />
             </div>
           </div>

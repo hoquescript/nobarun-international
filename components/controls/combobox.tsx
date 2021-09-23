@@ -22,7 +22,7 @@ const objectify = (arr: string[]) => {
 };
 
 const Combobox = (props: ComboboxProps) => {
-  const { name, label, options } = props;
+  const { name, label, options, placeholder } = props;
   const { register } = useFormContext();
 
   const data: optionType = Array.isArray(options)
@@ -34,7 +34,7 @@ const Combobox = (props: ComboboxProps) => {
 
       <select className="custom-input" id={name} {...register(name)}>
         <option disabled selected value="">
-          {/* -- select an option --{' '} */}
+          {placeholder}
         </option>
         {Object.keys(data).map((option) => (
           <option key={option} value={data[option]}>

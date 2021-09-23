@@ -1,39 +1,25 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { UseFormHandleSubmit, FieldValues } from 'react-hook-form';
 
-const Menu = {
-  Dashboard: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-  Product: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-  Blogs: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-  Review: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-  Appearance: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-  Settings: {
-    view: false,
-    edit: false,
-    delete: false,
-  },
-};
-const AccountAccess = () => {
-  const [permission, setPermission] = useState(Menu);
+interface PermissionProps {
+  (key: string): {
+    view: boolean;
+    edit: boolean;
+    delete: boolean;
+  };
+}
+interface AccountAccessProps {
+  permission: PermissionProps;
+  setPermission: React.Dispatch<React.SetStateAction<PermissionProps>>;
+  handleSubmit: UseFormHandleSubmit<FieldValues>;
+}
+const AccountAccess = (props: AccountAccessProps) => {
+  const { permission, setPermission, handleSubmit } = props;
+
+  const onSubmit = (data) => {
+    // Information Tab Data
+    console.log({ ...data, permission });
+  };
 
   const onSelectAllChange = (e) => {
     const allPermission = { ...permission };
@@ -43,6 +29,7 @@ const AccountAccess = () => {
       menu.edit = e.target.checked;
       menu.delete = e.target.checked;
     });
+    // @ts-ignorehandleSubmit
     setPermission(allPermission);
   };
 
@@ -56,10 +43,10 @@ const AccountAccess = () => {
     } else {
       menu[name] = checked;
     }
+    // @ts-ignore
     setPermission({ ...permission, [key]: menu });
   };
 
-  console.log(permission);
   return (
     <div className="mt-50 mb-50">
       <table className="table center" style={{ maxWidth: '120rem' }}>
@@ -124,6 +111,11 @@ const AccountAccess = () => {
           ))}
         </tbody>
       </table>
+      <div className="center mt-30">
+        <button className="btn-green" onClick={handleSubmit(onSubmit)}>
+          Save
+        </button>
+      </div>
     </div>
   );
 };

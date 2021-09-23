@@ -15,8 +15,17 @@ import {
 
 const ContactPerson = () => {
   const [contacts, setContacts] = useState({
-    [uuid()]: {
+    '23nfsdkf': {
       name: 'Wahid Hoque',
+      whatsapp: '01798323483',
+      logo: '',
+      email: 'wahidhoquee@gmail.com',
+      address: 'House-478, Road-12, Mohakhali DOHS',
+      isPublished: false,
+      isDisabled: true,
+    },
+    '23nfsdxf': {
+      name: 'Wakil Hoque',
       whatsapp: '01798323483',
       logo: '',
       email: 'wahidhoquee@gmail.com',
@@ -26,7 +35,7 @@ const ContactPerson = () => {
     },
   });
 
-  const addScriptsHandler = () => {
+  const addContactHandler = () => {
     setContacts({
       ...contacts,
       [uuid()]: {
@@ -43,6 +52,7 @@ const ContactPerson = () => {
 
   const saveHandler = (id: string) => {
     const contact = contacts[id];
+    console.log(contact);
     contact.isDisabled = true;
     setContacts({ ...contacts, [id]: contact });
   };
@@ -60,6 +70,8 @@ const ContactPerson = () => {
       }
       return object;
     }, {});
+
+    // @ts-ignore
     setContacts(newContacts);
   };
 
@@ -87,7 +99,7 @@ const ContactPerson = () => {
           <button
             type="button"
             className="btn-outline-green mr-20"
-            onClick={addScriptsHandler}
+            onClick={addContactHandler}
           >
             <FaPlusCircle className="btn-icon-small" />
             Add Contact
