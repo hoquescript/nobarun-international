@@ -1,6 +1,6 @@
 import React from 'react';
 import { UseFormHandleSubmit, FieldValues } from 'react-hook-form';
-import Checkbox from '../controls/checkbox';
+import { gql, useQuery, useMutation } from '@apollo/client';
 
 interface PermissionProps {
   (key: string): {
@@ -9,13 +9,45 @@ interface PermissionProps {
     delete: boolean;
   };
 }
+
 interface AccountAccessProps {
   permission: PermissionProps;
   setPermission: React.Dispatch<React.SetStateAction<PermissionProps>>;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
 }
+
+const CREATE_ACCOUNT = gql`
+  mutation addNewCategory(
+    $name: String!
+    $description: String!
+    $image: String!
+    $slug: String
+    $isPublished: Boolean!
+    $id: String!
+  ) {
+    addNewCategory(
+      data: {
+        name: $name
+        description: $description
+        image: $image
+        slug: $slug
+        isPublished: $isPublished
+        id: $id
+      }
+    ) {
+      id
+      name
+      description
+      parentCategory
+      slug
+      image
+    }
+  }
+`;
+
 const AccountAccess = (props: AccountAccessProps) => {
   const { permission, setPermission, handleSubmit } = props;
+  const [createAccount, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   const onSubmit = (data) => {
     // Information Tab Data

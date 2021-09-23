@@ -2,7 +2,8 @@
 
 .sidebar {
   height: calc(100vh - 7rem);
-  width: 42rem;
+  width: 40rem;
+  overflow-y: auto;
   @include respond(1400px) {
     width: 35rem;
   }
