@@ -1,5 +1,6 @@
 import React from 'react';
 import { UseFormHandleSubmit, FieldValues } from 'react-hook-form';
+import Checkbox from '../controls/checkbox';
 
 interface PermissionProps {
   (key: string): {
@@ -49,7 +50,7 @@ const AccountAccess = (props: AccountAccessProps) => {
 
   return (
     <div className="mt-50 mb-50">
-      <table className="table center" style={{ maxWidth: '120rem' }}>
+      <table className="table">
         <thead>
           <tr>
             <th className="center">Permission</th>
@@ -111,7 +112,17 @@ const AccountAccess = (props: AccountAccessProps) => {
           ))}
         </tbody>
       </table>
-      <div className="center mt-30">
+      <div className="center mt-50">
+        <div className="fields">
+          <div className="field field__term">
+            <label className="custom-checkbox mb-30" htmlFor="terms-conditions">
+              <input type="checkbox" id="terms-conditions" />
+              <div className="content">
+                Send the new user an email about their account.
+              </div>
+            </label>
+          </div>
+        </div>
         <button className="btn-green" onClick={handleSubmit(onSubmit)}>
           Save
         </button>
