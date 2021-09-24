@@ -1,4 +1,3 @@
-import { sr } from 'date-fns/locale';
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -53,7 +52,7 @@ interface PermissionProps {
 const AddAdmin = () => {
   const methods = useForm();
   const [tabValue, setTabValue] = useState('information');
-
+  const [isPasswordMatched, setIsPasswordMatched] = useState(false);
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
 
@@ -78,7 +77,9 @@ const AddAdmin = () => {
             <AccountAccess
               permission={permission}
               setPermission={setPermission}
+              register={methods.register}
               handleSubmit={methods.handleSubmit}
+              setIsPasswordMatched={setIsPasswordMatched}
             />
           </TabContent>
         </TabMenu>

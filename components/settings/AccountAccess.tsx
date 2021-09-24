@@ -14,44 +14,54 @@ interface AccountAccessProps {
   permission: PermissionProps;
   setPermission: React.Dispatch<React.SetStateAction<PermissionProps>>;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
+  register: any;
+  setIsPasswordMatched: any;
 }
 
 const CREATE_ACCOUNT = gql`
-  mutation addNewCategory(
-    $name: String!
-    $description: String!
-    $image: String!
-    $slug: String
-    $isPublished: Boolean!
-    $id: String!
-  ) {
-    addNewCategory(
-      data: {
-        name: $name
-        description: $description
-        image: $image
-        slug: $slug
-        isPublished: $isPublished
-        id: $id
-      }
-    ) {
-      id
-      name
-      description
-      parentCategory
-      slug
-      image
+  mutation setCategoriesTree($data: SignUpInput!) {
+    addNewAdmin(data: $data) {
+      displayName
     }
   }
 `;
 
 const AccountAccess = (props: AccountAccessProps) => {
-  const { permission, setPermission, handleSubmit } = props;
+  const {
+    permission,
+    setPermission,
+    register,
+    handleSubmit,
+    setIsPasswordMatched,
+  } = props;
   const [createAccount, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   const onSubmit = (data) => {
     // Information Tab Data
-    console.log({ ...data, permission });
+    // const password =
+    //   data.password === data.confirmPassword ? data.password : 'error';
+    // console.log({ ...data, permission });
+    if (data.password !== data.confirmPassword) {
+      return setIsPasswordMatched(false);
+    }
+    const account = {
+      displayName: data.displayName,
+      address: data.address,
+      email: data.email,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      notes: data.notes,
+      number: data.number,
+      permission: permission,
+    };
+    console.log(account);
+
+    createAccount({
+      variables: {
+        data: account,
+      },
+    });
   };
 
   const onSelectAllChange = (e) => {
@@ -148,7 +158,11 @@ const AccountAccess = (props: AccountAccessProps) => {
         <div className="fields">
           <div className="field field__term">
             <label className="custom-checkbox mb-30" htmlFor="terms-conditions">
-              <input type="checkbox" id="terms-conditions" />
+              <input
+                type="checkbox"
+                id="terms-conditions"
+                {...register('sendMail')}
+              />
               <div className="content">
                 Send the new user an email about their account.
               </div>

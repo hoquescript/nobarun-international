@@ -1,20 +1,39 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
+import { gql, useMutation, useQuery } from '@apollo/client';
 
 import TimePeriod from '../../../components/controls/period';
 import Search from '../../../components/controls/search';
 import Table from '../../../components/shared/Table';
 
 import styles from '../../../styles/pages/query-report.module.scss';
+import { ADMIN_COLUMNS } from '../../../data/AdminColumn';
 
-const Queries = () => {
+const GET_ALL_ACCOUNTS = gql`
+  query getAllAccounts {
+    getAllTheUsers {
+      firstName
+    }
+  }
+`;
+
+const Accounts = () => {
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+
+  const columns = useMemo(() => ADMIN_COLUMNS, []);
+
+  const { loading, error, data } = useQuery(GET_ALL_ACCOUNTS);
+  if (loading) return 'Loading...';
+  if (error) return `Fetching error! ${error.message}`;
+
+  console.log(data);
+
   return (
     <div className={styles.query}>
       <div className="row">
@@ -34,9 +53,9 @@ const Queries = () => {
           </a>
         </div>
       </div>
-      <Table />
+      <Table columns={columns} data={[]} />
     </div>
   );
 };
 
-export default Queries;
+export default Accounts;

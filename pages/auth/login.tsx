@@ -10,6 +10,7 @@ const Login = () => {
   const methods = useForm();
   const onSubmit = (data: any) => {
     const { email, password } = data;
+    console.log(data);
     signIn('credentials', {
       email,
       password,
@@ -33,13 +34,13 @@ const Login = () => {
             label="Email"
             type="email"
             name="email"
-            value="azim@gmail.com"
+            value="i@gmail.com"
             placeholder="Enter your Name"
           />
           <Textfield
             type="password"
             label="Password"
-            value="iwilldoit"
+            value="one123123"
             placeholder="Enter your Password"
             name="password"
           />
@@ -49,8 +50,8 @@ const Login = () => {
           >
             Forgot Password?
           </a>
-          <input type="submit" className={styles.auth__button} value="Login" />
-          {/* <button onClick={methods.handleSubmit(onSubmit)}>Login</button> */}
+          {/* <input type="submit" className={styles.auth__button} value="Login" /> */}
+          <button onClick={methods.handleSubmit(onSubmit)}>Login</button>
         </form>
       </FormProvider>
     </div>

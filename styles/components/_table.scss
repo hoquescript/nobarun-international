@@ -77,6 +77,9 @@
     transform: translate(-15px, 30px);
     position: absolute;
     background: transparent;
+    &.last {
+      transform: translate(-15px, -30px) !important;
+    }
     & > button {
       cursor: pointer;
       border: none;

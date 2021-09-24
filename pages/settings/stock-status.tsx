@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import { gql, useQuery, useMutation } from '@apollo/client';
+
 import {
   FaPlusCircle,
   FaHome,
@@ -10,61 +12,34 @@ import {
   FaSave,
 } from 'react-icons/fa';
 
-import Textfield from '../../components/controls/textfield';
+interface IStock {
+  [x: string]: {
+    title: string;
+    notes: string;
+    image: string;
+    isPublished: boolean;
+    isDisabled: boolean;
+    isNewStocks?: true;
+  };
+}
+const CREATE_STOCK_STATUS = gql`
+  mutation addNewStockStatus($data: CreateNewStockStatus!) {
+    createNewStockStatus(data: $data) {
+      title
+    }
+  }
+`;
 
-const StockItem = () => {
-  return (
-    <li>
-      <div className="row flex">
-        <div className="col-1">
-          <FaGripVertical />
-        </div>
-        <div className="col-3">
-          <h3 className="custom-input">Ready Stock</h3>
-        </div>
-        <div className="col-5">
-          <h3 className="custom-input">Notes</h3>
-        </div>
-        <div className="col-1">
-          <figure>
-            <img src="/images/product-img.jpg" alt="" />
-          </figure>
-        </div>
-        <div
-          className="col-2"
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            transform: 'translateY(10px)',
-          }}
-        >
-          <label htmlFor="publish" className="custom-switch">
-            <input type="checkbox" id="publish" />
-            <span>&nbsp;</span>
-          </label>
-          <span
-            className="table__icon menu"
-            style={{ marginLeft: '3rem', visibility: 'visible' }}
-          >
-            <FaEllipsisH />
-            <div className="table__action_menu">
-              <button>
-                <FaTrash />
-              </button>
-              <button>
-                <FaPen />
-              </button>
-            </div>
-          </span>
-        </div>
-      </div>
-    </li>
-  );
-};
+const EDIT_STOCK_STATUS = gql`
+  mutation addNewStockStatus($data: CreateNewStockStatus!) {
+    createNewStockStatus(data: $data) {
+      title
+    }
+  }
+`;
 
 const StockStatus = () => {
-  const [stocks, setStocks] = useState({
+  const [stocks, setStocks] = useState<IStock>({
     [uuid()]: {
       title: 'Ready Stock',
       notes: 'Hello Notes',
@@ -74,6 +49,9 @@ const StockStatus = () => {
     },
   });
 
+  const [createStock, createStockStatus] = useMutation(CREATE_STOCK_STATUS);
+  const [editStock, editStockStatus] = useMutation(EDIT_STOCK_STATUS);
+
   const addNewStockHandler = () => {
     setStocks({
       [uuid()]: {
@@ -82,12 +60,11 @@ const StockStatus = () => {
         image: '',
         isPublished: true,
         isDisabled: false,
+        isNewStocks: true,
       },
       ...stocks,
     });
   };
-
-  console.log(stocks);
 
   const handleChangeInput = (
     id: string,
@@ -108,6 +85,26 @@ const StockStatus = () => {
   const saveHandler = (id: string) => {
     const stock = stocks[id];
     stock.isDisabled = true;
+
+    const stockStatus = {
+      title: stock.title,
+      notes: stock.notes,
+      image: stock.image,
+      isPublished: stock.isPublished,
+    };
+
+    stock.isNewStocks
+      ? createStock({
+          variables: {
+            data: stockStatus,
+          },
+        })
+      : editStock({
+          variables: {
+            data: {},
+          },
+        });
+
     setStocks({ ...stocks, [id]: stock });
   };
 

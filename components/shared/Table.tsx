@@ -22,10 +22,19 @@ import {
 import tableData from '../../data/tableData.json';
 import { COLUMNS } from '../../data/column';
 
-const Table = () => {
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => tableData, []);
+interface TableProps {
+  columns: any[];
+  data: any[];
+  editHandler: any;
+  deleteHandler: any;
+}
 
+const Table = (props: TableProps) => {
+  // const columns = useMemo(() => COLUMNS, []);
+  // const data = useMemo(() => tableData, []);
+
+  const { columns, data, editHandler, deleteHandler } = props;
+  // console.log(data);
   // @ts-ignore
   const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
 
@@ -76,7 +85,7 @@ const Table = () => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row) => {
+            {page.map((row, idx) => {
               prepareRow(row);
               return (
                 <tr {...row.getRowProps()}>
@@ -91,11 +100,21 @@ const Table = () => {
                   <td style={{ padding: '.5rem' }}>
                     <span className="table__icon menu">
                       <FaEllipsisH />
-                      <div className="table__action_menu">
-                        <button>
+                      <div
+                        className={`table__action_menu ${
+                          idx + 1 === page.length ? 'last' : ''
+                        }`}
+                      >
+                        <button
+                          // @ts-ignore
+                          onClick={() => deleteHandler(row.original.name)}
+                        >
                           <FaTrash />
                         </button>
-                        <button>
+                        <button
+                          // @ts-ignore
+                          onClick={() => editHandler(row.original.name)}
+                        >
                           <FaPen />
                         </button>
                       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCamera } from 'react-icons/fa';
+import { FaCamera, FaInfoCircle } from 'react-icons/fa';
 
 import Textarea from '../controls/textarea';
 import Textfield from '../controls/textfield';
@@ -54,19 +54,23 @@ const AccountInfo = () => {
         </div>
         <div className="grid two mb-20">
           <Textfield
-            required
+            // required
             name="password"
             type="password"
             label="Password"
             placeholder="Enter your Password"
           />
           <Textfield
-            required
+            // required
             name="confirmPassword"
             type="password"
             label="Confirm Password"
             placeholder="Confirm your Password"
           />
+          <div className="flex" style={{ marginTop: '-1.8rem', color: 'red' }}>
+            <FaInfoCircle className="ml-20 mr-10" style={{}} />
+            Those passwords didn’t match. Try again
+          </div>
         </div>
         <div className="grid one mb-20">
           <Textarea name="notes" label="Add your Notes" />

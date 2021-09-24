@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import { gql, useMutation, useQuery } from '@apollo/client';
 import {
   FaEllipsisH,
   FaLocationArrow,
@@ -13,6 +14,21 @@ import {
   FaWhatsapp,
 } from 'react-icons/fa';
 
+const CREATE_CONTACT_PERSON = gql`
+  mutation addNewContactPerson($data: CreateNewContactPerson!) {
+    createNewContactPerson(data: $data) {
+      name
+    }
+  }
+`;
+
+const EDIT_CONTACT_PERSON = gql`
+  mutation editContactPerson($data: EditInput!) {
+    editContactPerson(data: $data) {
+      id
+    }
+  }
+`;
 const ContactPerson = () => {
   const [contacts, setContacts] = useState({
     '23nfsdkf': {
@@ -24,16 +40,10 @@ const ContactPerson = () => {
       isPublished: false,
       isDisabled: true,
     },
-    '23nfsdxf': {
-      name: 'Wakil Hoque',
-      whatsapp: '01798323483',
-      logo: '',
-      email: 'wahidhoquee@gmail.com',
-      address: 'House-478, Road-12, Mohakhali DOHS',
-      isPublished: false,
-      isDisabled: true,
-    },
   });
+
+  const [createContact] = useMutation(CREATE_CONTACT_PERSON);
+  const [editContact] = useMutation(EDIT_CONTACT_PERSON);
 
   const addContactHandler = () => {
     setContacts({
@@ -46,14 +56,42 @@ const ContactPerson = () => {
         address: '',
         isPublished: true,
         isDisabled: false,
+        isNewContact: true,
       },
     });
   };
 
   const saveHandler = (id: string) => {
     const contact = contacts[id];
-    console.log(contact);
     contact.isDisabled = true;
+
+    const contactPerson = {
+      name: contact.name,
+      whatsAppNumber: contact.whatsapp,
+      email: contact.email,
+      address: contact.address,
+      isPublished: contact.isPublished,
+      companyLogo: contact.logo,
+    };
+
+    const editContactPerson = {
+      editId: id,
+      editableObject: contactPerson,
+    };
+
+    console.log(contactPerson);
+    contact.isNewContact
+      ? createContact({
+          variables: {
+            data: contactPerson,
+          },
+        })
+      : editContact({
+          variables: {
+            data: contactPerson,
+          },
+        });
+
     setContacts({ ...contacts, [id]: contact });
   };
 
