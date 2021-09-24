@@ -38,6 +38,12 @@ const EDIT_STOCK_STATUS = gql`
   }
 `;
 
+const DELETE_STOCK_STATUS = gql`
+  mutation deleteStockStatus($id: String!) {
+    deleteAStockStatus(stockStatusId: $id)
+  }
+`;
+
 const StockStatus = () => {
   const [stocks, setStocks] = useState<IStock>({
     [uuid()]: {
@@ -49,8 +55,9 @@ const StockStatus = () => {
     },
   });
 
-  const [createStock, createStockStatus] = useMutation(CREATE_STOCK_STATUS);
-  const [editStock, editStockStatus] = useMutation(EDIT_STOCK_STATUS);
+  const [createStock] = useMutation(CREATE_STOCK_STATUS);
+  const [editStock] = useMutation(EDIT_STOCK_STATUS);
+  const [deleteStock] = useMutation(DELETE_STOCK_STATUS);
 
   const addNewStockHandler = () => {
     setStocks({

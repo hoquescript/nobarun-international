@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import {
@@ -13,6 +13,7 @@ import {
   FaUser,
   FaWhatsapp,
 } from 'react-icons/fa';
+import useAllContactPerson from '../../hooks/Settings/useAllContactPerson';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {
@@ -21,29 +22,29 @@ const CREATE_CONTACT_PERSON = gql`
     }
   }
 `;
-
 const EDIT_CONTACT_PERSON = gql`
-  mutation editContactPerson($data: EditInput!) {
-    editContactPerson(data: $data) {
-      id
-    }
+  mutation editContactPerson($data: EditContactPerson!) {
+    editContactPerson(data: $data)
   }
 `;
+const DELETE_CONTACT_PERSON = gql`
+  mutation deleteContactPerson($id: String!) {
+    deleteContactPersonById(contactPersonId: $id)
+  }
+`;
+
 const ContactPerson = () => {
-  const [contacts, setContacts] = useState({
-    '23nfsdkf': {
-      name: 'Wahid Hoque',
-      whatsapp: '01798323483',
-      logo: '',
-      email: 'wahidhoquee@gmail.com',
-      address: 'House-478, Road-12, Mohakhali DOHS',
-      isPublished: false,
-      isDisabled: true,
-    },
-  });
+  const [contacts, setContacts] = useState({});
 
   const [createContact] = useMutation(CREATE_CONTACT_PERSON);
   const [editContact] = useMutation(EDIT_CONTACT_PERSON);
+  const [deleteContact] = useMutation(DELETE_CONTACT_PERSON);
+
+  useEffect(() => {
+    useAllContactPerson().then((data) => {
+      setContacts(data);
+    });
+  }, []);
 
   const addContactHandler = () => {
     setContacts({
@@ -79,7 +80,6 @@ const ContactPerson = () => {
       editableObject: contactPerson,
     };
 
-    console.log(contactPerson);
     contact.isNewContact
       ? createContact({
           variables: {
@@ -88,7 +88,7 @@ const ContactPerson = () => {
         })
       : editContact({
           variables: {
-            data: contactPerson,
+            data: editContactPerson,
           },
         });
 
@@ -108,7 +108,11 @@ const ContactPerson = () => {
       }
       return object;
     }, {});
-
+    deleteContact({
+      variables: {
+        id,
+      },
+    });
     // @ts-ignore
     setContacts(newContacts);
   };

@@ -106,14 +106,18 @@ const Table = (props: TableProps) => {
                         }`}
                       >
                         <button
-                          // @ts-ignore
-                          onClick={() => deleteHandler(row.original.name)}
+                          onClick={() =>
+                            // @ts-ignore
+                            row.original.id && deleteHandler(row.original.id)
+                          }
                         >
                           <FaTrash />
                         </button>
                         <button
-                          // @ts-ignore
-                          onClick={() => editHandler(row.original.name)}
+                          onClick={() =>
+                            // @ts-ignore
+                            row.original.id && editHandler(row.original.id)
+                          }
                         >
                           <FaPen />
                         </button>
