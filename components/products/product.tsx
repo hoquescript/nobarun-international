@@ -20,7 +20,10 @@ const Product = () => (
             disabled
             style={{ width: '20rem' }}
           />
-          <Togglebar />
+          <label htmlFor="product" className={`custom-switch`}>
+            <input type="checkbox" id="publish" />
+            <span>&nbsp;</span>
+          </label>
         </div>
         <p>Our Multipurpose Commercial Masala Spice Grinding Machine</p>
         <h4>

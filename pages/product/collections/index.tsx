@@ -56,7 +56,10 @@ const renderItem = (props) => {
           </figure>
         </div>
         <div className="col-7 flex ct">
-          <Togglebar />
+          <label htmlFor="product" className={`custom-switch`}>
+            <input type="checkbox" id="publish" />
+            <span>&nbsp;</span>
+          </label>
           <span className={`ml-20 ${styles.category__menu}`}>
             <FaEllipsisV />
             <div className="table__action_menu">

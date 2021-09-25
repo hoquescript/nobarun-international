@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 
@@ -7,6 +7,8 @@ import Search from '../../components/controls/search';
 import Table from '../../components/shared/Table';
 
 import styles from '../../styles/pages/query-report.module.scss';
+import { COLUMNS } from '../../data/column';
+import tableData from '../../data/tableData.json';
 
 const BlogPost = () => {
   const [period, setPeriod] = useState(
@@ -15,6 +17,9 @@ const BlogPost = () => {
       'yyyy-MM-dd',
     )}`,
   );
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => tableData, []);
+
   return (
     <div className={styles.query}>
       <div className="row">
@@ -34,7 +39,12 @@ const BlogPost = () => {
           </button>
         </div>
       </div>
-      <Table />
+      <Table
+        columns={columns}
+        data={data}
+        editHandler={() => {}}
+        deleteHandler={() => {}}
+      />
     </div>
   );
 };

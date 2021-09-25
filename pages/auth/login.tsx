@@ -13,7 +13,6 @@ const Login = () => {
 
   const onSubmit = (data: any) => {
     const { email, password } = data;
-    console.log(data);
     signIn('credentials', {
       email,
       password,

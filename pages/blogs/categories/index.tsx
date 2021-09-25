@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Link from 'next/link';
 import {
   FaGripVertical,
@@ -12,6 +12,8 @@ import 'react-nestable/dist/styles/index.css';
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
+import { useState } from 'react';
+import useAllBlogCategories from '../../../hooks/Blogs/useAllBlogCategories';
 
 const items = [
   {
@@ -56,7 +58,15 @@ const renderItem = (props) => {
           </figure>
         </div>
         <div className="col-7 flex ct">
-          <Togglebar />
+          <label htmlFor={'publish'} className={`custom-switch`}>
+            <input
+              type="checkbox"
+              id="publish"
+              // checked={checked}
+              // {...register(name, { required })}
+            />
+            <span>&nbsp;</span>
+          </label>
           <span className={`ml-20 ${styles.category__menu}`}>
             <FaEllipsisV />
             <div className="table__action_menu">
@@ -75,6 +85,12 @@ const renderItem = (props) => {
 };
 
 const Categories = () => {
+  const [items, setItems] = useState([]);
+  useEffect(() => {
+    useAllBlogCategories().then((category) => setItems(category));
+  }, []);
+
+  console.log(items);
   return (
     <div className="container center">
       <div className="flex sb mb-60">

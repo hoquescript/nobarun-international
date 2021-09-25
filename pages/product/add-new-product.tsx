@@ -7,11 +7,14 @@ import Description from '../../components/products/tab/description';
 import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const AddProduct = () => {
+  const methods = useForm();
   const [tabValue, setTabValue] = useState('description');
 
-  const methods = useForm();
+  const productsImage = useTypedSelector((state) => state.ui.productsImage);
+
   const KeyPoint = useState<IKeyPoints[]>([
     {
       id: '',
@@ -33,6 +36,7 @@ const AddProduct = () => {
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
   const [keywords, setKeywords] = useState<string[]>([]);
+  const tagState = useState<string[]>([]);
 
   const handleAddProduct = (data: any) => {
     console.log(data);
@@ -80,9 +84,11 @@ const AddProduct = () => {
                 register={methods.register}
                 keyPointState={KeyPoint}
                 question={question}
+                tagState={tagState}
                 setFeatures={setFeatures}
                 setSpecification={setSpecification}
                 setTabValue={setTabValue}
+                productsImage={productsImage}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>
@@ -91,6 +97,7 @@ const AddProduct = () => {
                 control={methods.control}
                 chips={keywords}
                 setChips={setKeywords}
+                handleAddProduct={methods.handleSubmit(handleAddProduct)}
               />
             </TabContent>
           </TabMenu>

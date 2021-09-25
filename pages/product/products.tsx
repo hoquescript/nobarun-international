@@ -26,6 +26,7 @@ const Products = () => {
           <TimePeriod period={period} setPeriod={setPeriod} />
         </div>
       </div>
+
       <div className={styles.products__header}>
         <h2 className="heading-primary">50 Results</h2>
         <div className={styles.products__viewWrapper}>

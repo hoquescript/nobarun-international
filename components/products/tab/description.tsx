@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import { FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import Chip from '../../controls/chip';
 
 import Chipfield from '../../controls/chipfield';
 import Combobox from '../../controls/combobox';
@@ -16,18 +18,22 @@ interface DescriptionProps {
     React.Dispatch<React.SetStateAction<IKeyPoints[]>>,
   ];
   question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
+  tagState: any;
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
+  productsImage: string[];
 }
 const Description = (props: DescriptionProps) => {
   const {
     register,
     keyPointState,
     question,
+    tagState: [tags, setTags],
     setFeatures,
     setSpecification,
     setTabValue,
+    productsImage,
   } = props;
 
   return (
@@ -109,30 +115,14 @@ const Description = (props: DescriptionProps) => {
             <Chipfield />
           </div>
           <div className="product-images">
-            <figure>
-              <button type="button" className="remove-image">
-                <i className="times-icon"></i>
-              </button>
-              <img src="/images/product-img.jpg" alt="" />
-            </figure>
-            <figure>
-              <button type="button" className="remove-image">
-                <i className="times-icon"></i>
-              </button>
-              <img src="/images/product-img.jpg" alt="" />
-            </figure>
-            <figure>
-              <button type="button" className="remove-image">
-                <i className="times-icon"></i>
-              </button>
-              <img src="/images/product-img.jpg" alt="" />
-            </figure>
-            <figure>
-              <button type="button" className="remove-image">
-                <i className="times-icon"></i>
-              </button>
-              <img src="/images/product-img.jpg" alt="" />
-            </figure>
+            {productsImage.map((src) => (
+              <figure>
+                <button type="button" className="remove-image">
+                  <i className="times-icon"></i>
+                </button>
+                <img src={src} alt="" />
+              </figure>
+            ))}
             <FileButton />
           </div>
         </div>
@@ -159,6 +149,16 @@ const Description = (props: DescriptionProps) => {
         </div>
       </div>
       <Questions question={question} />
+      <div className="wrapper-section">
+        <div className="wrapper-section__title flex sb">
+          <h3 className="heading-secondary">Product Tags</h3>
+        </div>
+        <div className="wrapper-section__content">
+          <div className="field mt-20">
+            <Chip chips={tags} setChips={setTags} />
+          </div>
+        </div>
+      </div>
       <div className="center mt-40 mb-30">
         <button className="btn-green" onClick={() => setTabValue('seo')}>
           Next Page

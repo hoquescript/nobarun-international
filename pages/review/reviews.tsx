@@ -25,6 +25,7 @@ import tableData from '../../data/tableData.json';
 import { COLUMNS } from '../../data/column';
 
 import styles from '../../styles/pages/query-report.module.scss';
+import useAllReviews from '../../hooks/Review/useAllReview';
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -33,6 +34,7 @@ const formatIsPublished = (data) => {
   });
   return reviews;
 };
+
 const Reviews = () => {
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -41,8 +43,13 @@ const Reviews = () => {
     )}`,
   );
 
+  const [reviews, setReviews] = useState([]);
   const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => tableData, []);
+  const data = useMemo(() => reviews, []);
+
+  useEffect(() => {
+    useAllReviews().then((reviews) => setReviews(reviews));
+  }, []);
 
   // @ts-ignore
   const tableInstance = useTable({ columns, data }, useSortBy, usePagination);

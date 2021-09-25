@@ -29,9 +29,10 @@ interface SEOProps {
   control: Control<FieldValues, object>;
   chips: string[];
   setChips: React.Dispatch<React.SetStateAction<string[]>>;
+  handleAddProduct: any;
 }
 const SEO = (props: SEOProps) => {
-  const { register, control, chips, setChips } = props;
+  const { register, control, chips, setChips, handleAddProduct } = props;
 
   return (
     <>
@@ -71,6 +72,11 @@ const SEO = (props: SEOProps) => {
                 {...register('title')}
               ></textarea>
             </div>
+          </div>
+          <div className="center mt-40 mb-30">
+            <button className="btn-green" onClick={handleAddProduct}>
+              Save
+            </button>
           </div>
         </div>
       </div>

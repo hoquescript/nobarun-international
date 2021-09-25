@@ -19,7 +19,6 @@ import {
   FaFastForward,
 } from 'react-icons/fa';
 
-import tableData from '../../data/tableData.json';
 import { COLUMNS } from '../../data/column';
 
 interface TableProps {
@@ -30,9 +29,6 @@ interface TableProps {
 }
 
 const Table = (props: TableProps) => {
-  // const columns = useMemo(() => COLUMNS, []);
-  // const data = useMemo(() => tableData, []);
-
   const { columns, data, editHandler, deleteHandler } = props;
   // console.log(data);
   // @ts-ignore

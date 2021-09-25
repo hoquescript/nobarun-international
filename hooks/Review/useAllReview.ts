@@ -12,7 +12,7 @@ const GET_ALL_REVIEWS = gql`
   }
 `;
 
-const useAllAdmin = async () => {
+const useAllReviews = async () => {
   const data = await Client.request(GET_ALL_REVIEWS);
 
   const admins = data.getAllTheUsers.map((query) => ({
@@ -27,4 +27,4 @@ const useAllAdmin = async () => {
   return admins;
 };
 
-export default useAllAdmin;
+export default useAllReviews;
