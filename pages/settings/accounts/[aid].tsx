@@ -1,9 +1,11 @@
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import AccountAccess from '../../../components/settings/AccountAccess';
 import AccountInfo from '../../../components/settings/AccountInfo';
+import useAdminById from '../../../hooks/Settings/useAdminById';
 
 import { TabMenu, TabContent } from '../../../components/shared/Tabmenu';
 
@@ -51,13 +53,24 @@ interface PermissionProps {
 }
 
 const AddAdmin = () => {
-  const methods = useForm();
   const router = useRouter();
-  console.log(router.query.aid);
+
   const [tabValue, setTabValue] = useState('information');
   const [isPasswordMatched, setIsPasswordMatched] = useState(false);
+
+  const [defaultValues, setDefaultValues] = useState({});
+  const methods = useForm({ defaultValues });
+
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
+
+  // useEffect(() => {
+  //   if (router.query.aid !== 'add') {
+  //     useAdminById(router.query.aid).then((data) => {
+  //       setDefaultValues(data);
+  //     });
+  //   }
+  // }, []);
 
   return (
     <div className={styles.addAdmin}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
 import { gql, useQuery, useMutation } from '@apollo/client';
 
@@ -11,6 +11,7 @@ import {
   FaGripVertical,
   FaSave,
 } from 'react-icons/fa';
+import useAllStockStatus from '../../hooks/Settings/useAllStockStatus';
 
 interface IStock {
   [x: string]: {
@@ -31,10 +32,8 @@ const CREATE_STOCK_STATUS = gql`
 `;
 
 const EDIT_STOCK_STATUS = gql`
-  mutation addNewStockStatus($data: CreateNewStockStatus!) {
-    createNewStockStatus(data: $data) {
-      title
-    }
+  mutation editStockStatus($data: EditStockStatus!) {
+    editStockStatus(data: $data)
   }
 `;
 
@@ -45,19 +44,17 @@ const DELETE_STOCK_STATUS = gql`
 `;
 
 const StockStatus = () => {
-  const [stocks, setStocks] = useState<IStock>({
-    [uuid()]: {
-      title: 'Ready Stock',
-      notes: 'Hello Notes',
-      image: '',
-      isPublished: true,
-      isDisabled: true,
-    },
-  });
+  const [stocks, setStocks] = useState<IStock>({});
 
   const [createStock] = useMutation(CREATE_STOCK_STATUS);
   const [editStock] = useMutation(EDIT_STOCK_STATUS);
   const [deleteStock] = useMutation(DELETE_STOCK_STATUS);
+
+  useEffect(() => {
+    useAllStockStatus().then((data) => {
+      setStocks(data);
+    });
+  }, []);
 
   const addNewStockHandler = () => {
     setStocks({
@@ -100,6 +97,11 @@ const StockStatus = () => {
       isPublished: stock.isPublished,
     };
 
+    const editStockStatus = {
+      editId: id,
+      editableObject: stockStatus,
+    };
+
     stock.isNewStocks
       ? createStock({
           variables: {
@@ -108,7 +110,7 @@ const StockStatus = () => {
         })
       : editStock({
           variables: {
-            data: {},
+            data: editStockStatus,
           },
         });
 
@@ -128,6 +130,11 @@ const StockStatus = () => {
       }
       return object;
     }, {});
+    deleteStock({
+      variables: {
+        id,
+      },
+    });
     setStocks(newStocks);
   };
 

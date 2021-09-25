@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
+import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
+import useAllScripts from '../../hooks/Settings/useAllScripts';
+
+const CREATE_SCRIPT = gql`
+  mutation addNewScripts($data: CreateScript!) {
+    createNewScript(data: $data) {
+      headerScript
+    }
+  }
+`;
+const EDIT_SCRIPT = gql`
+  mutation editScript($data: EditScript!) {
+    editScript(data: $data)
+  }
+`;
+const DELETE_SCRIPT = gql`
+  mutation deleteScript($id: String!) {
+    deleteDcript(collectionId: $id)
+  }
+`;
 
 const AddScript = () => {
   const methods = useForm();
-  const [scripts, setScripts] = useState({
-    [uuid()]: {
-      header:
-        '<script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>',
-      footer:
-        '<script src="chrome-extension://mdhmgoflnkccjhcfbojdagggmklgfloo/inpage.js" id="blockstack-app"></script>',
-      isModified: false,
-      isDisabled: true,
-    },
-  });
+  const [scripts, setScripts] = useState({});
+
+  const [createScript] = useMutation(CREATE_SCRIPT);
+  const [editScriptTag] = useMutation(EDIT_SCRIPT);
+  const [deleteScript] = useMutation(DELETE_SCRIPT);
+
+  useEffect(() => {
+    useAllScripts().then((data) => {
+      setScripts(data);
+    });
+  }, []);
 
   const addScriptsHandler = () => {
     setScripts({
@@ -24,6 +45,7 @@ const AddScript = () => {
         footer: '',
         isModified: false,
         isDisabled: false,
+        isNewScript: true,
       },
     });
   };
@@ -41,6 +63,28 @@ const AddScript = () => {
   const saveHandler = (id: string) => {
     const script = scripts[id];
     script.isDisabled = true;
+
+    const scriptTags = {
+      headerScript: script.header,
+      footerScript: script.footer,
+    };
+
+    const editScriptTags = {
+      editId: id,
+      editableObject: scriptTags,
+    };
+    script.isNewScript
+      ? createScript({
+          variables: {
+            data: scriptTags,
+          },
+        })
+      : editScriptTag({
+          variables: {
+            data: editScriptTags,
+          },
+        });
+
     setScripts({ ...scripts, [id]: script });
   };
 
@@ -57,6 +101,11 @@ const AddScript = () => {
       }
       return object;
     }, {});
+    deleteScript({
+      variables: {
+        id,
+      },
+    });
     setScripts(newScripts);
   };
 

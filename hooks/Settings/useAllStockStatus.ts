@@ -1,39 +1,35 @@
-import React from 'react';
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
 
-const GET_ALL_CONTACT_PERSON = gql`
-  query getAllTheContactPersons {
-    getAllTheContactPersons {
+const GET_ALL_STOCK_STATUS = gql`
+  query getAllStockStatus {
+    getAllTheStockStatus {
       id
-      name
-      whatsAppNumber
-      email
-      address
+      title
+      notes
+      image
       isPublished
-      companyLogo
     }
   }
 `;
 
 const useAllStockStatus = async () => {
-  const data = await Client.request(GET_ALL_CONTACT_PERSON);
+  const data = await Client.request(GET_ALL_STOCK_STATUS);
+  console.log(data);
 
-  const persons = {};
+  const stocks = {};
   if (data) {
-    data.getAllTheContactPersons.forEach((contact) => {
-      persons[contact.id] = {
-        name: contact.name,
-        whatsapp: contact.whatsAppNumber,
-        logo: contact.companyLogo,
-        email: contact.email,
-        address: contact.address,
-        isPublished: contact.isPublished,
+    data.getAllTheStockStatus.forEach((stock) => {
+      stocks[stock.id] = {
+        title: stock.title,
+        notes: stock.notes,
+        image: stock.image,
+        isPublished: stock.isPublished,
         isDisabled: true,
       };
     });
   }
-  return persons;
+  return stocks;
 };
 
 export default useAllStockStatus;

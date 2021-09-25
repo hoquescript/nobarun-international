@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import { gql, useMutation } from '@apollo/client';
 import {
   FaArrowLeft,
   FaArrowRight,
@@ -12,16 +13,38 @@ import {
 } from 'react-icons/fa';
 
 import styles from '../../styles/pages/admin.module.scss';
+import useAllRedirects from '../../hooks/Settings/useAllRedirects';
+
+const CREATE_REDIRECT = gql`
+  mutation createRedirect($data: CreateRedirect!) {
+    createNewRedirect(data: $data) {
+      id
+    }
+  }
+`;
+const EDIT_REDIRECT = gql`
+  mutation editRedirect($data: EditRedirect!) {
+    editRedirect(data: $data)
+  }
+`;
+const DELETE_REDIRECT = gql`
+  mutation deleteRedirects($id: String!) {
+    deleteRedirect(collectionId: $id)
+  }
+`;
 
 const Redirect = () => {
-  const [posts, setPosts] = useState({
-    [uuid()]: {
-      from: '',
-      to: '',
-      isPublished: false,
-      isDisabled: true,
-    },
-  });
+  const [posts, setPosts] = useState({});
+
+  const [createRedirect] = useMutation(CREATE_REDIRECT);
+  const [editingRedirect] = useMutation(EDIT_REDIRECT);
+  const [deleteRedirect] = useMutation(DELETE_REDIRECT);
+
+  useEffect(() => {
+    useAllRedirects().then((data) => {
+      setPosts(data);
+    });
+  }, []);
 
   const addHandler = () => {
     setPosts({
@@ -31,6 +54,7 @@ const Redirect = () => {
         to: '',
         isPublished: true,
         isDisabled: false,
+        isNewRedirect: true,
       },
     });
   };
@@ -38,6 +62,30 @@ const Redirect = () => {
   const saveHandler = (id: string) => {
     const post = posts[id];
     post.isDisabled = true;
+
+    const redirects = {
+      redirectFrom: post.from,
+      redirectTo: post.to,
+      isPublished: post.isPublished,
+    };
+
+    const editRedirect = {
+      editId: id,
+      editableObject: redirects,
+    };
+
+    post.isNewRedirect
+      ? createRedirect({
+          variables: {
+            data: redirects,
+          },
+        })
+      : editingRedirect({
+          variables: {
+            data: editRedirect,
+          },
+        });
+
     setPosts({ ...posts, [id]: post });
   };
 
@@ -54,6 +102,11 @@ const Redirect = () => {
       }
       return object;
     }, {});
+    deleteRedirect({
+      variables: {
+        id,
+      },
+    });
     setPosts(newposts);
   };
 
@@ -116,7 +169,7 @@ const Redirect = () => {
           </div>
         </li>
         {currentPosts.map((key) => (
-          <li>
+          <li key={key}>
             <div className="row flex">
               <div className="col-5">
                 <div className="field video" style={{ position: 'relative' }}>

@@ -67,10 +67,10 @@ const AccountInfo = () => {
             label="Confirm Password"
             placeholder="Confirm your Password"
           />
-          <div className="flex" style={{ marginTop: '-1.8rem', color: 'red' }}>
+          {/* <div className="flex" style={{ marginTop: '-1.8rem', color: 'red' }}>
             <FaInfoCircle className="ml-20 mr-10" style={{}} />
             Those passwords didn’t match. Try again
-          </div>
+          </div> */}
         </div>
         <div className="grid one mb-20">
           <Textarea name="notes" label="Add your Notes" />

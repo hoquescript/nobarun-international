@@ -1,4 +1,3 @@
-import React from 'react';
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
 

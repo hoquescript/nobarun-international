@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation, useQuery } from '@apollo/client';
@@ -10,7 +11,6 @@ import Table from '../../../components/shared/Table';
 import styles from '../../../styles/pages/query-report.module.scss';
 import { ADMIN_COLUMNS } from '../../../data/AdminColumn';
 import useAllAdmin from '../../../hooks/Settings/useAllAdmin';
-import { useRouter } from 'next/router';
 
 const Accounts = () => {
   const router = useRouter();
@@ -51,7 +51,7 @@ const Accounts = () => {
         columns={columns}
         data={admins}
         editHandler={(id) => {
-          router.push(`/settings/accounts/${id}`);
+          // router.push(`/settings/accounts/${id}`);
         }}
         deleteHandler={() => {}}
       />
