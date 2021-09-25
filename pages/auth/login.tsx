@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { signIn } from 'next-auth/client';
 
@@ -8,14 +9,17 @@ import styles from '../../styles/pages/auth.module.scss';
 
 const Login = () => {
   const methods = useForm();
+  const { error } = useRouter().query;
+
   const onSubmit = (data: any) => {
     const { email, password } = data;
-    console.log(data);
+    // console.log(data);
     signIn('credentials', {
       email,
       password,
       callbackUrl: `${window.location.origin}/`,
     });
+    methods.reset({ email: '', password: '' });
   };
   return (
     <div className={styles.auth}>
@@ -44,14 +48,16 @@ const Login = () => {
             placeholder="Enter your Password"
             name="password"
           />
-          <a
-            href="/auth/forget-password"
-            className={styles.auth__forgetPassword}
-          >
-            Forgot Password?
-          </a>
-          {/* <input type="submit" className={styles.auth__button} value="Login" /> */}
-          <button onClick={methods.handleSubmit(onSubmit)}>Login</button>
+          <div className={`${error ? 'flex sb' : ''} mt-30`}>
+            {error && <p style={{ color: 'red' }}>* Wrong Email or Password</p>}
+            <a
+              href="/auth/forget-password"
+              className={styles.auth__forgetPassword}
+            >
+              Forgot Password?
+            </a>
+          </div>
+          <input type="submit" className={styles.auth__button} value="Login" />
         </form>
       </FormProvider>
     </div>

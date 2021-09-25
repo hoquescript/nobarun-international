@@ -20,9 +20,10 @@ interface TextEditorProps {
   bodyClass?: string;
   onChange?: any;
   multiple?: boolean;
+  disabled?: boolean;
 }
 const TextEditor = (props: TextEditorProps) => {
-  const { setValue, bodyClass, onChange } = props;
+  const { setValue, bodyClass, onChange, disabled } = props;
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
 
@@ -37,7 +38,7 @@ const TextEditor = (props: TextEditorProps) => {
   };
 
   return (
-    <div>
+    <>
       {/* 
   // @ts-ignore */}
       <EditorComponent
@@ -46,6 +47,7 @@ const TextEditor = (props: TextEditorProps) => {
         toolbarClassName="editor__toolbar"
         editorClassName={`editor__body ${bodyClass}`}
         onEditorStateChange={onEditorStateChange}
+        readOnly={disabled}
         toolbar={{
           options: [
             'inline',
@@ -65,7 +67,7 @@ const TextEditor = (props: TextEditorProps) => {
           history: { inDropdown: true },
         }}
       />
-    </div>
+    </>
   );
 };
 

@@ -1,17 +1,18 @@
 import React, { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
+import { IKeyPoints } from '../../components/products/AddProduct/KeyPoints';
+import { IQuestions } from '../../components/products/AddProduct/Questions';
 import Description from '../../components/products/tab/description';
 import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
-import styles from '../../styles/pages/products.module.scss';
 
 const AddProduct = () => {
   const [tabValue, setTabValue] = useState('description');
 
   const methods = useForm();
-  const KeyPoint = useState([
+  const KeyPoint = useState<IKeyPoints[]>([
     {
       id: '',
       title: '',
@@ -19,11 +20,13 @@ const AddProduct = () => {
       images: [],
     },
   ]);
-  const question = useState([
+  const question = useState<IQuestions[]>([
     {
       id: '',
       title: '',
       question: '',
+      isCollapsed: false,
+      isDisabled: false,
     },
   ]);
 
@@ -79,6 +82,7 @@ const AddProduct = () => {
                 question={question}
                 setFeatures={setFeatures}
                 setSpecification={setSpecification}
+                setTabValue={setTabValue}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

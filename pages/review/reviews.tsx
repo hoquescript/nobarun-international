@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { sub, format } from 'date-fns';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import {
@@ -18,16 +18,22 @@ import {
   FaEdit,
 } from 'react-icons/fa';
 
-import tableData from '../../data/tableData.json';
-import { COLUMNS } from '../../data/column';
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
-import Table from '../../components/shared/Table';
+
+import tableData from '../../data/tableData.json';
+import { COLUMNS } from '../../data/column';
 
 import styles from '../../styles/pages/query-report.module.scss';
-import Togglebar from '../../components/controls/togglebar';
 
-const BlogPost = () => {
+const formatIsPublished = (data) => {
+  const reviews = {};
+  data.forEach((review) => {
+    reviews[review.id] = Boolean(review.isPublished);
+  });
+  return reviews;
+};
+const Reviews = () => {
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -59,6 +65,17 @@ const BlogPost = () => {
   } = tableInstance;
 
   const { pageIndex, pageSize } = state;
+
+  const [isPublished, setIsPublished] = useState({});
+
+  useEffect(() => {
+    setIsPublished(formatIsPublished(data));
+  }, []);
+
+  const isPublishedHandler = (id, event) => {
+    const newIsPublished = { ...isPublished, [id]: event.target.checked };
+    setIsPublished(newIsPublished);
+  };
 
   return (
     <div className={styles.query}>
@@ -117,19 +134,8 @@ const BlogPost = () => {
                       </span>
                     </td>
                     {row.cells.map((cell, index) => {
-                      const grip = index === 0 && (
-                        <span
-                          className="table__icon grip"
-                          style={{ marginRight: '2rem' }}
-                        >
-                          <FaGripVertical />
-                        </span>
-                      );
                       return (
-                        <td {...cell.getCellProps()}>
-                          {/* {grip} */}
-                          {cell.render('Cell')}
-                        </td>
+                        <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                       );
                     })}
                     <td>
@@ -142,7 +148,15 @@ const BlogPost = () => {
                             <FaEdit />
                           </span>
                         </div>
-                        <Togglebar />
+                        <label id={row.id} className="custom-switch">
+                          <input
+                            type="checkbox"
+                            id={row.id}
+                            checked={isPublished[row.id] || false}
+                            onChange={(e) => isPublishedHandler(row.id, e)}
+                          />
+                          <span>&nbsp;</span>
+                        </label>
                       </div>
                     </td>
                   </tr>
@@ -213,4 +227,4 @@ const BlogPost = () => {
   );
 };
 
-export default BlogPost;
+export default Reviews;

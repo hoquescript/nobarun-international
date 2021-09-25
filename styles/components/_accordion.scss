@@ -100,3 +100,49 @@
     background-color: #666;
   }
 }
+
+.form_accordion {
+  box-shadow: 0px 0px 5px 0px #ccc;
+  &:not(:last-of-type) {
+    margin-bottom: 2rem;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 2rem;
+    cursor: pointer;
+    h5 {
+      font-weight: 500;
+    }
+    > i {
+      margin-left: auto;
+      transition: 0.3s;
+    }
+    &.active {
+      i {
+        transform: rotate(90deg);
+      }
+    }
+    &.has-actions {
+      padding: 1rem 0;
+    }
+  }
+  &__content {
+    padding-bottom: 20px;
+    display: none;
+    &.active {
+      display: block;
+    }
+    & > div {
+      border: none !important;
+      padding: 0 1rem;
+    }
+    & .editor__body {
+      border: 1px solid #f1f1f1;
+      border-top: none;
+      margin-top: 0;
+      padding: 1rem;
+    }
+  }
+}

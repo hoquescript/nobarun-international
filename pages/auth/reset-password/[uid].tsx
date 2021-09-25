@@ -1,8 +1,8 @@
 import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
-import Textfield from '../../components/controls/textfield';
-import styles from '../../styles/pages/auth.module.scss';
+import Textfield from '../../../components/controls/textfield';
+import styles from '../../../styles/pages/auth.module.scss';
 
 const ForgetPassword = () => {
   const methods = useForm();

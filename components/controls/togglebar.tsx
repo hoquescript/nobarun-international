@@ -1,14 +1,26 @@
 import React from 'react';
+import { useFormContext } from 'react-hook-form';
 
 interface TogglebarProps {
+  name: string;
+  className?: string;
+  required?: boolean;
   children?: React.ReactNode;
   checked?: boolean;
 }
 const Togglebar = (props: TogglebarProps) => {
-  const { children, checked } = props;
+  const { name, checked, required, className, children } = props;
+
+  const { register } = useFormContext();
+
   return (
-    <label htmlFor="publish" className="custom-switch">
-      <input type="checkbox" id="publish" checked={checked} />
+    <label htmlFor={name} className={`custom-switch ${className}`}>
+      <input
+        type="checkbox"
+        id="publish"
+        checked={checked}
+        {...register(name, { required })}
+      />
       <span>{children}</span>
     </label>
   );

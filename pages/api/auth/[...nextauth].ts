@@ -7,8 +7,8 @@ import Providers from 'next-auth/providers';
 import client from '../../../apollo-client';
 
 const LOGIN_QUERY = gql`
-  query {
-    login(data: { email: "azim@gmail.com", password: "iwilldoit" }) {
+  query getLoginData($data: LoginInput!) {
+    login(data: $data) {
       token
     }
   }
@@ -25,7 +25,7 @@ const providers = [
           query: LOGIN_QUERY,
           variables: { email, password },
         });
-
+        console.log(user);
         if (user) return { status: 'success', data: user.data?.login };
       } catch (e: any) {
         const errorMessage = e.response.data.message;
@@ -34,6 +34,17 @@ const providers = [
     },
   }),
 ];
+
+// const refreshAccessToken = async (prevToken) => {
+//   const token = await refreshEndpoint(prevToken);
+
+//   // Do what you want
+
+//   return {
+//     accessToken: token.accessToken,
+//     accessTokenExpires: Date.now() + token.expiresIn * 1000,
+//   };
+// }
 
 const callbacks = {
   async jwt(token: any, user: any) {
@@ -53,7 +64,7 @@ const options = {
   providers,
   callbacks,
   pages: {
-    error: '/auth/error',
+    error: '/auth/login',
   },
 };
 

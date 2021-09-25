@@ -26,21 +26,6 @@ const useAllAdmin = async () => {
     role: 'Superuser',
   }));
 
-  // const admins = {};
-  // if (data) {
-  //   data.getAllAccounts.forEach((admin) => {
-  //     admins[admin.id] = {
-  //       fullName: admin.name,
-  //       whatsapp: admin.whatsAppNumber,
-  //       logo: admin.companyLogo,
-  //       email: admin.email,
-  //       address: admin.address,
-  //       isPublished: admin.isPublished,
-  //       isDisabled: true,
-  //     };
-  //   });
-  // }
-  console.log(admins);
   return admins;
 };
 

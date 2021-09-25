@@ -30,8 +30,9 @@
   }
   &__forgetPassword {
     text-align: right;
-    margin-top: 2.5rem;
+    // margin-top: 2.5rem;
     display: block;
+    align-self: flex-end;
     &:hover {
       color: #086ca2;
     }

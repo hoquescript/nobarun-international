@@ -1,101 +1,33 @@
 import React, { useState } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
-import { FaPlus, FaPlusCircle } from 'react-icons/fa';
+import { FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
 
 import Chipfield from '../../controls/chipfield';
 import Combobox from '../../controls/combobox';
 import TextEditor from '../../shared/TextEditor';
+import KeyPoints, { IKeyPoints } from '../AddProduct/KeyPoints';
+import Questions, { IQuestions } from '../AddProduct/Questions';
 
 interface DescriptionProps {
   register: UseFormRegister<FieldValues>;
   keyPointState: [
-    {
-      id: string;
-      title: string;
-      content: string;
-      images: never[];
-    }[],
-    React.Dispatch<
-      React.SetStateAction<
-        {
-          id: string;
-          title: string;
-          content: string;
-          images: never[];
-        }[]
-      >
-    >,
+    IKeyPoints[],
+    React.Dispatch<React.SetStateAction<IKeyPoints[]>>,
   ];
-  question: [
-    {
-      id: string;
-      title: string;
-      question: string;
-    }[],
-    React.Dispatch<
-      React.SetStateAction<
-        {
-          id: string;
-          title: string;
-          question: string;
-        }[]
-      >
-    >,
-  ];
+  question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
+  setTabValue: any;
 }
 const Description = (props: DescriptionProps) => {
   const {
     register,
-    keyPointState: [keyPoints, setKeyPoints],
-    question: [questions, setQuestions],
+    keyPointState,
+    question,
     setFeatures,
     setSpecification,
+    setTabValue,
   } = props;
-
-  const onKeyPointsContentChange = (
-    idx: number,
-    key: 'title' | 'content',
-    value: string,
-  ) => {
-    const points = [...keyPoints];
-    points[idx][key] = value;
-    setKeyPoints(points);
-  };
-
-  const addKeyPoints = () => {
-    setKeyPoints([
-      ...keyPoints,
-      {
-        id: '',
-        title: '',
-        content: '',
-        images: [],
-      },
-    ]);
-  };
-
-  const onQuestionsChange = (
-    idx: number,
-    key: 'title' | 'question',
-    value: string,
-  ) => {
-    const questionArr = [...questions];
-    questionArr[idx][key] = value;
-    setQuestions(questionArr);
-  };
-
-  const addQuestion = () => {
-    setQuestions([
-      ...questions,
-      {
-        id: '',
-        title: '',
-        question: '',
-      },
-    ]);
-  };
 
   return (
     <div id="description">
@@ -221,59 +153,7 @@ const Description = (props: DescriptionProps) => {
           </div>
         </div>
       </div>
-      {keyPoints.map((point, idx) => (
-        <div className="wrapper-section center" key={idx}>
-          <div className="wrapper-section__title flex sb">
-            <input
-              className="custom-input large"
-              placeholder="Key Points of Product"
-              onChange={(e) =>
-                onKeyPointsContentChange(idx, 'title', e.target.value)
-              }
-            />
-            <div className="flex">
-              <div className="product-images">
-                <input
-                  type="file"
-                  id="product"
-                  accept="image/*, video/*"
-                  style={{ display: 'none', height: '71px' }}
-                  // onChange={(e) => imageUploadHandler(e)}
-                />
-                <label
-                  className="add-new-image"
-                  htmlFor="product"
-                  style={{ height: '71px' }}
-                >
-                  <FaPlus />
-                </label>
-              </div>
-            </div>
-          </div>
-          <div className="wrapper-section__content">
-            <div className="field mt-20">
-              <TextEditor
-                multiple
-                onChange={(content: string) =>
-                  onKeyPointsContentChange(idx, 'content', content)
-                }
-              />
-            </div>
-          </div>
-          <button
-            type="button"
-            className="btn-outline-green mt-20 mb-20"
-            onClick={addKeyPoints}
-          >
-            <FaPlusCircle className="btn-icon-small" />
-            Add New Point
-          </button>
-          <button type="button" className="btn-outline-green mt-20 ml-20 mb-20">
-            <FaPlusCircle className="btn-icon-small" />
-            Delete Point
-          </button>
-        </div>
-      ))}
+      <KeyPoints keyPointState={keyPointState} />
       <div className="wrapper-section">
         <div className="wrapper-section__title">
           <h3 className="heading-secondary">Feature List</h3>
@@ -294,43 +174,11 @@ const Description = (props: DescriptionProps) => {
           </div>
         </div>
       </div>
-      <div className="wrapper-section">
-        {questions.map((question, idx) => (
-          <div className="mb-40">
-            <div className="wrapper-section__title flex sb">
-              <input
-                className="custom-input large"
-                placeholder="Question Title"
-                onChange={(e) =>
-                  onQuestionsChange(idx, 'title', e.target.value)
-                }
-              />
-              <div>
-                <button
-                  type="button"
-                  className="btn-outline-green"
-                  onClick={addQuestion}
-                >
-                  <FaPlusCircle className="btn-icon-small" />
-                  Add Question
-                </button>
-                <button type="button" className="ml-20 btn-outline-green">
-                  <FaPlusCircle className="btn-icon-small" />
-                  Delete Question
-                </button>
-              </div>
-            </div>
-            <div className="wrapper-section__content">
-              <div className="field mt-20">
-                <TextEditor
-                  onChange={(content: string) =>
-                    onQuestionsChange(idx, 'question', content)
-                  }
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+      <Questions question={question} />
+      <div className="center mt-40 mb-30">
+        <button className="btn-green" onClick={() => setTabValue('seo')}>
+          Next Page
+        </button>
       </div>
     </div>
   );
