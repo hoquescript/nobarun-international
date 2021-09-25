@@ -13,7 +13,7 @@ const Login = () => {
 
   const onSubmit = (data: any) => {
     const { email, password } = data;
-    // console.log(data);
+    console.log(data);
     signIn('credentials', {
       email,
       password,
@@ -38,13 +38,13 @@ const Login = () => {
             label="Email"
             type="email"
             name="email"
-            value="i@gmail.com"
+            // value="iss@gmail.com"
             placeholder="Enter your Name"
           />
           <Textfield
             type="password"
             label="Password"
-            value="one123123"
+            // value="one123123"
             placeholder="Enter your Password"
             name="password"
           />
@@ -58,6 +58,7 @@ const Login = () => {
             </a>
           </div>
           <input type="submit" className={styles.auth__button} value="Login" />
+          {/* <button onClick={methods.handleSubmit(onSubmit)}>Hello</button> */}
         </form>
       </FormProvider>
     </div>

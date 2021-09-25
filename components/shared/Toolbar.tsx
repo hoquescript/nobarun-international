@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { AiFillSetting, AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
+import { toggleToolbar } from '../../store/slices/ui';
 
 const Toolbar = () => {
-  const [show, setShow] = useState(false);
+  const show = useTypedSelector((state) => state.ui.showToolbar);
+  const dispatch = useTypedDispatch();
   return (
     <div
       id="tools-panel"
@@ -13,7 +19,7 @@ const Toolbar = () => {
         className="btn-icon-fade side-panel__toggle show-panel"
         data-target="#tools-panel"
         onClick={() => {
-          setShow(!show);
+          dispatch(toggleToolbar(!show));
         }}
       >
         <AiFillSetting />

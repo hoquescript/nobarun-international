@@ -4,6 +4,7 @@ import { FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
 
 import Chipfield from '../../controls/chipfield';
 import Combobox from '../../controls/combobox';
+import FileButton from '../../controls/file';
 import TextEditor from '../../shared/TextEditor';
 import KeyPoints, { IKeyPoints } from '../AddProduct/KeyPoints';
 import Questions, { IQuestions } from '../AddProduct/Questions';
@@ -132,24 +133,7 @@ const Description = (props: DescriptionProps) => {
               </button>
               <img src="/images/product-img.jpg" alt="" />
             </figure>
-            <div className="product-images">
-              <input
-                type="file"
-                id="product"
-                accept="image/*, video/*"
-                style={{ display: 'none', height: '71px' }}
-                // onChange={(e) => imageUploadHandler(e)}
-              />
-
-              <label
-                className="add-new-image"
-                htmlFor="product"
-                style={{ height: '71px' }}
-              >
-                {/* <i className="plus-icon" onClick={imageUploader}></i> */}
-                <FaPlus />
-              </label>
-            </div>
+            <FileButton />
           </div>
         </div>
       </div>

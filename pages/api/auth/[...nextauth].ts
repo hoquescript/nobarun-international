@@ -23,9 +23,9 @@ const providers = [
         const { email, password } = credentials;
         const user = await client.query({
           query: LOGIN_QUERY,
-          variables: { email, password },
+          variables: { data: { email, password } },
         });
-        console.log(user);
+        // console.log(user);
         if (user) return { status: 'success', data: user.data?.login };
       } catch (e: any) {
         const errorMessage = e.response.data.message;

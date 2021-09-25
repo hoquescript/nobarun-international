@@ -27,7 +27,7 @@ export default function useProvideAuth() {
       uri: 'https://naubaun.herokuapp.com/graphql',
       headers: getAuthHeaders(),
     });
-    console.log(link);
+    // console.log(link);
     return new ApolloClient({
       link,
       cache: new InMemoryCache(),

@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 const getAuthHeaders = async () => {
   const session = await getSession();
   const authToken = session?.accessToken;
-  console.log(authToken);
+  // console.log(authToken);
   if (!authToken) return null;
 
   return {
@@ -16,7 +16,7 @@ const link = new HttpLink({
   uri: 'https://naubaun.herokuapp.com/graphql',
   headers: getAuthHeaders().then((res) => res),
 });
-console.log(link);
+// console.log(link);
 
 const client = new ApolloClient({
   uri: 'https://naubaun.herokuapp.com/graphql',
