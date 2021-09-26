@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FaEye, FaPlus, FaPlusCircle } from 'react-icons/fa';
+import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 
@@ -33,17 +33,6 @@ const CollectionForm = () => {
       slug: collectionSlug,
       isPublished: true,
     };
-    // createCategory({
-    //   variables: {
-    //     name: categoryName,
-    //     description,
-    //     image:
-    //       'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
-    //     isPublished: true,
-    //     parentCategory: parentCategory,
-    //     slug: categorySlug,
-    //   },
-    // });
     createCollection({
       variables: {
         data: collection,

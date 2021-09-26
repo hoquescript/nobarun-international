@@ -20,7 +20,7 @@ const Checkbox = (props: CheckboxProps) => {
           <input
             type="checkbox"
             id="terms-conditions"
-            checked={checked}
+            // checked={checked}
             {...register(name, { required })}
           />
           <div className="content">{children}</div>
@@ -30,7 +30,7 @@ const Checkbox = (props: CheckboxProps) => {
   );
 };
 Checkbox.defaultProps = {
-  checked: false,
+  // checked: false,
   required: false,
 };
 export default Checkbox;

@@ -11,6 +11,7 @@ import Table from '../../../components/shared/Table';
 import styles from '../../../styles/pages/query-report.module.scss';
 import { ADMIN_COLUMNS } from '../../../data/AdminColumn';
 import useAllAdmin from '../../../hooks/Settings/useAllAdmin';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 
 const Accounts = () => {
   const router = useRouter();
@@ -21,10 +22,12 @@ const Accounts = () => {
     )}`,
   );
 
+  const token = useTypedSelector((state) => state.ui.token);
+
   const [admins, setAdmins] = useState([]);
   useEffect(() => {
-    useAllAdmin().then((admin) => setAdmins(admin));
-  }, []);
+    useAllAdmin(token).then((admin) => setAdmins(admin));
+  }, [token]);
 
   const columns = useMemo(() => ADMIN_COLUMNS, []);
 

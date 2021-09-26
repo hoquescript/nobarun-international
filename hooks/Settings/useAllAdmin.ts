@@ -1,5 +1,6 @@
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
+import { useTypedSelector } from '../useTypedSelector';
 
 const GET_ALL_ADMINS = gql`
   query {
@@ -25,20 +26,23 @@ const GET_ALL_ADMINS = gql`
   }
 `;
 
-const useAllAdmin = async () => {
-  const client = await createGraphQLRequestClient();
-  const data = await client.request(GET_ALL_ADMINS);
+const useAllAdmin = async (token) => {
+  const requestHeaders = {
+    authorization: `Bearer ${token}`,
+  };
+  if (token) {
+    const data = await Client.request(GET_ALL_ADMINS, {}, requestHeaders);
 
-  const admins = data.getAllTheUsers.map((query) => ({
-    id: query.id,
-    fullName: query.firstName + ' ' + query.lastName,
-    email: query.email,
-    phone: query.number,
-    title: query.displayName,
-    role: 'Superuser',
-  }));
-
-  return admins;
+    const admins = data.getAllTheUsers.map((query) => ({
+      id: query.id,
+      fullName: query.firstName + ' ' + query.lastName,
+      email: query.email,
+      phone: query.number,
+      title: query.displayName,
+      role: 'Superuser',
+    }));
+    return admins;
+  } else return [];
 };
 
 export default useAllAdmin;

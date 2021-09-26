@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
-import { FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import Chip from '../../controls/chip';
 
 import Chipfield from '../../controls/chipfield';
@@ -10,6 +8,7 @@ import FileButton from '../../controls/file';
 import TextEditor from '../../shared/TextEditor';
 import KeyPoints, { IKeyPoints } from '../AddProduct/KeyPoints';
 import Questions, { IQuestions } from '../AddProduct/Questions';
+import RelatedProducts from '../AddProduct/RelatedProduct';
 
 interface DescriptionProps {
   register: UseFormRegister<FieldValues>;
@@ -24,6 +23,8 @@ interface DescriptionProps {
   setTabValue: any;
   productsImage: string[];
   info: any;
+  relatedProducts: string[];
+  setRelatedProducts: any;
 }
 const Description = (props: DescriptionProps) => {
   const {
@@ -36,8 +37,9 @@ const Description = (props: DescriptionProps) => {
     setTabValue,
     productsImage,
     info,
+    relatedProducts,
+    setRelatedProducts,
   } = props;
-  console.log(info);
   return (
     <div id="description">
       <div className="wrapper-section">
@@ -114,7 +116,10 @@ const Description = (props: DescriptionProps) => {
             </div>
           </div>
           <div className="mb-50">
-            <Chipfield />
+            <RelatedProducts
+              chips={relatedProducts}
+              setChips={setRelatedProducts}
+            />
           </div>
           <div className="product-images">
             {productsImage.map((src) => (

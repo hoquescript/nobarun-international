@@ -1,5 +1,6 @@
 import type { AppProps } from 'next/app';
-import { Provider as SessionProvider } from 'next-auth/client';
+import { useEffect } from 'react';
+import { getSession, Provider as SessionProvider } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
@@ -8,10 +9,13 @@ import Layout from '../layout';
 import useAuthProvider from '../hooks/useAuthProvider';
 import store from '../store/configureStore';
 import '../styles/main.scss';
+import { useTypedDispatch } from '../hooks/useTypedSelector';
+import { setAuthToken } from '../store/slices/ui';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { createApolloClient } = useAuthProvider();
+
   return (
     <SessionProvider session={pageProps.session}>
       <Provider store={store}>

@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import Combobox from '../../../components/controls/combobox';
 
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 import Togglebar from '../../../components/controls/togglebar';
+import { useEffect } from 'react';
+import useAllBlogCategories from '../../../hooks/Blogs/useAllBlogCategory';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory($data: CreateNewBlogCategoryInput!) {
@@ -20,13 +23,33 @@ const AddCategory = () => {
   const methods = useForm();
   const [createCategory] = useMutation(CREATE_CATEGORY);
 
+  const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    useAllBlogCategories().then((category) => setCategories(category));
+  }, []);
+
   const onSubmit = (data) => {
-    console.log(data);
+    let pCategory = {};
+    if (data.parentCategory) {
+      pCategory = {
+        parentCategory: data.parentCategory,
+      };
+    }
+    const category = {
+      id: uuid(),
+      name: data.name,
+      description,
+      image: '',
+      slug: data.slug,
+      isPublished: data.isPublished,
+      ...pCategory,
+    };
+    console.log(category);
     createCategory({
       variables: {
-        ...data,
-        description,
+        data: category,
       },
     });
   };
@@ -63,7 +86,7 @@ const AddCategory = () => {
                 name="parentCategory"
                 label="Parent Category"
                 placeholder="Select Category"
-                options={[{ id: '56', value: 'Hello' }]}
+                options={categories || []}
               />
             </div>
           </div>

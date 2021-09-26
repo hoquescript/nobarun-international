@@ -8,34 +8,15 @@ import {
   FaPlusCircle,
 } from 'react-icons/fa';
 import Nestable from 'react-nestable';
+import { gql, useMutation } from '@apollo/client';
+
 import 'react-nestable/dist/styles/index.css';
+
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
 import { useState } from 'react';
-import useAllBlogCategories from '../../../hooks/Blogs/useAllBlogCategories';
-
-const items = [
-  {
-    id: 0,
-    name: 'Car Parking Management',
-    description: 'Make plant based milks and juices with ease',
-  },
-  {
-    id: 1,
-    name: 'Coffee & Tea Business',
-    description:
-      'Sustainability and freshness is assured with our branded glass bottles',
-    children: [
-      {
-        id: 2,
-        name: 'Commercial Kitchen Equipment',
-        description: 'The freshest organic ingredients for milk making',
-      },
-    ],
-  },
-  // { id: 3, text: 'Lisa' },
-];
+import useBlogCategoriesTree from '../../../hooks/Blogs/useBlogCategoriesTree';
 
 const renderItem = (props) => {
   const { item, index, collapseIcon, handler } = props;
@@ -84,13 +65,30 @@ const renderItem = (props) => {
   );
 };
 
+const SET_CATEGORIES_TREE = gql`
+  mutation setCategoriesTree($items: [CreateNewCategoryInput!]!) {
+    setCategoriesTree(items: $items)
+  }
+`;
+
 const Categories = () => {
   const [items, setItems] = useState([]);
+
+  const [createCategory] = useMutation(SET_CATEGORIES_TREE);
+
   useEffect(() => {
-    useAllBlogCategories().then((category) => setItems(category));
+    useBlogCategoriesTree().then((category) => setItems(category));
   }, []);
 
-  console.log(items);
+  const setCategoryTreeHandler = (dragInfo) => {
+    const { items } = dragInfo;
+    setItems(items);
+    createCategory({
+      variables: {
+        items,
+      },
+    });
+  };
   return (
     <div className="container center">
       <div className="flex sb mb-60">
@@ -114,9 +112,7 @@ const Categories = () => {
           <Nestable
             items={items}
             renderItem={renderItem}
-            onChange={(items) => {
-              // console.log(items);
-            }}
+            onChange={setCategoryTreeHandler}
           />
         </div>
       </div>

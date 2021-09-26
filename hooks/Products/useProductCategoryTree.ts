@@ -9,15 +9,6 @@ const GET_ALL_CATEGORY = gql`
 
 const useProductCategoryTree = async () => {
   const data = await Client.request(GET_ALL_CATEGORY);
-  // console.log(data);
-  // const admins = data.getAllTheUsers.map((query) => ({
-  //   id: query.id,
-  //   fullName: query.firstName + ' ' + query.lastName,
-  //   email: query.email,
-  //   phone: query.number,
-  //   title: query.displayName,
-  //   role: 'Superuser',
-  // }));
 
   const categories = JSON.parse(data?.getCategories).map((category) => ({
     id: category.id,

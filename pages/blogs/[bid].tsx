@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaEye, FaPlus, FaPlusCircle } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
 
 import Checkbox from '../../components/controls/checkbox';
@@ -11,6 +11,8 @@ import FileButton from '../../components/controls/file';
 import Togglebar from '../../components/controls/togglebar';
 import TextEditor from '../../components/shared/TextEditor';
 import Toolbar from '../../components/shared/Toolbar';
+import useBlogInfo from '../../hooks/Blogs/useBlogInfo';
+
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const AddNewPost = () => {
@@ -24,13 +26,20 @@ const AddNewPost = () => {
       images: [],
     },
   ]);
+  const [info, setInfo] = useState({});
+
+  useEffect(() => {
+    useBlogInfo().then((data) => {
+      setInfo(data);
+    });
+  }, []);
 
   const blogImages = useTypedSelector((state) => state.ui.blogsImage);
 
   const postBlogHandler = (data) => {
     console.log({ ...data, sections: PostSectionState[0], tags });
   };
-  const info = {};
+
   return (
     <FormProvider {...methods}>
       <Toolbar />

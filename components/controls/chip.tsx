@@ -1,6 +1,6 @@
-import React, { useRef, useState } from 'react';
-import { AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
-import styles from './chipfield.module.scss';
+import React, { useRef } from 'react';
+import { AiOutlineClose } from 'react-icons/ai';
+import styles from '../../styles/pages/products.module.scss';
 
 interface ChipProps {
   chips: string[];
@@ -9,6 +9,12 @@ interface ChipProps {
 const Chip = (props: ChipProps) => {
   const { chips, setChips } = props;
   const ref = useRef<HTMLInputElement>(null);
+
+  const chipRemoveHandler = (idx) => {
+    const newChips = [...chips];
+    newChips.splice(idx, 1);
+    setChips(newChips);
+  };
 
   const onSubmitHandler = (e) => {
     e.preventDefault();
@@ -31,10 +37,14 @@ const Chip = (props: ChipProps) => {
             placeholder="Search"
             ref={ref}
           />
-          {chips.map((chip) => (
+          {chips.map((chip, idx) => (
             <div className="chip" key={chip}>
               <span className="chip__title">{chip}</span>
-              <button type="button" className="chip__remove">
+              <button
+                type="button"
+                className="chip__remove"
+                onClick={() => chipRemoveHandler(idx)}
+              >
                 <AiOutlineClose />
               </button>
             </div>

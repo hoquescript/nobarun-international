@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
+import Togglebar from '../../components/controls/togglebar';
 import { IKeyPoints } from '../../components/products/AddProduct/KeyPoints';
 import { IQuestions } from '../../components/products/AddProduct/Questions';
 import Description from '../../components/products/tab/description';
@@ -20,7 +21,7 @@ const AddProduct = () => {
     useProductInfo().then((data) => {
       setInfo(data);
     });
-  });
+  }, []);
 
   const productsImage = useTypedSelector((state) => state.ui.productsImage);
 
@@ -44,13 +45,23 @@ const AddProduct = () => {
 
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [keywords, setKeywords] = useState<string[]>([]);
   const tagState = useState<string[]>([]);
 
   const handleAddProduct = (data: any) => {
-    console.log(data);
-    console.log(KeyPoint[0]);
-    console.log(question[0]);
+    const product = {
+      ...data,
+      relatedProducts,
+      images: productsImage,
+      keyPoints: KeyPoint[0],
+      features,
+      specification,
+      questions: question[0],
+      tags: tagState[0],
+      keywords,
+    };
+    console.log(product);
   };
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>
@@ -67,10 +78,7 @@ const AddProduct = () => {
           >
             <h2 className="page-title">Product Editor</h2>
             <div>
-              <label htmlFor="publish" className="custom-switch ml-auto">
-                <input type="checkbox" id="publish" />
-                <span>Publish</span>
-              </label>
+              <Togglebar name="isPublished">Publish</Togglebar>
               <button type="button" className="btn-icon-white ml-20">
                 <FaEye />
               </button>
@@ -99,6 +107,8 @@ const AddProduct = () => {
                 setTabValue={setTabValue}
                 productsImage={productsImage}
                 info={info}
+                relatedProducts={relatedProducts}
+                setRelatedProducts={setRelatedProducts}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

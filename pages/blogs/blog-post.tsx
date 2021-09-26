@@ -7,8 +7,11 @@ import Search from '../../components/controls/search';
 import Table from '../../components/shared/Table';
 
 import styles from '../../styles/pages/query-report.module.scss';
-import { COLUMNS } from '../../data/column';
+import { BLOG_COLUMNS } from '../../data/BlogColumn';
 import tableData from '../../data/tableData.json';
+import { useEffect } from 'react';
+import useAllBlogCategories from '../../hooks/Blogs/useAllBlogs';
+import Link from 'next/link';
 
 const BlogPost = () => {
   const [period, setPeriod] = useState(
@@ -17,9 +20,11 @@ const BlogPost = () => {
       'yyyy-MM-dd',
     )}`,
   );
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => tableData, []);
-
+  const columns = useMemo(() => BLOG_COLUMNS, []);
+  const [posts, setPosts] = useState([]);
+  useEffect(() => {
+    useAllBlogCategories().then((blogs) => setPosts(blogs));
+  }, []);
   return (
     <div className={styles.query}>
       <div className="row">
@@ -33,15 +38,17 @@ const BlogPost = () => {
       <div className={styles.query__btnWrapper}>
         <h1 className="heading-primary mt-40 mb-40">Blog Post (4 post)</h1>
         <div>
-          <button type="button" className="btn-outline-green mr-20">
-            <FaPlusCircle className="btn-icon-small" />
-            Add Post
-          </button>
+          <Link href="/blogs/add-new-post">
+            <a className="btn-outline-green small mr-20">
+              <FaPlusCircle className="btn-icon-small" />
+              Add Post
+            </a>
+          </Link>
         </div>
       </div>
       <Table
         columns={columns}
-        data={data}
+        data={posts}
         editHandler={() => {}}
         deleteHandler={() => {}}
       />

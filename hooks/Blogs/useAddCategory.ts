@@ -1,4 +1,4 @@
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory(
@@ -30,8 +30,7 @@ const CREATE_CATEGORY = gql`
 `;
 
 const useProductCategoryTree = async () => {
-  const [createCategory, { data, loading, error }] =
-    useMutation(CREATE_CATEGORY);
+  const [createCategory] = useMutation(CREATE_CATEGORY);
 
   return createCategory;
 };
