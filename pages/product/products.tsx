@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle, FaGripHorizontal, FaList } from 'react-icons/fa';
 
@@ -7,14 +7,22 @@ import Search from '../../components/controls/search';
 import Product from '../../components/products/product';
 
 import styles from '../../styles/pages/products.module.scss';
+import ProductList from '../../components/products/ProductList/ProductList';
+import Table from '../../components/shared/Table';
+import { COLUMNS } from '../../data/column';
+import reviews from '../../data/tableData.json';
 
 const Products = () => {
+  const [viewType, setViewType] = useState('grid');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+
+  const columns = useMemo(() => COLUMNS, []);
+  const data = useMemo(() => reviews, []);
 
   return (
     <div className="container center">
@@ -39,11 +47,17 @@ const Products = () => {
             </select>
           </div>
           <div className={styles.products__btnWrapper}>
-            <button className={styles.products__view_btn}>
+            <button
+              className={styles.products__view_btn}
+              onClick={() => setViewType('grid')}
+            >
               <FaGripHorizontal className="mr-10" />
               Card
             </button>
-            <button className={styles.products__view_btn}>
+            <button
+              className={styles.products__view_btn}
+              onClick={() => setViewType('list')}
+            >
               <FaList className="mr-10" />
               List
             </button>
@@ -57,33 +71,44 @@ const Products = () => {
         </div>
       </div>
       <div className="row">
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
-        <div className="col-xxl-4 col-xl-6 col-xs-12">
-          <Product />
-        </div>
+        {viewType === 'grid' ? (
+          <>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+            <div className="col-xxl-4 col-xl-6 col-xs-12">
+              <Product />
+            </div>
+          </>
+        ) : (
+          <Table
+            columns={columns}
+            data={data}
+            editHandler={() => {}}
+            deleteHandler={() => {}}
+          />
+        )}
 
         {/* <div className="col-4"></div> */}
         {/* <div className="col-4">

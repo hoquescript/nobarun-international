@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useForm, FormProvider, useFormContext } from 'react-hook-form';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useForm, FormProvider } from 'react-hook-form';
+import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
 
 import Combobox from '../../../components/controls/combobox';
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
-
-import styles from '../../../styles/pages/products.module.scss';
+import { useEffect } from 'react';
+import useAllCategories from '../../../hooks/Products/useAllCategories';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory(
@@ -19,6 +19,7 @@ const CREATE_CATEGORY = gql`
     $slug: String
     $isPublished: Boolean!
     $id: String!
+    $parentCategory: String!
   ) {
     addNewCategory(
       data: {
@@ -28,6 +29,7 @@ const CREATE_CATEGORY = gql`
         slug: $slug
         isPublished: $isPublished
         id: $id
+        parentCategory: $parentCategory
       }
     ) {
       id
@@ -40,15 +42,6 @@ const CREATE_CATEGORY = gql`
   }
 `;
 
-const GET_ALL_CATEGORY = gql`
-  query allCategory {
-    getAllTheCategory {
-      id
-      name
-    }
-  }
-`;
-
 const CategoryForm = () => {
   const methods = useForm();
   const {
@@ -56,16 +49,19 @@ const CategoryForm = () => {
   } = useRouter();
 
   const [description, setDescription] = useState('');
+  const [categories, setCategories] = useState([]);
 
-  const { loading: l, error: e, data: category } = useQuery(GET_ALL_CATEGORY);
-
-  const categories: { [key: string]: string } = {};
-  category?.getAllTheCategory.forEach((dt) => {
-    categories[dt.name] = dt.id;
+  useEffect(() => {
+    useAllCategories().then((data) => {
+      setCategories(data);
+    });
   });
+  // const categories: { [key: string]: string } = {};
+  // category?.getAllTheCategory.forEach((dt) => {
+  //   categories[dt.name] = dt.id;
+  // });
 
-  const [createCategory, { data, loading, error }] =
-    useMutation(CREATE_CATEGORY);
+  const [createCategory] = useMutation(CREATE_CATEGORY);
 
   const onSubmit = (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
@@ -76,15 +72,15 @@ const CategoryForm = () => {
         image:
           'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
         isPublished: true,
-        // parentCategory: parentCategory,
+        parentCategory: parentCategory,
         slug: categorySlug,
         id: uuid(),
       },
     });
   };
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  // if (loading) return 'Submitting...';
+  // if (error) return `Submission error! ${error.message}`;
   return (
     <div className="container center">
       <div
@@ -128,8 +124,7 @@ const CategoryForm = () => {
                 name="parentCategory"
                 label="Parent Category"
                 placeholder="Select Category"
-                // options={l ? ['hello'] : categories}
-                options={['hello', '614b80e450b42484f8461df4']}
+                options={categories || []}
               />
             </div>
           </div>

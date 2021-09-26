@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
 import { IKeyPoints } from '../../components/products/AddProduct/KeyPoints';
@@ -7,11 +7,20 @@ import Description from '../../components/products/tab/description';
 import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
+import useProductInfo from '../../hooks/Products/useProductInfo';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const AddProduct = () => {
   const methods = useForm();
+
   const [tabValue, setTabValue] = useState('description');
+  const [info, setInfo] = useState({});
+
+  useEffect(() => {
+    useProductInfo().then((data) => {
+      setInfo(data);
+    });
+  });
 
   const productsImage = useTypedSelector((state) => state.ui.productsImage);
 
@@ -89,6 +98,7 @@ const AddProduct = () => {
                 setSpecification={setSpecification}
                 setTabValue={setTabValue}
                 productsImage={productsImage}
+                info={info}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { v4 as uuid } from 'uuid';
 
@@ -16,44 +16,17 @@ import Togglebar from '../../../components/controls/togglebar';
 import styles from '../../../styles/pages/products.module.scss';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
+import useProductCategoryTree from '../../../hooks/Products/useProductCategoryTree';
 
 const items = [
-  {
-    id: 0,
-    name: 'Car Parking Management',
-    description: 'Make plant based milks and juices with ease',
-  },
+  { id: 0, des: 'Andy' },
   {
     id: 1,
-    name: 'Coffee & Tea Business',
-    description:
-      'Sustainability and freshness is assured with our branded glass bottles',
-    // children: null,
-    // children:[ '1','2'],
-    children: [
-      {
-        id: 2,
-        name: 'Commercial Kitchen Equipment',
-        description: 'The freshest organic ingredients for milk making',
-        children: [
-          {
-            id: 2,
-            name: 'Commercial Kitchen Equipment',
-            description: 'The freshest organic ingredients for milk making',
-          },
-        ],
-      },
-    ],
+    text: 'Harry',
+    children: [{ id: 2, text: 'David' }],
   },
-  // { id: 3, text: 'Lisa' },
+  { id: 3, text: 'Lisa' },
 ];
-
-const GET_ALL_CATEGORY = gql`
-  query GetCategoryTree {
-    getCategories
-  }
-`;
-
 interface renderItemProps {
   item: any;
   index: any;
@@ -118,56 +91,24 @@ const SET_CATEGORIES_TREE = gql`
 `;
 
 const Categories = () => {
-  const router = useRouter();
   const [categoryItem, setCategoryItem] = useState();
 
-  const [createCategory, { data: d, loading: l, error: e }] =
-    useMutation(SET_CATEGORIES_TREE);
+  const [createCategory] = useMutation(SET_CATEGORIES_TREE);
 
-  // console.log(uuid());
+  useEffect(() => {
+    useProductCategoryTree().then((data) => setCategoryItem(data));
+  }, []);
 
-  const { loading, error, data } = useQuery(GET_ALL_CATEGORY);
-  if (loading) return 'Loading...';
-  if (error) return `Fetching error! ${error.message}`;
-  // console.log(JSON.parse(data?.getCategories));
-
-  // useEffect(() => {
-
-  const categories = JSON.parse(data?.getCategories).map((category) => ({
-    id: category.id,
-    name: category.name,
-    description: category.description,
-    slug: category.slug,
-    children: category.children,
-  }));
-
-  // console.log(categories);
-
-  // useEffect(() => {
-  // setCategoryItem(categories);
-  // }, []);
-  // }, []);
-
-  // console.log(categoryItem);
+  console.log(categoryItem);
 
   const setCategoryTreeHandler = (dragInfo) => {
     const { items } = dragInfo;
-    console.log(items);
-
-    // items.map(item => {
-    //   const
-    // });
-    // createCategory();
-
+    setCategoryItem(items);
     createCategory({
       variables: {
         items,
       },
     });
-    // setCategoryItem('Please Rerender again');
-    // router.reload(window.location.pathname);
-    // router.reload(window.location.pathname);
-    // console.log(d);
   };
 
   return (
@@ -191,8 +132,8 @@ const Categories = () => {
         </div>
         <div className="col-12">
           <Nestable
-            items={items}
-            threshold={5}
+            items={categoryItem}
+            threshold={20}
             renderItem={renderItem}
             onChange={setCategoryTreeHandler}
           />

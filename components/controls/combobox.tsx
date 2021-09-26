@@ -1,33 +1,20 @@
 import React from 'react';
 import { useFormContext } from 'react-hook-form';
 
-type optionType = { [optionName: string]: string };
-
 interface ComboboxProps {
   label: string;
   name: string;
   className?: string;
   placeholder?: string;
   type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file';
-  options: string[] | optionType;
+  options: { id: string; value: string }[];
   required?: boolean;
 }
-
-const objectify = (arr: string[]) => {
-  const result: optionType = {};
-  arr.forEach((optionName) => {
-    result[optionName] = optionName.toLowerCase().replace(/ /g, '');
-  });
-  return result;
-};
 
 const Combobox = (props: ComboboxProps) => {
   const { name, label, options, placeholder } = props;
   const { register } = useFormContext();
 
-  const data: optionType = Array.isArray(options)
-    ? objectify(options)
-    : options;
   return (
     <div className="field">
       <label htmlFor={name}>{label}</label>
@@ -36,9 +23,9 @@ const Combobox = (props: ComboboxProps) => {
         <option disabled selected value="">
           {placeholder}
         </option>
-        {Object.keys(data).map((option) => (
-          <option key={option} value={data[option]}>
-            {option}
+        {options.map((option) => (
+          <option key={option.id} value={option.id}>
+            {option.value}
           </option>
         ))}
       </select>

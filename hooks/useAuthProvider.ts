@@ -1,14 +1,16 @@
 import { HttpLink, ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { GraphQLClient } from 'graphql-request';
 import { getSession } from 'next-auth/client';
 import { useState, useEffect } from 'react';
 
 export default function useAuthProvider() {
   const [authToken, setAuthToken] = useState<string | null | unknown>(null);
-
   useEffect(() => {
     async function getToken() {
       const session = await getSession();
-      if (session) setAuthToken(session?.accessToken);
+      if (session) {
+        setAuthToken(session?.accessToken);
+      }
     }
     getToken();
   }, []);
@@ -31,8 +33,17 @@ export default function useAuthProvider() {
       cache: new InMemoryCache(),
     });
   };
+
+  const createGraphQLRequestClient = () => {
+    const Client = new GraphQLClient('https://naubaun.herokuapp.com/graphql', {
+      // @ts-ignore
+      headers: getAuthHeaders(),
+    });
+    return Client;
+  };
   return {
     setAuthToken,
     createApolloClient,
+    createGraphQLRequestClient,
   };
 }

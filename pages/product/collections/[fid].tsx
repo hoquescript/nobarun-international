@@ -1,3 +1,4 @@
+import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -5,7 +6,13 @@ import { FaEye, FaPlus, FaPlusCircle } from 'react-icons/fa';
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 
-import styles from '../../../styles/pages/products.module.scss';
+const CREATE_COLLECTION = gql`
+  mutation addCollection($data: CreateNewCollectionInput!) {
+    createNewCollection(data: $data) {
+      id
+    }
+  }
+`;
 
 const CollectionForm = () => {
   const methods = useForm();
@@ -15,8 +22,17 @@ const CollectionForm = () => {
 
   const [description, setDescription] = useState('');
 
+  const [createCollection] = useMutation(CREATE_COLLECTION);
+
   const onSubmit = (data) => {
     const { collectionName, collectionSlug } = data;
+    const collection = {
+      name: collectionName,
+      description: description,
+      image: 'httphs',
+      slug: collectionSlug,
+      isPublished: true,
+    };
     // createCategory({
     //   variables: {
     //     name: categoryName,
@@ -28,6 +44,11 @@ const CollectionForm = () => {
     //     slug: categorySlug,
     //   },
     // });
+    createCollection({
+      variables: {
+        data: collection,
+      },
+    });
   };
 
   return (

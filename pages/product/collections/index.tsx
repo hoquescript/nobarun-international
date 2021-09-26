@@ -12,6 +12,9 @@ import 'react-nestable/dist/styles/index.css';
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import useAllCollections from '../../../hooks/Products/useAllCollections';
 
 const items = [
   {
@@ -24,13 +27,6 @@ const items = [
     name: 'Coffee & Tea Business',
     description:
       'Sustainability and freshness is assured with our branded glass bottles',
-    children: [
-      {
-        id: 2,
-        name: 'Commercial Kitchen Equipment',
-        description: 'The freshest organic ingredients for milk making',
-      },
-    ],
   },
   // { id: 3, text: 'Lisa' },
 ];
@@ -78,6 +74,13 @@ const renderItem = (props) => {
 };
 
 const Collections = () => {
+  const [collections, setCollections] =
+    useState<{ [key: string]: string | number }[]>();
+
+  useEffect(() => {
+    useAllCollections().then((collections) => setCollections(collections));
+  }, []);
+
   return (
     <div className="container center mt-30">
       <div className="flex sb mb-60">
@@ -99,8 +102,10 @@ const Collections = () => {
         </div>
         <div className="col-12">
           <Nestable
-            items={items}
+            items={collections}
             renderItem={renderItem}
+            collapsed
+            maxDepth={1}
             onChange={(items) => {
               // console.log(items);
             }}

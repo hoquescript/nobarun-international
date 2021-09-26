@@ -23,6 +23,7 @@ interface DescriptionProps {
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
   productsImage: string[];
+  info: any;
 }
 const Description = (props: DescriptionProps) => {
   const {
@@ -34,8 +35,9 @@ const Description = (props: DescriptionProps) => {
     setSpecification,
     setTabValue,
     productsImage,
+    info,
   } = props;
-
+  console.log(info);
   return (
     <div id="description">
       <div className="wrapper-section">
@@ -52,28 +54,28 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="category"
                 label="Category"
-                options={['Car Parking Management', '2', '3']}
+                options={info.categories || []}
               />
             </div>
             <div className="col-3">
               <Combobox
                 name="collection"
                 label="Collection"
-                options={['Flash Sale', '2', '3']}
+                options={info.collections || []}
               />
             </div>
             <div className="col-3">
               <Combobox
                 name="stockStatus"
                 label="Stock Status"
-                options={['Ready Stock', '2', '3']}
+                options={info.stocks || []}
               />
             </div>
             <div className="col-3">
               <Combobox
                 name="contactPerson"
                 label="Contact Person"
-                options={['Shuvo Islam', '2', '3']}
+                options={info.contacts || []}
               />
             </div>
           </div>
