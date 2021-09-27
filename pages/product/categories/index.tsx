@@ -18,15 +18,6 @@ import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import useProductCategoryTree from '../../../hooks/Products/useProductCategoryTree';
 
-const items = [
-  { id: 0, des: 'Andy' },
-  {
-    id: 1,
-    text: 'Harry',
-    children: [{ id: 2, text: 'David' }],
-  },
-  { id: 3, text: 'Lisa' },
-];
 interface renderItemProps {
   item: any;
   index: any;
@@ -35,8 +26,6 @@ interface renderItemProps {
 }
 const renderItem = (props: renderItemProps) => {
   const { item, index, collapseIcon, handler } = props;
-  // const [published, setPublished] = useState(false);
-
   return (
     <div className="row">
       <div className="col-1 flex ct" style={{ cursor: 'move' }}>

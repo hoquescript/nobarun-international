@@ -34,16 +34,8 @@ export default function useAuthProvider() {
     });
   };
 
-  const createGraphQLRequestClient = () => {
-    const Client = new GraphQLClient('https://naubaun.herokuapp.com/graphql', {
-      // @ts-ignore
-      headers: getAuthHeaders(),
-    });
-    return Client;
-  };
   return {
     setAuthToken,
     createApolloClient,
-    createGraphQLRequestClient,
   };
 }

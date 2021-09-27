@@ -1,6 +1,5 @@
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
-import { useTypedSelector } from '../useTypedSelector';
 
 const GET_ALL_ADMINS = gql`
   query {
@@ -46,6 +45,3 @@ const useAllAdmin = async (token) => {
 };
 
 export default useAllAdmin;
-function createGraphQLRequestClient() {
-  throw new Error('Function not implemented.');
-}

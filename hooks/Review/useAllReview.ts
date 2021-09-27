@@ -3,28 +3,39 @@ import Client from '../../config/GraphqlClient';
 
 const GET_ALL_REVIEWS = gql`
   query getAllReviews {
-    getAllReviewsForAProduct(productId: "614dba9ac8d3558394d7e4a8") {
+    getAllReviews {
       id
       title
       name
+      email
+      rating
+      reviewText
       product
+      images
+      isPublished
     }
   }
 `;
 
-const useAllReviews = async () => {
-  const data = await Client.request(GET_ALL_REVIEWS);
+const useAllReviews = async (token) => {
+  const requestHeaders = {
+    authorization: `Bearer ${token}`,
+  };
+  if (token) {
+    const data = await Client.request(GET_ALL_REVIEWS, {}, requestHeaders);
 
-  const admins = data.getAllTheUsers.map((query) => ({
-    id: query.id,
-    fullName: query.firstName + ' ' + query.lastName,
-    email: query.email,
-    phone: query.number,
-    title: query.displayName,
-    role: 'Superuser',
-  }));
+    const reviews = data.getAllReviews.map((review) => ({
+      id: review.id,
+      createdAt: '19th Feb, 2021',
+      SKU: 'bdtR5xy',
+      title: review.title,
+      rating: review.rating,
+      reviewText: review.reviewText,
+      images: review.images,
+    }));
 
-  return admins;
+    return reviews;
+  } else return [];
 };
 
 export default useAllReviews;

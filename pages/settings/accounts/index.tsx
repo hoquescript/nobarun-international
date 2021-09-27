@@ -54,7 +54,7 @@ const Accounts = () => {
         columns={columns}
         data={admins}
         editHandler={(id) => {
-          // router.push(`/settings/accounts/${id}`);
+          router.push(`/settings/accounts/${id}`);
         }}
         deleteHandler={() => {}}
       />

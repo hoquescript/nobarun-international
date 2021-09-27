@@ -6,27 +6,38 @@ const GET_ADMIN_BY_ID = gql`
     getSingleAdminById(adminId: $id) {
       firstName
       lastName
+      displayName
+      address
       email
       number
-      displayName
     }
   }
 `;
 
-const useAdminById = async (aid) => {
-  console.log(aid);
-  const data = await Client.request(GET_ADMIN_BY_ID, { id: aid });
-  console.log(data);
-  // const admins = data.getAllTheUsers.map((query) => ({
-  //   id: query.id,
-  //   fullName: query.firstName + ' ' + query.lastName,
-  //   email: query.email,
-  //   phone: query.number,
-  //   title: query.displayName,
-  //   role: 'Superuser',
-  // }));
-
-  return data.getSingleAdminById;
+const useAdminById = async (aid, token) => {
+  const requestHeaders = {
+    authorization: `Bearer ${token}`,
+  };
+  if (token) {
+    const data = await Client.request(
+      GET_ADMIN_BY_ID,
+      { id: aid },
+      requestHeaders,
+    );
+    const accounts = data.getSingleAdminById;
+    const account = {
+      firstName: accounts.firstName,
+      lastName: accounts.lastName,
+      displayName: accounts.displayName,
+      address: accounts.address,
+      email: accounts.email,
+      number: accounts.number,
+      password: '',
+      confirmPassword: '',
+      sendMail: false,
+    };
+    return account;
+  } else return {};
 };
 
 export default useAdminById;

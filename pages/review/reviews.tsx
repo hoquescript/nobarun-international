@@ -3,12 +3,8 @@ import { sub, format } from 'date-fns';
 import { useTable, useSortBy, usePagination } from 'react-table';
 import {
   FaGripVertical,
-  FaEllipsisH,
   FaSortUp,
   FaSortDown,
-  FaSortAmountUpAlt,
-  FaTrash,
-  FaPen,
   FaBackward,
   FaFastBackward,
   FaForward,
@@ -21,11 +17,12 @@ import {
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
 
-import tableData from '../../data/tableData.json';
-import { COLUMNS } from '../../data/column';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import useAllReviews from '../../hooks/Review/useAllReview';
 
 import styles from '../../styles/pages/query-report.module.scss';
-import useAllReviews from '../../hooks/Review/useAllReview';
+import { REVIEWS_COLUMNS } from '../../data/ReviewsColumn';
+import Link from 'next/link';
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -43,16 +40,20 @@ const Reviews = () => {
     )}`,
   );
 
-  const [reviews, setReviews] = useState([]);
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => reviews, []);
+  const [reviews, setReviews] = useState<any[]>([]);
+  const columns = useMemo(() => REVIEWS_COLUMNS, []);
 
+  const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    useAllReviews().then((reviews) => setReviews(reviews));
-  }, []);
+    useAllReviews(token).then((reviews) => setReviews(reviews));
+  }, [token]);
 
   // @ts-ignore
-  const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
+  const tableInstance = useTable(
+    { columns, data: reviews },
+    useSortBy,
+    usePagination,
+  );
 
   const {
     getTableProps,
@@ -76,7 +77,7 @@ const Reviews = () => {
   const [isPublished, setIsPublished] = useState({});
 
   useEffect(() => {
-    setIsPublished(formatIsPublished(data));
+    setIsPublished(formatIsPublished(reviews));
   }, []);
 
   const isPublishedHandler = (id, event) => {
@@ -95,12 +96,16 @@ const Reviews = () => {
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
-        <h1 className="heading-primary mt-40 mb-40">Reviews (51 Result)</h1>
+        <h1 className="heading-primary mt-40 mb-40">
+          Reviews ({reviews.length} Result)
+        </h1>
         <div>
-          <button type="button" className="btn-outline-green mr-20">
-            <FaPlusCircle className="btn-icon-small" />
-            Add Review
-          </button>
+          <Link href="/review/add-new-review">
+            <a className="btn-outline-green small mr-20">
+              <FaPlusCircle className="btn-icon-small" />
+              Add Review
+            </a>
+          </Link>
         </div>
       </div>
       <div style={{ paddingBottom: 50 }}>

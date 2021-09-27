@@ -1,11 +1,11 @@
+import React, { useMemo, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import AccountAccess from '../../../components/settings/AccountAccess';
 import AccountInfo from '../../../components/settings/AccountInfo';
 import useAdminById from '../../../hooks/Settings/useAdminById';
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 
 import { TabMenu, TabContent } from '../../../components/shared/Tabmenu';
 
@@ -58,19 +58,35 @@ const AddAdmin = () => {
   const [tabValue, setTabValue] = useState('information');
   const [isPasswordMatched, setIsPasswordMatched] = useState(false);
 
-  const [defaultValues, setDefaultValues] = useState({});
-  const methods = useForm({ defaultValues });
+  const [defaultValues, setDefaultValues] = useState<{ [k: string]: any }>({
+    firstName: '',
+    lastName: '',
+    displayName: '',
+    address: '',
+    email: '',
+    number: '',
+    password: '',
+    confirmPassword: '',
+    sendMail: false,
+  });
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
 
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
 
-  // useEffect(() => {
-  //   if (router.query.aid !== 'add') {
-  //     useAdminById(router.query.aid).then((data) => {
-  //       setDefaultValues(data);
-  //     });
-  //   }
-  // }, []);
+  const token = useTypedSelector((state) => state.ui.token);
+  useEffect(() => {
+    if (router.query.aid !== 'add') {
+      useAdminById(router.query.aid, token).then((data) => {
+        // setDefaultValues(data);
+        methods.reset(data);
+      });
+    }
+  }, [token]);
+
+  console.log(defaultValues);
 
   return (
     <div className={styles.addAdmin}>
