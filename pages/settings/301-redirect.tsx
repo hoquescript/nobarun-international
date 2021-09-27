@@ -14,6 +14,8 @@ import {
 
 import styles from '../../styles/pages/admin.module.scss';
 import useAllRedirects from '../../hooks/Settings/useAllRedirects';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const CREATE_REDIRECT = gql`
   mutation createRedirect($data: CreateRedirect!) {
@@ -283,6 +285,20 @@ const Redirect = () => {
       </nav>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Redirect;

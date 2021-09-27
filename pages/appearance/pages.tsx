@@ -1,3 +1,5 @@
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import React from 'react';
 import { FaSave, FaDownload, FaEye, FaRegTrashAlt } from 'react-icons/fa';
 import TextEditor from '../../components/shared/TextEditor';
@@ -32,6 +34,21 @@ const Pages = () => {
       <TextEditor bodyClass="editor__body-large" />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Pages;

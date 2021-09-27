@@ -11,33 +11,13 @@ import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
 import useProductInfo from '../../hooks/Products/useProductInfo';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const CREATE_NEW_PRODUCTS = gql`
   mutation addProduct($data: CreateNewProduct!) {
     createNewProduct(data: $data) {
       id
-      name
-      category
-      stockStatus
-      contactPerson
-      price
-      originalPrice
-      discount
-      productCode
-      images
-      videos
-      featureLists
-      specification
-      questions {
-        questionTitle
-        question
-      }
-      tags
-      isPublished
-      keyPoints {
-        name
-        description
-      }
     }
   }
 `;
@@ -85,6 +65,9 @@ const AddProduct = () => {
     console.log('object');
     const product = {
       ...data,
+      price: +data.price,
+      originalPrice: +data.price,
+      discount: +data.discount,
       relatedProducts,
       images: productsImage,
       keyPoints: KeyPoint[0],
@@ -163,6 +146,20 @@ const AddProduct = () => {
       </FormProvider>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default AddProduct;

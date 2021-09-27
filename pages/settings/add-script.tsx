@@ -4,6 +4,8 @@ import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
 import useAllScripts from '../../hooks/Settings/useAllScripts';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const CREATE_SCRIPT = gql`
   mutation addNewScripts($data: CreateScript!) {
@@ -186,6 +188,21 @@ const AddScript = () => {
       </FormProvider>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default AddScript;

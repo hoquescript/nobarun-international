@@ -1,4 +1,6 @@
 import { gql, useMutation } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
@@ -105,6 +107,20 @@ const CollectionForm = () => {
       </FormProvider>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default CollectionForm;

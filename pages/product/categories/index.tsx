@@ -17,6 +17,8 @@ import styles from '../../../styles/pages/products.module.scss';
 import { gql, useMutation, useQuery } from '@apollo/client';
 import { useRouter } from 'next/router';
 import useProductCategoryTree from '../../../hooks/Products/useProductCategoryTree';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 interface renderItemProps {
   item: any;
@@ -130,6 +132,20 @@ const Categories = () => {
       </div>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Categories;

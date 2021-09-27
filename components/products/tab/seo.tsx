@@ -45,11 +45,11 @@ const SEO = (props: SEOProps) => {
                   Title
                 </label>
               </div>
-              <WordCount control={control} name="seoTitle" />
+              <WordCount control={control} name="SeoTitle" />
               <input
                 type="text"
                 className="custom-input"
-                {...register('seoTitle')}
+                {...register('SeoTitle')}
               />
             </div>
             <Textfield name="slug" label="Slug" />

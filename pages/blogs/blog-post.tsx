@@ -12,6 +12,8 @@ import tableData from '../../data/tableData.json';
 import { useEffect } from 'react';
 import useAllBlogCategories from '../../hooks/Blogs/useAllBlogs';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const BlogPost = () => {
   const [period, setPeriod] = useState(
@@ -54,6 +56,21 @@ const BlogPost = () => {
       />
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default BlogPost;

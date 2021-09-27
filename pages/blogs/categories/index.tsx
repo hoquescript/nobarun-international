@@ -17,6 +17,8 @@ import Togglebar from '../../../components/controls/togglebar';
 import styles from '../../../styles/pages/products.module.scss';
 import { useState } from 'react';
 import useBlogCategoriesTree from '../../../hooks/Blogs/useBlogCategoriesTree';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const renderItem = (props) => {
   const { item, index, collapseIcon, handler } = props;
@@ -66,8 +68,8 @@ const renderItem = (props) => {
 };
 
 const SET_CATEGORIES_TREE = gql`
-  mutation setCategoriesTree($items: [CreateNewCategoryInput!]!) {
-    setCategoriesTree(items: $items)
+  mutation setBlogCategoriesTree($items: [CreateNewBlogCategoryInput!]!) {
+    setBlogCategoriesTree(items: $items)
   }
 `;
 
@@ -118,6 +120,20 @@ const Categories = () => {
       </div>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Categories;

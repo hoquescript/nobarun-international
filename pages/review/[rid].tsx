@@ -15,6 +15,8 @@ import Textfield from '../../components/controls/textfield';
 
 import styles from '../../styles/pages/review.module.scss';
 import Togglebar from '../../components/controls/togglebar';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -160,6 +162,21 @@ const AddReview = () => {
       </div>
     </FormProvider>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default AddReview;

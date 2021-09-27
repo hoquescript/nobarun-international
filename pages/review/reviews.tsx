@@ -23,6 +23,8 @@ import useAllReviews from '../../hooks/Review/useAllReview';
 import styles from '../../styles/pages/query-report.module.scss';
 import { REVIEWS_COLUMNS } from '../../data/ReviewsColumn';
 import Link from 'next/link';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -237,6 +239,20 @@ const Reviews = () => {
       </div>
     </div>
   );
+};
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession({ req: context.req });
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/auth/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
 };
 
 export default Reviews;
