@@ -14,7 +14,7 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 
 const CREATE_CATEGORY = gql`
-  mutation addNewCategory($data: CreateNewBlogCategoryInput!) {
+  mutation addNewBlogCategory($data: CreateNewBlogCategoryInput!) {
     addNewBlogCategory(data: $data) {
       id
     }
@@ -40,13 +40,13 @@ const AddCategory = () => {
       };
     }
     const category = {
-      id: uuid(),
       name: data.name,
       description,
       image: '',
       slug: data.slug,
       isPublished: data.isPublished,
-      ...pCategory,
+      parentCategory: data.parentCategory,
+      id: uuid(),
     };
     console.log(category);
     createCategory({

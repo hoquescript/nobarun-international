@@ -14,6 +14,7 @@ import {
 import useAllStockStatus from '../../hooks/Settings/useAllStockStatus';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { BoxFileupload } from '../../components/controls/fileUpload';
 
 interface IStock {
   [x: string]: {
@@ -74,16 +75,21 @@ const StockStatus = () => {
 
   const handleChangeInput = (
     id: string,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | 'file',
+    url?: string,
   ) => {
-    // @ts-ignore
-    const { name, value, checked } = event.target;
     const stock = stocks[id];
-    if (name === 'isPublished') {
-      stock[name] = checked;
+    if (event === 'file') {
+      stock.image = url as string;
     } else {
       // @ts-ignore
-      stock[name] = value;
+      const { name, value, checked } = event.target;
+      if (name === 'isPublished') {
+        stock[name] = checked;
+      } else {
+        // @ts-ignore
+        stock[name] = value;
+      }
     }
     setStocks({ ...stocks, [id]: stock });
   };
@@ -198,9 +204,17 @@ const StockStatus = () => {
                 </div>
               </div>
               <div className="col-1">
-                <figure>
-                  <img src="/images/product-img.jpg" alt="" />
-                </figure>
+                {stocks[key].image ? (
+                  <figure>
+                    <img src={stocks[key].image} alt="" />
+                  </figure>
+                ) : (
+                  <BoxFileupload
+                    onChangeHandler={(url) =>
+                      handleChangeInput(key, 'file', url)
+                    }
+                  />
+                )}
               </div>
               <div
                 className="col-2"

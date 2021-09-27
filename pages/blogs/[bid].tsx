@@ -1,9 +1,10 @@
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
 import React, { useEffect, useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
+import { gql, useMutation } from '@apollo/client';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 import Checkbox from '../../components/controls/checkbox';
 import Chip from '../../components/controls/chip';
@@ -17,9 +18,18 @@ import useBlogInfo from '../../hooks/Blogs/useBlogInfo';
 
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
+const ADD_NEW_BLOG = gql`
+  mutation addNewBlog($data: CreateNewBlogInput!) {
+    createNewBlog(data: $data) {
+      id
+    }
+  }
+`;
+
 const AddNewPost = () => {
   const methods = useForm();
   const [tags, setTags] = useState<string[]>([]);
+  const [addNewBlog] = useMutation(ADD_NEW_BLOG);
   const PostSectionState = useState<IPostSection[]>([
     {
       id: '',
@@ -40,6 +50,17 @@ const AddNewPost = () => {
 
   const postBlogHandler = (data) => {
     console.log({ ...data, sections: PostSectionState[0], tags });
+    const post = {
+      ...data,
+      images: blogImages,
+      sections: PostSectionState[0],
+      tags,
+    };
+    addNewBlog({
+      variables: {
+        data: post,
+      },
+    });
   };
 
   return (
@@ -76,8 +97,8 @@ const AddNewPost = () => {
                 <div className="col-4">
                   <Combobox
                     name="collectionName"
-                    label="Collection"
-                    options={info.collections || []}
+                    label="Related Product Category"
+                    options={info.relatedCategories || []}
                   />
                 </div>
                 <div className="col-4">

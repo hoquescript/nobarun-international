@@ -55,7 +55,7 @@ const Toolbar = () => {
   };
 
   const selectImageHandler = (imageSrc) => {
-    dispatch(selectImage({ src: imageSrc, path: router.pathname }));
+    dispatch(selectImage({ src: imageSrc, path: router.asPath }));
   };
 
   useEffect(() => {

@@ -42,6 +42,10 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.productsImage.push(action.payload.src);
       }
+      if (action.payload.path === '/blogs/add-new-post') {
+        // @ts-ignore
+        state.blogsImage.push(action.payload.src);
+      }
     },
     setAuthToken: (state, action) => {
       state.token = action.payload;

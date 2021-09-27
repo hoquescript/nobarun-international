@@ -5,12 +5,11 @@ const GET_ALL_BLOGS = gql`
   query getAllBlogs {
     getAllTheBlog {
       id
-      postTitle: title
-      body
-      contact: type
+      postTitle: blogTitle
+      contact: contactPerson
       category
       isPublished
-      author: createdBy
+      author: collectionName
     }
   }
 `;
@@ -19,11 +18,11 @@ const useAllBlogCategories = async () => {
   const data = await Client.request(GET_ALL_BLOGS);
   return data.getAllTheBlog.map((blog) => ({
     postTitle: blog.postTitle,
-    contact: 'Informative',
+    contact: blog.contact,
     category: blog.category,
     isPublished: blog.isPublished,
     publishedOn: '20th Jan, 2021',
-    author: 'Nobarun',
+    author: blog.author,
   }));
 };
 

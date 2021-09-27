@@ -7,7 +7,7 @@ const GET_ALL_BLOG_INFO = gql`
       id
       value: name
     }
-    getAllTheCollection {
+    getAllCategoriesWithoutParent {
       id
       value: name
     }
@@ -23,7 +23,7 @@ const useBlogInfo = async () => {
   return {
     categories: data.getAllBlogCategoriesWithoutParent,
     contacts: data.getAllTheContactPersons,
-    collections: data.getAllTheCollection,
+    relatedCategories: data.getAllCategoriesWithoutParent,
   };
 };
 

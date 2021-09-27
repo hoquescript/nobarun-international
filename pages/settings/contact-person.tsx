@@ -16,6 +16,8 @@ import {
 import useAllContactPerson from '../../hooks/Settings/useAllContactPerson';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import Modal from '../../components/shared/Modal';
+import { InputFileUpload } from '../../components/controls/fileUpload';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {
@@ -37,6 +39,8 @@ const DELETE_CONTACT_PERSON = gql`
 
 const ContactPerson = () => {
   const [contacts, setContacts] = useState({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteKey, setDeleteKey] = useState('');
 
   const [createContact] = useMutation(CREATE_CONTACT_PERSON);
   const [editContact] = useMutation(EDIT_CONTACT_PERSON);
@@ -103,7 +107,13 @@ const ContactPerson = () => {
     setContacts({ ...contacts, [id]: contact });
   };
 
+  const openModal = (key) => {
+    setShowDeleteModal(true);
+    setDeleteKey(key);
+  };
+
   const deleteHandler = (id: string) => {
+    console.log(id);
     const newContacts = Object.keys(contacts).reduce((object, key) => {
       if (key !== id) {
         object[key] = contacts[key];
@@ -121,22 +131,35 @@ const ContactPerson = () => {
 
   const handleChangeInput = (
     id: string,
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | 'file',
+    url?: string,
   ) => {
     // @ts-ignore
-    const { name, value, checked } = event.target;
     const contact = contacts[id];
-    if (name === 'isPublished') {
-      contact[name] = checked;
+    if (event === 'file') {
+      contact.logo = url;
     } else {
       // @ts-ignore
-      contact[name] = value;
+      const { name, value, checked } = event.target;
+      if (name === 'isPublished') {
+        contact[name] = checked;
+      } else {
+        // @ts-ignore
+        contact[name] = value;
+      }
     }
     setContacts({ ...contacts, [id]: contact });
   };
+
   console.log(contacts);
   return (
     <div className="container center">
+      <Modal
+        title="Contact Person"
+        modalIsOpen={showDeleteModal}
+        setIsOpen={setShowDeleteModal}
+        confirmHandler={() => deleteHandler(deleteKey)}
+      />
       <div className="flex sb mt-40 mb-20">
         <h1 className="heading-primary mt-40 mb-40">Contact Person</h1>
         <div>
@@ -151,7 +174,7 @@ const ContactPerson = () => {
         </div>
       </div>
       {Object.keys(contacts).map((key: string) => (
-        <div className="wrapper-section">
+        <div className="wrapper-section" key={key}>
           <div className="wrapper-section__content">
             <div className="row">
               <div className="col-4">
@@ -197,11 +220,11 @@ const ContactPerson = () => {
                     className="video__icon"
                     style={{ transform: 'translate(2rem, 1.7rem)' }}
                   />
-                  <input
-                    type="file"
-                    className="custom-input video__input mt--30"
-                    placeholder="Name"
-                    disabled={contacts[key].isDisabled}
+                  <InputFileUpload
+                    className="video__input mt--30"
+                    onChangeHandler={(url) =>
+                      handleChangeInput(key, 'file', url)
+                    }
                   />
                 </div>
               </div>
@@ -263,7 +286,7 @@ const ContactPerson = () => {
                     <div className="table__action_menu">
                       <button
                         className="big-icon"
-                        onClick={() => deleteHandler(key)}
+                        onClick={() => openModal(key)}
                       >
                         <FaTrash />
                       </button>

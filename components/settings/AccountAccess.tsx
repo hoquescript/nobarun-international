@@ -11,6 +11,7 @@ interface PermissionProps {
 }
 
 interface AccountAccessProps {
+  images: string;
   permission: PermissionProps;
   setPermission: React.Dispatch<React.SetStateAction<PermissionProps>>;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
@@ -28,6 +29,7 @@ const CREATE_ACCOUNT = gql`
 
 const AccountAccess = (props: AccountAccessProps) => {
   const {
+    images,
     permission,
     setPermission,
     register,
@@ -37,10 +39,6 @@ const AccountAccess = (props: AccountAccessProps) => {
   const [createAccount, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
 
   const onSubmit = (data) => {
-    // Information Tab Data
-    // const password =
-    //   data.password === data.confirmPassword ? data.password : 'error';
-    // console.log({ ...data, permission });
     if (data.password !== data.confirmPassword) {
       return setIsPasswordMatched(false);
     }
@@ -54,9 +52,8 @@ const AccountAccess = (props: AccountAccessProps) => {
       notes: data.notes,
       number: data.number,
       permission: permission,
+      images,
     };
-    console.log(account);
-
     createAccount({
       variables: {
         data: account,

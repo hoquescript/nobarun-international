@@ -1,12 +1,32 @@
 import React from 'react';
 import { FaCamera, FaInfoCircle } from 'react-icons/fa';
+import axios from 'axios';
+
+const baseUrl =
+  'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
+const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
 
 import Textarea from '../controls/textarea';
 import Textfield from '../controls/textfield';
 
 import styles from '../../styles/pages/admin.module.scss';
 
-const AccountInfo = () => {
+interface AccountInfoProps {
+  setImages: any;
+}
+const AccountInfo = (props: AccountInfoProps) => {
+  const { setImages } = props;
+  const imageUploadHandler = async (e) => {
+    const { files } = e.target;
+    if (files) {
+      for (let i = 0; i < files?.length; i++) {
+        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
+        const { url } = await (await axios.put(uploadURL, files[i])).config;
+        const objectUrl = `${objectBaseUrl}/${Key}`;
+        setImages(objectUrl);
+      }
+    }
+  };
   return (
     <div className={`${styles.addAdmin__wrapper} mt-60`}>
       <div className={styles.addAdmin__form}>
@@ -84,7 +104,7 @@ const AccountInfo = () => {
             id="product"
             accept="image/*, video/*"
             style={{ display: 'none', height: '71px' }}
-            // onChange={(e) => imageUploadHandler(e)}
+            onChange={(e) => imageUploadHandler(e)}
           />
 
           <label className={styles.addAdmin__image_upload} htmlFor="product">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 
@@ -8,6 +8,7 @@ import Textfield from '../../components/controls/textfield';
 import styles from '../../styles/pages/query-report.module.scss';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { InputFileUpload } from '../../components/controls/fileUpload';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -20,7 +21,7 @@ const ADD_NEW_QUERY = gql`
 const AddNewQuery = () => {
   const methods = useForm();
   const [createQuery] = useMutation(ADD_NEW_QUERY);
-
+  const [attachment, setAttachment] = useState('');
   const addNewQuery = (data) => {
     const query = {
       company: data.companyName,
@@ -31,10 +32,8 @@ const AddNewQuery = () => {
       phone: data.number,
       address: data.address,
       product: '614dba9ac8d3558394d7e4a8',
-      attachment:
-        'https://en.wikipedia.org/wiki/Image#/media/File:Image_created_with_a_mobile_phone.png',
+      attachment,
     };
-
     methods.reset();
 
     createQuery({
@@ -74,6 +73,11 @@ const AddNewQuery = () => {
           />
         </div>
         <div className="grid two mb-20">
+          <div className="field">
+            <label>Attachments</label>
+            <InputFileUpload onChangeHandler={(url) => setAttachment(url)} />
+          </div>
+
           <Textfield
             type="file"
             name="attachments"

@@ -58,6 +58,7 @@ const AddAdmin = () => {
   const router = useRouter();
 
   const [tabValue, setTabValue] = useState('information');
+  const [images, setImages] = useState('');
   const [isPasswordMatched, setIsPasswordMatched] = useState(false);
 
   const [defaultValues, setDefaultValues] = useState<{ [k: string]: any }>({
@@ -82,7 +83,6 @@ const AddAdmin = () => {
   useEffect(() => {
     if (router.query.aid !== 'add') {
       useAdminById(router.query.aid, token).then((data) => {
-        // setDefaultValues(data);
         methods.reset(data);
       });
     }
@@ -105,10 +105,11 @@ const AddAdmin = () => {
           setTabValue={setTabValue}
         >
           <TabContent id="information" value={tabValue}>
-            <AccountInfo />
+            <AccountInfo setImages={setImages} />
           </TabContent>
           <TabContent id="permission" value={tabValue}>
             <AccountAccess
+              images={images}
               permission={permission}
               setPermission={setPermission}
               register={methods.register}
