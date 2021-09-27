@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
 import Togglebar from '../../components/controls/togglebar';
@@ -11,12 +12,43 @@ import Toolbar from '../../components/shared/Toolbar';
 import useProductInfo from '../../hooks/Products/useProductInfo';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 
+const CREATE_NEW_PRODUCTS = gql`
+  mutation addProduct($data: CreateNewProduct!) {
+    createNewProduct(data: $data) {
+      id
+      name
+      category
+      stockStatus
+      contactPerson
+      price
+      originalPrice
+      discount
+      productCode
+      images
+      videos
+      featureLists
+      specification
+      questions {
+        questionTitle
+        question
+      }
+      tags
+      isPublished
+      keyPoints {
+        name
+        description
+      }
+    }
+  }
+`;
+
 const AddProduct = () => {
   const methods = useForm();
 
   const [tabValue, setTabValue] = useState('description');
   const [info, setInfo] = useState({});
 
+  const [createNewProduct] = useMutation(CREATE_NEW_PRODUCTS);
   useEffect(() => {
     useProductInfo().then((data) => {
       setInfo(data);
@@ -50,6 +82,7 @@ const AddProduct = () => {
   const tagState = useState<string[]>([]);
 
   const handleAddProduct = (data: any) => {
+    console.log('object');
     const product = {
       ...data,
       relatedProducts,
@@ -61,6 +94,11 @@ const AddProduct = () => {
       tags: tagState[0],
       keywords,
     };
+    createNewProduct({
+      variables: {
+        data: product,
+      },
+    });
     console.log(product);
   };
   return (

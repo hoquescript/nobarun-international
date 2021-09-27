@@ -61,7 +61,7 @@ const Description = (props: DescriptionProps) => {
             </div>
             <div className="col-3">
               <Combobox
-                name="collection"
+                name="collectionName"
                 label="Collection"
                 options={info.collections || []}
               />

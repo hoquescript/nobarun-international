@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
+import el from 'date-fns/esm/locale/el/index.js';
+import React, { useState, useEffect } from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
 import { AiOutlineSearch } from 'react-icons/ai';
+import useMenuInfo from '../../hooks/Appearance/useMenuInfo';
 import styles from '../../styles/pages/appearance.module.scss';
 
 interface MenuListProps {
@@ -19,9 +22,33 @@ interface MenuListProps {
   }[];
   menuFor: string;
 }
+
+const parentMenu = ['products', 'categories', 'collections', 'blogs'];
+
 const MenuList = (props: MenuListProps) => {
-  const { menuFor, menus } = props;
+  const { menuFor } = props;
+  const methods = useForm();
+
+  const { register } = methods;
+
+  const [menus, setMenus] = useState<{ [k: string]: any }>({});
+  useEffect(() => {
+    useMenuInfo().then((menu) => setMenus(menu));
+  }, []);
+
+  const selected = useState<{ [k: string]: any }>({});
+
+  const onChangeHandler = (event, parent, slug) => {
+    const { name, checked } = event.target;
+    console.log({ event, parent, slug });
+    let menu: { [k: string]: any };
+    if (menus[parent]) {
+      menu = menus[parent];
+    }
+    menu = {};
+  };
   console.log(menus);
+
   const [listType, setListType] = useState('all');
   return (
     <>
@@ -46,8 +73,8 @@ const MenuList = (props: MenuListProps) => {
               Select All(3 items)
             </label>
           </li>
-          {menus.map((menu) => (
-            <li className={styles.menu__item}>
+          {parentMenu.map((menu) => (
+            <li className={styles.menu__item} key={menu}>
               <label>
                 <input
                   type="checkbox"
@@ -55,8 +82,24 @@ const MenuList = (props: MenuListProps) => {
                   // checked={permission[menu].edit}
                   // onChange={(e) => onPermissionChange(e, menu)}
                 />
-                {menu.label}
+                {menu}
               </label>
+              <ul className={styles.menu__sub_list}>
+                {menus[menu] &&
+                  menus[menu].map((url, idx) => (
+                    <li className={styles.menu__sub_item} key={url.slug + idx}>
+                      <label>
+                        <input
+                          type="checkbox"
+                          name={url.slug}
+                          checked={selected[menu] && selected[menu][url.slug]}
+                          onChange={(e) => onChangeHandler(e, menu, url.slug)}
+                        />
+                        {url.name}
+                      </label>
+                    </li>
+                  ))}
+              </ul>
             </li>
           ))}
         </ul>

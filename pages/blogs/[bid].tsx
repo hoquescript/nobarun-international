@@ -73,7 +73,7 @@ const AddNewPost = () => {
                 </div>
                 <div className="col-4">
                   <Combobox
-                    name="collection"
+                    name="collectionName"
                     label="Collection"
                     options={info.collections || []}
                   />

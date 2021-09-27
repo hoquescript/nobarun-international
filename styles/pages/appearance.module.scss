@@ -30,6 +30,8 @@
   &__wrapper {
     border: 1px solid #777;
     padding: 1.5rem 1rem;
+    max-height: 40rem;
+    overflow-y: auto;
   }
   &__tab_wrapper {
     display: flex;
@@ -53,11 +55,14 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 0 2rem;
+    text-align: left;
   }
   &__item {
     padding: 0.5rem;
+    text-transform: capitalize;
     & > label {
       cursor: pointer;
+      display: block;
       & > input {
         margin-right: 1.5rem;
       }
@@ -102,6 +107,20 @@
         @include respond(1180px) {
           max-width: 17rem;
         }
+      }
+    }
+  }
+  &__sub_list {
+    padding-left: 1rem;
+    padding: 0.8rem 0rem 0.8rem 1.5rem;
+  }
+  &__sub_item {
+    padding: 0.3rem 0;
+    & > label {
+      cursor: pointer;
+      display: block;
+      & > input {
+        margin-right: 1.5rem;
       }
     }
   }

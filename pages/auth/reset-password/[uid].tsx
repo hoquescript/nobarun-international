@@ -1,16 +1,44 @@
 import React from 'react';
+import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import Textfield from '../../../components/controls/textfield';
 import styles from '../../../styles/pages/auth.module.scss';
 
-const ForgetPassword = () => {
+const RESET_PASSWORD = gql`
+  mutation reset($data: ResetPassword!) {
+    resetPassword(data: $data)
+  }
+`;
+const ResetPassword = () => {
   const methods = useForm();
+  const { uid } = useRouter().query;
+  const [resetPassword] = useMutation(RESET_PASSWORD);
 
+  const [error, setError] = useState(false);
+  const onSubmit = (data) => {
+    if (data.password !== data.confirmPassword) {
+      setError(true);
+    } else {
+      resetPassword({
+        variables: {
+          data: {
+            token: uid,
+            password: data.password,
+          },
+        },
+      });
+    }
+  };
   return (
     <div className={styles.auth}>
       <FormProvider {...methods}>
-        <form className={styles.auth__form}>
+        <form
+          className={styles.auth__form}
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
           <img
             src="/images/logo.png"
             alt="Logo of Nobarun"
@@ -32,11 +60,20 @@ const ForgetPassword = () => {
             label="Confirm Password"
             placeholder="Confirm your Password"
           />
-          <button className={styles.auth__button}>Send</button>
+          <div className={`${error ? 'flex sb' : ''} mt-30`}>
+            {error && (
+              <p style={{ color: 'red' }}>* Passwords didn't matched</p>
+            )}
+          </div>
+          <input
+            type="submit"
+            className={`mb-50 ${styles.auth__button}`}
+            value="Reset Password"
+          />
         </form>
       </FormProvider>
     </div>
   );
 };
 
-export default ForgetPassword;
+export default ResetPassword;
