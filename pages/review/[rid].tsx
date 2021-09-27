@@ -17,6 +17,8 @@ import styles from '../../styles/pages/review.module.scss';
 import Togglebar from '../../components/controls/togglebar';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import FileButton from '../../components/controls/file';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -29,6 +31,7 @@ const CREATE_REVIEW = gql`
 const AddReview = () => {
   const methods = useForm();
   const [rating, setRating] = useState(2);
+  const reviewImage = useTypedSelector((state) => state.ui.reviewImage);
 
   const [createReview] = useMutation(CREATE_REVIEW);
 
@@ -93,47 +96,15 @@ const AddReview = () => {
                     <Textarea name="reviewText" label="Your Reviews" />
                   </div>
                   <div className="product-images">
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src="/images/product-img.jpg" alt="" />
-                    </figure>
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src="/images/product-img.jpg" alt="" />
-                    </figure>
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src="/images/product-img.jpg" alt="" />
-                    </figure>
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src="/images/product-img.jpg" alt="" />
-                    </figure>
-                    <div className="product-images">
-                      <input
-                        type="file"
-                        id="product"
-                        accept="image/*, video/*"
-                        style={{ display: 'none', height: '71px' }}
-                        // onChange={(e) => imageUploadHandler(e)}
-                      />
-
-                      <label
-                        className="add-new-image"
-                        htmlFor="product"
-                        style={{ height: '71px' }}
-                      >
-                        <AiOutlinePlus />
-                      </label>
-                    </div>
+                    {reviewImage.map((src) => (
+                      <figure>
+                        <button type="button" className="remove-image">
+                          <i className="times-icon"></i>
+                        </button>
+                        <img src={src} alt="" />
+                      </figure>
+                    ))}
+                    <FileButton />
                   </div>
                 </div>
                 <p className="mt-20 flex">

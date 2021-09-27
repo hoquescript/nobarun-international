@@ -62,7 +62,6 @@ const AddProduct = () => {
   const tagState = useState<string[]>([]);
 
   const handleAddProduct = (data: any) => {
-    console.log('object');
     const product = {
       ...data,
       price: +data.price,
@@ -82,7 +81,6 @@ const AddProduct = () => {
         data: product,
       },
     });
-    console.log(product);
   };
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>

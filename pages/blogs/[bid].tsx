@@ -8,11 +8,9 @@ import { getSession } from 'next-auth/client';
 
 import Checkbox from '../../components/controls/checkbox';
 import Chip from '../../components/controls/chip';
-import Chipfield from '../../components/controls/chipfield';
 import Combobox from '../../components/controls/combobox';
 import FileButton from '../../components/controls/file';
 import Togglebar from '../../components/controls/togglebar';
-import TextEditor from '../../components/shared/TextEditor';
 import Toolbar from '../../components/shared/Toolbar';
 import useBlogInfo from '../../hooks/Blogs/useBlogInfo';
 
@@ -96,7 +94,7 @@ const AddNewPost = () => {
                 </div>
                 <div className="col-4">
                   <Combobox
-                    name="collectionName"
+                    name="relatedProduct"
                     label="Related Product Category"
                     options={info.relatedCategories || []}
                   />

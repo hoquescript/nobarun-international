@@ -4,9 +4,10 @@ interface UIState {
   showToolbar: boolean;
   token: string;
   images: { src: string; name: string }[];
-  links: string[];
+  links: { src: string; name: string }[];
   productsImage: string[];
   blogsImage: string[];
+  reviewImage: string[];
 }
 const initialState: UIState = {
   showToolbar: false,
@@ -15,6 +16,7 @@ const initialState: UIState = {
   links: [],
   productsImage: [],
   blogsImage: [],
+  reviewImage: [],
 };
 export const uiSlice = createSlice({
   name: 'ui',
@@ -46,9 +48,17 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.blogsImage.push(action.payload.src);
       }
+      if (action.payload.path === '/review/add-new-review') {
+        // @ts-ignore
+        state.reviewImage.push(action.payload.src);
+      }
     },
     setAuthToken: (state, action) => {
       state.token = action.payload;
+    },
+    fetchMedia: (state, action) => {
+      state.images = action.payload.images;
+      state.links = action.payload.videos;
     },
   },
 });
@@ -61,6 +71,7 @@ export const {
   addYoutubeLink,
   selectImage,
   setAuthToken,
+  fetchMedia,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

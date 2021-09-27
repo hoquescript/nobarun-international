@@ -9,7 +9,7 @@ const GET_ALL_BLOGS = gql`
       contact: contactPerson
       category
       isPublished
-      author: collectionName
+      author: relatedProduct
     }
   }
 `;

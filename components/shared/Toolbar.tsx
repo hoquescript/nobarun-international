@@ -1,9 +1,11 @@
+import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
 import { linkSync } from 'fs';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AiFillSetting, AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa';
+import useAllMedia from '../../hooks/Appearance/useAllMedia';
 import {
   useTypedDispatch,
   useTypedSelector,
@@ -11,6 +13,7 @@ import {
 import {
   addImage,
   addYoutubeLink,
+  fetchMedia,
   selectImage,
   toggleToolbar,
 } from '../../store/slices/ui';
@@ -19,17 +22,29 @@ const baseUrl =
   'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
 const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
 
+const ADD_NEW_MEDIA = gql`
+  mutation addImage($data: GalleryInput!) {
+    addImagesAndVideosTOGallery(data: $data)
+  }
+`;
+
 const Toolbar = () => {
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
-
+  console.log(links);
   const router = useRouter();
-  console.log(router);
+  const [addMedia] = useMutation(ADD_NEW_MEDIA);
 
   const [imageFile, setImageFile] = useState<FileList | null>(null);
   const [link, setLink] = useState('');
   const dispatch = useTypedDispatch();
+
+  useEffect(() => {
+    useAllMedia().then((media) => {
+      dispatch(fetchMedia(media));
+    });
+  }, []);
 
   const imageUploadHandler = (e) => {
     const { files } = e.target;
@@ -45,12 +60,33 @@ const Toolbar = () => {
         const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
         const objectUrl = `${objectBaseUrl}/${Key}`;
         dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
+        addMedia({
+          variables: {
+            data: {
+              images: [{ src: objectUrl, name: imageFile[i].name }],
+              videos: [],
+            },
+          },
+        });
       }
     }
   };
 
   const youtubeLinkHandler = () => {
     dispatch(addYoutubeLink(link));
+    addMedia({
+      variables: {
+        data: {
+          images: [],
+          videos: [
+            {
+              name: 'Tube-1',
+              src: link,
+            },
+          ],
+        },
+      },
+    });
     setLink('');
   };
 
@@ -139,23 +175,24 @@ const Toolbar = () => {
             className="accordion__content active"
             style={{ display: 'block' }}
           >
-            <div className="field video" style={{ position: 'relative' }}>
-              <AiFillYoutube className="video__icon" />
+            <div className="field youtube">
+              <AiFillYoutube className="youtube__icon" />
               <input
                 type="text"
-                className="custom-input video__input"
+                className={`custom-input youtube__youtube`}
                 value={link}
                 onChange={(e) => setLink(e.target.value)}
                 placeholder="Post Your Youtube Link"
               />
-              <button onClick={youtubeLinkHandler}>+</button>
+              <button className="youtube__add" onClick={youtubeLinkHandler}>
+                <FaPlus />
+              </button>
             </div>
           </div>
           {links.map((link) => {
             const embeddedLink = `https://www.youtube.com/embed/${
-              link.split('=')[1]
+              link.src.split('=')[1]
             }`;
-            console.log(embeddedLink);
             return (
               <iframe
                 width="150"

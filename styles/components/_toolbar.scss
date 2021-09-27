@@ -139,3 +139,37 @@
     padding-left: 6rem;
   }
 }
+
+.youtube {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  // margin-right: 2rem;
+  &__icon {
+    height: 3rem;
+    width: 3rem;
+    color: #1e8cc5;
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    transform: translateY(-50%);
+  }
+  &__input {
+    // padding-left: 6rem;
+    width: 85%;
+  }
+  &__youtube {
+    &::placeholder {
+      padding-left: 5rem;
+    }
+  }
+  &__add {
+    width: 15%;
+    border: none;
+    color: #1e8cc5;
+    & > svg {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+}
