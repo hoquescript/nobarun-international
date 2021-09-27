@@ -26,7 +26,7 @@ const AddNewPost = () => {
       images: [],
     },
   ]);
-  const [info, setInfo] = useState({});
+  const [info, setInfo] = useState<{ [k: string]: any }>({});
 
   useEffect(() => {
     useBlogInfo().then((data) => {
