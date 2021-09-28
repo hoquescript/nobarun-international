@@ -1,5 +1,5 @@
+import React, { forwardRef } from 'react';
 import axios from 'axios';
-import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 
 const baseUrl =
@@ -10,9 +10,10 @@ interface InputFileProps {
   onChangeHandler: any;
   disabled?: boolean;
   className?: string;
+  // fileInputRef: any;
 }
 
-export const InputFileUpload = (props: InputFileProps) => {
+export const InputFileUpload = forwardRef((props: InputFileProps, ref) => {
   const { disabled, className, onChangeHandler } = props;
   const imageUploadHandler = async (e) => {
     const { files } = e.target;
@@ -25,9 +26,10 @@ export const InputFileUpload = (props: InputFileProps) => {
       }
     }
   };
-
   return (
     <input
+      // @ts-ignore
+      ref={ref}
       type="file"
       className={`custom-input ${className}`}
       placeholder="Name"
@@ -35,7 +37,7 @@ export const InputFileUpload = (props: InputFileProps) => {
       onChange={(e) => imageUploadHandler(e)}
     />
   );
-};
+});
 
 export const BoxFileupload = (props: InputFileProps) => {
   const { disabled, onChangeHandler } = props;
@@ -56,6 +58,7 @@ export const BoxFileupload = (props: InputFileProps) => {
       <input
         type="file"
         id="product"
+        disabled={disabled}
         accept="image/*, video/*"
         style={{ display: 'none', height: '71px' }}
         onChange={(e) => imageUploadHandler(e)}

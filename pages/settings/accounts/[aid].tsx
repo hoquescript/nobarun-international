@@ -46,6 +46,18 @@ const Menu = {
   },
 };
 
+const defaultValues = {
+  firstName: '',
+  lastName: '',
+  displayName: '',
+  address: '',
+  email: '',
+  number: '',
+  password: '',
+  confirmPassword: '',
+  sendMail: false,
+};
+
 interface PermissionProps {
   (key: string): {
     view: boolean;
@@ -59,45 +71,32 @@ const AddAdmin = () => {
 
   const [tabValue, setTabValue] = useState('information');
   const [images, setImages] = useState('');
+  const [isEditMode, setIsEditMode] = useState(false);
   const [isPasswordMatched, setIsPasswordMatched] = useState(false);
-
-  const [defaultValues, setDefaultValues] = useState<{ [k: string]: any }>({
-    firstName: '',
-    lastName: '',
-    displayName: '',
-    address: '',
-    email: '',
-    number: '',
-    password: '',
-    confirmPassword: '',
-    sendMail: false,
-  });
-  const methods = useForm({
-    defaultValues: useMemo(() => defaultValues, [defaultValues]),
-  });
 
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
 
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
+
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
     if (router.query.aid !== 'add') {
+      setIsEditMode(true);
       useAdminById(router.query.aid, token).then((data) => {
-        methods.reset(data);
+        methods.reset(data.account);
+        setPermission(data.permission);
       });
     }
   }, [token]);
-
-  console.log(defaultValues);
 
   return (
     <div className={styles.addAdmin}>
       <h1 className="heading-primary ml-5 mb-20">
         {tabValue === 'information' ? 'Add New Admin' : 'Role Detail'}
       </h1>
-      {tabValue !== 'information' && (
-        <h4 className="heading-tertiary ml-20 mb-20">Sr. Organizer</h4>
-      )}
       <FormProvider {...methods}>
         <TabMenu
           menus={['Information', 'Permission']}
@@ -105,7 +104,11 @@ const AddAdmin = () => {
           setTabValue={setTabValue}
         >
           <TabContent id="information" value={tabValue}>
-            <AccountInfo setImages={setImages} />
+            <AccountInfo
+              images={images}
+              setImages={setImages}
+              setTabValue={setTabValue}
+            />
           </TabContent>
           <TabContent id="permission" value={tabValue}>
             <AccountAccess

@@ -190,20 +190,33 @@ const Toolbar = () => {
             </div>
           </div>
           {links.map((link) => {
-            const embeddedLink = `https://www.youtube.com/embed/${
+            const embeddedLink = `https://www.youtube.com/embed/?${
               link.src.split('=')[1]
             }`;
             return (
-              <iframe
-                width="150"
-                height="150"
-                src={embeddedLink}
-                title="YouTube video player"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="ml-20"
-              />
+              <div
+                className="images-gallery__image"
+                onClick={() => selectImageHandler(link.src)}
+              >
+                <i className="check-circle-icon selected-mark"></i>
+                <figure>
+                  <img
+                    src={`https://img.youtube.com/vi/${embeddedLink}/maxresdefault.jpg`}
+                    alt=""
+                  />
+                </figure>
+                {/* <h5>{image.name}</h5> */}
+              </div>
+              // <iframe
+              //   width="150"
+              //   height="150"
+              //   src={embeddedLink}
+              //   title="YouTube video player"
+              //   frameBorder="0"
+              //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              //   allowFullScreen
+              //   className="ml-20"
+              // />
             );
           })}
         </div>

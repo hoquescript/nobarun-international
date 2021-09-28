@@ -10,6 +10,39 @@ const GET_ADMIN_BY_ID = gql`
       address
       email
       number
+      notes
+      permission {
+        Appearance {
+          delete
+          edit
+          view
+        }
+        Blogs {
+          delete
+          edit
+          view
+        }
+        Dashboard {
+          delete
+          edit
+          view
+        }
+        Product {
+          delete
+          edit
+          view
+        }
+        Settings {
+          delete
+          edit
+          view
+        }
+        Review {
+          delete
+          edit
+          view
+        }
+      }
     }
   }
 `;
@@ -32,11 +65,12 @@ const useAdminById = async (aid, token) => {
       address: accounts.address,
       email: accounts.email,
       number: accounts.number,
-      password: '',
-      confirmPassword: '',
+      notes: accounts.notes,
+      password: 'Hello1997',
+      confirmPassword: 'Hello1997',
       sendMail: false,
     };
-    return account;
+    return { account, permission: accounts.permission };
   } else return {};
 };
 

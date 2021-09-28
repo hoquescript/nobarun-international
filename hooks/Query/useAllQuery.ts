@@ -1,8 +1,10 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from 'graphql-request';
+import Client from '../../config/GraphqlClient';
 
 const GET_ALL_QUERIES = gql`
   query GetAllQueries {
     getAllQueryUsers {
+      id
       name
       phone
       email
@@ -14,17 +16,18 @@ const GET_ALL_QUERIES = gql`
   }
 `;
 
-const useAllQuery = () => {
-  const { loading, error, data } = useQuery(GET_ALL_QUERIES);
-  let modifiedData = [];
-  if (data) {
-    modifiedData = data.getAllQueryUsers.map((query) => ({
+const useAllQuery = async (token) => {
+  const requestHeaders = {
+    authorization: `Bearer ${token}`,
+  };
+  if (token) {
+    const data = await Client.request(GET_ALL_QUERIES, {}, requestHeaders);
+    return data.getAllQueryUsers.map((query) => ({
       ...query,
       date: '19 June, 2021',
       SKU: '#4567rt',
     }));
-  }
-  return { loading, error, data: modifiedData };
+  } else return [];
 };
 
 export default useAllQuery;

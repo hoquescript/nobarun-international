@@ -62,7 +62,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
         <input
           type="text"
           className={`${styles.chip__input}`}
-          placeholder="Search"
+          placeholder="Search Product Code"
           onClick={() => setShowSuggestion(true)}
           onChange={onChangeHandler}
         />

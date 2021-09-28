@@ -6,6 +6,7 @@ import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
 import useAllScripts from '../../hooks/Settings/useAllScripts';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import Modal from '../../components/shared/Modal';
 
 const CREATE_SCRIPT = gql`
   mutation addNewScripts($data: CreateScript!) {
@@ -28,6 +29,8 @@ const DELETE_SCRIPT = gql`
 const AddScript = () => {
   const methods = useForm();
   const [scripts, setScripts] = useState({});
+  const [deleteKey, setDeleteKey] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [createScript] = useMutation(CREATE_SCRIPT);
   const [editScriptTag] = useMutation(EDIT_SCRIPT);
@@ -111,14 +114,18 @@ const AddScript = () => {
     setScripts(newScripts);
   };
 
-  // name: '',
-  //       whatsapp: '',
-  //       logo: '',
-  //       email: '',
-  //       address: '',
-  //       isDisabled: true,
+  const openModal = (key) => {
+    setShowDeleteModal(true);
+    setDeleteKey(key);
+  };
   return (
     <div className="container center">
+      <Modal
+        title="301 Redirect"
+        modalIsOpen={showDeleteModal}
+        setIsOpen={setShowDeleteModal}
+        confirmHandler={() => deleteHandler(deleteKey)}
+      />
       <FormProvider {...methods}>
         <div className="flex sb">
           <h1 className="heading-primary mt-40 mb-40">Add Scripts</h1>
@@ -134,7 +141,7 @@ const AddScript = () => {
           </div>
         </div>
         {Object.keys(scripts).map((key: string) => (
-          <div className="wrapper-section">
+          <div className="wrapper-section" key={key}>
             <div className="wrapper-section__content">
               <div className="row">
                 <div className="col-5">
@@ -176,7 +183,7 @@ const AddScript = () => {
                   <button
                     type="button"
                     className="btn-icon-white ml-20"
-                    onClick={() => deleteHandler(key)}
+                    onClick={() => openModal(key)}
                   >
                     <FaTrash />
                   </button>

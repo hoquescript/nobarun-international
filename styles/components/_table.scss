@@ -77,10 +77,12 @@
     transform: translate(-15px, 30px);
     position: absolute;
     background: transparent;
+    border-radius: 10px;
     &.last {
       transform: translate(-15px, -30px) !important;
     }
-    & > button {
+    & > button,
+    & > a {
       cursor: pointer;
       border: none;
       padding: 0.7rem 1rem;
@@ -91,17 +93,17 @@
         height: 2rem;
         width: 2rem;
       }
-      &:first-of-type {
-        border-top-left-radius: 10px;
-        border-bottom-left-radius: 10px;
-      }
-      &:last-of-type {
-        border-top-right-radius: 10px;
-        border-bottom-right-radius: 10px;
-      }
       &:hover {
         background-color: #eee;
       }
+    }
+    & > button {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    & > a {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
     }
   }
   &__icon:hover > &__action_menu {

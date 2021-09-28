@@ -10,11 +10,13 @@ import {
   FaPen,
   FaGripVertical,
   FaSave,
+  FaTimes,
 } from 'react-icons/fa';
 import useAllStockStatus from '../../hooks/Settings/useAllStockStatus';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { BoxFileupload } from '../../components/controls/fileUpload';
+import Modal from '../../components/shared/Modal';
 
 interface IStock {
   [x: string]: {
@@ -48,6 +50,8 @@ const DELETE_STOCK_STATUS = gql`
 
 const StockStatus = () => {
   const [stocks, setStocks] = useState<IStock>({});
+  const [deleteKey, setDeleteKey] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [createStock] = useMutation(CREATE_STOCK_STATUS);
   const [editStock] = useMutation(EDIT_STOCK_STATUS);
@@ -146,8 +150,25 @@ const StockStatus = () => {
     setStocks(newStocks);
   };
 
+  const removeImage = (id) => {
+    const stock = stocks[id];
+    stock.image = '';
+    setStocks({ ...stocks, [id]: stock });
+  };
+
+  const openModal = (key) => {
+    setShowDeleteModal(true);
+    setDeleteKey(key);
+  };
+
   return (
     <div className="container center">
+      <Modal
+        title="301 Redirect"
+        modalIsOpen={showDeleteModal}
+        setIsOpen={setShowDeleteModal}
+        confirmHandler={() => deleteHandler(deleteKey)}
+      />
       <div className="flex sb">
         <h1 className="heading-primary mt-40 mb-40">Stock Status</h1>
         <div>
@@ -204,17 +225,28 @@ const StockStatus = () => {
                 </div>
               </div>
               <div className="col-1">
-                {stocks[key].image ? (
-                  <figure>
-                    <img src={stocks[key].image} alt="" />
-                  </figure>
-                ) : (
-                  <BoxFileupload
-                    onChangeHandler={(url) =>
-                      handleChangeInput(key, 'file', url)
-                    }
-                  />
-                )}
+                <div className="product-images">
+                  {stocks[key].image ? (
+                    <figure>
+                      <button
+                        type="button"
+                        className="remove-image"
+                        disabled={stocks[key].isDisabled}
+                        onClick={() => removeImage(key)}
+                      >
+                        <FaTimes />
+                      </button>
+                      <img src={stocks[key].image} alt="" />
+                    </figure>
+                  ) : (
+                    <BoxFileupload
+                      disabled={stocks[key].isDisabled}
+                      onChangeHandler={(url) =>
+                        handleChangeInput(key, 'file', url)
+                      }
+                    />
+                  )}
+                </div>
               </div>
               <div
                 className="col-2"
@@ -241,10 +273,7 @@ const StockStatus = () => {
                 >
                   <FaEllipsisH />
                   <div className="table__action_menu">
-                    <button
-                      className="big-icon"
-                      onClick={() => deleteHandler(key)}
-                    >
+                    <button className="big-icon" onClick={() => openModal(key)}>
                       <FaTrash />
                     </button>
                     <button

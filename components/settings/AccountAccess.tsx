@@ -20,7 +20,7 @@ interface AccountAccessProps {
 }
 
 const CREATE_ACCOUNT = gql`
-  mutation setCategoriesTree($data: SignUpInput!) {
+  mutation addAdmin($data: SignUpInput!) {
     addNewAdmin(data: $data) {
       displayName
     }
@@ -52,7 +52,7 @@ const AccountAccess = (props: AccountAccessProps) => {
       notes: data.notes,
       number: data.number,
       permission: permission,
-      images,
+      image: images,
     };
     createAccount({
       variables: {
@@ -108,47 +108,48 @@ const AccountAccess = (props: AccountAccessProps) => {
           </tr>
         </thead>
         <tbody>
-          {Object.keys(permission).map((menu) => (
-            <tr key={menu}>
-              <td className="center">{menu}</td>
-              <td>
-                <input
-                  type="checkbox"
-                  name="view"
-                  checked={permission[menu].view}
-                  onChange={(e) => onPermissionChange(e, menu)}
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  name="edit"
-                  checked={permission[menu].edit}
-                  onChange={(e) => onPermissionChange(e, menu)}
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  name="delete"
-                  checked={permission[menu].delete}
-                  onChange={(e) => onPermissionChange(e, menu)}
-                />
-              </td>
-              <td>
-                <input
-                  type="checkbox"
-                  name="checkAll"
-                  checked={
-                    permission[menu].view &&
-                    permission[menu].edit &&
-                    permission[menu].delete
-                  }
-                  onChange={(e) => onPermissionChange(e, menu)}
-                />
-              </td>
-            </tr>
-          ))}
+          {permission &&
+            Object.keys(permission).map((menu) => (
+              <tr key={menu}>
+                <td className="center">{menu}</td>
+                <td>
+                  <input
+                    type="checkbox"
+                    name="view"
+                    checked={permission[menu].view}
+                    onChange={(e) => onPermissionChange(e, menu)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    name="edit"
+                    checked={permission[menu].edit}
+                    onChange={(e) => onPermissionChange(e, menu)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    name="delete"
+                    checked={permission[menu].delete}
+                    onChange={(e) => onPermissionChange(e, menu)}
+                  />
+                </td>
+                <td>
+                  <input
+                    type="checkbox"
+                    name="checkAll"
+                    checked={
+                      permission[menu].view &&
+                      permission[menu].edit &&
+                      permission[menu].delete
+                    }
+                    onChange={(e) => onPermissionChange(e, menu)}
+                  />
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="center mt-50">

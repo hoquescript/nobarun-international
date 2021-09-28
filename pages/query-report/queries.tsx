@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { CSVLink } from 'react-csv';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
@@ -12,6 +11,9 @@ import Table from '../../components/shared/Table';
 import styles from '../../styles/pages/query-report.module.scss';
 import { QUERY_COLUMNS } from '../../data/QueryColumn';
 import useAllQuery from '../../hooks/Query/useAllQuery';
+import { gql, useMutation } from '@apollo/client';
+import { useEffect } from 'react';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const headers = [
   { label: 'Full Name', key: 'name' },
@@ -24,9 +26,13 @@ const headers = [
   { label: 'Notes', key: 'notes' },
 ];
 
+const DELETE_QUERY = gql`
+  mutation deleteQueryById($id: String!) {
+    removeQueryUserById(queryUserId: $id)
+  }
+`;
 const Queries = () => {
-  const router = useRouter();
-
+  const [data, setData] = useState([]);
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -34,10 +40,12 @@ const Queries = () => {
     )}`,
   );
 
-  const { loading, error, data } = useAllQuery();
+  const [deleteQuery] = useMutation(DELETE_QUERY);
 
-  if (loading) return 'Submitting...';
-  if (error) return `Submission error! ${error.message}`;
+  const token = useTypedSelector((state) => state.ui.token);
+  useEffect(() => {
+    useAllQuery(token).then((data) => setData(data));
+  }, [token]);
 
   const csvReport = {
     filename: 'Customers Query.csv',
@@ -58,7 +66,7 @@ const Queries = () => {
       <div className={styles.query__btnWrapper}>
         <h1 className="heading-primary mt-40 mb-40">Customers Query</h1>
         <div>
-          <Link href="/query-report/add">
+          <Link href="/query-report/add-new-query">
             <a className="btn-outline-green small mr-20">
               <FaPlusCircle className="btn-icon-small" />
               Add Query
@@ -74,15 +82,18 @@ const Queries = () => {
       </div>
       {data && (
         <Table
-          // instance={tableInstance}
+          title="Queries"
           columns={QUERY_COLUMNS}
           data={data}
-          editHandler={(id) => {
-            // router.push(`/${id}`);
-            console.log(id);
-          }}
-          deleteHandler={(id) => {
-            console.log(id);
+          deleteHandler={(id, idx) => {
+            const modifiedData = [...data];
+            modifiedData.splice(idx, 1);
+            setData(modifiedData);
+            deleteQuery({
+              variables: {
+                id,
+              },
+            });
           }}
         />
       )}

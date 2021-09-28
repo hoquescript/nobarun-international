@@ -1,11 +1,6 @@
-import React, { useMemo } from 'react';
-import {
-  useTable,
-  useSortBy,
-  usePagination,
-  Column,
-  TableInstance,
-} from 'react-table';
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useTable, useSortBy, usePagination } from 'react-table';
 import {
   FaGripVertical,
   FaEllipsisH,
@@ -19,18 +14,21 @@ import {
   FaFastForward,
 } from 'react-icons/fa';
 
-import { COLUMNS } from '../../data/column';
+import Modal from './Modal';
 
 interface TableProps {
+  title?: string;
   columns: any[];
   data: any[];
-  editHandler: any;
+  editHandler?: any;
   deleteHandler: any;
 }
 
 const Table = (props: TableProps) => {
-  const { columns, data, editHandler, deleteHandler } = props;
-  // console.log(data);
+  const { columns, data, deleteHandler } = props;
+
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   // @ts-ignore
   const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
 
@@ -101,22 +99,35 @@ const Table = (props: TableProps) => {
                           idx + 1 === page.length ? 'last' : ''
                         }`}
                       >
-                        <button
-                          onClick={() =>
+                        <Modal
+                          title="Contact Person"
+                          modalIsOpen={showDeleteModal}
+                          setIsOpen={setShowDeleteModal}
+                          confirmHandler={() => {
                             // @ts-ignore
-                            row.original.id && deleteHandler(row.original.id)
-                          }
+                            row.original.id &&
+                              // @ts-ignore
+                              deleteHandler(row.original.id, row.index);
+                          }}
+                        />
+                        <button
+                          onClick={() => {
+                            setShowDeleteModal(true);
+                          }}
                         >
                           <FaTrash />
                         </button>
-                        <button
-                          onClick={() =>
+                        <Link
+                          href={`/query-report/${
                             // @ts-ignore
-                            row.original.id && editHandler(row.original.id)
-                          }
+                            row.original && row.original?.id
+                          }`}
                         >
-                          <FaPen />
-                        </button>
+                          <a>
+                            <FaPen />
+                          </a>
+                        </Link>
+                        {/* </button> */}
                       </div>
                     </span>
                   </td>

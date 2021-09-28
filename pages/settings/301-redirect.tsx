@@ -16,6 +16,7 @@ import styles from '../../styles/pages/admin.module.scss';
 import useAllRedirects from '../../hooks/Settings/useAllRedirects';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import Modal from '../../components/shared/Modal';
 
 const CREATE_REDIRECT = gql`
   mutation createRedirect($data: CreateRedirect!) {
@@ -37,6 +38,8 @@ const DELETE_REDIRECT = gql`
 
 const Redirect = () => {
   const [posts, setPosts] = useState({});
+  const [deleteKey, setDeleteKey] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [createRedirect] = useMutation(CREATE_REDIRECT);
   const [editingRedirect] = useMutation(EDIT_REDIRECT);
@@ -128,6 +131,11 @@ const Redirect = () => {
     setPosts({ ...posts, [id]: post });
   };
 
+  const openModal = (key) => {
+    setShowDeleteModal(true);
+    setDeleteKey(key);
+  };
+
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(5);
 
@@ -149,6 +157,12 @@ const Redirect = () => {
 
   return (
     <div className="container center">
+      <Modal
+        title="301 Redirect"
+        modalIsOpen={showDeleteModal}
+        setIsOpen={setShowDeleteModal}
+        confirmHandler={() => deleteHandler(deleteKey)}
+      />
       <div className="flex sb">
         <h1 className="heading-primary mt-40 mb-40">301 Redirect</h1>
         <div>
@@ -227,10 +241,7 @@ const Redirect = () => {
                 >
                   <FaEllipsisH />
                   <div className="table__action_menu">
-                    <button
-                      className="big-icon"
-                      onClick={() => deleteHandler(key)}
-                    >
+                    <button className="big-icon" onClick={() => openModal(key)}>
                       <FaTrash />
                     </button>
                     <button
