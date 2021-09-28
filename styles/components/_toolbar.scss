@@ -154,11 +154,8 @@
     left: 10px;
     transform: translateY(-50%);
   }
-  &__input {
-    // padding-left: 6rem;
-    width: 85%;
-  }
   &__youtube {
+    width: 85%;
     &::placeholder {
       padding-left: 5rem;
     }
@@ -170,6 +167,27 @@
     & > svg {
       height: 2rem;
       width: 2rem;
+    }
+  }
+  &__thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  &__thumbnail {
+    cursor: pointer;
+    height: 13rem;
+    width: 17rem;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    transition: 0.2s border;
+    &:hover {
+      border: 2px solid $primaryColor;
+    }
+    &:nth-of-type(odd) {
+      margin-right: 1rem;
+    }
+    &:not(:last-child) {
+      margin-bottom: 1rem;
     }
   }
 }

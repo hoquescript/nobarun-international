@@ -1,19 +1,18 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import React, { useState, useMemo, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 
 import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
 
-import styles from '../../styles/pages/query-report.module.scss';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
-import { InputFileUpload } from '../../components/controls/fileUpload';
 import RelatedProducts from '../../components/products/AddProduct/RelatedProduct';
-import router, { useRouter } from 'next/router';
-import useAdminById from '../../hooks/Settings/useAdminById';
+import { InputFileUpload } from '../../components/controls/fileUpload';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import useQueryById from '../../hooks/Query/useQueryById';
+import styles from '../../styles/pages/query-report.module.scss';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -23,7 +22,7 @@ const ADD_NEW_QUERY = gql`
   }
 `;
 
-const defaultState = {
+const defaultValues = {
   companyName: '',
   email: '',
   fullName: '',
@@ -35,7 +34,9 @@ const defaultState = {
 };
 
 const AddNewQuery = () => {
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
   const router = useRouter();
 
   const [createQuery] = useMutation(ADD_NEW_QUERY);
@@ -57,8 +58,7 @@ const AddNewQuery = () => {
       product: productCode[0],
       attachment,
     };
-    console.log(query);
-    methods.reset(defaultState);
+    methods.reset(defaultValues);
     setAttachment('');
     setProductCode([]);
     if (fileInputRef) {

@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import StarRatings from 'react-star-ratings';
 import { gql, useQuery, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
-import {
-  AiOutlineClose,
-  AiOutlinePlus,
-  AiOutlineWarning,
-} from 'react-icons/ai';
+import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
 
 import Toolbar from '../../components/shared/Toolbar';
 
 import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
 
-import styles from '../../styles/pages/review.module.scss';
 import Togglebar from '../../components/controls/togglebar';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import FileButton from '../../components/controls/file';
+import router from 'next/router';
+import useQueryById from '../../hooks/Query/useQueryById';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -28,24 +25,53 @@ const CREATE_REVIEW = gql`
   }
 `;
 
+const defaultValues = {
+  email: '',
+  name: '',
+  reviewText: '',
+  title: '',
+  isPublished: false,
+};
+
 const AddReview = () => {
-  const methods = useForm();
-  const [rating, setRating] = useState(2);
-  const reviewImage = useTypedSelector((state) => state.ui.reviewImage);
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
+
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [rating, setRating] = useState(0);
 
   const [createReview] = useMutation(CREATE_REVIEW);
 
   const addNewReview = (data) => {
-    createReview({
-      variables: {
-        data: {
-          ...data,
-          rating,
-          product: '614dba9ac8d3558394d7e4a8',
-        },
-      },
-    });
+    console.log(data);
+    const review = {
+      ...data,
+      rating,
+      product: '614dba9ac8d3558394d7e4a8',
+    };
+    methods.reset(defaultValues);
+    setRating(0);
+
+    // createReview({
+    //   variables: {
+    //     data: review,
+    //   },
+    // });
   };
+
+  const token = useTypedSelector((state) => state.ui.token);
+  useEffect(() => {
+    if (router.query.rid !== 'add-new-review') {
+      setIsEditMode(true);
+      useQueryById(router.query.rid, token).then((data) => {
+        methods.reset(data);
+        // @ts-ignore
+        setAttachment(data.attachment);
+      });
+    }
+  }, [token]);
+
   return (
     <FormProvider {...methods}>
       <Toolbar />
@@ -95,17 +121,7 @@ const AddReview = () => {
                   <div className="col-12 mb-10">
                     <Textarea name="reviewText" label="Your Reviews" />
                   </div>
-                  <div className="product-images">
-                    {reviewImage.map((src) => (
-                      <figure>
-                        <button type="button" className="remove-image">
-                          <i className="times-icon"></i>
-                        </button>
-                        <img src={src} alt="" />
-                      </figure>
-                    ))}
-                    <FileButton />
-                  </div>
+                  <FileButton showMedia />
                 </div>
                 <p className="mt-20 flex">
                   <AiOutlineWarning

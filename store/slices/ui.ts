@@ -1,35 +1,40 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+type Media = {
+  images: string[];
+  videos: string[];
+};
+
 interface UIState {
   showToolbar: boolean;
   token: string;
   images: { src: string; name: string }[];
   links: { src: string; name: string }[];
-  productsImage: string[];
+  productMedia: Media;
   blogsImage: string[];
-  reviewImage: string[];
+  reviewMedia: Media;
 }
 const initialState: UIState = {
   showToolbar: false,
   token: '',
   images: [],
   links: [],
-  productsImage: [],
+  productMedia: {
+    images: [],
+    videos: [],
+  },
   blogsImage: [],
-  reviewImage: [],
+  reviewMedia: {
+    images: [],
+    videos: [],
+  },
 };
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
-    showToolbar: (state) => {
-      state.showToolbar = true;
-    },
-    hideToolbar: (state) => {
-      state.showToolbar = false;
-    },
-    toggleToolbar: (state, action) => {
-      state.showToolbar = action.payload;
+    toggleToolbar: (state) => {
+      state.showToolbar = !state.showToolbar;
     },
     addImage: (state, action) => {
       // @ts-ignore
@@ -42,7 +47,7 @@ export const uiSlice = createSlice({
     selectImage: (state, action) => {
       if (action.payload.path === '/product/add-new-product') {
         // @ts-ignore
-        state.productsImage.push(action.payload.src);
+        state.productMedia.images.push(action.payload.src);
       }
       if (action.payload.path === '/blogs/add-new-post') {
         // @ts-ignore
@@ -50,7 +55,21 @@ export const uiSlice = createSlice({
       }
       if (action.payload.path === '/review/add-new-review') {
         // @ts-ignore
-        state.reviewImage.push(action.payload.src);
+        state.reviewMedia.images.push(action.payload.src);
+      }
+    },
+    selectVideo: (state, action) => {
+      if (action.payload.path === '/product/add-new-product') {
+        // @ts-ignore
+        state.productMedia.videos.push(action.payload.src);
+      }
+      if (action.payload.path === '/blogs/add-new-post') {
+        // @ts-ignore
+        state.blogsImage.push(action.payload.src);
+      }
+      if (action.payload.path === '/review/add-new-review') {
+        // @ts-ignore
+        state.reviewMedia.videos.push(action.payload.src);
       }
     },
     setAuthToken: (state, action) => {
@@ -64,12 +83,11 @@ export const uiSlice = createSlice({
 });
 
 export const {
-  showToolbar,
-  hideToolbar,
   toggleToolbar,
   addImage,
   addYoutubeLink,
   selectImage,
+  selectVideo,
   setAuthToken,
   fetchMedia,
 } = uiSlice.actions;

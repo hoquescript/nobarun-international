@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 import { AiFillSetting, AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa';
+import getYoutubeId from '../../helpers/getYoutubeId';
 import useAllMedia from '../../hooks/Appearance/useAllMedia';
 import {
   useTypedDispatch,
@@ -15,6 +16,7 @@ import {
   addYoutubeLink,
   fetchMedia,
   selectImage,
+  selectVideo,
   toggleToolbar,
 } from '../../store/slices/ui';
 
@@ -32,7 +34,6 @@ const Toolbar = () => {
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
-  console.log(links);
   const router = useRouter();
   const [addMedia] = useMutation(ADD_NEW_MEDIA);
 
@@ -94,6 +95,10 @@ const Toolbar = () => {
     dispatch(selectImage({ src: imageSrc, path: router.asPath }));
   };
 
+  const selectVideoHandler = (videoSrc) => {
+    dispatch(selectVideo({ src: videoSrc, path: router.asPath }));
+  };
+
   useEffect(() => {
     uploadImages();
   }, [imageFile]);
@@ -108,7 +113,7 @@ const Toolbar = () => {
         className="btn-icon-fade side-panel__toggle show-panel"
         data-target="#tools-panel"
         onClick={() => {
-          dispatch(toggleToolbar(!show));
+          dispatch(toggleToolbar());
         }}
       >
         <AiFillSetting />
@@ -189,36 +194,25 @@ const Toolbar = () => {
               </button>
             </div>
           </div>
-          {links.map((link) => {
-            const embeddedLink = `https://www.youtube.com/embed/?${
-              link.src.split('=')[1]
-            }`;
-            return (
-              <div
-                className="images-gallery__image"
-                onClick={() => selectImageHandler(link.src)}
-              >
-                <i className="check-circle-icon selected-mark"></i>
-                <figure>
-                  <img
-                    src={`https://img.youtube.com/vi/${embeddedLink}/maxresdefault.jpg`}
-                    alt=""
-                  />
-                </figure>
-                {/* <h5>{image.name}</h5> */}
-              </div>
-              // <iframe
-              //   width="150"
-              //   height="150"
-              //   src={embeddedLink}
-              //   title="YouTube video player"
-              //   frameBorder="0"
-              //   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              //   allowFullScreen
-              //   className="ml-20"
-              // />
-            );
-          })}
+          <div className="youtube__thumbnails">
+            {links.map((link) => {
+              const id = getYoutubeId(link.src);
+              return (
+                <div
+                  className="youtube__thumbnail"
+                  onClick={() => selectVideoHandler(link.src)}
+                >
+                  <i className="check-circle-icon selected-mark"></i>
+                  <figure>
+                    <img
+                      src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}
+                      alt=""
+                    />
+                  </figure>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </div>
