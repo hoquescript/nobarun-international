@@ -1,5 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { sub, format } from 'date-fns';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import { FaPlusCircle, FaGripHorizontal, FaList } from 'react-icons/fa';
 
 import TimePeriod from '../../components/controls/period';
@@ -7,12 +9,12 @@ import Search from '../../components/controls/search';
 import Product from '../../components/products/product';
 
 import styles from '../../styles/pages/products.module.scss';
-import ProductList from '../../components/products/ProductList/ProductList';
 import Table from '../../components/shared/Table';
 import { COLUMNS } from '../../data/column';
 import reviews from '../../data/tableData.json';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import useAllProducts from '../../hooks/Products/useAllProducts';
+import { PRODUCT_COLUMNS } from '../../data/ProductColumn';
+import Link from 'next/link';
 
 const Products = () => {
   const [viewType, setViewType] = useState('grid');
@@ -22,9 +24,13 @@ const Products = () => {
       'yyyy-MM-dd',
     )}`,
   );
+  const [products, setProducts] = useState<any[]>([]);
+  const columns = useMemo(() => PRODUCT_COLUMNS, []);
+  // const data = useMemo(() => reviews, []);
 
-  const columns = useMemo(() => COLUMNS, []);
-  const data = useMemo(() => reviews, []);
+  useEffect(() => {
+    useAllProducts().then((data) => setProducts(data));
+  }, []);
 
   return (
     <div className="container center">
@@ -38,7 +44,7 @@ const Products = () => {
       </div>
 
       <div className={styles.products__header}>
-        <h2 className="heading-primary">50 Results</h2>
+        <h2 className="heading-primary">{products.length} Results</h2>
         <div className={styles.products__viewWrapper}>
           <div className="sort-by">
             <span className="mr-10">Sort by</span>
@@ -66,56 +72,32 @@ const Products = () => {
           </div>
         </div>
         <div>
-          <button type="button" className="btn-outline-green mr-20">
-            <FaPlusCircle className="btn-icon-small" />
-            Add Query
-          </button>
+          <Link href="/product/add-new-product">
+            <a className="btn-outline-green small mr-20">
+              <FaPlusCircle className="btn-icon-small" />
+              Add Product
+            </a>
+          </Link>
         </div>
       </div>
       <div className="row">
         {viewType === 'grid' ? (
           <>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
-            <div className="col-xxl-4 col-xl-6 col-xs-12">
-              <Product />
-            </div>
+            {products &&
+              products.map((product) => (
+                <div className="col-xxl-4 col-xl-6 col-xs-12" key={product.id}>
+                  <Product {...product} />
+                </div>
+              ))}
           </>
         ) : (
           <Table
             columns={columns}
-            data={data}
+            data={products}
             editHandler={() => {}}
             deleteHandler={() => {}}
           />
         )}
-
-        {/* <div className="col-4"></div> */}
-        {/* <div className="col-4">
-        <Product />
-      </div> */}
       </div>
     </div>
   );
