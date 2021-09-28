@@ -121,17 +121,7 @@ const Description = (props: DescriptionProps) => {
               setChips={setRelatedProducts}
             />
           </div>
-          <div className="product-images">
-            {productsImage.map((src) => (
-              <figure>
-                <button type="button" className="remove-image">
-                  <i className="times-icon"></i>
-                </button>
-                <img src={src} alt="" />
-              </figure>
-            ))}
-            <FileButton />
-          </div>
+          <FileButton />
         </div>
       </div>
       <KeyPoints keyPointState={keyPointState} />

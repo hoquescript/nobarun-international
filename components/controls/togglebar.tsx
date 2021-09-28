@@ -15,12 +15,7 @@ const Togglebar = (props: TogglebarProps) => {
 
   return (
     <label htmlFor={name} className={`custom-switch ${className}`}>
-      <input
-        type="checkbox"
-        id="publish"
-        checked={checked}
-        {...register(name, { required })}
-      />
+      <input type="checkbox" id={name} {...register(name, { required })} />
       <span>{children}</span>
     </label>
   );

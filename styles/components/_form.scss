@@ -91,6 +91,7 @@
 .custom-checkbox {
   display: flex;
   align-items: flex-start;
+  cursor: pointer;
   input {
     display: none;
 
@@ -156,6 +157,7 @@ textarea.custom-input {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  cursor: pointer;
   & input {
     display: none;
   }

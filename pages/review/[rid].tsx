@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import StarRatings from 'react-star-ratings';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
 
@@ -16,6 +16,7 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import FileButton from '../../components/controls/file';
 import router from 'next/router';
 import useQueryById from '../../hooks/Query/useQueryById';
+import ProductCode from '../../components/shared/ProductCode';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -30,6 +31,8 @@ const defaultValues = {
   name: '',
   reviewText: '',
   title: '',
+  createdAt: '',
+  productCode: '',
   isPublished: false,
 };
 
@@ -42,14 +45,16 @@ const AddReview = () => {
   const [rating, setRating] = useState(0);
 
   const [createReview] = useMutation(CREATE_REVIEW);
-
+  const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
   const addNewReview = (data) => {
-    console.log(data);
     const review = {
       ...data,
+      createdAt: new Date(data.createdAt),
       rating,
-      product: '614dba9ac8d3558394d7e4a8',
+      product: data.productCode,
+      reviewMedia,
     };
+    console.log(review);
     methods.reset(defaultValues);
     setRating(0);
 
@@ -109,14 +114,24 @@ const AddReview = () => {
                       />
                     </div>
                   </div>
-                  <div className="col-12 mb-10">
+                  <div className="col-12 mb-20">
                     <Textfield name="title" label="Company Name" />
                   </div>
-                  <div className="col-6 mb-10">
+                  <div className="col-6 mb-20">
                     <Textfield name="name" label="Your Name" />
                   </div>
                   <div className="col-6 mb-10">
                     <Textfield name="email" label="Your e-Mail Address" />
+                  </div>
+                  <div className="col-6 mb-20">
+                    <Textfield
+                      type="date"
+                      name="createdAt"
+                      label="Review Date"
+                    />
+                  </div>
+                  <div className="col-6 mb-20">
+                    <ProductCode />
                   </div>
                   <div className="col-12 mb-10">
                     <Textarea name="reviewText" label="Your Reviews" />

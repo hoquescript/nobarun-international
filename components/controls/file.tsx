@@ -7,7 +7,7 @@ import {
 } from '../../hooks/useTypedSelector';
 import { toggleToolbar } from '../../store/slices/ui';
 
-const FileButton = (props: { showMedia: boolean }) => {
+const FileButton = (props: { showMedia?: boolean }) => {
   const { showMedia } = props;
   const dispatch = useTypedDispatch();
   const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);

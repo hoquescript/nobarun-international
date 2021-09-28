@@ -6,7 +6,7 @@ interface TextfieldProps {
   name: string;
   className?: string;
   placeholder?: string;
-  type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file';
+  type?: 'text' | 'number' | 'tel' | 'email' | 'password' | 'file' | 'date';
   required?: boolean;
   value?: string;
 }

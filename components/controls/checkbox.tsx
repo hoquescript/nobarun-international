@@ -16,10 +16,10 @@ const Checkbox = (props: CheckboxProps) => {
   return (
     <div className="fields">
       <div className="field field__term">
-        <label className="custom-checkbox mb-30" htmlFor="terms-conditions">
+        <label className="custom-checkbox mb-30" htmlFor={name}>
           <input
             type="checkbox"
-            id="terms-conditions"
+            id={name}
             // checked={checked}
             {...register(name, { required })}
           />
