@@ -22,6 +22,12 @@ const ADD_NEW_QUERY = gql`
   }
 `;
 
+const EDIT_NEW_QUERY = gql`
+  mutation editQuery($data: EditQueryUserInput!) {
+    editQueryUserInfo(data: $data)
+  }
+`;
+
 const defaultValues = {
   companyName: '',
   email: '',
@@ -38,8 +44,10 @@ const AddNewQuery = () => {
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
   const router = useRouter();
+  const qid = router.query.qid;
 
   const [createQuery] = useMutation(ADD_NEW_QUERY);
+  const [editQuery] = useMutation(EDIT_NEW_QUERY);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [attachment, setAttachment] = useState('');
@@ -61,22 +69,32 @@ const AddNewQuery = () => {
     methods.reset(defaultValues);
     setAttachment('');
     setProductCode([]);
-    if (fileInputRef) {
-      // @ts-ignore
-      fileInputRef.current.value = '';
+    // @ts-ignore
+    fileInputRef.current.value = '';
+
+    if (isEditMode) {
+      editQuery({
+        variables: {
+          data: {
+            editId: qid,
+            editableObject: query,
+          },
+        },
+      });
+    } else {
+      createQuery({
+        variables: {
+          data: query,
+        },
+      });
     }
-    createQuery({
-      variables: {
-        data: query,
-      },
-    });
   };
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    if (router.query.qid !== 'add-new-query') {
+    if (qid !== 'add-new-query') {
       setIsEditMode(true);
-      useQueryById(router.query.qid, token).then((data) => {
+      useQueryById(qid, token).then((data) => {
         methods.reset(data);
         // @ts-ignore
         setAttachment(data.attachment);

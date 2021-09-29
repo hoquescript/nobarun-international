@@ -72,6 +72,12 @@ export const uiSlice = createSlice({
         state.reviewMedia.videos.push(action.payload.src);
       }
     },
+    resetMediaSelection: (state) => {
+      state.productMedia.images = [];
+      state.productMedia.videos = [];
+      state.reviewMedia.images = [];
+      state.reviewMedia.videos = [];
+    },
     setAuthToken: (state, action) => {
       state.token = action.payload;
     },
@@ -90,6 +96,7 @@ export const {
   selectVideo,
   setAuthToken,
   fetchMedia,
+  resetMediaSelection,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

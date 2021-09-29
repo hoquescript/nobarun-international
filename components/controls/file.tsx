@@ -7,14 +7,21 @@ import {
 } from '../../hooks/useTypedSelector';
 import { toggleToolbar } from '../../store/slices/ui';
 
-const FileButton = (props: { showMedia?: boolean }) => {
-  const { showMedia } = props;
+const FileButton = (props: {
+  showMedia?: boolean;
+  page: 'product' | 'review';
+}) => {
+  const { page, showMedia } = props;
   const dispatch = useTypedDispatch();
-  const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
+  let media: any;
+  if (page === 'product')
+    media = useTypedSelector((state) => state.ui.productMedia);
+  if (page === 'review')
+    media = useTypedSelector((state) => state.ui.reviewMedia);
   return (
     <div className="product-images">
       {showMedia &&
-        reviewMedia.images.map((src) => (
+        media.images.map((src) => (
           <figure>
             <button type="button" className="remove-image">
               <i className="times-icon"></i>
@@ -23,7 +30,7 @@ const FileButton = (props: { showMedia?: boolean }) => {
           </figure>
         ))}
       {showMedia &&
-        reviewMedia.videos.map((src) => {
+        media.videos.map((src) => {
           const id = getYoutubeId(src);
           return (
             <figure>

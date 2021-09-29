@@ -10,8 +10,8 @@ export const QUERY_COLUMNS = [
   {
     Header: 'Date',
     Footer: 'Date',
-    accessor: 'date',
-    // Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
+    accessor: 'createdAt',
+    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
   },
   {
     Header: 'Message',
@@ -36,7 +36,7 @@ export const QUERY_COLUMNS = [
   {
     Header: 'SKU',
     Footer: 'SKU',
-    accessor: 'SKU',
+    accessor: 'productCode',
     Cell: ({ value }) => value.substring(0, 4),
   },
   {

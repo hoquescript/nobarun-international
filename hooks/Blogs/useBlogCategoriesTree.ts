@@ -11,6 +11,7 @@ const useBlogCategoriesTree = async () => {
   const data = await Client.request(GET_BLOG_CATEGORIES_TREE);
 
   const categories = JSON.parse(data?.getBlogCategories).map((category) => ({
+    _id: category._id,
     id: category.id,
     name: category.name,
     description: category.description,

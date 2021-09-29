@@ -1,8 +1,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
-import { gql, useMutation, useQuery } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
 
 import TimePeriod from '../../../components/controls/period';
 import Search from '../../../components/controls/search';
@@ -15,8 +14,13 @@ import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 
+const DELETE_ADMIN = gql`
+  mutation deleteUserById($id: String!) {
+    deleteUserById(userId: $id)
+  }
+`;
+
 const Accounts = () => {
-  const router = useRouter();
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -24,6 +28,7 @@ const Accounts = () => {
     )}`,
   );
 
+  const [deleteAdmin] = useMutation(DELETE_ADMIN);
   const token = useTypedSelector((state) => state.ui.token);
 
   const [admins, setAdmins] = useState([]);
@@ -53,12 +58,19 @@ const Accounts = () => {
         </div>
       </div>
       <Table
+        pageName="account"
         columns={columns}
         data={admins}
-        editHandler={(id) => {
-          router.push(`/settings/accounts/${id}`);
+        deleteHandler={(id, idx) => {
+          const modifiedData = [...admins];
+          modifiedData.splice(idx, 1);
+          setAdmins(modifiedData);
+          deleteAdmin({
+            variables: {
+              id,
+            },
+          });
         }}
-        deleteHandler={() => {}}
       />
     </div>
   );

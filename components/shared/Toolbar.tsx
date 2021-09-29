@@ -1,10 +1,10 @@
+import React, { useEffect, useState } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
-import { linkSync } from 'fs';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
 import { AiFillSetting, AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
 import { FaPlus } from 'react-icons/fa';
+
 import getYoutubeId from '../../helpers/getYoutubeId';
 import useAllMedia from '../../hooks/Appearance/useAllMedia';
 import {
@@ -157,8 +157,9 @@ const Toolbar = () => {
               />
             </div>
             <div className="images-gallery">
-              {images.map((image) => (
+              {images.map((image, idx) => (
                 <div
+                  key={image.name + idx}
                   className="images-gallery__image"
                   onClick={() => selectImageHandler(image.src)}
                 >
@@ -195,10 +196,11 @@ const Toolbar = () => {
             </div>
           </div>
           <div className="youtube__thumbnails">
-            {links.map((link) => {
+            {links.map((link, idx) => {
               const id = getYoutubeId(link.src);
               return (
                 <div
+                  key={link.src + idx}
                   className="youtube__thumbnail"
                   onClick={() => selectVideoHandler(link.src)}
                 >

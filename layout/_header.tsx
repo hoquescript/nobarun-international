@@ -11,7 +11,7 @@ import { BsFillGridFill } from 'react-icons/bs';
 
 const Header = () => {
   const logoutHandler = () => {
-    signOut();
+    signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/auth/login` });
   };
   return (
     <div className={styles.header}>

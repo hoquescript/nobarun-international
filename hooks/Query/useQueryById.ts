@@ -12,7 +12,7 @@ const GET_QUERY_BY_ID = gql`
       company
       message
       notes
-      product
+      productCode
     }
   }
 `;
@@ -35,8 +35,8 @@ const useQueryById = async (qid, token) => {
       message: queryById.message,
       notes: queryById.notes,
       number: queryById.phone,
-      address: queryById.notes,
-      productCode: queryById.product,
+      address: queryById.address,
+      productCode: queryById.productCode,
       attachment: queryById.attachment,
     };
     return query;

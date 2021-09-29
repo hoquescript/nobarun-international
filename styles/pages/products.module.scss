@@ -72,6 +72,21 @@
     object-fit: cover;
     border-radius: 0.8rem;
   }
+  &__menu {
+    cursor: pointer;
+    &:hover > div {
+      display: flex;
+    }
+    & > div {
+      transform: translate(15px, -30px);
+      position: absolute;
+      background: transparent;
+      border-radius: 10px;
+      & > * {
+        background-color: #ddd;
+      }
+    }
+  }
 }
 
 .chip {

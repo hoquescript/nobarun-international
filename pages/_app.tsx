@@ -10,6 +10,8 @@ import Layout from '../layout';
 import useAuthProvider from '../hooks/useAuthProvider';
 import store from '../store/configureStore';
 import '../styles/main.scss';
+import 'react-nestable/dist/styles/index.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 // optional configuration
 const options = {

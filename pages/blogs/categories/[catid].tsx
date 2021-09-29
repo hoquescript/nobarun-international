@@ -1,17 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+
 import Combobox from '../../../components/controls/combobox';
 
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 import Togglebar from '../../../components/controls/togglebar';
-import { useEffect } from 'react';
+
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import useAllBlogCategories from '../../../hooks/Blogs/useAllBlogCategory';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import useBlogCategoryById from '../../../hooks/Blogs/useBlogCategoryById';
 
 const CREATE_CATEGORY = gql`
   mutation addNewBlogCategory($data: CreateNewBlogCategoryInput!) {
@@ -21,24 +25,56 @@ const CREATE_CATEGORY = gql`
   }
 `;
 
-const AddCategory = () => {
-  const methods = useForm();
-  const [createCategory] = useMutation(CREATE_CATEGORY);
+const EDIT_CATEGORY = gql`
+  mutation editBlogCategory($data: EditBlogCategory!) {
+    editBlogCategory(data: $data)
+  }
+`;
 
+const defaultValues = {
+  name: '',
+  description: '',
+  image: '',
+  slug: '',
+  isPublished: false,
+  parentCategory: '',
+};
+
+const AddCategory = () => {
+  const router = useRouter();
+  const catid = router.query.catid;
+
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
+
+  const [createCategory] = useMutation(CREATE_CATEGORY);
+  const [editCategory] = useMutation(EDIT_CATEGORY);
+
+  const textEditorRef = useRef(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
+
+  const token = useTypedSelector((state) => state.ui.token);
+  useEffect(() => {
+    if (catid !== 'add') {
+      setIsEditMode(true);
+      useBlogCategoryById(catid, token).then((data) => {
+        methods.reset(data);
+        // @ts-ignore
+        setDescription(data.description);
+        // @ts-ignore
+        // textEditorRef.current.set(data.description);
+      });
+    }
+  }, [token]);
 
   useEffect(() => {
     useAllBlogCategories().then((category) => setCategories(category));
   }, []);
 
   const onSubmit = (data) => {
-    let pCategory = {};
-    if (data.parentCategory) {
-      pCategory = {
-        parentCategory: data.parentCategory,
-      };
-    }
     const category = {
       name: data.name,
       description,
@@ -48,12 +84,28 @@ const AddCategory = () => {
       parentCategory: data.parentCategory,
       id: uuid(),
     };
-    console.log(category);
-    createCategory({
-      variables: {
-        data: category,
-      },
-    });
+    methods.reset(defaultValues);
+    // @ts-ignore
+    textEditorRef.current.reset();
+    if (isEditMode) {
+      // @ts-ignore
+      delete category.id;
+      delete category.parentCategory;
+      editCategory({
+        variables: {
+          data: {
+            editId: catid,
+            editableObject: category,
+          },
+        },
+      });
+    } else {
+      createCategory({
+        variables: {
+          data: category,
+        },
+      });
+    }
   };
   return (
     <div className="container center">
@@ -83,14 +135,16 @@ const AddCategory = () => {
                 placeholder="Enter your Name"
               />
             </div>
-            <div className="grid three mb-20">
-              <Combobox
-                name="parentCategory"
-                label="Parent Category"
-                placeholder="Select Category"
-                options={categories || []}
-              />
-            </div>
+            {!isEditMode && (
+              <div className="grid three mb-20">
+                <Combobox
+                  name="parentCategory"
+                  label="Parent Category"
+                  placeholder="Select Category"
+                  options={categories || []}
+                />
+              </div>
+            )}
           </div>
         </div>
         <div className="wrapper-section">
@@ -103,7 +157,7 @@ const AddCategory = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor setValue={setDescription} />
+              <TextEditor ref={textEditorRef} setValue={setDescription} />
             </div>
           </div>
         </div>

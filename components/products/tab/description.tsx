@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
 import Chip from '../../controls/chip';
 
-import Chipfield from '../../controls/chipfield';
 import Combobox from '../../controls/combobox';
 import FileButton from '../../controls/file';
 import TextEditor from '../../shared/TextEditor';
@@ -21,7 +20,6 @@ interface DescriptionProps {
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
-  productsImage: string[];
   info: any;
   relatedProducts: string[];
   setRelatedProducts: any;
@@ -35,7 +33,6 @@ const Description = (props: DescriptionProps) => {
     setFeatures,
     setSpecification,
     setTabValue,
-    productsImage,
     info,
     relatedProducts,
     setRelatedProducts,
@@ -121,7 +118,7 @@ const Description = (props: DescriptionProps) => {
               setChips={setRelatedProducts}
             />
           </div>
-          <FileButton />
+          <FileButton showMedia page="product" />
         </div>
       </div>
       <KeyPoints keyPointState={keyPointState} />

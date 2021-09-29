@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
@@ -8,10 +10,12 @@ import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import Combobox from '../../../components/controls/combobox';
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
-import { useEffect } from 'react';
+
+import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import useAllCategories from '../../../hooks/Products/useAllCategories';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import useProductCategoryById from '../../../hooks/Products/useProductCategoryById';
+import FileButton from '../../../components/controls/file';
+import Toolbar from '../../../components/shared/Toolbar';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory(
@@ -44,47 +48,88 @@ const CREATE_CATEGORY = gql`
   }
 `;
 
+const EDIT_CATEGORY = gql`
+  mutation editProductCategory($data: EditCategory!) {
+    editCategory(data: $data)
+  }
+`;
+
+const defaultValues = {
+  name: '',
+  description: '',
+  image: '',
+  slug: '',
+  isPublished: false,
+  parentCategory: '',
+};
+
 const CategoryForm = () => {
-  const methods = useForm();
   const {
     query: { fid },
   } = useRouter();
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
 
+  const textEditorRef = useRef(null);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    useAllCategories().then((data) => {
-      setCategories(data);
-    });
-  });
-  // const categories: { [key: string]: string } = {};
-  // category?.getAllTheCategory.forEach((dt) => {
-  //   categories[dt.name] = dt.id;
-  // });
-
   const [createCategory] = useMutation(CREATE_CATEGORY);
+  const [editCategory] = useMutation(EDIT_CATEGORY);
+
+  useEffect(() => {
+    // useAllCategories().then((data) => {
+    //   setCategories(data);
+    // });
+  }, []);
+
+  const token = useTypedSelector((state) => state.ui.token);
+  useEffect(() => {
+    if (fid !== 'add') {
+      setIsEditMode(true);
+      // useProductCategoryById(fid, token).then((data) => {
+      //   methods.reset(data);
+      //   // @ts-ignore
+      //   setDescription(data.description);
+      //   // @ts-ignore
+      //   // textEditorRef.current.set(data.description);
+      // });
+    }
+  }, [token]);
 
   const onSubmit = (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
-    createCategory({
-      variables: {
-        name: categoryName,
-        description,
-        image:
-          'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
-        isPublished: true,
-        parentCategory: parentCategory,
-        slug: categorySlug,
-        id: uuid(),
-      },
-    });
+    const category = {
+      name: categoryName,
+      description,
+      image:
+        'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
+      isPublished: true,
+      parentCategory: parentCategory,
+      slug: categorySlug,
+      id: uuid(),
+    };
+    if (isEditMode) {
+      delete category.parentCategory;
+      editCategory({
+        variables: {
+          editId: fid,
+          editableObject: category,
+        },
+      });
+    } else {
+      createCategory({
+        variables: {
+          data: category,
+        },
+      });
+    }
   };
-
-  // if (loading) return 'Submitting...';
-  // if (error) return `Submission error! ${error.message}`;
   return (
     <div className="container center">
+      <Toolbar />
       <div
         className="main__content__header"
         style={{
@@ -107,27 +152,37 @@ const CategoryForm = () => {
       <FormProvider {...methods}>
         <div className="wrapper-section">
           <div className="wrapper-section__content">
-            <div className="grid one mb-20">
-              <Textfield
-                label="Name"
-                placeholder="Enter Category Name"
-                name="categoryName"
-              />
-            </div>
-            <div className="grid one mb-20">
-              <Textfield
-                label="Slug"
-                placeholder="Enter Category Slug"
-                name="categorySlug"
-              />
-            </div>
-            <div className="grid three mb-20">
-              <Combobox
-                name="parentCategory"
-                label="Parent Category"
-                placeholder="Select Category"
-                options={categories || []}
-              />
+            <div className="row">
+              <div className="col-12">
+                <Textfield
+                  label="Name"
+                  placeholder="Enter Category Name"
+                  name="categoryName"
+                />
+              </div>
+              <div className="col-12">
+                <Textfield
+                  label="Slug"
+                  placeholder="Enter Category Slug"
+                  name="categorySlug"
+                />
+              </div>
+              {!isEditMode && (
+                <div className="col-4">
+                  <Combobox
+                    name="parentCategory"
+                    label="Parent Category"
+                    placeholder="Select Category"
+                    options={categories || []}
+                  />
+                </div>
+              )}
+              <div
+                className="col-6 flex ml-60"
+                style={{ transform: 'translateY(15px)' }}
+              >
+                <FileButton />
+              </div>
             </div>
           </div>
         </div>
@@ -141,7 +196,7 @@ const CategoryForm = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor setValue={setDescription} />
+              <TextEditor ref={textEditorRef} setValue={setDescription} />
             </div>
           </div>
         </div>

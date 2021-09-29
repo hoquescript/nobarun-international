@@ -10,8 +10,11 @@ const GET_ALL_REVIEWS = gql`
       email
       rating
       reviewText
-      product
-      images
+      productCode
+      reviewMedia {
+        images
+        videos
+      }
       isPublished
     }
   }
@@ -27,11 +30,11 @@ const useAllReviews = async (token) => {
     const reviews = data.getAllReviews.map((review) => ({
       id: review.id,
       createdAt: '19th Feb, 2021',
-      SKU: 'bdtR5xy',
+      SKU: review.productCode,
       title: review.title,
       rating: review.rating,
       reviewText: review.reviewText,
-      images: review.images,
+      images: +review.reviewMedia.images + +review.reviewMedia.videos,
     }));
 
     return reviews;

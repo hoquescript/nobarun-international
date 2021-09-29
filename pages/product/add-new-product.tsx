@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
@@ -10,9 +10,13 @@ import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
 import useProductInfo from '../../hooks/Products/useProductInfo';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { resetMediaSelection } from '../../store/slices/ui';
 
 const CREATE_NEW_PRODUCTS = gql`
   mutation addProduct($data: CreateNewProduct!) {
@@ -22,8 +26,47 @@ const CREATE_NEW_PRODUCTS = gql`
   }
 `;
 
+const defaultValues = {
+  isPublished: false,
+  productName: '',
+  price: '',
+  originalPrice: '',
+  discount: '',
+  productCode: '',
+  category: '',
+  collectionName: '',
+  stockStatus: '',
+  contactPerson: '',
+  SeoTitle: '',
+  title: '',
+  slug: '',
+  url: '',
+  siteMap: '',
+};
+
+const defaultKeypoints = [
+  {
+    id: '',
+    title: '',
+    content: '',
+    images: [],
+  },
+];
+
+const defaultQuestions = [
+  {
+    id: '',
+    title: '',
+    question: '',
+    isCollapsed: false,
+    isDisabled: false,
+  },
+];
+
 const AddProduct = () => {
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
 
   const [tabValue, setTabValue] = useState('description');
   const [info, setInfo] = useState({});
@@ -35,25 +78,10 @@ const AddProduct = () => {
     });
   }, []);
 
-  const productsImage = useTypedSelector((state) => state.ui.productsImage);
+  const productMedia = useTypedSelector((state) => state.ui.productMedia);
 
-  const KeyPoint = useState<IKeyPoints[]>([
-    {
-      id: '',
-      title: '',
-      content: '',
-      images: [],
-    },
-  ]);
-  const question = useState<IQuestions[]>([
-    {
-      id: '',
-      title: '',
-      question: '',
-      isCollapsed: false,
-      isDisabled: false,
-    },
-  ]);
+  const KeyPoint = useState<IKeyPoints[]>(defaultKeypoints);
+  const question = useState<IQuestions[]>(defaultQuestions);
 
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
@@ -61,6 +89,7 @@ const AddProduct = () => {
   const [keywords, setKeywords] = useState<string[]>([]);
   const tagState = useState<string[]>([]);
 
+  const dispatch = useTypedDispatch();
   const handleAddProduct = (data: any) => {
     const product = {
       ...data,
@@ -68,7 +97,8 @@ const AddProduct = () => {
       originalPrice: +data.price,
       discount: +data.discount,
       relatedProducts,
-      images: productsImage,
+      images: productMedia.images,
+      videos: productMedia.videos,
       keyPoints: KeyPoint[0],
       features,
       specification,
@@ -76,11 +106,22 @@ const AddProduct = () => {
       tags: tagState[0],
       keywords,
     };
-    createNewProduct({
-      variables: {
-        data: product,
-      },
-    });
+    //Form Reset
+    methods.reset(defaultValues);
+    KeyPoint[1](defaultKeypoints);
+    question[1](defaultQuestions);
+    setFeatures('');
+    setSpecification('');
+    setRelatedProducts([]);
+    setKeywords([]);
+    tagState[1]([]);
+    dispatch(resetMediaSelection());
+    console.log(KeyPoint[0]);
+    // createNewProduct({
+    //   variables: {
+    //     data: product,
+    //   },
+    // });
   };
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>
@@ -124,7 +165,6 @@ const AddProduct = () => {
                 setFeatures={setFeatures}
                 setSpecification={setSpecification}
                 setTabValue={setTabValue}
-                productsImage={productsImage}
                 info={info}
                 relatedProducts={relatedProducts}
                 setRelatedProducts={setRelatedProducts}

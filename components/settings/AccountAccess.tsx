@@ -11,12 +11,14 @@ interface PermissionProps {
 }
 
 interface AccountAccessProps {
+  accountId: string;
   images: string;
   permission: PermissionProps;
   setPermission: React.Dispatch<React.SetStateAction<PermissionProps>>;
   handleSubmit: UseFormHandleSubmit<FieldValues>;
   register: any;
   setIsPasswordMatched: any;
+  isEditMode: boolean;
 }
 
 const CREATE_ACCOUNT = gql`
@@ -24,6 +26,12 @@ const CREATE_ACCOUNT = gql`
     addNewAdmin(data: $data) {
       displayName
     }
+  }
+`;
+
+const EDIT_ADMIN = gql`
+  mutation editAdmin($data: EditAdmin!) {
+    editAdmin(data: $data)
   }
 `;
 
@@ -35,16 +43,21 @@ const AccountAccess = (props: AccountAccessProps) => {
     register,
     handleSubmit,
     setIsPasswordMatched,
+    isEditMode,
+    accountId,
   } = props;
-  const [createAccount, { data, loading, error }] = useMutation(CREATE_ACCOUNT);
+  const [createAccount] = useMutation(CREATE_ACCOUNT);
+  const [editAccount] = useMutation(EDIT_ADMIN);
 
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
       return setIsPasswordMatched(false);
     }
+    console.log(data);
     const account = {
       displayName: data.displayName,
       address: data.address,
+      location: '',
       email: data.email,
       password: data.password,
       firstName: data.firstName,
@@ -53,12 +66,27 @@ const AccountAccess = (props: AccountAccessProps) => {
       number: data.number,
       permission: permission,
       image: images,
+      sendMail: data.sendMail,
     };
-    createAccount({
-      variables: {
-        data: account,
-      },
-    });
+    if (isEditMode) {
+      delete account.password;
+      console.log('object');
+      console.log(account);
+      editAccount({
+        variables: {
+          data: {
+            editId: accountId,
+            editableObject: account,
+          },
+        },
+      });
+    } else {
+      createAccount({
+        variables: {
+          data: account,
+        },
+      });
+    }
   };
 
   const onSelectAllChange = (e) => {

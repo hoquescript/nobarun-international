@@ -68,7 +68,7 @@ interface PermissionProps {
 
 const AddAdmin = () => {
   const router = useRouter();
-
+  const aid = router.query.aid;
   const [tabValue, setTabValue] = useState('information');
   const [images, setImages] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
@@ -83,9 +83,9 @@ const AddAdmin = () => {
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    if (router.query.aid !== 'add') {
+    if (aid !== 'add') {
       setIsEditMode(true);
-      useAdminById(router.query.aid, token).then((data) => {
+      useAdminById(aid, token).then((data) => {
         methods.reset(data.account);
         setPermission(data.permission);
       });
@@ -118,6 +118,8 @@ const AddAdmin = () => {
               register={methods.register}
               handleSubmit={methods.handleSubmit}
               setIsPasswordMatched={setIsPasswordMatched}
+              accountId={aid as string}
+              isEditMode={isEditMode}
             />
           </TabContent>
         </TabMenu>

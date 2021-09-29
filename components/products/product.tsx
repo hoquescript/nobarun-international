@@ -26,7 +26,7 @@ const Product = (props) => {
             <input
               type="text"
               className="custom-input small mr-20"
-              value="Commercial Kitchen"
+              value={category}
               checked={isPublished}
               disabled
               style={{ width: '20rem' }}

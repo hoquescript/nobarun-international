@@ -1,6 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import Link from 'next/link';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
+import { gql, useMutation } from '@apollo/client';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -8,12 +12,13 @@ import Table from '../../components/shared/Table';
 
 import styles from '../../styles/pages/query-report.module.scss';
 import { BLOG_COLUMNS } from '../../data/BlogColumn';
-import tableData from '../../data/tableData.json';
-import { useEffect } from 'react';
 import useAllBlogCategories from '../../hooks/Blogs/useAllBlogs';
-import Link from 'next/link';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+
+const DELETE_BLOG = gql`
+  mutation deleteUserById($id: String!) {
+    deleteUserById(userId: $id)
+  }
+`;
 
 const BlogPost = () => {
   const [period, setPeriod] = useState(
@@ -24,9 +29,13 @@ const BlogPost = () => {
   );
   const columns = useMemo(() => BLOG_COLUMNS, []);
   const [posts, setPosts] = useState([]);
+
+  const [deleteBlog] = useMutation(DELETE_BLOG);
+
   useEffect(() => {
     useAllBlogCategories().then((blogs) => setPosts(blogs));
   }, []);
+
   return (
     <div className={styles.query}>
       <div className="row">
@@ -49,10 +58,19 @@ const BlogPost = () => {
         </div>
       </div>
       <Table
+        pageName="blog"
         columns={columns}
         data={posts}
-        editHandler={() => {}}
-        deleteHandler={() => {}}
+        deleteHandler={(id, idx) => {
+          const modifiedData = [...posts];
+          modifiedData.splice(idx, 1);
+          setPosts(modifiedData);
+          deleteBlog({
+            variables: {
+              id,
+            },
+          });
+        }}
       />
     </div>
   );

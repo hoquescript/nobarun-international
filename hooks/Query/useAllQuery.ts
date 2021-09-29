@@ -11,7 +11,8 @@ const GET_ALL_QUERIES = gql`
       address
       message
       notes
-      product
+      productCode
+      createdAt
     }
   }
 `;
@@ -24,8 +25,6 @@ const useAllQuery = async (token) => {
     const data = await Client.request(GET_ALL_QUERIES, {}, requestHeaders);
     return data.getAllQueryUsers.map((query) => ({
       ...query,
-      date: '19 June, 2021',
-      SKU: '#4567rt',
     }));
   } else return [];
 };

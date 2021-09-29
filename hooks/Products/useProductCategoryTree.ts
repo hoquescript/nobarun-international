@@ -11,6 +11,7 @@ const useProductCategoryTree = async () => {
   const data = await Client.request(GET_ALL_CATEGORY);
 
   const categories = JSON.parse(data?.getCategories).map((category) => ({
+    _id: category._id,
     id: category.id,
     name: category.name,
     description: category.description,

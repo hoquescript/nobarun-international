@@ -17,6 +17,7 @@ import {
 import Modal from './Modal';
 
 interface TableProps {
+  pageName: 'account' | 'query' | 'blog';
   title?: string;
   columns: any[];
   data: any[];
@@ -25,7 +26,7 @@ interface TableProps {
 }
 
 const Table = (props: TableProps) => {
-  const { columns, data, deleteHandler } = props;
+  const { pageName, columns, data, deleteHandler } = props;
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -81,6 +82,10 @@ const Table = (props: TableProps) => {
           <tbody {...getTableBodyProps()}>
             {page.map((row, idx) => {
               prepareRow(row);
+              let editLink: string;
+              if (pageName === 'account') editLink = 'settings/accounts';
+              if (pageName === 'query') editLink = 'query-report';
+              if (pageName === 'blog') editLink = 'blogs';
               return (
                 <tr {...row.getRowProps()}>
                   <td style={{ padding: '.5rem' }}>
@@ -118,7 +123,8 @@ const Table = (props: TableProps) => {
                           <FaTrash />
                         </button>
                         <Link
-                          href={`/query-report/${
+                          // @ts-ignore
+                          href={`/${editLink}/${
                             // @ts-ignore
                             row.original && row.original?.id
                           }`}

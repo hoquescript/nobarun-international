@@ -17,6 +17,7 @@ const GET_ALL_BLOGS = gql`
 const useAllBlogCategories = async () => {
   const data = await Client.request(GET_ALL_BLOGS);
   return data.getAllTheBlog.map((blog) => ({
+    id: blog.id,
     postTitle: blog.postTitle,
     contact: blog.contact,
     category: blog.category,

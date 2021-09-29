@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
-import dynamic from 'next/dynamic'; // (if using Next.js or use own dynamic loader)
+import React, {
+  useState,
+  useEffect,
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
+import dynamic from 'next/dynamic';
 import { Editor } from 'react-draft-wysiwyg';
 import { EditorState, convertToRaw } from 'draft-js';
 import draftToHtml from 'draftjs-to-html';
-// import htmlToDraft from 'html-to-draftjs';
-
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import htmlToDraft from 'html-to-draftjs';
 
 const EditorComponent = dynamic(
   async () => {
@@ -22,10 +25,22 @@ interface TextEditorProps {
   multiple?: boolean;
   disabled?: boolean;
 }
-const TextEditor = (props: TextEditorProps) => {
+
+const TextEditor = forwardRef((props: TextEditorProps, ref) => {
   const { setValue, bodyClass, onChange, disabled } = props;
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  useImperativeHandle(ref, () => ({
+    async set(html) {
+      const draftData = htmlToDraft(html);
+      console.log(draftData);
+      setEditorState(draftData);
+    },
+    reset() {
+      setEditorState(EditorState.createEmpty());
+    },
+  }));
 
   const onEditorStateChange = (editorState) => {
     setEditorState(editorState);
@@ -69,6 +84,6 @@ const TextEditor = (props: TextEditorProps) => {
       />
     </>
   );
-};
+});
 
 export default TextEditor;

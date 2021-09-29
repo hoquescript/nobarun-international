@@ -14,13 +14,6 @@ const GET_ALL_ADMINS = gql`
       notes
       number
       location
-      permission {
-        Appearance {
-          delete
-          edit
-          view
-        }
-      }
     }
   }
 `;
