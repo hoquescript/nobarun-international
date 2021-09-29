@@ -11,6 +11,9 @@ interface UIState {
   images: { src: string; name: string }[];
   links: { src: string; name: string }[];
   productMedia: Media;
+  productCategoryMedia: Media;
+  productCollectionMedia: Media;
+  blogCategoryMedia: Media;
   blogsImage: string[];
   reviewMedia: Media;
 }
@@ -23,7 +26,19 @@ const initialState: UIState = {
     images: [],
     videos: [],
   },
+  productCategoryMedia: {
+    images: [],
+    videos: [],
+  },
+  productCollectionMedia: {
+    images: [],
+    videos: [],
+  },
   blogsImage: [],
+  blogCategoryMedia: {
+    images: [],
+    videos: [],
+  },
   reviewMedia: {
     images: [],
     videos: [],
@@ -49,6 +64,24 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.productMedia.images.push(action.payload.src);
       }
+      if (action.payload.path.startsWith('/product/categories/')) {
+        if (state.productCategoryMedia.images.length === 1)
+          state.productCategoryMedia.images = [];
+        // @ts-ignore
+        state.productCategoryMedia.images.push(action.payload.src);
+      }
+      if (action.payload.path.startsWith('/product/collections/')) {
+        if (state.productCollectionMedia.images.length === 1)
+          state.productCollectionMedia.images = [];
+        // @ts-ignore
+        state.productCollectionMedia.images.push(action.payload.src);
+      }
+      if (action.payload.path.startsWith('/blogs/categories/')) {
+        if (state.blogCategoryMedia.images.length === 1)
+          state.blogCategoryMedia.images = [];
+        // @ts-ignore
+        state.blogCategoryMedia.images.push(action.payload.src);
+      }
       if (action.payload.path === '/blogs/add-new-post') {
         // @ts-ignore
         state.blogsImage.push(action.payload.src);
@@ -72,9 +105,23 @@ export const uiSlice = createSlice({
         state.reviewMedia.videos.push(action.payload.src);
       }
     },
+    setMedia: (state, action) => {
+      if (action.payload.path.startsWith('/product/categories/')) {
+        state.productCollectionMedia.images = [action.payload.src];
+      }
+      if (action.payload.path.startsWith('/product/collections/')) {
+        state.productCollectionMedia.images = [action.payload.src];
+      }
+      if (action.payload.path.startsWith('/blogs/categories/')) {
+        state.blogCategoryMedia.images = [action.payload.src];
+      }
+    },
     resetMediaSelection: (state) => {
       state.productMedia.images = [];
       state.productMedia.videos = [];
+      state.productCategoryMedia.images = [];
+      state.productCollectionMedia.images = [];
+      state.blogCategoryMedia.images = [];
       state.reviewMedia.images = [];
       state.reviewMedia.videos = [];
     },
@@ -96,6 +143,7 @@ export const {
   selectVideo,
   setAuthToken,
   fetchMedia,
+  setMedia,
   resetMediaSelection,
 } = uiSlice.actions;
 

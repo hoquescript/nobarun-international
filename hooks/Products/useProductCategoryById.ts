@@ -27,14 +27,13 @@ const useProductCategoryById = async (fid, token) => {
       { id: fid },
       requestHeaders,
     );
-    const categoryById = data.getBlogCategoryById;
+    const categoryById = data.getCategoryById;
     const category = {
       id: categoryById.id,
-      name: categoryById.name,
+      categoryName: categoryById.name,
       description: categoryById.description,
       image: categoryById.image,
-      parentCategory: categoryById.parentCategory,
-      slug: categoryById.slug,
+      categorySlug: categoryById.slug,
       isPublished: categoryById.isPublished,
     };
     return category;

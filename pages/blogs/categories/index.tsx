@@ -61,7 +61,7 @@ const Categories = () => {
   };
 
   const renderItem = (props) => {
-    const { item, index, collapseIcon, handler } = props;
+    const { item } = props;
     return (
       <div className="row">
         <div className="col-1 flex ct" style={{ cursor: 'move' }}>
@@ -79,7 +79,7 @@ const Categories = () => {
         <div className="col-3 row">
           <div className="col-5">
             <figure className={`${styles.category__image} center`}>
-              <img src="/images/product-img.jpg" alt="" />
+              <img src={item.image} alt="" />
             </figure>
           </div>
           <div className="col-7 flex ct">
@@ -88,7 +88,6 @@ const Categories = () => {
                 type="checkbox"
                 id="publish"
                 defaultChecked={item.isPublished}
-                // {...register(name, { required })}
               />
               <span>&nbsp;</span>
             </label>

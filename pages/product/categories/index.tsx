@@ -14,8 +14,7 @@ import 'react-nestable/dist/styles/index.css';
 import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
-import { gql, useMutation, useQuery } from '@apollo/client';
-import { useRouter } from 'next/router';
+import { gql, useMutation } from '@apollo/client';
 import useProductCategoryTree from '../../../hooks/Products/useProductCategoryTree';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
@@ -41,6 +40,7 @@ const DELETE_CATEGORY = gql`
 `;
 
 const Categories = () => {
+  const [key, setKey] = useState('');
   const [categoryItem, setCategoryItem] = useState();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -88,14 +88,14 @@ const Categories = () => {
         <div className="col-3 row">
           <div className="col-5">
             <figure className={`${styles.category__image} center`}>
-              <img src="/images/product-img.jpg" alt="" />
+              <img src={item.image} alt="" />
             </figure>
           </div>
           <div className="col-7 flex">
-            <label htmlFor="publish" className="custom-switch">
+            <label htmlFor="isPublished" className="custom-switch">
               <input
                 type="checkbox"
-                id="publish"
+                id="isPublished"
                 defaultChecked={item.isPublished}
               />
               <span>&nbsp;</span>
@@ -106,18 +106,18 @@ const Categories = () => {
                 title="Blog Category"
                 modalIsOpen={showDeleteModal}
                 setIsOpen={setShowDeleteModal}
-                confirmHandler={() => deleteHandler(item._id)}
+                confirmHandler={() => deleteHandler(key)}
               />
               <div className="table__action_menu">
                 <button
                   onClick={() => {
+                    setKey(item._id);
                     setShowDeleteModal(true);
-                    console.log('object');
                   }}
                 >
                   <FaTrash />
                 </button>
-                <Link href={`/blogs/categories/${item._id}`}>
+                <Link href={`/product/categories/${item._id}`}>
                   <a>
                     <FaPen />
                   </a>

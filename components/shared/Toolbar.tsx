@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useImperativeHandle,
+  forwardRef,
+} from 'react';
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
@@ -30,7 +35,7 @@ const ADD_NEW_MEDIA = gql`
   }
 `;
 
-const Toolbar = () => {
+const Toolbar = forwardRef((props, ref) => {
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
@@ -40,6 +45,12 @@ const Toolbar = () => {
   const [imageFile, setImageFile] = useState<FileList | null>(null);
   const [link, setLink] = useState('');
   const dispatch = useTypedDispatch();
+
+  useImperativeHandle(ref, () => ({
+    mediaHandler(handler) {
+      handler();
+    },
+  }));
 
   useEffect(() => {
     useAllMedia().then((media) => {
@@ -219,6 +230,6 @@ const Toolbar = () => {
       </div>
     </div>
   );
-};
+});
 
 export default Toolbar;

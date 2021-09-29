@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import getYoutubeId from '../../helpers/getYoutubeId';
 import {
@@ -6,18 +6,35 @@ import {
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
 import { toggleToolbar } from '../../store/slices/ui';
+import Toolbar from '../shared/Toolbar';
 
 const FileButton = (props: {
   showMedia?: boolean;
-  page: 'product' | 'review';
+  page:
+    | 'product'
+    | 'blog'
+    | 'review'
+    | 'pCategory'
+    | 'pCollection'
+    | 'bCategory';
 }) => {
   const { page, showMedia } = props;
+
+  const ref = useRef();
   const dispatch = useTypedDispatch();
+
   let media: any;
   if (page === 'product')
     media = useTypedSelector((state) => state.ui.productMedia);
   if (page === 'review')
     media = useTypedSelector((state) => state.ui.reviewMedia);
+  if (page === 'pCategory')
+    media = useTypedSelector((state) => state.ui.productCategoryMedia);
+  if (page === 'pCollection')
+    media = useTypedSelector((state) => state.ui.productCollectionMedia);
+  if (page === 'bCategory')
+    media = useTypedSelector((state) => state.ui.blogCategoryMedia);
+
   return (
     <div className="product-images">
       {showMedia &&

@@ -7,7 +7,6 @@ const GET_ALL_COLLECTIONS = gql`
       id
       name
       description
-      categories
       image
       slug
       isPublished

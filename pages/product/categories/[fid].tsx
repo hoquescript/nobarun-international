@@ -5,17 +5,22 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
-import { FaEye, FaPlusCircle } from 'react-icons/fa';
+import { FaEye } from 'react-icons/fa';
 
 import Combobox from '../../../components/controls/combobox';
 import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 
-import { useTypedSelector } from '../../../hooks/useTypedSelector';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../../hooks/useTypedSelector';
 import useAllCategories from '../../../hooks/Products/useAllCategories';
 import useProductCategoryById from '../../../hooks/Products/useProductCategoryById';
 import FileButton from '../../../components/controls/file';
 import Toolbar from '../../../components/shared/Toolbar';
+
+import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory(
@@ -55,17 +60,15 @@ const EDIT_CATEGORY = gql`
 `;
 
 const defaultValues = {
-  name: '',
-  description: '',
-  image: '',
-  slug: '',
+  categoryName: '',
+  categorySlug: '',
   isPublished: false,
-  parentCategory: '',
 };
 
 const CategoryForm = () => {
   const {
     query: { fid },
+    asPath,
   } = useRouter();
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
@@ -80,22 +83,32 @@ const CategoryForm = () => {
   const [editCategory] = useMutation(EDIT_CATEGORY);
 
   useEffect(() => {
-    // useAllCategories().then((data) => {
-    //   setCategories(data);
-    // });
+    if (fid !== 'add') {
+      useAllCategories().then((data) => {
+        setCategories(data);
+      });
+    }
   }, []);
 
+  const dispatch = useTypedDispatch();
+
   const token = useTypedSelector((state) => state.ui.token);
+  const images = useTypedSelector(
+    (state) => state.ui.productCategoryMedia.images,
+  );
+
   useEffect(() => {
     if (fid !== 'add') {
       setIsEditMode(true);
-      // useProductCategoryById(fid, token).then((data) => {
-      //   methods.reset(data);
-      //   // @ts-ignore
-      //   setDescription(data.description);
-      //   // @ts-ignore
-      //   // textEditorRef.current.set(data.description);
-      // });
+      useProductCategoryById(fid, token).then((data) => {
+        methods.reset(data);
+        // @ts-ignore
+        dispatch(setMedia({ path: asPath, src: data.image }));
+        // @ts-ignore
+        setDescription(data.description);
+        // @ts-ignore
+        // textEditorRef.current.set(data.description);
+      });
     }
   }, [token]);
 
@@ -104,19 +117,26 @@ const CategoryForm = () => {
     const category = {
       name: categoryName,
       description,
-      image:
-        'https://www.wpbeginner.com/wp-content/uploads/2019/12/What-is-Category.jpg',
+      image: images[0],
       isPublished: true,
       parentCategory: parentCategory,
       slug: categorySlug,
       id: uuid(),
     };
+
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    // @ts-ignore
+    textEditorRef.current.reset();
+
     if (isEditMode) {
       delete category.parentCategory;
       editCategory({
         variables: {
-          editId: fid,
-          editableObject: category,
+          data: {
+            editId: fid,
+            editableObject: category,
+          },
         },
       });
     } else {
@@ -178,10 +198,13 @@ const CategoryForm = () => {
                 </div>
               )}
               <div
-                className="col-6 flex ml-60"
-                style={{ transform: 'translateY(15px)' }}
+                className={isEditMode ? 'col-6 mt-20' : 'col-6 ml-60'}
+                style={{
+                  transform: isEditMode ? '' : 'translateY(30px)',
+                  flexDirection: 'row',
+                }}
               >
-                <FileButton />
+                <FileButton showMedia page="pCategory" />
               </div>
             </div>
           </div>
@@ -189,10 +212,6 @@ const CategoryForm = () => {
         <div className="wrapper-section">
           <div className="wrapper-section__title flex sb">
             <h3 className="heading-secondary">Description</h3>
-            <button type="button" className="btn-outline-green">
-              <FaPlusCircle className="btn-icon-small" />
-              Add Description
-            </button>
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">

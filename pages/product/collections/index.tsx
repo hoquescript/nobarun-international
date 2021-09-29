@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   FaGripVertical,
@@ -8,80 +8,98 @@ import {
   FaPlusCircle,
 } from 'react-icons/fa';
 import Nestable from 'react-nestable';
-import 'react-nestable/dist/styles/index.css';
-import Togglebar from '../../../components/controls/togglebar';
-
-import styles from '../../../styles/pages/products.module.scss';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import useAllCollections from '../../../hooks/Products/useAllCollections';
+import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 
-const items = [
-  {
-    id: 0,
-    name: 'Car Parking Management',
-    description: 'Make plant based milks and juices with ease',
-  },
-  {
-    id: 1,
-    name: 'Coffee & Tea Business',
-    description:
-      'Sustainability and freshness is assured with our branded glass bottles',
-  },
-  // { id: 3, text: 'Lisa' },
-];
+import styles from '../../../styles/pages/products.module.scss';
+import useAllCollections from '../../../hooks/Products/useAllCollections';
+import Modal from '../../../components/shared/Modal';
 
-const renderItem = (props) => {
-  const { item, index, collapseIcon, handler } = props;
-  console.log(props);
-  return (
-    <div className="row">
-      <div className="col-1 flex ct" style={{ cursor: 'move' }}>
-        <FaGripVertical className="mb-20" />
-      </div>
-      <div className="col-3">
-        <h3 className="custom-input">{item.name}</h3>
-      </div>
-      <div className="col-5">
-        <h3 className="custom-input">{item.description}</h3>
-      </div>
-      <div className="col-3 row">
-        <div className="col-5">
-          <figure className={`${styles.category__image} center`}>
-            <img src="/images/product-img.jpg" alt="" />
-          </figure>
-        </div>
-        <div className="col-7 flex ct">
-          <label htmlFor="product" className={`custom-switch`}>
-            <input type="checkbox" id="publish" />
-            <span>&nbsp;</span>
-          </label>
-          <span className={`ml-20 ${styles.category__menu}`}>
-            <FaEllipsisV />
-            <div className="table__action_menu">
-              <button>
-                <FaTrash />
-              </button>
-              <button>
-                <FaPen />
-              </button>
-            </div>
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
+const DELETE_COLLECTION = gql`
+  mutation deleteCollection($id: String!) {
+    deleteCollection(collectionId: $id)
+  }
+`;
 
 const Collections = () => {
+  const [key, setKey] = useState('');
   const [collections, setCollections] =
     useState<{ [key: string]: string | number }[]>();
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const [deleteCollection] = useMutation(DELETE_COLLECTION);
 
   useEffect(() => {
     useAllCollections().then((collections) => setCollections(collections));
   }, []);
+
+  const deleteHandler = (id) => {
+    deleteCollection({
+      variables: {
+        id,
+      },
+    });
+  };
+  const renderItem = (props) => {
+    const { item } = props;
+    return (
+      <div className="row">
+        <div className="col-1 flex ct" style={{ cursor: 'move' }}>
+          <FaGripVertical className="mb-20" />
+        </div>
+        <div className="col-3">
+          <h3 className="custom-input">{item.name}</h3>
+        </div>
+        <div className="col-5">
+          <h3 className="custom-input">{item.description}</h3>
+        </div>
+        <div className="col-3 row">
+          <div className="col-5">
+            <figure className={`${styles.category__image} center`}>
+              <img src={item.image} alt="" />
+            </figure>
+          </div>
+          <div className="col-7 flex ct">
+            <label htmlFor="isPublished" className={`custom-switch`}>
+              <input
+                type="checkbox"
+                id="isPublished"
+                defaultChecked={item.isPublished}
+              />
+              <span>&nbsp;</span>
+            </label>
+            <span className={`ml-20 ${styles.category__menu}`}>
+              <FaEllipsisV />
+              <Modal
+                title="Product Collection"
+                modalIsOpen={showDeleteModal}
+                setIsOpen={setShowDeleteModal}
+                confirmHandler={() => {
+                  deleteHandler(key);
+                }}
+              />
+              <div className="table__action_menu">
+                <button
+                  onClick={() => {
+                    setKey(item.id);
+                    setShowDeleteModal(true);
+                  }}
+                >
+                  <FaTrash />
+                </button>
+                <Link href={`/product/collections/${item.id}`}>
+                  <a>
+                    <FaPen />
+                  </a>
+                </Link>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="container center mt-30">
