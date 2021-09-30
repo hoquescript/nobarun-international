@@ -16,6 +16,7 @@ const GET_ALL_REVIEWS = gql`
         videos
       }
       isPublished
+      createdAt
     }
   }
 `;
@@ -29,12 +30,13 @@ const useAllReviews = async (token) => {
 
     const reviews = data.getAllReviews.map((review) => ({
       id: review.id,
-      createdAt: '19th Feb, 2021',
+      createdAt: review.createdAt,
       SKU: review.productCode,
       title: review.title,
       rating: review.rating,
       reviewText: review.reviewText,
-      images: +review.reviewMedia.images + +review.reviewMedia.videos,
+      images:
+        +review.reviewMedia.images.length + +review.reviewMedia.videos.length,
     }));
 
     return reviews;

@@ -1,7 +1,5 @@
 import { getSession } from 'next-auth/client';
-import React from 'react';
-import { useEffect } from 'react';
-import Client from '../config/GraphqlClient';
+import React, { useEffect } from 'react';
 import { useTypedDispatch } from '../hooks/useTypedSelector';
 import { setAuthToken } from '../store/slices/ui';
 

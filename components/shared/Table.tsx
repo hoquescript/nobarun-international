@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import {
+  useTable,
+  useSortBy,
+  usePagination,
+  useGlobalFilter,
+} from 'react-table';
 import {
   FaGripVertical,
   FaEllipsisH,
@@ -23,15 +28,26 @@ interface TableProps {
   data: any[];
   editHandler?: any;
   deleteHandler: any;
+  filter?: {
+    search: string;
+    range: any;
+  };
+  globalFilterFn?: any;
 }
 
 const Table = (props: TableProps) => {
-  const { pageName, columns, data, deleteHandler } = props;
+  const { pageName, columns, data, deleteHandler, filter, globalFilterFn } =
+    props;
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // @ts-ignore
-  const tableInstance = useTable({ columns, data }, useSortBy, usePagination);
+  const tableInstance = useTable(
+    { columns, data, globalFilter: globalFilterFn },
+    useGlobalFilter,
+    useSortBy,
+    usePagination,
+  );
 
   const {
     getTableProps,
@@ -48,11 +64,14 @@ const Table = (props: TableProps) => {
     gotoPage,
     pageCount,
     state,
+    setGlobalFilter,
   } = tableInstance;
 
   // @ts-ignore
   const { pageIndex, pageSize } = state;
-
+  useEffect(() => {
+    setGlobalFilter(filter); // Set the Global Filter to the filter prop.
+  }, [filter, setGlobalFilter]);
   return (
     <div>
       <div className="table__wrapper">

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { sub, format } from 'date-fns';
+import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
 
@@ -21,12 +21,20 @@ const DELETE_ADMIN = gql`
 `;
 
 const Accounts = () => {
+  const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: sub(new Date(), { months: 6 }),
+      endDate: new Date(),
+      key: 'Periods',
+    },
+  ]);
 
   const [deleteAdmin] = useMutation(DELETE_ADMIN);
   const token = useTypedSelector((state) => state.ui.token);
@@ -38,14 +46,31 @@ const Accounts = () => {
 
   const columns = useMemo(() => ADMIN_COLUMNS, []);
 
+  const filterData = (rows, ids, query) => {
+    const param = query.search.toLowerCase();
+    return rows.filter((row) => {
+      return row.values?.fullName.toLowerCase().includes(param);
+      // &&
+      // isWithinInterval(new Date(row.values?.createdAt), {
+      //   start: query.range.startDate,
+      //   end: query.range.endDate,
+      // })
+    });
+  };
+
   return (
     <div className={styles.query}>
       <div className="row">
         <div className="col-6">
-          <Search />
+          <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod period={period} setPeriod={setPeriod} />
+          <TimePeriod
+            period={period}
+            setPeriod={setPeriod}
+            selectionRange={selectionRange}
+            setSelectionRange={setSelectionRange}
+          />
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
@@ -59,6 +84,8 @@ const Accounts = () => {
       </div>
       <Table
         pageName="account"
+        filter={{ search, range: selectionRange[0] }}
+        globalFilterFn={filterData}
         columns={columns}
         data={admins}
         deleteHandler={(id, idx) => {

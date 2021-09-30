@@ -3,7 +3,12 @@ import { AiOutlineSearch } from 'react-icons/ai';
 
 import styles from './search.module.scss';
 
-const Search = () => {
+interface SearchProps {
+  search: string;
+  setSearch: any;
+}
+const Search = (props) => {
+  const { search, setSearch } = props;
   return (
     <div className="field" style={{ position: 'relative' }}>
       <AiOutlineSearch className={styles.search__icon} />
@@ -11,6 +16,8 @@ const Search = () => {
         type="text"
         className={`custom-input ${styles.search__input}`}
         placeholder="Search"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
       />
     </div>
   );

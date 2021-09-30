@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { CSVLink } from 'react-csv';
-import { sub, format } from 'date-fns';
+import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 
 import TimePeriod from '../../components/controls/period';
@@ -33,12 +33,20 @@ const DELETE_QUERY = gql`
 `;
 const Queries = () => {
   const [data, setData] = useState([]);
+  const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: sub(new Date(), { months: 6 }),
+      endDate: new Date(),
+      key: 'Periods',
+    },
+  ]);
 
   const [deleteQuery] = useMutation(DELETE_QUERY);
 
@@ -53,14 +61,32 @@ const Queries = () => {
     data,
   };
 
+  const filterData = (rows, ids, query) => {
+    const param = query.search.toLowerCase();
+    return rows.filter((row) => {
+      return (
+        row.values?.name.toLowerCase().includes(param) &&
+        isWithinInterval(new Date(row.values?.createdAt), {
+          start: query.range.startDate,
+          end: query.range.endDate,
+        })
+      );
+    });
+  };
+
   return (
     <div className={styles.query}>
       <div className="row">
         <div className="col-6">
-          <Search />
+          <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod period={period} setPeriod={setPeriod} />
+          <TimePeriod
+            period={period}
+            setPeriod={setPeriod}
+            selectionRange={selectionRange}
+            setSelectionRange={setSelectionRange}
+          />
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
@@ -82,9 +108,12 @@ const Queries = () => {
       </div>
       {data && (
         <Table
+          filter={{ search, range: selectionRange[0] }}
+          pageName="query"
           title="Queries"
           columns={QUERY_COLUMNS}
           data={data}
+          globalFilterFn={filterData}
           deleteHandler={(id, idx) => {
             const modifiedData = [...data];
             modifiedData.splice(idx, 1);

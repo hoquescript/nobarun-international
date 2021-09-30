@@ -10,16 +10,23 @@ import Toolbar from '../shared/Toolbar';
 
 const FileButton = (props: {
   showMedia?: boolean;
+  setPage?: any;
+  postKey?: string | number;
+  setPostSectionKey?: any;
   page:
+    | ''
     | 'product'
     | 'blog'
     | 'review'
     | 'pCategory'
     | 'pCollection'
-    | 'bCategory';
+    | 'bCategory'
+    | 'bPostSection'
+    | 'bMain';
 }) => {
-  const { page, showMedia } = props;
+  const { page, setPage, showMedia, postKey, setPostSectionKey } = props;
 
+  console.log(postKey);
   const ref = useRef();
   const dispatch = useTypedDispatch();
 
@@ -34,10 +41,17 @@ const FileButton = (props: {
     media = useTypedSelector((state) => state.ui.productCollectionMedia);
   if (page === 'bCategory')
     media = useTypedSelector((state) => state.ui.blogCategoryMedia);
-
+  if (page === 'bMain')
+    media = useTypedSelector((state) => state.blogs.blogsMedia.main);
+  if (page === 'bPostSection')
+    media = useTypedSelector(
+      (state) => state.blogs.blogsMedia.postSection[postKey],
+    );
+  // console.log(media);
   return (
     <div className="product-images">
       {showMedia &&
+        media &&
         media.images.map((src) => (
           <figure>
             <button type="button" className="remove-image">
@@ -47,6 +61,7 @@ const FileButton = (props: {
           </figure>
         ))}
       {showMedia &&
+        media &&
         media.videos.map((src) => {
           const id = getYoutubeId(src);
           return (
@@ -66,6 +81,9 @@ const FileButton = (props: {
         className="add-new-image"
         style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
         onClick={() => {
+          console.log('I was clicked' + postKey);
+          setPage && setPage(page);
+          setPostSectionKey && setPostSectionKey(postKey);
           dispatch(toggleToolbar());
         }}
       >

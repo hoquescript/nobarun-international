@@ -35,7 +35,12 @@ const ADD_NEW_MEDIA = gql`
   }
 `;
 
-const Toolbar = forwardRef((props, ref) => {
+interface ToolbarProps {
+  imageSelector?: any;
+  videoSelector?: any;
+}
+const Toolbar = forwardRef((props: ToolbarProps, ref) => {
+  const { imageSelector, videoSelector } = props;
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
@@ -103,11 +108,19 @@ const Toolbar = forwardRef((props, ref) => {
   };
 
   const selectImageHandler = (imageSrc) => {
-    dispatch(selectImage({ src: imageSrc, path: router.asPath }));
+    if (imageSelector) {
+      imageSelector(imageSrc);
+    } else {
+      dispatch(selectImage({ src: imageSrc, path: router.asPath }));
+    }
   };
 
   const selectVideoHandler = (videoSrc) => {
-    dispatch(selectVideo({ src: videoSrc, path: router.asPath }));
+    if (videoSelector) {
+      videoSelector(videoSrc);
+    } else {
+      dispatch(selectVideo({ src: videoSrc, path: router.asPath }));
+    }
   };
 
   useEffect(() => {

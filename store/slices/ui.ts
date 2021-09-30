@@ -14,7 +14,10 @@ interface UIState {
   productCategoryMedia: Media;
   productCollectionMedia: Media;
   blogCategoryMedia: Media;
-  blogsImage: string[];
+  blogsImage: {
+    main: Media;
+    postSection: Media;
+  };
   reviewMedia: Media;
 }
 const initialState: UIState = {
@@ -34,7 +37,16 @@ const initialState: UIState = {
     images: [],
     videos: [],
   },
-  blogsImage: [],
+  blogsImage: {
+    main: {
+      images: [],
+      videos: [],
+    },
+    postSection: {
+      images: [],
+      videos: [],
+    },
+  },
   blogCategoryMedia: {
     images: [],
     videos: [],
@@ -82,11 +94,11 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.blogCategoryMedia.images.push(action.payload.src);
       }
-      if (action.payload.path === '/blogs/add-new-post') {
-        // @ts-ignore
-        state.blogsImage.push(action.payload.src);
-      }
-      if (action.payload.path === '/review/add-new-review') {
+      // if (action.payload.path === '/blogs/add-new-post') {
+      //   // @ts-ignore
+      //   state.blogsImage.push(action.payload.src);
+      // }
+      if (action.payload.path.startsWith('/review/add-new-review')) {
         // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
@@ -96,15 +108,16 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.productMedia.videos.push(action.payload.src);
       }
-      if (action.payload.path === '/blogs/add-new-post') {
-        // @ts-ignore
-        state.blogsImage.push(action.payload.src);
-      }
+      // if (action.payload.path === '/blogs/add-new-post') {
+      //   // @ts-ignore
+      //   state.blogsImage.push(action.payload.src);
+      // }
       if (action.payload.path === '/review/add-new-review') {
         // @ts-ignore
         state.reviewMedia.videos.push(action.payload.src);
       }
     },
+    
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
         state.productCollectionMedia.images = [action.payload.src];
@@ -114,6 +127,11 @@ export const uiSlice = createSlice({
       }
       if (action.payload.path.startsWith('/blogs/categories/')) {
         state.blogCategoryMedia.images = [action.payload.src];
+      }
+      if (action.payload.path.startsWith('/review')) {
+        console.log(action.payload);
+        state.reviewMedia.images = action.payload.src?.images;
+        state.reviewMedia.videos = action.payload.src?.videos;
       }
     },
     resetMediaSelection: (state) => {

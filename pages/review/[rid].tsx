@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import StarRatings from 'react-star-ratings';
+import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
@@ -12,11 +13,14 @@ import Textfield from '../../components/controls/textfield';
 import Togglebar from '../../components/controls/togglebar';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
 import FileButton from '../../components/controls/file';
-import router from 'next/router';
-import useQueryById from '../../hooks/Query/useQueryById';
 import ProductCode from '../../components/shared/ProductCode';
+import { resetMediaSelection, setMedia } from '../../store/slices/ui';
+import useReviewById from '../../hooks/Review/useReviewById';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -27,8 +31,8 @@ const CREATE_REVIEW = gql`
 `;
 
 const defaultValues = {
-  email: '',
   name: '',
+  email: '',
   reviewText: '',
   title: '',
   createdAt: '',
@@ -37,6 +41,8 @@ const defaultValues = {
 };
 
 const AddReview = () => {
+  const router = useRouter();
+  const rid = router.query.rid;
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -45,34 +51,38 @@ const AddReview = () => {
   const [rating, setRating] = useState(0);
 
   const [createReview] = useMutation(CREATE_REVIEW);
+
+  const dispatch = useTypedDispatch();
   const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
+
   const addNewReview = (data) => {
     const review = {
       ...data,
       createdAt: new Date(data.createdAt),
       rating,
-      product: data.productCode,
+      productCode: data.productCode,
       reviewMedia,
     };
     console.log(review);
     methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
     setRating(0);
 
-    // createReview({
-    //   variables: {
-    //     data: review,
-    //   },
-    // });
+    createReview({
+      variables: {
+        data: review,
+      },
+    });
   };
-
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    if (router.query.rid !== 'add-new-review') {
+    if (rid !== 'add-new-review') {
       setIsEditMode(true);
-      useQueryById(router.query.rid, token).then((data) => {
+      useReviewById(rid, token).then((data) => {
         methods.reset(data);
+        console.log(data);
         // @ts-ignore
-        setAttachment(data.attachment);
+        dispatch(setMedia({ path: router.asPath, src: data.reviewMedia }));
       });
     }
   }, [token]);
@@ -136,7 +146,7 @@ const AddReview = () => {
                   <div className="col-12 mb-10">
                     <Textarea name="reviewText" label="Your Reviews" />
                   </div>
-                  <FileButton showMedia />
+                  <FileButton showMedia page="review" />
                 </div>
                 <p className="mt-20 flex">
                   <AiOutlineWarning

@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 // import storage from 'redux-persist/lib/storage';
 
 import uiReducer from './slices/ui';
+import blogsReducer from './slices/blogs';
 
 import rootSaga from './rootSaga';
 
@@ -12,6 +13,7 @@ const sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
   reducer: {
     ui: uiReducer,
+    blogs: blogsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

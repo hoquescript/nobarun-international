@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import {
   Control,
   FieldValues,
@@ -26,7 +26,7 @@ const WordCount = (props: WordCountProps) => {
 
 interface SEOProps {
   register: UseFormRegister<FieldValues>;
-  control: Control<FieldValues, object>;
+  control: any;
   chips: string[];
   setChips: React.Dispatch<React.SetStateAction<string[]>>;
   handleAddProduct: any;

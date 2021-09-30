@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
@@ -14,7 +15,11 @@ import Togglebar from '../../components/controls/togglebar';
 import Toolbar from '../../components/shared/Toolbar';
 import useBlogInfo from '../../hooks/Blogs/useBlogInfo';
 
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import {
+  useTypedSelector,
+  useTypedDispatch,
+} from '../../hooks/useTypedSelector';
+import { selectBlogImage, selectBlogVideo } from '../../store/slices/blogs';
 
 const ADD_NEW_BLOG = gql`
   mutation addNewBlog($data: CreateNewBlogInput!) {
@@ -26,16 +31,19 @@ const ADD_NEW_BLOG = gql`
 
 const AddNewPost = () => {
   const methods = useForm();
+  const [page, setPage] = useState('');
+  const [postSectionKey, setPostSectionKey] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [addNewBlog] = useMutation(ADD_NEW_BLOG);
-  const PostSectionState = useState<IPostSection[]>([
-    {
+  const PostSectionState = useState<{ [k: string]: IPostSection }>({
+    [uuid()]: {
       id: '',
       title: '',
       content: '',
       images: [],
     },
-  ]);
+  });
+  console.log(PostSectionState[0]);
   const [info, setInfo] = useState<{ [k: string]: any }>({});
 
   useEffect(() => {
@@ -44,6 +52,7 @@ const AddNewPost = () => {
     });
   }, []);
 
+  const dispatch = useTypedDispatch();
   const blogImages = useTypedSelector((state) => state.ui.blogsImage);
 
   const postBlogHandler = (data) => {
@@ -61,9 +70,21 @@ const AddNewPost = () => {
     });
   };
 
+  const selectImageHandler = (imageSrc) => {
+    console.log(postSectionKey);
+    dispatch(selectBlogImage({ page, src: imageSrc, key: postSectionKey }));
+  };
+  const selectVideoHandler = (imageSrc) => {
+    dispatch(selectBlogVideo({ page, src: imageSrc, key: postSectionKey }));
+  };
+
+  console.log(page);
   return (
     <FormProvider {...methods}>
-      <Toolbar />
+      <Toolbar
+        imageSelector={selectImageHandler}
+        videoSelector={selectVideoHandler}
+      />
       <div className="container center">
         <div className="main__content__header mb-40">
           <h2 className="page-title">Post Editor</h2>
@@ -107,58 +128,24 @@ const AddNewPost = () => {
                   />
                 </div>
               </div>
-
-              <div className="grid two">
-                <div className="mt-50 mb-20 flex">
-                  <h4 className="heading-tertiary mr-20">Featured Post</h4>
-                  <Checkbox name="isFeatured" />
+              <div className="row" style={{ alignItems: 'baseline' }}>
+                <div className="col-5">
+                  <div className="mt-50 mb-20 flex">
+                    <h4 className="heading-tertiary mr-20">Featured Post</h4>
+                    <Checkbox name="isFeatured" />
+                  </div>
                 </div>
-                <div className="product-images mt-50">
-                  {blogImages.map((src) => (
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src={src} alt="" />
-                    </figure>
-                  ))}
-                  <FileButton />
+                <div className="col-7">
+                  <FileButton page={'bMain'} showMedia setPage={setPage} />
                 </div>
               </div>
             </div>
           </div>
-          {/* <div className="wrapper-section center">
-            <div className="wrapper-section__title flex sb">
-              <input
-                className="custom-input large"
-                placeholder="Title of the Post"
-              />
-              <div className="flex">
-                <div className="product-images">
-                  {blogImages.map((src) => (
-                    <figure>
-                      <button type="button" className="remove-image">
-                        <i className="times-icon"></i>
-                      </button>
-                      <img src={src} alt="" />
-                    </figure>
-                  ))}
-                  <FileButton />
-                </div>
-              </div>
-            </div>
-
-            <div className="wrapper-section__content">
-              <div className="field mt-20">
-                <TextEditor setValue={setSpecification} />
-              </div>
-            </div>
-            <button type="button" className="btn-outline-green mt-20 mb-20">
-              <FaPlusCircle className="btn-icon-small" />
-              Add New Section
-            </button>
-          </div> */}
-          <PostSection keyPointState={PostSectionState} />
+          <PostSection
+            keyPointState={PostSectionState}
+            setPage={setPage}
+            setPostSectionKey={setPostSectionKey}
+          />
           <div className="wrapper-section">
             <div className="wrapper-section__title flex sb">
               <h3 className="heading-secondary">Post Tags</h3>

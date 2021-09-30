@@ -70,6 +70,7 @@ const AddProduct = () => {
 
   const [tabValue, setTabValue] = useState('description');
   const [info, setInfo] = useState({});
+  const [fileBtn, setFileBtn] = useState({});
 
   const [createNewProduct] = useMutation(CREATE_NEW_PRODUCTS);
   useEffect(() => {
@@ -123,9 +124,11 @@ const AddProduct = () => {
     //   },
     // });
   };
+
+  const productImageHandler = () => {};
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>
-      <Toolbar />
+      <Toolbar imageSelector={productImageHandler()} />
       <FormProvider {...methods}>
         <div>
           <div
@@ -168,6 +171,8 @@ const AddProduct = () => {
                 info={info}
                 relatedProducts={relatedProducts}
                 setRelatedProducts={setRelatedProducts}
+                fileBtn={fileBtn}
+                setFileBtn={setFileBtn}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

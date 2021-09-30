@@ -6,9 +6,8 @@ import StarRatings from 'react-star-ratings';
 export const REVIEWS_COLUMNS = [
   {
     Header: 'Date',
-    // Footer: 'Date',
     accessor: 'createdAt',
-    // Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
+    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
   },
   {
     Header: 'SKU',
@@ -45,7 +44,7 @@ export const REVIEWS_COLUMNS = [
     accessor: 'images',
     Cell: ({ value }) => (
       <span className="flex">
-        {value.length} Image{' '}
+        {Number(value)} Files{' '}
         <FaDownload
           className="ml-10"
           style={{ height: '2.5rem', width: '2.5rem', color: '#777' }}

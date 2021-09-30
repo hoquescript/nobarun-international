@@ -1,6 +1,14 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { sub, format } from 'date-fns';
-import { useTable, useSortBy, usePagination } from 'react-table';
+import { sub, format, isWithinInterval } from 'date-fns';
+import {
+  useTable,
+  useSortBy,
+  usePagination,
+  useGlobalFilter,
+} from 'react-table';
+import Link from 'next/link';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import {
   FaGripVertical,
   FaSortUp,
@@ -22,9 +30,6 @@ import useAllReviews from '../../hooks/Review/useAllReview';
 
 import styles from '../../styles/pages/query-report.module.scss';
 import { REVIEWS_COLUMNS } from '../../data/ReviewsColumn';
-import Link from 'next/link';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -35,12 +40,20 @@ const formatIsPublished = (data) => {
 };
 
 const Reviews = () => {
+  const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: sub(new Date(), { months: 6 }),
+      endDate: new Date(),
+      key: 'Periods',
+    },
+  ]);
 
   const [reviews, setReviews] = useState<any[]>([]);
   const columns = useMemo(() => REVIEWS_COLUMNS, []);
@@ -50,9 +63,23 @@ const Reviews = () => {
     useAllReviews(token).then((reviews) => setReviews(reviews));
   }, [token]);
 
+  const filterData = (rows, ids, query) => {
+    const param = query.search.toLowerCase();
+    return rows.filter((row) => {
+      return (
+        row.values?.title.toLowerCase().includes(param) &&
+        isWithinInterval(new Date(row.values?.createdAt), {
+          start: query.range.startDate,
+          end: query.range.endDate,
+        })
+      );
+    });
+  };
+
   // @ts-ignore
   const tableInstance = useTable(
-    { columns, data: reviews },
+    { columns, data: reviews, globalFilter: filterData },
+    useGlobalFilter,
     useSortBy,
     usePagination,
   );
@@ -72,6 +99,7 @@ const Reviews = () => {
     gotoPage,
     pageCount,
     state,
+    setGlobalFilter,
   } = tableInstance;
 
   const { pageIndex, pageSize } = state;
@@ -82,6 +110,13 @@ const Reviews = () => {
     setIsPublished(formatIsPublished(reviews));
   }, []);
 
+  useEffect(() => {
+    setGlobalFilter({
+      search,
+      range: selectionRange[0],
+    }); // Set the Global Filter to the filter prop.
+  }, [search, selectionRange, setGlobalFilter]);
+
   const isPublishedHandler = (id, event) => {
     const newIsPublished = { ...isPublished, [id]: event.target.checked };
     setIsPublished(newIsPublished);
@@ -91,10 +126,15 @@ const Reviews = () => {
     <div className={styles.query}>
       <div className="row">
         <div className="col-6">
-          <Search />
+          <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod period={period} setPeriod={setPeriod} />
+          <TimePeriod
+            period={period}
+            setPeriod={setPeriod}
+            selectionRange={selectionRange}
+            setSelectionRange={setSelectionRange}
+          />
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
@@ -159,7 +199,17 @@ const Reviews = () => {
                             <FaEye />
                           </span>
                           <span>
-                            <FaEdit />
+                            <Link
+                              // @ts-ignore
+                              href={`/review/${
+                                // @ts-ignore
+                                row.original && row.original?.id
+                              }`}
+                            >
+                              <a>
+                                <FaEdit />
+                              </a>
+                            </Link>
                           </span>
                         </div>
                         <label id={row.id} className="custom-switch">

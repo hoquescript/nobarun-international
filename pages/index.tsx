@@ -2,80 +2,56 @@ import React from 'react';
 import type { NextPage } from 'next';
 import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
-import { AiOutlineAppstore, AiOutlineStar } from 'react-icons/ai';
 
 import styles from '../styles/pages/dashboard.module.scss';
 import Summary from '../components/dashboard/Summary';
+import Product from '../components/dashboard/product';
+import useRootQuery from '../hooks/useRootQuery';
 
-const Product = () => {
-  return (
-    <div className={styles.product}>
-      <div>
-        <img
-          src="/images/product-img.jpg"
-          alt="Product"
-          className={styles.product__image}
-        />
-      </div>
-      <div className="ml-10">
-        <h2 className="heading-tertiary">Chocolate Avocado Smoothie</h2>
-        <div className="flex">
-          <h5>16 Reviews</h5>
-          <span className={styles.product__circle}>&nbsp;</span>
-          <span className="flex ml-10">
-            <AiOutlineStar />
-            4.9(71)
-          </span>
-        </div>
-      </div>
-      <div className={styles.product__rating} style={{ display: 'none' }}>
-        <span className="flex">
-          <AiOutlineStar />
-          4.9(71)
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const Home: NextPage = () => {
+interface HomeProps {
+  summary: {
+    totalProducts: string;
+    totalQueries: string;
+    totalPosts: string;
+    totalReviews: string;
+  };
+  enquiries: any;
+  recentProducts: any;
+  recentReviews: any;
+}
+const Home: NextPage<HomeProps> = (props) => {
+  const { summary, enquiries, recentProducts, recentReviews } = props;
   return (
     <div className="container center">
       <div className="row">
-        <Summary title="Total Products" ammount="13,856" />
-        <Summary title="Customer Enquiry" ammount="1,850" />
-        <Summary title="Blog Post" ammount="856" />
-        <Summary title="Reviews" ammount="35,856" />
+        <Summary title="Total Products" ammount={summary.totalProducts} />
+        <Summary title="Customer Enquiry" ammount={summary.totalQueries} />
+        <Summary title="Blog Post" ammount={summary.totalPosts} />
+        <Summary title="Reviews" ammount={summary.totalReviews} />
       </div>
       <div className="row mt-50">
         <div className="col-4">
           <div className={styles.product_wrapper}>
             <h3 className="heading-secondary">Top Product Enquiry</h3>
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            {enquiries.map((query) => (
+              <Product {...query} />
+            ))}
           </div>
         </div>
         <div className="col-4">
           <div className={styles.product_wrapper}>
             <h3 className="heading-secondary">Recent Products</h3>
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            {recentProducts.map((product) => (
+              <Product {...product} />
+            ))}
           </div>
         </div>
         <div className="col-4">
           <div className={styles.product_wrapper}>
             <h3 className="heading-secondary">Recent Reviews</h3>
-            <Product />
-            <Product />
-            <Product />
-            <Product />
-            <Product />
+            {recentReviews.map((product) => (
+              <Product {...product} />
+            ))}
           </div>
         </div>
       </div>
@@ -93,8 +69,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       },
     };
   }
+  const token = await getSession(context);
+  // @ts-ignore
+  const data = await useRootQuery(token.accessToken);
   return {
-    props: {},
+    props: data,
   };
 };
 export default Home;
+
+// {
+//   summary: {
+//     totalProducts: 10,
+//     totalQueries: 8,
+//     totalPosts: 20,
+//     totalReviews: 80,
+//   },
+// },
+// };

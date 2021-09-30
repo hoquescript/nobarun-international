@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef } from 'react';
 
 import { DateRangePicker } from 'react-date-range';
 import { format, sub } from 'date-fns';
@@ -12,19 +12,12 @@ type ISelectionRange = { startDate: Date; endDate: Date; key: string };
 interface TimePeriodProps {
   period: string;
   setPeriod: React.Dispatch<React.SetStateAction<string>>;
+  selectionRange: any;
+  setSelectionRange: any;
 }
 
 const TimePeriod = React.memo((props: TimePeriodProps) => {
-  const { period, setPeriod } = props;
-
-  const [selectionRange, setSelectionRange] = useState([
-    {
-      startDate: sub(new Date(), { months: 6 }),
-      endDate: new Date(),
-      key: 'Periods',
-    },
-  ]);
-
+  const { period, setPeriod, selectionRange, setSelectionRange } = props;
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [timePeriod, setTimePeriod] = useState('Last 6 Months');
   const [screenWidth, setScreenWidth] = useState(1920);
@@ -212,5 +205,4 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
     </div>
   );
 });
-
 export default TimePeriod;
