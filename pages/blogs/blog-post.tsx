@@ -2,7 +2,7 @@ import React, { useMemo, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import { sub, format } from 'date-fns';
+import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
 
@@ -21,12 +21,21 @@ const DELETE_BLOG = gql`
 `;
 
 const BlogPost = () => {
+  const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: sub(new Date(), { months: 6 }),
+      endDate: new Date(),
+      key: 'Periods',
+    },
+  ]);
+
   const columns = useMemo(() => BLOG_COLUMNS, []);
   const [posts, setPosts] = useState([]);
 
@@ -36,14 +45,31 @@ const BlogPost = () => {
     useAllBlogCategories().then((blogs) => setPosts(blogs));
   }, []);
 
+  const filterData = (rows, ids, query) => {
+    const param = query.search.toLowerCase();
+    return rows.filter((row) => {
+      return row.values?.postTitle.toLowerCase().includes(param);
+      // &&
+      // isWithinInterval(new Date(row.values?.createdAt), {
+      //   start: query.range.startDate,
+      //   end: query.range.endDate,
+      // })
+    });
+  };
+
   return (
     <div className={styles.query}>
       <div className="row">
         <div className="col-6">
-          <Search />
+          <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod period={period} setPeriod={setPeriod} />
+          <TimePeriod
+            period={period}
+            setPeriod={setPeriod}
+            selectionRange={selectionRange}
+            setSelectionRange={setSelectionRange}
+          />
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
@@ -58,6 +84,8 @@ const BlogPost = () => {
         </div>
       </div>
       <Table
+        filter={{ search, range: selectionRange[0] }}
+        globalFilterFn={filterData}
         pageName="blog"
         columns={columns}
         data={posts}

@@ -6,19 +6,26 @@ const GET_ALL_PRODUCTS = gql`
     getAllTheProducts {
       id
       productName
-      category
+      populatedCategory {
+        name
+        _id
+      }
       specification
       price
       productCode
       images
       isPublished
+      createdAt
     }
   }
 `;
 
 const useAllProducts = async () => {
   const data = await Client.request(GET_ALL_PRODUCTS);
-  return data.getAllTheProducts;
+  return data.getAllTheProducts.map((product) => ({
+    ...product,
+    category: product.populatedCategory ? product.populatedCategory.name : null,
+  }));
 };
 
 export default useAllProducts;

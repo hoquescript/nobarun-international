@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye } from 'react-icons/fa';
@@ -19,7 +19,14 @@ import {
   useTypedSelector,
   useTypedDispatch,
 } from '../../hooks/useTypedSelector';
-import { selectBlogImage, selectBlogVideo } from '../../store/slices/blogs';
+import {
+  resetBlogMedia,
+  selectBlogImage,
+  selectBlogVideo,
+  setBlogMedia,
+} from '../../store/slices/blogs';
+import useBlogById from '../../hooks/Blogs/useBlogById';
+import { useRouter } from 'next/router';
 
 const ADD_NEW_BLOG = gql`
   mutation addNewBlog($data: CreateNewBlogInput!) {
@@ -29,21 +36,44 @@ const ADD_NEW_BLOG = gql`
   }
 `;
 
+const EDIT_BLOG = gql`
+  mutation editBlog($data: EditBlog!) {
+    editBlog(data: $data)
+  }
+`;
+
+const defaultValues = {
+  blogTitle: '',
+  isPublished: false,
+  category: '',
+  relatedProduct: '',
+  contactPerson: '',
+  isFeatured: false,
+};
+
+const defaultPostSection = {
+  [uuid()]: {
+    id: '',
+    title: '',
+    content: '',
+    images: [],
+    videos: [],
+  },
+};
+
 const AddNewPost = () => {
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
+  const router = useRouter();
+  const bid = router.query.bid;
+
+  const [isEditMode, setIsEditMode] = useState(false);
   const [page, setPage] = useState('');
   const [postSectionKey, setPostSectionKey] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [addNewBlog] = useMutation(ADD_NEW_BLOG);
-  const PostSectionState = useState<{ [k: string]: IPostSection }>({
-    [uuid()]: {
-      id: '',
-      title: '',
-      content: '',
-      images: [],
-    },
-  });
-  console.log(PostSectionState[0]);
+  const PostSectionState =
+    useState<{ [k: string]: IPostSection }>(defaultPostSection);
   const [info, setInfo] = useState<{ [k: string]: any }>({});
 
   useEffect(() => {
@@ -52,33 +82,79 @@ const AddNewPost = () => {
     });
   }, []);
 
-  const dispatch = useTypedDispatch();
-  const blogImages = useTypedSelector((state) => state.ui.blogsImage);
+  const [addBlog] = useMutation(ADD_NEW_BLOG);
+  const [editBlog] = useMutation(EDIT_BLOG);
 
+  const dispatch = useTypedDispatch();
+  const blogMedia = useTypedSelector((state) => state.blogs.blogsMedia.main);
+  const blogPostSections = useTypedSelector(
+    (state) => state.blogs.blogsMedia.postSection,
+  );
   const postBlogHandler = (data) => {
-    console.log({ ...data, sections: PostSectionState[0], tags });
+    const sections = Object.keys(PostSectionState[0]).map((key) => {
+      const section = PostSectionState[0][key];
+      return {
+        id: key,
+        title: section.title,
+        content: section.content,
+        images: blogPostSections[key] && blogPostSections[key].images,
+        videos: blogPostSections[key] && blogPostSections[key].videos,
+      };
+    });
     const post = {
       ...data,
-      images: blogImages,
-      sections: PostSectionState[0],
+      images: blogMedia.images,
+      videos: blogMedia.videos,
+      sections,
       tags,
     };
-    addNewBlog({
-      variables: {
-        data: post,
-      },
-    });
+    methods.reset(defaultValues);
+    dispatch(resetBlogMedia());
+    setTags([]);
+    PostSectionState[1](defaultPostSection);
+    // console.log({ data, post });
+    if (isEditMode) {
+      editBlog({
+        variables: {
+          data: {
+            editId: bid,
+            editableObject: post,
+          },
+        },
+      });
+    } else {
+      addBlog({
+        variables: {
+          data: post,
+        },
+      });
+    }
   };
 
+  useEffect(() => {
+    if (bid !== 'add-new-post') {
+      setIsEditMode(true);
+      useBlogById(bid).then((data) => {
+        // console.log(data.postSection.contents);
+        methods.reset(data.mainContent);
+        setTags(data.tags);
+        PostSectionState[1](data.postSection.contents);
+        dispatch(
+          setBlogMedia({
+            main: data.main,
+            postSection: data.postSection.media,
+          }),
+        );
+      });
+    }
+  }, []);
+
   const selectImageHandler = (imageSrc) => {
-    console.log(postSectionKey);
     dispatch(selectBlogImage({ page, src: imageSrc, key: postSectionKey }));
   };
   const selectVideoHandler = (imageSrc) => {
     dispatch(selectBlogVideo({ page, src: imageSrc, key: postSectionKey }));
   };
-
-  console.log(page);
   return (
     <FormProvider {...methods}>
       <Toolbar

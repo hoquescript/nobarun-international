@@ -5,6 +5,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import uiReducer from './slices/ui';
 import blogsReducer from './slices/blogs';
+import productsReducer from './slices/products';
 
 import rootSaga from './rootSaga';
 
@@ -14,6 +15,7 @@ const store = configureStore({
   reducer: {
     ui: uiReducer,
     blogs: blogsReducer,
+    products: productsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

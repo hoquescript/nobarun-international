@@ -5,7 +5,6 @@ import styles from '../../styles/pages/products.module.scss';
 
 const Product = (props) => {
   const {
-    id,
     productName,
     category,
     specification,
@@ -13,7 +12,6 @@ const Product = (props) => {
     images,
     isPublished,
   } = props;
-  console.log(props);
   return (
     <div className={styles.product}>
       <h3 className="heading-tertiary">{productName}</h3>

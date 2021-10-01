@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { FaPlus } from 'react-icons/fa';
 import getYoutubeId from '../../helpers/getYoutubeId';
 import {
@@ -18,6 +18,8 @@ const FileButton = (props: {
     | 'product'
     | 'blog'
     | 'review'
+    | 'pMain'
+    | 'pKeypoint'
     | 'pCategory'
     | 'pCollection'
     | 'bCategory'
@@ -26,8 +28,6 @@ const FileButton = (props: {
 }) => {
   const { page, setPage, showMedia, postKey, setPostSectionKey } = props;
 
-  console.log(postKey);
-  const ref = useRef();
   const dispatch = useTypedDispatch();
 
   let media: any;
@@ -45,15 +45,23 @@ const FileButton = (props: {
     media = useTypedSelector((state) => state.blogs.blogsMedia.main);
   if (page === 'bPostSection')
     media = useTypedSelector(
-      (state) => state.blogs.blogsMedia.postSection[postKey],
+      (state) => state.blogs.blogsMedia.postSection[postKey as string],
     );
-  // console.log(media);
+  if (page === 'pMain')
+    media = useTypedSelector((state) => state.products.productMedia.main);
+  if (page === 'pKeypoint')
+    media = useTypedSelector(
+      (state) =>
+        state.products.productMedia.keyPoints &&
+        state.products.productMedia.keyPoints[postKey as string],
+    );
+
   return (
     <div className="product-images">
       {showMedia &&
         media &&
-        media.images.map((src) => (
-          <figure>
+        media.images.map((src, idx) => (
+          <figure key={src + idx}>
             <button type="button" className="remove-image">
               <i className="times-icon"></i>
             </button>
@@ -62,10 +70,10 @@ const FileButton = (props: {
         ))}
       {showMedia &&
         media &&
-        media.videos.map((src) => {
+        media.videos.map((src, idx) => {
           const id = getYoutubeId(src);
           return (
-            <figure>
+            <figure key={id + idx}>
               <button type="button" className="remove-image">
                 <i className="times-icon"></i>
               </button>
@@ -76,19 +84,29 @@ const FileButton = (props: {
             </figure>
           );
         })}
-
-      <button
-        className="add-new-image"
-        style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
-        onClick={() => {
-          console.log('I was clicked' + postKey);
-          setPage && setPage(page);
-          setPostSectionKey && setPostSectionKey(postKey);
-          dispatch(toggleToolbar());
-        }}
-      >
-        <FaPlus />
-      </button>
+      {(page === 'pKeypoint' &&
+        media &&
+        media.images &&
+        media.images.length + media.videos.length === 2) ||
+      (page === 'bPostSection' &&
+        media &&
+        media.images &&
+        media.images.length + media.videos.length === 2) ? (
+        ''
+      ) : (
+        <button
+          className="add-new-image"
+          style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
+          onClick={() => {
+            console.log('I was clicked' + postKey);
+            setPage && setPage(page);
+            setPostSectionKey && setPostSectionKey(postKey);
+            dispatch(toggleToolbar());
+          }}
+        >
+          <FaPlus />
+        </button>
+      )}
     </div>
   );
 };

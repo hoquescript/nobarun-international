@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
+import { resetMediaSelection } from '../../store/slices/ui';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
 import Togglebar from '../../components/controls/togglebar';
+import { v4 as uuid } from 'uuid';
+
 import { IKeyPoints } from '../../components/products/AddProduct/KeyPoints';
 import { IQuestions } from '../../components/products/AddProduct/Questions';
 import Description from '../../components/products/tab/description';
@@ -14,15 +19,26 @@ import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
-import { resetMediaSelection } from '../../store/slices/ui';
+import {
+  resetBlogMedia,
+  selectProductImage,
+  selectProductVideo,
+  setProductMedia,
+} from '../../store/slices/products';
+import useProductById from '../../hooks/Products/useProductById';
+import { useRouter } from 'next/router';
 
 const CREATE_NEW_PRODUCTS = gql`
   mutation addProduct($data: CreateNewProduct!) {
     createNewProduct(data: $data) {
       id
     }
+  }
+`;
+
+const EDIT_PRODUCT = gql`
+  mutation editProduct($data: EditProductInput!) {
+    updateProductById(data: $data)
   }
 `;
 
@@ -44,14 +60,15 @@ const defaultValues = {
   siteMap: '',
 };
 
-const defaultKeypoints = [
-  {
+const defaultKeypoints = {
+  [uuid()]: {
     id: '',
     title: '',
     content: '',
-    images: [],
+    images: [] as string[],
+    videos: [] as string[],
   },
-];
+};
 
 const defaultQuestions = [
   {
@@ -67,22 +84,28 @@ const AddProduct = () => {
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
+  const router = useRouter();
+  const pid = router.query.pid;
 
+  const [isEditMode, setIsEditMode] = useState(false);
   const [tabValue, setTabValue] = useState('description');
   const [info, setInfo] = useState({});
-  const [fileBtn, setFileBtn] = useState({});
 
   const [createNewProduct] = useMutation(CREATE_NEW_PRODUCTS);
+  const [editProduct] = useMutation(EDIT_PRODUCT);
+
+  // Getting Category | Collection | Contact | Stock
   useEffect(() => {
     useProductInfo().then((data) => {
       setInfo(data);
     });
   }, []);
 
-  const productMedia = useTypedSelector((state) => state.ui.productMedia);
-
-  const KeyPoint = useState<IKeyPoints[]>(defaultKeypoints);
+  const KeyPoint = useState<{ [k: string]: IKeyPoints }>(defaultKeypoints);
   const question = useState<IQuestions[]>(defaultQuestions);
+
+  const [page, setPage] = useState('');
+  const [postSectionKey, setPostSectionKey] = useState('');
 
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
@@ -91,7 +114,25 @@ const AddProduct = () => {
   const tagState = useState<string[]>([]);
 
   const dispatch = useTypedDispatch();
+  const productMedia = useTypedSelector(
+    (state) => state.products.productMedia.main,
+  );
+  const productKeypoints = useTypedSelector(
+    (state) => state.products.productMedia.keyPoints,
+  );
+
   const handleAddProduct = (data: any) => {
+    const keyPoints = Object.keys(KeyPoint[0]).map((key) => {
+      const keypoint = KeyPoint[0][key];
+      return {
+        id: key,
+        title: keypoint.title,
+        content: keypoint.content,
+        images: productKeypoints[key] && productKeypoints[key].images,
+        videos: productKeypoints[key] && productKeypoints[key].videos,
+      };
+    });
+
     const product = {
       ...data,
       price: +data.price,
@@ -100,13 +141,16 @@ const AddProduct = () => {
       relatedProducts,
       images: productMedia.images,
       videos: productMedia.videos,
-      keyPoints: KeyPoint[0],
+      keyPoints,
       features,
       specification,
       questions: question[0],
       tags: tagState[0],
       keywords,
     };
+
+    console.log(product);
+
     //Form Reset
     methods.reset(defaultValues);
     KeyPoint[1](defaultKeypoints);
@@ -116,19 +160,61 @@ const AddProduct = () => {
     setRelatedProducts([]);
     setKeywords([]);
     tagState[1]([]);
-    dispatch(resetMediaSelection());
-    console.log(KeyPoint[0]);
-    // createNewProduct({
-    //   variables: {
-    //     data: product,
-    //   },
-    // });
+    dispatch(resetBlogMedia());
+
+    if (isEditMode) {
+      delete product.collectionName;
+      editProduct({
+        variables: {
+          data: {
+            editId: pid,
+            editableObject: product,
+          },
+        },
+      });
+    } else {
+      createNewProduct({
+        variables: {
+          data: product,
+        },
+      });
+    }
   };
 
-  const productImageHandler = () => {};
+  useEffect(() => {
+    if (pid !== 'add-new-product') {
+      setIsEditMode(true);
+      useProductById(pid).then((data) => {
+        methods.reset(data.mainContent);
+        KeyPoint[1](data.keyPoints.contents);
+        dispatch(
+          setProductMedia({
+            main: data.main,
+            keypoint: data.keyPoints.media,
+          }),
+        );
+        question[1](data.questions);
+        setFeatures(data.features);
+        setSpecification(data.specification);
+        setRelatedProducts(data.relatedProducts);
+        setKeywords(data.keywords);
+        tagState[1](data.tags);
+      });
+    }
+  }, []);
+
+  const selectImageHandler = (imageSrc) => {
+    dispatch(selectProductImage({ page, src: imageSrc, key: postSectionKey }));
+  };
+  const selectVideoHandler = (imageSrc) => {
+    dispatch(selectProductVideo({ page, src: imageSrc, key: postSectionKey }));
+  };
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>
-      <Toolbar imageSelector={productImageHandler()} />
+      <Toolbar
+        imageSelector={selectImageHandler}
+        videoSelector={selectVideoHandler}
+      />
       <FormProvider {...methods}>
         <div>
           <div
@@ -162,6 +248,8 @@ const AddProduct = () => {
             <TabContent id="description" value={tabValue}>
               <Description
                 register={methods.register}
+                control={methods.control}
+                setValue={methods.setValue}
                 keyPointState={KeyPoint}
                 question={question}
                 tagState={tagState}
@@ -171,14 +259,17 @@ const AddProduct = () => {
                 info={info}
                 relatedProducts={relatedProducts}
                 setRelatedProducts={setRelatedProducts}
-                fileBtn={fileBtn}
-                setFileBtn={setFileBtn}
+                setPage={setPage}
+                setPostSectionKey={setPostSectionKey}
+                // fileBtn={fileBtn}
+                // setFileBtn={setFileBtn}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>
               <SEO
                 register={methods.register}
                 control={methods.control}
+                setValue={methods.setValue}
                 chips={keywords}
                 setChips={setKeywords}
                 handleAddProduct={methods.handleSubmit(handleAddProduct)}

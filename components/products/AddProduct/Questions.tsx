@@ -68,6 +68,7 @@ const Questions = (props: QuestionsProps) => {
               className="custom-input large"
               disabled={question.isDisabled}
               placeholder="Question Title"
+              value={question.title}
               onChange={(e) => onQuestionsChange(idx, 'title', e.target.value)}
             />
             <div>

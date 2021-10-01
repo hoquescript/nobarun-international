@@ -19,10 +19,7 @@ const initialState: UIState = {
       images: [],
       videos: [],
     },
-    postSection: {
-      // images: [],
-      // videos: [],
-    },
+    postSection: {},
   },
 };
 export const blogSlice = createSlice({
@@ -51,6 +48,11 @@ export const blogSlice = createSlice({
       if (page === 'bMain')
         state.blogsMedia.main.videos.push(action.payload.src);
       if (page === 'bPostSection') {
+        if (!state.blogsMedia.postSection[key])
+          state.blogsMedia.postSection[key] = {
+            images: [],
+            videos: [],
+          };
         const noOfMedia =
           state.blogsMedia.postSection[key].images.length +
           state.blogsMedia.postSection[key].videos.length;
@@ -58,9 +60,24 @@ export const blogSlice = createSlice({
           state.blogsMedia.postSection[key].videos.push(action.payload.src);
       }
     },
+    setBlogMedia: (state, action) => {
+      state.blogsMedia.main.images = action.payload.main.images;
+      state.blogsMedia.main.videos = action.payload.main.videos;
+      state.blogsMedia.postSection = action.payload.postSection;
+    },
+    resetBlogMedia: (state) => {
+      state.blogsMedia.main.images = [];
+      state.blogsMedia.main.videos = [];
+      state.blogsMedia.postSection = {};
+    },
   },
 });
 
-export const { selectBlogImage, selectBlogVideo } = blogSlice.actions;
+export const {
+  selectBlogImage,
+  selectBlogVideo,
+  setBlogMedia,
+  resetBlogMedia,
+} = blogSlice.actions;
 
 export default blogSlice.reducer;

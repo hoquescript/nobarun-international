@@ -11,9 +11,9 @@ export const PRODUCT_COLUMNS = [
     accessor: 'category',
   },
   {
-    Header: 'Published',
-    accessor: 'author',
-    Cell: 'Nobarun',
+    Header: 'Published Date',
+    accessor: 'createdAt',
+    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
   },
   {
     Header: 'Price',

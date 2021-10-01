@@ -6,15 +6,13 @@ import Combobox from '../../controls/combobox';
 import FileButton from '../../controls/file';
 import TextEditor from '../../shared/TextEditor';
 import KeyPoints, { IKeyPoints } from '../AddProduct/KeyPoints';
+import Pricing from '../AddProduct/Pricing';
 import Questions, { IQuestions } from '../AddProduct/Questions';
 import RelatedProducts from '../AddProduct/RelatedProduct';
 
 interface DescriptionProps {
   register: UseFormRegister<FieldValues>;
-  keyPointState: [
-    IKeyPoints[],
-    React.Dispatch<React.SetStateAction<IKeyPoints[]>>,
-  ];
+  keyPointState: [any, any];
   question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
   tagState: any;
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
@@ -23,10 +21,16 @@ interface DescriptionProps {
   info: any;
   relatedProducts: string[];
   setRelatedProducts: any;
+  setValue: any;
+  control: any;
+  setPage: any;
+  setPostSectionKey: any;
 }
 const Description = (props: DescriptionProps) => {
   const {
     register,
+    setValue,
+    control,
     keyPointState,
     question,
     tagState: [tags, setTags],
@@ -36,6 +40,8 @@ const Description = (props: DescriptionProps) => {
     info,
     relatedProducts,
     setRelatedProducts,
+    setPage,
+    setPostSectionKey,
   } = props;
   return (
     <div id="description">
@@ -79,30 +85,11 @@ const Description = (props: DescriptionProps) => {
             </div>
           </div>
           <div className="product-specs mt-30 mb-50">
-            <div>
-              <input
-                type="text"
-                className="custom-input medium mb-10 center"
-                {...register('price')}
-              />
-              <span>Price</span>
-            </div>
-            <div>
-              <input
-                type="text"
-                className="custom-input medium mb-10 center"
-                {...register('originalPrice')}
-              />
-              <span>Original Price</span>
-            </div>
-            <div>
-              <input
-                type="text"
-                className="custom-input medium mb-10 center"
-                {...register('discount')}
-              />
-              <span>Discount</span>
-            </div>
+            <Pricing
+              register={register}
+              control={control}
+              setValue={setValue}
+            />
             <div>
               <input
                 type="text"
@@ -118,10 +105,14 @@ const Description = (props: DescriptionProps) => {
               setChips={setRelatedProducts}
             />
           </div>
-          <FileButton showMedia page="product" />
+          <FileButton page={'pMain'} showMedia setPage={setPage} />
         </div>
       </div>
-      <KeyPoints keyPointState={keyPointState} />
+      <KeyPoints
+        keyPointState={keyPointState}
+        setPage={setPage}
+        setPostSectionKey={setPostSectionKey}
+      />
       <div className="wrapper-section">
         <div className="wrapper-section__title">
           <h3 className="heading-secondary">Feature List</h3>

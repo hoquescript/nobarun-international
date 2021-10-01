@@ -1,8 +1,9 @@
 import React, { useMemo, useState, useEffect } from 'react';
-import { sub, format } from 'date-fns';
+import { sub, format, isWithinInterval } from 'date-fns';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { FaPlusCircle, FaGripHorizontal, FaList } from 'react-icons/fa';
+import { gql, useMutation } from '@apollo/client';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -10,36 +11,83 @@ import Product from '../../components/products/product';
 
 import styles from '../../styles/pages/products.module.scss';
 import Table from '../../components/shared/Table';
-import { COLUMNS } from '../../data/column';
-import reviews from '../../data/tableData.json';
 import useAllProducts from '../../hooks/Products/useAllProducts';
 import { PRODUCT_COLUMNS } from '../../data/ProductColumn';
 import Link from 'next/link';
+import fuzzyMatch from '../../helpers/fuzzySearch';
+
+const DELETE_PRODUCT = gql`
+  mutation deleteProduct($id: String!) {
+    deleteProductById(productId: $id)
+  }
+`;
 
 const Products = () => {
   const [viewType, setViewType] = useState('grid');
+  const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
       'yyyy-MM-dd',
     )}`,
   );
+  const [selectionRange, setSelectionRange] = useState([
+    {
+      startDate: sub(new Date(), { months: 6 }),
+      endDate: new Date(),
+      key: 'Periods',
+    },
+  ]);
+
+  const [deleteProduct] = useMutation(DELETE_PRODUCT);
+
   const [products, setProducts] = useState<any[]>([]);
   const columns = useMemo(() => PRODUCT_COLUMNS, []);
-  // const data = useMemo(() => reviews, []);
 
   useEffect(() => {
     useAllProducts().then((data) => setProducts(data));
   }, []);
 
+  // useEffect(() => {
+  //   const filteredProducts: any[] = [];
+  //   products.forEach((product) => {
+  //     const value = fuzzyMatch(product.productName, search);
+  //     if (value) filteredProducts.push(product);
+  //   });
+  //   // console.log(filteredProducts);
+  //   setProducts(filteredProducts);
+  //   // const filteredProducts = products.filter((product) => {
+  //   //   return product.productName;
+  //   // });
+  // }, [search]);
+
+  const filterData = (rows, ids, query) => {
+    const param = query.search.toLowerCase();
+    return rows.filter((row) => {
+      console.log(row.values);
+      return (
+        row.values?.productName.toLowerCase().includes(param) &&
+        isWithinInterval(new Date(row.values?.createdAt), {
+          start: query.range.startDate,
+          end: query.range.endDate,
+        })
+      );
+    });
+  };
+
   return (
     <div className="container center">
       <div className="row mb-30">
         <div className="col-6">
-          <Search />
+          <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod period={period} setPeriod={setPeriod} />
+          <TimePeriod
+            period={period}
+            setPeriod={setPeriod}
+            selectionRange={selectionRange}
+            setSelectionRange={setSelectionRange}
+          />
         </div>
       </div>
 
@@ -84,18 +132,43 @@ const Products = () => {
         {viewType === 'grid' ? (
           <>
             {products &&
-              products.map((product) => (
-                <div className="col-xxl-4 col-xl-6 col-xs-12" key={product.id}>
-                  <Product {...product} />
-                </div>
-              ))}
+              products
+                .filter((product) => {
+                  return (
+                    fuzzyMatch(product.productName, search) &&
+                    isWithinInterval(new Date(product.createdAt), {
+                      start: selectionRange[0].startDate,
+                      end: selectionRange[0].endDate,
+                    })
+                  );
+                })
+                .map((product) => (
+                  <div
+                    className="col-xxl-4 col-xl-6 col-xs-12"
+                    key={product.id}
+                  >
+                    <Product {...product} />
+                  </div>
+                ))}
           </>
         ) : (
           <Table
+            filter={{ search, range: selectionRange[0] }}
+            pageName="product"
+            title="Products"
             columns={columns}
             data={products}
-            editHandler={() => {}}
-            deleteHandler={() => {}}
+            globalFilterFn={filterData}
+            deleteHandler={(id, idx) => {
+              const modifiedData = [...products];
+              modifiedData.splice(idx, 1);
+              setProducts(modifiedData);
+              deleteProduct({
+                variables: {
+                  id,
+                },
+              });
+            }}
           />
         )}
       </div>

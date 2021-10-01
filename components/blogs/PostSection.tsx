@@ -7,10 +7,10 @@ import FileButton from '../controls/file';
 import TextEditor from '../shared/TextEditor';
 
 export interface IPostSection {
-  id: string;
+  id?: string;
   title: string;
   content: string;
-  images: string[];
+  images?: string[];
   isCollapsed?: boolean;
   isDisabled?: boolean;
 }
@@ -27,8 +27,6 @@ const PostSection = (props: PostSectionProps) => {
     setPage,
     setPostSectionKey,
   } = props;
-
-  const blogImages = useTypedSelector((state) => state.ui.blogsImage);
 
   const onKeyPointsContentChange = (
     idx: string,
@@ -48,6 +46,7 @@ const PostSection = (props: PostSectionProps) => {
         title: '',
         content: '',
         images: [],
+        videos: [],
         isCollapsed: false,
       },
     });
@@ -79,6 +78,7 @@ const PostSection = (props: PostSectionProps) => {
               className="custom-input large mr-60"
               disabled={keyPoints[key].isDisabled}
               placeholder="Title of the Post"
+              value={keyPoints[key].title}
               onChange={(e) =>
                 onKeyPointsContentChange(key, 'title', e.target.value)
               }
