@@ -53,7 +53,6 @@ const Redirect = () => {
 
   const addHandler = () => {
     setPosts({
-      ...posts,
       [uuid()]: {
         from: '',
         to: '',
@@ -61,6 +60,7 @@ const Redirect = () => {
         isDisabled: false,
         isNewRedirect: true,
       },
+      ...posts,
     });
   };
 

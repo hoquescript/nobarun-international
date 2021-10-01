@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
-import { FaEye, FaPlusCircle } from 'react-icons/fa';
+import { FaEye, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -140,8 +140,19 @@ const AddCategory = () => {
           <h2 className="heading-primary">Product Editor</h2>
           <div>
             <Togglebar name="isPublished" />
-            <button type="button" className="btn-icon-white ml-20">
-              <FaEye />
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={methods.handleSubmit(onSubmit)}
+            >
+              <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => router.push('/blogs/categories')}
+            >
+              <FaTimes />
             </button>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { v4 as uuid } from 'uuid';
 
@@ -19,6 +19,7 @@ import useProductCategoryTree from '../../../hooks/Products/useProductCategoryTr
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import Modal from '../../../components/shared/Modal';
+import { useRouter } from 'next/router';
 
 interface renderItemProps {
   item: any;
@@ -40,6 +41,7 @@ const DELETE_CATEGORY = gql`
 `;
 
 const Categories = () => {
+  const router = useRouter();
   const [key, setKey] = useState('');
   const [categoryItem, setCategoryItem] = useState();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -61,16 +63,27 @@ const Categories = () => {
     });
   };
 
-  const deleteHandler = (id) => {
-    deleteCategory({
+  const deleteHandler = async (id) => {
+    await deleteCategory({
       variables: {
         id,
       },
     });
+    router.reload();
   };
 
+  const description = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const text = description.current?.innerText;
+    if (text && description.current && text?.length > 70) {
+      const value = text.substring(0, 70).concat('...');
+      // console.log(object);
+      description.current.innerText = value;
+    }
+  }, []);
+
   const renderItem = (props: renderItemProps) => {
-    const { item, index, collapseIcon, handler } = props;
+    const { item } = props;
     return (
       <div className="row">
         <div className="col-1 flex ct" style={{ cursor: 'move' }}>
@@ -82,6 +95,7 @@ const Categories = () => {
         <div className="col-5">
           <div
             className="custom-input"
+            ref={description}
             dangerouslySetInnerHTML={{ __html: item.description }}
           />
         </div>

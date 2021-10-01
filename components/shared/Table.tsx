@@ -5,6 +5,7 @@ import {
   useSortBy,
   usePagination,
   useGlobalFilter,
+  useFlexLayout,
 } from 'react-table';
 import {
   FaGripVertical,
@@ -41,11 +42,22 @@ const Table = (props: TableProps) => {
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  const defaultColumn = React.useMemo(
+    () => ({
+      // When using the useFlexLayout:
+      minWidth: 30, // minWidth is only used as a limit for resizing
+      width: 50, // width is used for both the flex-basis and flex-grow
+      maxWidth: 200, // maxWidth is only used as a limit for resizing
+    }),
+    [],
+  );
+
   // @ts-ignore
   const tableInstance = useTable(
-    { columns, data, globalFilter: globalFilterFn },
+    { columns, data, defaultColumn, globalFilter: globalFilterFn },
     useGlobalFilter,
     useSortBy,
+    useFlexLayout,
     usePagination,
   );
 

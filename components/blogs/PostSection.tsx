@@ -40,6 +40,11 @@ const PostSection = (props: PostSectionProps) => {
   };
 
   const addKeyPoints = () => {
+    const modifiedKeyPoint = { ...keyPoints };
+    Object.values(modifiedKeyPoint).forEach(
+      //@ts-ignore
+      (point) => (point.isCollapsed = true),
+    );
     setKeyPoints({
       ...keyPoints,
       [uuid()]: {

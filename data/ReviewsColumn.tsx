@@ -38,6 +38,7 @@ export const REVIEWS_COLUMNS = [
   {
     Header: 'Message',
     accessor: 'reviewText',
+    Cell: ({ value }) => value.substring(0, 30).concat('...'),
   },
   {
     Header: 'Attachment',

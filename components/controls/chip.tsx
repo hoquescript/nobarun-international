@@ -19,7 +19,8 @@ const Chip = (props: ChipProps) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     if (ref.current && ref.current.value) {
-      setChips(chips.concat(ref.current.value));
+      const values = ref.current.value.split(',').map((value) => value.trim());
+      setChips(chips.concat(values));
       ref.current.value = '';
     }
   };

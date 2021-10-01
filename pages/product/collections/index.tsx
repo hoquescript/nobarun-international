@@ -11,10 +11,12 @@ import Nestable from 'react-nestable';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 
 import styles from '../../../styles/pages/products.module.scss';
 import useAllCollections from '../../../hooks/Products/useAllCollections';
 import Modal from '../../../components/shared/Modal';
+import { useRef } from 'react';
 
 const DELETE_COLLECTION = gql`
   mutation deleteCollection($id: String!) {
@@ -23,6 +25,7 @@ const DELETE_COLLECTION = gql`
 `;
 
 const Collections = () => {
+  const router = useRouter();
   const [key, setKey] = useState('');
   const [collections, setCollections] =
     useState<{ [key: string]: string | number }[]>();
@@ -34,13 +37,25 @@ const Collections = () => {
     useAllCollections().then((collections) => setCollections(collections));
   }, []);
 
-  const deleteHandler = (id) => {
-    deleteCollection({
+  const deleteHandler = async (id) => {
+    await deleteCollection({
       variables: {
         id,
       },
     });
+    router.reload();
   };
+
+  const description = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const text = description.current?.innerText;
+    if (text && description.current && text?.length > 70) {
+      const value = text.substring(0, 70).concat('...');
+      // console.log(object);
+      description.current.innerText = value;
+    }
+  }, []);
+
   const renderItem = (props) => {
     const { item } = props;
     return (
@@ -54,6 +69,7 @@ const Collections = () => {
         <div className="col-5">
           <div
             className="custom-input"
+            ref={description}
             dangerouslySetInnerHTML={{ __html: item.description }}
           />
         </div>

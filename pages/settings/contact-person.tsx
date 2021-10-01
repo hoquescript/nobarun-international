@@ -54,7 +54,6 @@ const ContactPerson = () => {
 
   const addContactHandler = () => {
     setContacts({
-      ...contacts,
       [uuid()]: {
         name: '',
         whatsapp: '',
@@ -65,6 +64,7 @@ const ContactPerson = () => {
         isDisabled: false,
         isNewContact: true,
       },
+      ...contacts,
     });
   };
 

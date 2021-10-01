@@ -44,7 +44,6 @@ const AddScript = () => {
 
   const addScriptsHandler = () => {
     setScripts({
-      ...scripts,
       [uuid()]: {
         header: '',
         footer: '',
@@ -52,6 +51,7 @@ const AddScript = () => {
         isDisabled: false,
         isNewScript: true,
       },
+      ...scripts,
     });
   };
 

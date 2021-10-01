@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaSave, FaTimes } from 'react-icons/fa';
 import { useAlert } from 'react-alert';
 
 import Combobox from '../../../components/controls/combobox';
@@ -22,6 +22,7 @@ import Toolbar from '../../../components/shared/Toolbar';
 
 import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
 import CategorySlug from '../../../components/products/CategorySlug';
+import Togglebar from '../../../components/controls/togglebar';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory($data: CreateNewCategoryInput!) {
@@ -48,6 +49,7 @@ const CategoryForm = () => {
   const {
     query: { fid },
     asPath,
+    push,
   } = useRouter();
   const alert = useAlert();
   const methods = useForm({
@@ -97,7 +99,7 @@ const CategoryForm = () => {
       name: categoryName,
       description,
       image: images[0],
-      isPublished: true,
+      isPublished: data.isPublished,
       parentCategory: parentCategory,
       slug: categorySlug,
       id: uuid(),
@@ -139,26 +141,34 @@ const CategoryForm = () => {
   return (
     <div className="container center">
       <Toolbar />
-      <div
-        className="main__content__header"
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <h2 className="heading-primary">Add Category</h2>
-        <div>
-          <label htmlFor="publish" className="custom-switch ml-auto">
-            <input type="checkbox" id="publish" />
-            <span>Publish</span>
-          </label>
-          <button type="button" className="btn-icon-white ml-20">
-            <FaEye />
-          </button>
-        </div>
-      </div>
       <FormProvider {...methods}>
+        <div
+          className="main__content__header"
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <h2 className="heading-primary">Add Category</h2>
+          <div>
+            <Togglebar name="isPublished" />
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={methods.handleSubmit(onSubmit)}
+            >
+              <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => push('/product/categories')}
+            >
+              <FaTimes />
+            </button>
+          </div>
+        </div>
         <div className="wrapper-section">
           <div className="wrapper-section__content">
             <div className="row">

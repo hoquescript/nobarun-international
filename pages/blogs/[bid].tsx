@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaEye } from 'react-icons/fa';
+import { FaEye, FaSave, FaTimes } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
@@ -180,8 +180,20 @@ const AddNewPost = () => {
           <h2 className="page-title">Post Editor</h2>
           <div>
             <Togglebar name="isPublished">Publish</Togglebar>
-            <button type="button" className="btn-icon-white ml-20">
-              <FaEye />
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={methods.handleSubmit(postBlogHandler)}
+            >
+              <FaSave />
+            </button>
+
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => router.push('/blogs/blog-post')}
+            >
+              <FaTimes />
             </button>
           </div>
         </div>

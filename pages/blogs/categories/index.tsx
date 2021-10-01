@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   FaGripVertical,
@@ -12,8 +12,8 @@ import { useState } from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { gql, useMutation } from '@apollo/client';
+import { useRouter } from 'next/router';
 
-import Togglebar from '../../../components/controls/togglebar';
 import Modal from '../../../components/shared/Modal';
 
 import useBlogCategoriesTree from '../../../hooks/Blogs/useBlogCategoriesTree';
@@ -32,6 +32,7 @@ const DELETE_BLOG_CATEGORY = gql`
 `;
 
 const Categories = () => {
+  const router = useRouter();
   const [items, setItems] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -52,13 +53,24 @@ const Categories = () => {
     });
   };
 
-  const deleteHandler = (id) => {
-    deleteCategory({
+  const deleteHandler = async (id) => {
+    await deleteCategory({
       variables: {
         id,
       },
     });
+    router.reload();
   };
+
+  const description = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const text = description.current?.innerText;
+    if (text && description.current && text?.length > 50) {
+      const value = text.substring(0, 50).concat('...');
+      // console.log(object);
+      description.current.innerText = value;
+    }
+  }, []);
 
   const renderItem = (props) => {
     const { item } = props;
@@ -73,6 +85,7 @@ const Categories = () => {
         <div className="col-5">
           <div
             className="custom-input"
+            ref={description}
             dangerouslySetInnerHTML={{ __html: item.description }}
           />
         </div>
@@ -103,7 +116,6 @@ const Categories = () => {
                 <button
                   onClick={() => {
                     setShowDeleteModal(true);
-                    console.log('object');
                   }}
                 >
                   <FaTrash />

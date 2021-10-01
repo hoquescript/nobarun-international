@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaEye, FaSave } from 'react-icons/fa';
+import { FaSave, FaTimes } from 'react-icons/fa';
 import Togglebar from '../../components/controls/togglebar';
 import { v4 as uuid } from 'uuid';
 
@@ -150,8 +150,6 @@ const AddProduct = () => {
       keywords,
     };
 
-    console.log(product);
-
     //Form Reset
     methods.reset(defaultValues);
     KeyPoint[1](defaultKeypoints);
@@ -172,6 +170,7 @@ const AddProduct = () => {
           },
         },
       });
+      setTabValue('description');
       if (!editState.error) {
         alert.info('Edited Review Successfully');
       } else {
@@ -183,6 +182,7 @@ const AddProduct = () => {
           data: product,
         },
       });
+      setTabValue('description');
       if (!createState.error) {
         alert.success('Posted Query Successfully');
       } else {
@@ -239,15 +239,19 @@ const AddProduct = () => {
             <h2 className="page-title">Product Editor</h2>
             <div>
               <Togglebar name="isPublished">Publish</Togglebar>
-              <button type="button" className="btn-icon-white ml-20">
-                <FaEye />
-              </button>
               <button
                 type="button"
                 className="btn-icon-white ml-20"
                 onClick={methods.handleSubmit(handleAddProduct)}
               >
                 <FaSave />
+              </button>
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={() => router.push('/product/products')}
+              >
+                <FaTimes />
               </button>
             </div>
           </div>

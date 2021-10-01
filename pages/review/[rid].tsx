@@ -22,6 +22,7 @@ import FileButton from '../../components/controls/file';
 import ProductCode from '../../components/shared/ProductCode';
 import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 import useReviewById from '../../hooks/Review/useReviewById';
+import { FaSave, FaTimes } from 'react-icons/fa';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -128,8 +129,19 @@ const AddReview = () => {
               <h2 className="page-title">Add Review</h2>
               <div>
                 <Togglebar name="isPublished">Publish</Togglebar>
-                <button type="button" className="btn-icon-white ml-20">
-                  <AiOutlineClose />
+                <button
+                  type="button"
+                  className="btn-icon-white ml-20"
+                  onClick={methods.handleSubmit(addNewReview)}
+                >
+                  <FaSave />
+                </button>
+                <button
+                  type="button"
+                  className="btn-icon-white ml-20"
+                  onClick={() => router.push('/review/reviews')}
+                >
+                  <FaTimes />
                 </button>
               </div>
             </div>
@@ -178,7 +190,7 @@ const AddReview = () => {
                   </div>
                   <FileButton showMedia page="review" />
                 </div>
-                <p className="mt-20 flex">
+                {/* <p className="mt-20 flex">
                   <AiOutlineWarning
                     className="mr-10"
                     style={{ height: 25, width: 25, color: 'red' }}
@@ -188,7 +200,7 @@ const AddReview = () => {
                   size of files: <strong className="ml-10">24MB</strong>, max
                   number of files:
                   <strong className="ml-10">8</strong>
-                </p>
+                </p> */}
                 <div className="center mt-30">
                   <button
                     className="btn-green"

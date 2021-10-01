@@ -29,6 +29,11 @@ const Questions = (props: QuestionsProps) => {
   };
 
   const addQuestion = () => {
+    const modifiedQuestions = [...questions];
+    modifiedQuestions.forEach(
+      //@ts-ignore
+      (question) => (question.isCollapsed = true),
+    );
     setQuestions([
       ...questions,
       {

@@ -103,11 +103,14 @@ const Description = (props: DescriptionProps) => {
               <span>Product Code</span>
             </div>
           </div>
-          <div className="mb-50">
-            <RelatedProducts
-              chips={relatedProducts}
-              setChips={setRelatedProducts}
-            />
+          <div className="mb-20">
+            <div className={`field`}>
+              <label>Related Products</label>
+              <RelatedProducts
+                chips={relatedProducts}
+                setChips={setRelatedProducts}
+              />
+            </div>
           </div>
           <FileButton page={'pMain'} showMedia setPage={setPage} />
         </div>

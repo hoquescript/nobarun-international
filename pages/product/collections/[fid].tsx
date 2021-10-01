@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useAlert } from 'react-alert';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FaEye, FaPlusCircle } from 'react-icons/fa';
+import { FaEye, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
 
 import FileButton from '../../../components/controls/file';
 import Textfield from '../../../components/controls/textfield';
@@ -43,6 +43,7 @@ const CollectionForm = () => {
   const {
     query: { fid },
     asPath,
+    push,
   } = useRouter();
   const alert = useAlert();
   const methods = useForm({
@@ -134,8 +135,19 @@ const CollectionForm = () => {
           <h2 className="heading-primary">Add Collection</h2>
           <div>
             <Togglebar name="isPublished" />
-            <button type="button" className="btn-icon-white ml-20">
-              <FaEye />
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={methods.handleSubmit(onSubmit)}
+            >
+              <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => push('/product/collections')}
+            >
+              <FaTimes />
             </button>
           </div>
         </div>

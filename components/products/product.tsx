@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useRef } from 'react';
 import { FaEye, FaStar } from 'react-icons/fa';
 
 import styles from '../../styles/pages/products.module.scss';
@@ -12,6 +13,17 @@ const Product = (props) => {
     images,
     isPublished,
   } = props;
+
+  const description = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const text = description.current?.innerText;
+    if (text && description.current && text?.length > 70) {
+      const value = text.substring(0, 70).concat('...');
+      // console.log(object);
+      description.current.innerText = value;
+    }
+  }, []);
+
   return (
     <div className={styles.product}>
       <h3 className="heading-tertiary">{productName}</h3>
@@ -25,16 +37,20 @@ const Product = (props) => {
               type="text"
               className="custom-input small mr-20"
               value={category}
-              checked={isPublished}
               disabled
               style={{ width: '20rem' }}
             />
             <label htmlFor="product" className={`custom-switch`}>
-              <input type="checkbox" id="publish" />
+              <input
+                type="checkbox"
+                id="isPublished"
+                defaultChecked={isPublished}
+              />
               <span>&nbsp;</span>
             </label>
           </div>
           <div
+            ref={description}
             dangerouslySetInnerHTML={{
               __html: specification,
             }}

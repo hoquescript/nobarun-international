@@ -1,27 +1,41 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
 import fuzzyMatch from '../../../helpers/fuzzySearch';
+import useAllProductCode from '../../../hooks/Products/useAllProductCode';
 import styles from '../../../styles/pages/products.module.scss';
 
-const products = ['SKU-01', 'SKU-02', 'SKU-03'];
-const defaultState = () => {
-  const defaultState: any = {};
-  products.forEach((product) => {
-    defaultState[product] = '';
-  });
-  return defaultState;
-};
+// const products = ['SKU-01', 'SKU-02', 'SKU-03'];
 
 interface RelatedProductsProps {
   chips: string[];
   setChips: any;
 }
 
+const defaultState = (products) => {
+  const defaultState: any = {};
+  products &&
+    products.forEach((product) => {
+      defaultState[product] = '';
+    });
+  console.log('Method', defaultState);
+  return defaultState;
+};
+
 const RelatedProducts = (props: RelatedProductsProps) => {
   const { chips, setChips } = props;
-  const [suggestions, setSuggestions] = useState<any>(defaultState());
+  const [productCodes, setProductCodes] = useState([]);
+  const [suggestions, setSuggestions] = useState<any>({});
   const [showSuggestion, setShowSuggestion] = useState(false);
 
+  useEffect(() => {
+    useAllProductCode().then((data) => {
+      const products = data.map((product) => product.value);
+      setProductCodes(products);
+      setSuggestions(defaultState(products));
+    });
+  }, []);
+
+  console.log('Component', suggestions);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event) {
@@ -38,7 +52,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
   const onChangeHandler = (e) => {
     const searchLists: any = {};
     setShowSuggestion(true);
-    products.forEach((product) => {
+    productCodes.forEach((product) => {
       const value = fuzzyMatch(product, e.target.value);
       if (value) searchLists[product] = value;
     });
@@ -86,7 +100,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
       </div>
       <div className={styles.chip__chips}>
         {chips.map((chip, idx) => (
-          <div className="chip" key={chip}>
+          <div className="chip ml-10" key={chip}>
             <span className="chip__title">{chip}</span>
             <button
               type="button"
