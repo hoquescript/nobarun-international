@@ -60,6 +60,7 @@ const FileButton = (props: {
     <div className="product-images">
       {showMedia &&
         media &&
+        media.images &&
         media.images.map((src, idx) => (
           <figure key={src + idx}>
             <button type="button" className="remove-image">
@@ -70,6 +71,7 @@ const FileButton = (props: {
         ))}
       {showMedia &&
         media &&
+        media.videos &&
         media.videos.map((src, idx) => {
           const id = getYoutubeId(src);
           return (

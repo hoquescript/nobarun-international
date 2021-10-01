@@ -72,10 +72,10 @@ export const uiSlice = createSlice({
       state.links.push(action.payload);
     },
     selectImage: (state, action) => {
-      if (action.payload.path === '/product/add-new-product') {
-        // @ts-ignore
-        state.productMedia.images.push(action.payload.src);
-      }
+      // if (action.payload.path === '/product/add-new-product') {
+      //   // @ts-ignore
+      //   state.productMedia.images.push(action.payload.src);
+      // }
       if (action.payload.path.startsWith('/product/categories/')) {
         if (state.productCategoryMedia.images.length === 1)
           state.productCategoryMedia.images = [];
@@ -94,33 +94,25 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.blogCategoryMedia.images.push(action.payload.src);
       }
-      // if (action.payload.path === '/blogs/add-new-post') {
-      //   // @ts-ignore
-      //   state.blogsImage.push(action.payload.src);
-      // }
-      if (action.payload.path.startsWith('/review/add-new-review')) {
+      if (action.payload.path.startsWith('/review')) {
         // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
     },
     selectVideo: (state, action) => {
-      if (action.payload.path === '/product/add-new-product') {
-        // @ts-ignore
-        state.productMedia.videos.push(action.payload.src);
-      }
-      // if (action.payload.path === '/blogs/add-new-post') {
+      // if (action.payload.path === '/product/add-new-product') {
       //   // @ts-ignore
-      //   state.blogsImage.push(action.payload.src);
+      //   state.productMedia.videos.push(action.payload.src);
       // }
-      if (action.payload.path === '/review/add-new-review') {
+      if (action.payload.path === '/review') {
         // @ts-ignore
         state.reviewMedia.videos.push(action.payload.src);
       }
     },
-    
+
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
-        state.productCollectionMedia.images = [action.payload.src];
+        state.productCategoryMedia.images = [action.payload.src];
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         state.productCollectionMedia.images = [action.payload.src];

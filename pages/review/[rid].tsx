@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import StarRatings from 'react-star-ratings';
+import { useAlert } from 'react-alert';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
@@ -29,6 +30,11 @@ const CREATE_REVIEW = gql`
     }
   }
 `;
+const EDIT_REVIEW = gql`
+  mutation editReview($data: EditReview!) {
+    editReview(data: $data)
+  }
+`;
 
 const defaultValues = {
   name: '',
@@ -41,6 +47,7 @@ const defaultValues = {
 };
 
 const AddReview = () => {
+  const alert = useAlert();
   const router = useRouter();
   const rid = router.query.rid;
   const methods = useForm({
@@ -50,7 +57,8 @@ const AddReview = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [rating, setRating] = useState(0);
 
-  const [createReview] = useMutation(CREATE_REVIEW);
+  const [createReview, createState] = useMutation(CREATE_REVIEW);
+  const [editReview, editState] = useMutation(EDIT_REVIEW);
 
   const dispatch = useTypedDispatch();
   const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
@@ -63,16 +71,38 @@ const AddReview = () => {
       productCode: data.productCode,
       reviewMedia,
     };
-    console.log(review);
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());
     setRating(0);
-
-    createReview({
-      variables: {
-        data: review,
-      },
-    });
+    if (!data.createdAt) {
+      delete review.createdAt;
+    }
+    if (isEditMode) {
+      editReview({
+        variables: {
+          data: {
+            editId: rid,
+            editableObject: review,
+          },
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Review Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    } else {
+      createReview({
+        variables: {
+          data: review,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    }
   };
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {

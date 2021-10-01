@@ -10,14 +10,18 @@ import Textarea from '../controls/textarea';
 import Textfield from '../controls/textfield';
 
 import styles from '../../styles/pages/admin.module.scss';
+import PasswordChecker from './PasswordChecker';
 
 interface AccountInfoProps {
   images: string;
   setImages: any;
   setTabValue: any;
+  isPasswordMatched: boolean;
+  control: any;
 }
 const AccountInfo = (props: AccountInfoProps) => {
-  const { images, setImages, setTabValue } = props;
+  const { images, setImages, setTabValue, isPasswordMatched, control } = props;
+  console.log(isPasswordMatched);
   const imageUploadHandler = async (e) => {
     const { files } = e.target;
     if (files) {
@@ -76,26 +80,7 @@ const AccountInfo = (props: AccountInfoProps) => {
               placeholder="Enter your Number"
             />
           </div>
-          <div className="grid two mb-20">
-            <Textfield
-              // required
-              name="password"
-              type="password"
-              label="Password"
-              placeholder="Enter your Password"
-            />
-            <Textfield
-              // required
-              name="confirmPassword"
-              type="password"
-              label="Confirm Password"
-              placeholder="Confirm your Password"
-            />
-            {/* <div className="flex" style={{ marginTop: '-1.8rem', color: 'red' }}>
-            <FaInfoCircle className="ml-20 mr-10" style={{}} />
-            Those passwords didn’t match. Try again
-          </div> */}
-          </div>
+          <PasswordChecker control={control} />
           <div className="grid one mb-20">
             <Textarea name="notes" label="Add your Notes" />
           </div>

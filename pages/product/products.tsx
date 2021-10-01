@@ -48,19 +48,6 @@ const Products = () => {
     useAllProducts().then((data) => setProducts(data));
   }, []);
 
-  // useEffect(() => {
-  //   const filteredProducts: any[] = [];
-  //   products.forEach((product) => {
-  //     const value = fuzzyMatch(product.productName, search);
-  //     if (value) filteredProducts.push(product);
-  //   });
-  //   // console.log(filteredProducts);
-  //   setProducts(filteredProducts);
-  //   // const filteredProducts = products.filter((product) => {
-  //   //   return product.productName;
-  //   // });
-  // }, [search]);
-
   const filterData = (rows, ids, query) => {
     const param = query.search.toLowerCase();
     return rows.filter((row) => {
@@ -160,14 +147,15 @@ const Products = () => {
             data={products}
             globalFilterFn={filterData}
             deleteHandler={(id, idx) => {
-              const modifiedData = [...products];
-              modifiedData.splice(idx, 1);
-              setProducts(modifiedData);
-              deleteProduct({
-                variables: {
-                  id,
-                },
-              });
+              console.log(id, idx);
+              // const modifiedData = [...products];
+              // modifiedData.splice(idx, 1);
+              // setProducts(modifiedData);
+              // deleteProduct({
+              //   variables: {
+              //     id,
+              //   },
+              // });
             }}
           />
         )}

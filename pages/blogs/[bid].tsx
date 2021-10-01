@@ -6,6 +6,7 @@ import PostSection, { IPostSection } from '../../components/blogs/PostSection';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { useAlert } from 'react-alert';
 
 import Checkbox from '../../components/controls/checkbox';
 import Chip from '../../components/controls/chip';
@@ -62,6 +63,7 @@ const defaultPostSection = {
 };
 
 const AddNewPost = () => {
+  const alert = useAlert();
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -82,8 +84,8 @@ const AddNewPost = () => {
     });
   }, []);
 
-  const [addBlog] = useMutation(ADD_NEW_BLOG);
-  const [editBlog] = useMutation(EDIT_BLOG);
+  const [addBlog, createState] = useMutation(ADD_NEW_BLOG);
+  const [editBlog, editState] = useMutation(EDIT_BLOG);
 
   const dispatch = useTypedDispatch();
   const blogMedia = useTypedSelector((state) => state.blogs.blogsMedia.main);
@@ -112,7 +114,7 @@ const AddNewPost = () => {
     dispatch(resetBlogMedia());
     setTags([]);
     PostSectionState[1](defaultPostSection);
-    // console.log({ data, post });
+
     if (isEditMode) {
       editBlog({
         variables: {
@@ -122,12 +124,22 @@ const AddNewPost = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Query Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       addBlog({
         variables: {
           data: post,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
 

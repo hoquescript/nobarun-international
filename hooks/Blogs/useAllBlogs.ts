@@ -6,10 +6,17 @@ const GET_ALL_BLOGS = gql`
     getAllTheBlog {
       id
       postTitle: blogTitle
-      contact: contactPerson
-      category
+      contact: contactPerson {
+        name
+      }
+      category: populatedCategory {
+        name
+      }
       isPublished
-      author: relatedProduct
+      author: populatedRelatedProduct {
+        productName
+      }
+      createdAt
     }
   }
 `;
@@ -19,11 +26,12 @@ const useAllBlogCategories = async () => {
   return data.getAllTheBlog.map((blog) => ({
     id: blog.id,
     postTitle: blog.postTitle,
-    contact: blog.contact,
-    category: blog.category,
+    contact: blog.contact.name,
+    category: blog.category.name,
     isPublished: blog.isPublished,
-    publishedOn: '20th Jan, 2021',
-    author: blog.author,
+    publishedOn: blog.createdAt,
+    author: blog.author.productName,
+    createdAt: blog.createdAt,
   }));
 };
 

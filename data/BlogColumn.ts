@@ -21,9 +21,9 @@ export const BLOG_COLUMNS = [
     Cell: ({ value }) => (value ? 'Published' : 'Draft'),
   },
   {
-    Header: 'Publish',
-    accessor: 'publishedOn',
-    // Cell: ({ value }) => format(new Date(value), 'dd/MM/yyyy'),
+    Header: 'Published On',
+    accessor: 'createdAt',
+    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
   },
   {
     Header: 'Published By',

@@ -4,15 +4,16 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
 import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
 
-import RelatedProducts from '../../components/products/AddProduct/RelatedProduct';
 import { InputFileUpload } from '../../components/controls/fileUpload';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import useQueryById from '../../hooks/Query/useQueryById';
 import styles from '../../styles/pages/query-report.module.scss';
+import ProductCode from '../../components/shared/ProductCode';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -36,22 +37,22 @@ const defaultValues = {
   notes: '',
   number: '',
   address: '',
-  product: '',
+  productCode: '',
 };
 
 const AddNewQuery = () => {
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
+  const alert = useAlert();
   const router = useRouter();
   const qid = router.query.qid;
 
-  const [createQuery] = useMutation(ADD_NEW_QUERY);
-  const [editQuery] = useMutation(EDIT_NEW_QUERY);
+  const [createQuery, createState] = useMutation(ADD_NEW_QUERY);
+  const [editQuery, editState] = useMutation(EDIT_NEW_QUERY);
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [attachment, setAttachment] = useState('');
-  const [productCode, setProductCode] = useState([]);
   const fileInputRef = React.useRef();
 
   const addNewQuery = (data) => {
@@ -63,15 +64,13 @@ const AddNewQuery = () => {
       notes: data.notes,
       phone: data.number,
       address: data.address,
-      product: productCode[0],
+      productCode: data.productCode,
       attachment,
     };
     methods.reset(defaultValues);
     setAttachment('');
-    setProductCode([]);
     // @ts-ignore
     fileInputRef.current.value = '';
-
     if (isEditMode) {
       editQuery({
         variables: {
@@ -81,12 +80,22 @@ const AddNewQuery = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Query Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createQuery({
         variables: {
           data: query,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
 
@@ -146,8 +155,8 @@ const AddNewQuery = () => {
             placeholder="Enter your Company Name"
           />
         </div>
-        <div className="mt-30">
-          <RelatedProducts chips={productCode} setChips={setProductCode} />
+        <div className="grid three mt-30 mb-30">
+          <ProductCode />
         </div>
         <div className="grid one mb-20">
           <Textarea name="message" label="Message" />

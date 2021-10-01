@@ -52,7 +52,10 @@ const Collections = () => {
           <h3 className="custom-input">{item.name}</h3>
         </div>
         <div className="col-5">
-          <h3 className="custom-input">{item.description}</h3>
+          <div
+            className="custom-input"
+            dangerouslySetInnerHTML={{ __html: item.description }}
+          />
         </div>
         <div className="col-3 row">
           <div className="col-5">

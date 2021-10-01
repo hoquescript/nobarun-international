@@ -9,7 +9,7 @@ interface PricingProps {
 }
 const Pricing = (props: PricingProps) => {
   const { register, control, setValue } = props;
-  const { dirtyFields, touchedFields } = useFormState();
+  const { dirtyFields } = useFormState();
   // console.log({ dirtyFields });
   const priceValue = useWatch({
     control,

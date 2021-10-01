@@ -1,6 +1,7 @@
 import React from 'react';
 import { UseFormHandleSubmit, FieldValues } from 'react-hook-form';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 
 interface PermissionProps {
   (key: string): {
@@ -19,6 +20,11 @@ interface AccountAccessProps {
   register: any;
   setIsPasswordMatched: any;
   isEditMode: boolean;
+  setTabValue: any;
+  defaultValues: any;
+  menu: any;
+  reset: any;
+  setImages: any;
 }
 
 const CREATE_ACCOUNT = gql`
@@ -42,18 +48,24 @@ const AccountAccess = (props: AccountAccessProps) => {
     setPermission,
     register,
     handleSubmit,
-    setIsPasswordMatched,
     isEditMode,
     accountId,
+    setTabValue,
+    defaultValues,
+    menu,
+    reset,
+    setImages,
   } = props;
-  const [createAccount] = useMutation(CREATE_ACCOUNT);
-  const [editAccount] = useMutation(EDIT_ADMIN);
+
+  const alert = useAlert();
+  const [createAccount, createState] = useMutation(CREATE_ACCOUNT);
+  const [editAccount, editState] = useMutation(EDIT_ADMIN);
 
   const onSubmit = (data) => {
     if (data.password !== data.confirmPassword) {
-      return setIsPasswordMatched(false);
+      setTabValue('information');
+      return;
     }
-    console.log(data);
     const account = {
       displayName: data.displayName,
       address: data.address,
@@ -68,10 +80,15 @@ const AccountAccess = (props: AccountAccessProps) => {
       image: images,
       sendMail: data.sendMail,
     };
+
+    // Resetting
+    reset(defaultValues);
+    setPermission(menu);
+    setImages('');
+
+    // Posting
     if (isEditMode) {
       delete account.password;
-      console.log('object');
-      console.log(account);
       editAccount({
         variables: {
           data: {
@@ -80,15 +97,27 @@ const AccountAccess = (props: AccountAccessProps) => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Admin Account Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createAccount({
         variables: {
           data: account,
         },
       });
+      if (!createState.error) {
+        alert.success('Created a New Admin Account Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
-
+  const onError = (error) => {
+    alert.error('Please Fillup all the Required Fields(*)');
+  };
   const onSelectAllChange = (e) => {
     const allPermission = { ...permission };
     Object.keys(allPermission).forEach((key) => {
@@ -195,7 +224,7 @@ const AccountAccess = (props: AccountAccessProps) => {
             </label>
           </div>
         </div>
-        <button className="btn-green" onClick={handleSubmit(onSubmit)}>
+        <button className="btn-green" onClick={handleSubmit(onSubmit, onError)}>
           Save
         </button>
       </div>

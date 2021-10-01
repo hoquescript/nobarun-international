@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import { resetMediaSelection } from '../../store/slices/ui';
+import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaEye, FaSave } from 'react-icons/fa';
@@ -81,6 +81,7 @@ const defaultQuestions = [
 ];
 
 const AddProduct = () => {
+  const alert = useAlert();
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -91,8 +92,8 @@ const AddProduct = () => {
   const [tabValue, setTabValue] = useState('description');
   const [info, setInfo] = useState({});
 
-  const [createNewProduct] = useMutation(CREATE_NEW_PRODUCTS);
-  const [editProduct] = useMutation(EDIT_PRODUCT);
+  const [createNewProduct, createState] = useMutation(CREATE_NEW_PRODUCTS);
+  const [editProduct, editState] = useMutation(EDIT_PRODUCT);
 
   // Getting Category | Collection | Contact | Stock
   useEffect(() => {
@@ -163,7 +164,6 @@ const AddProduct = () => {
     dispatch(resetBlogMedia());
 
     if (isEditMode) {
-      delete product.collectionName;
       editProduct({
         variables: {
           data: {
@@ -172,12 +172,22 @@ const AddProduct = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Review Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createNewProduct({
         variables: {
           data: product,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
 

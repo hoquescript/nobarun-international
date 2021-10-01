@@ -6,10 +6,10 @@ import { FaEye, FaPlusCircle } from 'react-icons/fa';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import { useAlert } from 'react-alert';
 
 import Combobox from '../../../components/controls/combobox';
 
-import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 import Togglebar from '../../../components/controls/togglebar';
 
@@ -22,6 +22,7 @@ import useBlogCategoryById from '../../../hooks/Blogs/useBlogCategoryById';
 import FileButton from '../../../components/controls/file';
 import Toolbar from '../../../components/shared/Toolbar';
 import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
+import SlugGenerator from '../../../components/blogs/SlugCategory';
 
 const CREATE_CATEGORY = gql`
   mutation addNewBlogCategory($data: CreateNewBlogCategoryInput!) {
@@ -47,6 +48,7 @@ const defaultValues = {
 };
 
 const AddCategory = () => {
+  const alert = useAlert();
   const router = useRouter();
   const catid = router.query.catid;
 
@@ -54,8 +56,8 @@ const AddCategory = () => {
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
 
-  const [createCategory] = useMutation(CREATE_CATEGORY);
-  const [editCategory] = useMutation(EDIT_CATEGORY);
+  const [createCategory, createState] = useMutation(CREATE_CATEGORY);
+  const [editCategory, editState] = useMutation(EDIT_CATEGORY);
 
   const textEditorRef = useRef(null);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -112,12 +114,22 @@ const AddCategory = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Query Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createCategory({
         variables: {
           data: category,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
   return (
@@ -136,22 +148,13 @@ const AddCategory = () => {
         <div className="wrapper-section">
           <div className="wrapper-section__content">
             <div className="row">
-              <div className="col-12">
-                <Textfield
-                  name="name"
-                  label="Category Name"
-                  placeholder="Enter your Name"
-                />
-              </div>
-              <div className="col-12">
-                <Textfield
-                  name="slug"
-                  label="Slug"
-                  placeholder="Enter your Name"
-                />
-              </div>
+              <SlugGenerator
+                register={methods.register}
+                control={methods.control}
+                setValue={methods.setValue}
+              />
               {!isEditMode && (
-                <div className="grid three mb-20">
+                <div className="col-4 mt-20 mb-20 mr-60">
                   <Combobox
                     name="parentCategory"
                     label="Parent Category"
@@ -161,7 +164,7 @@ const AddCategory = () => {
                 </div>
               )}
               <div
-                className={isEditMode ? 'col-6 mt-20' : 'col-6 ml-60'}
+                className={isEditMode ? 'col-6 mt-20' : 'col-6  mt-20 ml-60'}
                 style={{
                   transform: isEditMode ? '' : 'translateY(30px)',
                   flexDirection: 'row',

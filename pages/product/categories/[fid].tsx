@@ -6,9 +6,9 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
 import { FaEye } from 'react-icons/fa';
+import { useAlert } from 'react-alert';
 
 import Combobox from '../../../components/controls/combobox';
-import Textfield from '../../../components/controls/textfield';
 import TextEditor from '../../../components/shared/TextEditor';
 
 import {
@@ -21,34 +21,12 @@ import FileButton from '../../../components/controls/file';
 import Toolbar from '../../../components/shared/Toolbar';
 
 import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
+import CategorySlug from '../../../components/products/CategorySlug';
 
 const CREATE_CATEGORY = gql`
-  mutation addNewCategory(
-    $name: String!
-    $description: String!
-    $image: String!
-    $slug: String
-    $isPublished: Boolean!
-    $id: String!
-    $parentCategory: String!
-  ) {
-    addNewCategory(
-      data: {
-        name: $name
-        description: $description
-        image: $image
-        slug: $slug
-        isPublished: $isPublished
-        id: $id
-        parentCategory: $parentCategory
-      }
-    ) {
-      id
-      name
-      description
-      parentCategory
-      slug
-      image
+  mutation addNewCategory($data: CreateNewCategoryInput!) {
+    addNewCategory(data: $data) {
+      _id
     }
   }
 `;
@@ -62,6 +40,7 @@ const EDIT_CATEGORY = gql`
 const defaultValues = {
   categoryName: '',
   categorySlug: '',
+  parentCategory: '',
   isPublished: false,
 };
 
@@ -70,6 +49,7 @@ const CategoryForm = () => {
     query: { fid },
     asPath,
   } = useRouter();
+  const alert = useAlert();
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -79,15 +59,13 @@ const CategoryForm = () => {
   const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
 
-  const [createCategory] = useMutation(CREATE_CATEGORY);
-  const [editCategory] = useMutation(EDIT_CATEGORY);
+  const [createCategory, createState] = useMutation(CREATE_CATEGORY);
+  const [editCategory, editState] = useMutation(EDIT_CATEGORY);
 
   useEffect(() => {
-    if (fid !== 'add') {
-      useAllCategories().then((data) => {
-        setCategories(data);
-      });
-    }
+    useAllCategories().then((data) => {
+      setCategories(data);
+    });
   }, []);
 
   const dispatch = useTypedDispatch();
@@ -101,6 +79,7 @@ const CategoryForm = () => {
     if (fid !== 'add') {
       setIsEditMode(true);
       useProductCategoryById(fid, token).then((data) => {
+        console.log(data);
         methods.reset(data);
         // @ts-ignore
         dispatch(setMedia({ path: asPath, src: data.image }));
@@ -139,12 +118,22 @@ const CategoryForm = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Query Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createCategory({
         variables: {
           data: category,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
   return (
@@ -173,22 +162,13 @@ const CategoryForm = () => {
         <div className="wrapper-section">
           <div className="wrapper-section__content">
             <div className="row">
-              <div className="col-12">
-                <Textfield
-                  label="Name"
-                  placeholder="Enter Category Name"
-                  name="categoryName"
-                />
-              </div>
-              <div className="col-12">
-                <Textfield
-                  label="Slug"
-                  placeholder="Enter Category Slug"
-                  name="categorySlug"
-                />
-              </div>
+              <CategorySlug
+                register={methods.register}
+                control={methods.control}
+                setValue={methods.setValue}
+              />
               {!isEditMode && (
-                <div className="col-4">
+                <div className="col-4 mt-20">
                   <Combobox
                     name="parentCategory"
                     label="Parent Category"
@@ -198,7 +178,7 @@ const CategoryForm = () => {
                 </div>
               )}
               <div
-                className={isEditMode ? 'col-6 mt-20' : 'col-6 ml-60'}
+                className={isEditMode ? 'col-6 mt-20' : 'col-6 mt-20 ml-60'}
                 style={{
                   transform: isEditMode ? '' : 'translateY(30px)',
                   flexDirection: 'row',

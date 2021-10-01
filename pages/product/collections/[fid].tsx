@@ -3,8 +3,10 @@ import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import { useAlert } from 'react-alert';
 import { FormProvider, useForm } from 'react-hook-form';
 import { FaEye, FaPlusCircle } from 'react-icons/fa';
+
 import FileButton from '../../../components/controls/file';
 import Textfield from '../../../components/controls/textfield';
 import Togglebar from '../../../components/controls/togglebar';
@@ -16,6 +18,7 @@ import {
 } from '../../../hooks/useTypedSelector';
 import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
 import useCollectionById from '../../../hooks/Products/useProductCollectionById';
+import CollectionSlug from '../../../components/products/CollectionSlug';
 
 const CREATE_COLLECTION = gql`
   mutation addCollection($data: CreateNewCollectionInput!) {
@@ -41,6 +44,7 @@ const CollectionForm = () => {
     query: { fid },
     asPath,
   } = useRouter();
+  const alert = useAlert();
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
@@ -49,8 +53,8 @@ const CollectionForm = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [description, setDescription] = useState('');
 
-  const [createCollection] = useMutation(CREATE_COLLECTION);
-  const [editCollection] = useMutation(EDIT_COLLECTION);
+  const [createCollection, createState] = useMutation(CREATE_COLLECTION);
+  const [editCollection, editState] = useMutation(EDIT_COLLECTION);
 
   const dispatch = useTypedDispatch();
 
@@ -96,12 +100,22 @@ const CollectionForm = () => {
           },
         },
       });
+      if (!editState.error) {
+        alert.info('Edited Query Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
     } else {
       createCollection({
         variables: {
           data: collection,
         },
       });
+      if (!createState.error) {
+        alert.success('Posted Query Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
 
@@ -128,20 +142,11 @@ const CollectionForm = () => {
         <div className="wrapper-section">
           <div className="wrapper-section__content">
             <div className="row">
-              <div className="col-12">
-                <Textfield
-                  name="collectionName"
-                  label="Name"
-                  placeholder="Enter Collection Name"
-                />
-              </div>
-              <div className="col-12">
-                <Textfield
-                  name="collectionSlug"
-                  label="Slug"
-                  placeholder="Enter Collection Slug"
-                />
-              </div>
+              <CollectionSlug
+                register={methods.register}
+                control={methods.control}
+                setValue={methods.setValue}
+              />
               <div className="col-6 mt-30">
                 <FileButton showMedia page="pCollection" />
               </div>

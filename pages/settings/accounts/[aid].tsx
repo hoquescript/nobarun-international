@@ -55,6 +55,7 @@ const defaultValues = {
   number: '',
   password: '',
   confirmPassword: '',
+  notes: '',
   sendMail: false,
 };
 
@@ -72,8 +73,9 @@ const AddAdmin = () => {
   const [tabValue, setTabValue] = useState('information');
   const [images, setImages] = useState('');
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isPasswordMatched, setIsPasswordMatched] = useState(false);
+  const [isPasswordMatched, setIsPasswordMatched] = useState(true);
 
+  console.log(tabValue);
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
 
@@ -105,9 +107,11 @@ const AddAdmin = () => {
         >
           <TabContent id="information" value={tabValue}>
             <AccountInfo
+              control={methods.control}
               images={images}
               setImages={setImages}
               setTabValue={setTabValue}
+              isPasswordMatched={isPasswordMatched}
             />
           </TabContent>
           <TabContent id="permission" value={tabValue}>
@@ -117,9 +121,14 @@ const AddAdmin = () => {
               setPermission={setPermission}
               register={methods.register}
               handleSubmit={methods.handleSubmit}
+              reset={methods.reset}
               setIsPasswordMatched={setIsPasswordMatched}
               accountId={aid as string}
               isEditMode={isEditMode}
+              setTabValue={setTabValue}
+              setImages={setImages}
+              defaultValues={defaultValues}
+              menu={Menu}
             />
           </TabContent>
         </TabMenu>
