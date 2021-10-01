@@ -19,6 +19,7 @@ const EditorComponent = dynamic(
 ) as any as Editor;
 
 interface TextEditorProps {
+  value?: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   bodyClass?: string;
   onChange?: any;

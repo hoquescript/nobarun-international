@@ -15,7 +15,9 @@ interface DescriptionProps {
   keyPointState: [any, any];
   question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
   tagState: any;
+  features: string;
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
+  specification: string;
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
   info: any;
@@ -34,7 +36,9 @@ const Description = (props: DescriptionProps) => {
     keyPointState,
     question,
     tagState: [tags, setTags],
+    features,
     setFeatures,
+    specification,
     setSpecification,
     setTabValue,
     info,
@@ -119,7 +123,7 @@ const Description = (props: DescriptionProps) => {
         </div>
         <div className="wrapper-section__content">
           <div className="field mt-20">
-            <TextEditor setValue={setFeatures} />
+            <TextEditor value={features} setValue={setFeatures} />
           </div>
         </div>
       </div>
@@ -129,7 +133,7 @@ const Description = (props: DescriptionProps) => {
         </div>
         <div className="wrapper-section__content">
           <div className="field mt-20">
-            <TextEditor setValue={setSpecification} />
+            <TextEditor value={specification} setValue={setSpecification} />
           </div>
         </div>
       </div>

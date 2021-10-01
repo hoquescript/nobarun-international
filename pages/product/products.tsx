@@ -147,15 +147,14 @@ const Products = () => {
             data={products}
             globalFilterFn={filterData}
             deleteHandler={(id, idx) => {
-              console.log(id, idx);
-              // const modifiedData = [...products];
-              // modifiedData.splice(idx, 1);
-              // setProducts(modifiedData);
-              // deleteProduct({
-              //   variables: {
-              //     id,
-              //   },
-              // });
+              const modifiedData = [...products];
+              modifiedData.splice(idx, 1);
+              setProducts(modifiedData);
+              deleteProduct({
+                variables: {
+                  id,
+                },
+              });
             }}
           />
         )}

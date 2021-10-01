@@ -31,12 +31,6 @@ const Pricing = (props: PricingProps) => {
     const discount = discountValue !== '' ? parseInt(discountValue) : '';
     const originalPrice =
       originalPriceValue !== '' ? parseInt(originalPriceValue) : '';
-    console.log(
-      price,
-      originalPrice,
-      dirtyFields.discount,
-      dirtyFields.originalPrice,
-    );
     // Finding Discount
     if (
       price &&
@@ -46,7 +40,6 @@ const Pricing = (props: PricingProps) => {
       !dirtyFields.discount &&
       price < originalPrice
     ) {
-      console.log('Finding Discount');
       const discount = originalPrice - price;
       const cDiscount = Math.ceil((discount / originalPrice) * 100);
       setValue('discount', cDiscount);
@@ -61,7 +54,6 @@ const Pricing = (props: PricingProps) => {
       dirtyFields.discount &&
       discount <= 100
     ) {
-      console.log('Finding Original');
       const pricePercentage = 100 - discount;
       const oPrice = Math.ceil((price / pricePercentage) * 100);
       setValue('originalPrice', oPrice);
@@ -75,7 +67,6 @@ const Pricing = (props: PricingProps) => {
       dirtyFields.originalPrice &&
       dirtyFields.discount
     ) {
-      console.log('Finding Discounted Price');
       const discountAmmount = Math.ceil((discount / 100) * originalPrice);
       const discountPrice = originalPrice - discountAmmount;
       setValue('price', discountPrice);

@@ -17,7 +17,7 @@ const Questions = (props: QuestionsProps) => {
   const {
     question: [questions, setQuestions],
   } = props;
-
+  console.log(questions);
   const onQuestionsChange = (
     idx: number,
     key: 'title' | 'question',
@@ -58,6 +58,8 @@ const Questions = (props: QuestionsProps) => {
     questionArr[idx].isCollapsed = !questionArr[idx].isCollapsed;
     setQuestions(questionArr);
   };
+
+  // console.log(questions);
 
   return (
     <div className="wrapper-section">
@@ -114,10 +116,13 @@ const Questions = (props: QuestionsProps) => {
             }`}
           >
             <TextEditor
+              value={question.question}
               disabled={question.isDisabled}
-              onChange={(content: string) =>
-                onQuestionsChange(idx, 'question', content)
-              }
+              onChange={(content: string) => {
+                // console.log(content);
+                onQuestionsChange(idx, 'question', content);
+                // console.log('I was clicked');
+              }}
             />
           </div>
         </div>

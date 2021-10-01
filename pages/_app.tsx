@@ -6,12 +6,15 @@ import { ApolloProvider } from '@apollo/client';
 import { transitions, positions, Provider as AlertProvider } from 'react-alert';
 
 import Layout from '../layout';
+import Alert from '../components/shared/Alert';
+
 import useAuthProvider from '../hooks/useAuthProvider';
 import store from '../store/configureStore';
+
 import '../styles/main.scss';
 import 'react-nestable/dist/styles/index.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import Alert from '../components/shared/Alert';
+import 'react-quill/dist/quill.snow.css';
 
 // optional configuration
 const options = {

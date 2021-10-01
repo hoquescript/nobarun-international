@@ -203,6 +203,7 @@ const AddProduct = () => {
             keypoint: data.keyPoints.media,
           }),
         );
+        // console.log(data.questions);
         question[1](data.questions);
         setFeatures(data.features);
         setSpecification(data.specification);
@@ -263,7 +264,9 @@ const AddProduct = () => {
                 keyPointState={KeyPoint}
                 question={question}
                 tagState={tagState}
+                features={features}
                 setFeatures={setFeatures}
+                specification={specification}
                 setSpecification={setSpecification}
                 setTabValue={setTabValue}
                 info={info}

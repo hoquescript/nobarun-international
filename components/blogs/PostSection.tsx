@@ -33,6 +33,7 @@ const PostSection = (props: PostSectionProps) => {
     key: 'title' | 'content',
     value: string,
   ) => {
+    console.log('Changing');
     const points = { ...keyPoints };
     points[idx][key] = value;
     setKeyPoints(points);
@@ -68,6 +69,8 @@ const PostSection = (props: PostSectionProps) => {
     keyPointsArr[idx].isCollapsed = !keyPointsArr[idx].isCollapsed;
     setKeyPoints(keyPointsArr);
   };
+
+  console.log(keyPoints);
 
   return (
     <div className="wrapper-section">
@@ -137,6 +140,7 @@ const PostSection = (props: PostSectionProps) => {
           >
             <TextEditor
               multiple
+              value={keyPoints[key].content}
               disabled={keyPoints[key].isDisabled}
               onChange={(content: string) =>
                 onKeyPointsContentChange(key, 'content', content)

@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
 
 import styles from '../styles/pages/dashboard.module.scss';
+
 import Summary from '../components/dashboard/Summary';
 import Product from '../components/dashboard/product';
 import useRootQuery from '../hooks/useRootQuery';
@@ -21,6 +22,7 @@ interface HomeProps {
 }
 const Home: NextPage<HomeProps> = (props) => {
   const { summary, enquiries, recentProducts, recentReviews } = props;
+  console.log(props);
   return (
     <div className="container center">
       <div className="row">
@@ -77,13 +79,3 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 export default Home;
-
-// {
-//   summary: {
-//     totalProducts: 10,
-//     totalQueries: 8,
-//     totalPosts: 20,
-//     totalReviews: 80,
-//   },
-// },
-// };

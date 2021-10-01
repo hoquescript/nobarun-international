@@ -57,8 +57,16 @@
 // }
 
 // React TextEditor
-.editor__body-large {
-  min-height: 56rem !important;
+.quill {
+  padding: 1rem 2rem !important;
+}
+.ql-toolbar.ql-snow {
+  border: 1px solid #dbdbdb !important;
+  padding: 1.2rem 1rem !important;
+}
+.ql-container.ql-snow {
+  min-height: 20rem !important;
+  border: 1px solid #dbdbdb !important;
 }
 
 //React File Structure

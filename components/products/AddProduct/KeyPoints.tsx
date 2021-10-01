@@ -139,6 +139,7 @@ const KeyPoints = (props: KeyPointsProps) => {
             }`}
           >
             <TextEditor
+              value={keyPoints[point].content}
               multiple
               disabled={keyPoints[point].isDisabled}
               onChange={(content: string) =>

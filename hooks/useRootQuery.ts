@@ -13,6 +13,7 @@ const GET_ROOT_QUERY = gql`
           id
           productName
           title
+          images
         }
         reviewCount
         ratingAverage
@@ -22,6 +23,7 @@ const GET_ROOT_QUERY = gql`
           id
           productName
           title
+          images
         }
         reviewCount
         ratingAverage
@@ -31,6 +33,7 @@ const GET_ROOT_QUERY = gql`
           id
           productName
           title
+          images
         }
         reviewCount
         ratingAverage

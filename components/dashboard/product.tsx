@@ -7,6 +7,7 @@ interface ProductProps {
     id: string;
     productName: string;
     title: string;
+    images: string[];
   };
   reviewCount: number;
   ratingAverage: number;
@@ -17,7 +18,7 @@ const Product = (props: ProductProps) => {
     <div className={styles.product}>
       <div>
         <img
-          src="/images/product-img.jpg"
+          src={product.images && product.images[0]}
           alt="Product"
           className={styles.product__image}
         />
