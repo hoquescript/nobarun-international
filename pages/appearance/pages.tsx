@@ -31,7 +31,7 @@ const Pages = () => {
         placeholder="Title of the Page"
         // value="Plastic Aluminum Solar Reflective Motorway Road Studs"
       />
-      <TextEditor bodyClass="editor__body-large" />
+      {/* <TextEditor bodyClass="editor__body-large" /> */}
     </div>
   );
 };
