@@ -13,7 +13,7 @@ import RelatedProducts from '../AddProduct/RelatedProduct';
 interface DescriptionProps {
   register: UseFormRegister<FieldValues>;
   keyPointState: [any, any];
-  question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
+  question: [any, any];
   tagState: any;
   features: string;
   setFeatures: React.Dispatch<React.SetStateAction<string>>;
@@ -47,6 +47,7 @@ const Description = (props: DescriptionProps) => {
     setPage,
     setPostSectionKey,
   } = props;
+
   return (
     <div id="description">
       <div className="wrapper-section">
@@ -126,7 +127,13 @@ const Description = (props: DescriptionProps) => {
         </div>
         <div className="wrapper-section__content">
           <div className="field mt-20">
-            <TextEditor value={features} setValue={setFeatures} />
+            <TextEditor
+              value={features}
+              onChange={(content) => {
+                console.log(features);
+                setFeatures(content);
+              }}
+            />
           </div>
         </div>
       </div>
@@ -136,7 +143,7 @@ const Description = (props: DescriptionProps) => {
         </div>
         <div className="wrapper-section__content">
           <div className="field mt-20">
-            <TextEditor value={specification} setValue={setSpecification} />
+            <TextEditor value={specification} onChange={setSpecification} />
           </div>
         </div>
       </div>

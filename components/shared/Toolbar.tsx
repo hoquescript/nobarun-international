@@ -3,6 +3,7 @@ import React, {
   useState,
   useImperativeHandle,
   forwardRef,
+  useRef,
 } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
@@ -19,6 +20,7 @@ import {
 import {
   addImage,
   addYoutubeLink,
+  closeToolbar,
   fetchMedia,
   selectImage,
   selectVideo,
@@ -127,8 +129,22 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     uploadImages();
   }, [imageFile]);
 
+  const toolbarRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (toolbarRef.current && !toolbarRef?.current.contains(event.target)) {
+        dispatch(closeToolbar());
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
+
   return (
     <div
+      ref={toolbarRef}
       id="tools-panel"
       className={`side-panel side-panel--floated ${show ? 'active' : ''}`}
     >

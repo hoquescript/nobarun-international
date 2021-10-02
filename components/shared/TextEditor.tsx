@@ -1,25 +1,10 @@
-import React, {
-  useState,
-  useEffect,
-  useImperativeHandle,
-  forwardRef,
-} from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Editor } from 'react-draft-wysiwyg';
-import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import htmlToDraft from 'html-to-draftjs';
 
-const EditorComponent = dynamic(
-  async () => {
-    const mod = await import('react-draft-wysiwyg');
-    return mod.Editor;
-  },
-  { ssr: false },
-) as any as Editor;
+const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
 
 interface TextEditorProps {
-  value?: string;
+  value: string;
   setValue?: React.Dispatch<React.SetStateAction<string>>;
   bodyClass?: string;
   onChange?: any;
@@ -27,64 +12,49 @@ interface TextEditorProps {
   disabled?: boolean;
 }
 
-const TextEditor = forwardRef((props: TextEditorProps, ref) => {
-  const { setValue, bodyClass, onChange, disabled } = props;
+const modules = {
+  toolbar: [
+    [{ header: [1, 2, false] }],
+    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+    [
+      { list: 'ordered' },
+      { list: 'bullet' },
+      { indent: '-1' },
+      { indent: '+1' },
+    ],
+    ['link', 'image'],
+    ['clean'],
+  ],
+};
 
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+const formats = [
+  'header',
+  'bold',
+  'italic',
+  'underline',
+  'strike',
+  'blockquote',
+  'list',
+  'bullet',
+  'indent',
+  'link',
+  'image',
+];
 
-  useImperativeHandle(ref, () => ({
-    async set(html) {
-      const draftData = htmlToDraft(html);
-      console.log(draftData);
-      setEditorState(draftData);
-    },
-    reset() {
-      setEditorState(EditorState.createEmpty());
-    },
-  }));
-
-  const onEditorStateChange = (editorState) => {
-    setEditorState(editorState);
-
-    onChange &&
-      onChange(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-
-    setValue &&
-      setValue(draftToHtml(convertToRaw(editorState.getCurrentContent())));
-  };
+const TextEditor = (props: TextEditorProps) => {
+  const { value, setValue, bodyClass, onChange, disabled } = props;
+  console.log('Description', value);
 
   return (
-    <>
-      {/* 
-  // @ts-ignore */}
-      <EditorComponent
-        editorState={editorState}
-        wrapperClassName="editor"
-        toolbarClassName="editor__toolbar"
-        editorClassName={`editor__body ${bodyClass}`}
-        onEditorStateChange={onEditorStateChange}
-        readOnly={disabled}
-        toolbar={{
-          options: [
-            'inline',
-            'blockType',
-            'fontSize',
-            'list',
-            'textAlign',
-            'history',
-            'embedded',
-            'emoji',
-            'image',
-          ],
-          inline: { inDropdown: true },
-          list: { inDropdown: true },
-          textAlign: { inDropdown: true },
-          link: { inDropdown: true },
-          history: { inDropdown: true },
-        }}
-      />
-    </>
+    <ReactQuill
+      theme="snow"
+      modules={modules}
+      formats={formats}
+      value={value}
+      onChange={onChange}
+      readOnly={disabled}
+    />
   );
-});
+};
 
 export default TextEditor;

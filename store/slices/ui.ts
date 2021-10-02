@@ -19,6 +19,7 @@ interface UIState {
     postSection: Media;
   };
   reviewMedia: Media;
+  queryMedia: Media;
 }
 const initialState: UIState = {
   showToolbar: false,
@@ -55,11 +56,18 @@ const initialState: UIState = {
     images: [],
     videos: [],
   },
+  queryMedia: {
+    images: [],
+    videos: [],
+  },
 };
 export const uiSlice = createSlice({
   name: 'ui',
   initialState,
   reducers: {
+    closeToolbar: (state) => {
+      state.showToolbar = false;
+    },
     toggleToolbar: (state) => {
       state.showToolbar = !state.showToolbar;
     },
@@ -98,6 +106,10 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
+      if (action.payload.path.startsWith('/query-report')) {
+        // @ts-ignore
+        state.reviewMedia.images.push(action.payload.src);
+      }
     },
     selectVideo: (state, action) => {
       // if (action.payload.path === '/product/add-new-product') {
@@ -121,7 +133,10 @@ export const uiSlice = createSlice({
         state.blogCategoryMedia.images = [action.payload.src];
       }
       if (action.payload.path.startsWith('/review')) {
-        console.log(action.payload);
+        state.reviewMedia.images = action.payload.src?.images;
+        state.reviewMedia.videos = action.payload.src?.videos;
+      }
+      if (action.payload.path.startsWith('/query-report')) {
         state.reviewMedia.images = action.payload.src?.images;
         state.reviewMedia.videos = action.payload.src?.videos;
       }
@@ -146,6 +161,7 @@ export const uiSlice = createSlice({
 });
 
 export const {
+  closeToolbar,
   toggleToolbar,
   addImage,
   addYoutubeLink,

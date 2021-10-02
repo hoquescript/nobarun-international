@@ -1,28 +1,26 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 import StarRatings from 'react-star-ratings';
 import { useAlert } from 'react-alert';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { AiOutlineClose, AiOutlineWarning } from 'react-icons/ai';
+import { FaSave, FaTimes } from 'react-icons/fa';
 
 import Toolbar from '../../components/shared/Toolbar';
-
 import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
-
 import Togglebar from '../../components/controls/togglebar';
-import { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/client';
+import FileButton from '../../components/controls/file';
+import ProductCode from '../../components/shared/ProductCode';
+
 import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
-import FileButton from '../../components/controls/file';
-import ProductCode from '../../components/shared/ProductCode';
-import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 import useReviewById from '../../hooks/Review/useReviewById';
-import { FaSave, FaTimes } from 'react-icons/fa';
+import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -57,6 +55,7 @@ const AddReview = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [rating, setRating] = useState(0);
+  const [productCode, setProductCode] = useState('');
 
   const [createReview, createState] = useMutation(CREATE_REVIEW);
   const [editReview, editState] = useMutation(EDIT_REVIEW);
@@ -69,7 +68,7 @@ const AddReview = () => {
       ...data,
       createdAt: new Date(data.createdAt),
       rating,
-      productCode: data.productCode,
+      productCode: productCode,
       reviewMedia,
     };
     methods.reset(defaultValues);
@@ -183,24 +182,16 @@ const AddReview = () => {
                     />
                   </div>
                   <div className="col-6 mb-20">
-                    <ProductCode />
+                    <ProductCode
+                      productCode={productCode}
+                      setProductCode={setProductCode}
+                    />
                   </div>
                   <div className="col-12 mb-10">
                     <Textarea name="reviewText" label="Your Reviews" />
                   </div>
                   <FileButton showMedia page="review" />
                 </div>
-                {/* <p className="mt-20 flex">
-                  <AiOutlineWarning
-                    className="mr-10"
-                    style={{ height: 25, width: 25, color: 'red' }}
-                  />
-                  Allowed file types:
-                  <strong className="ml-10">jpg, gif, png</strong>, max total
-                  size of files: <strong className="ml-10">24MB</strong>, max
-                  number of files:
-                  <strong className="ml-10">8</strong>
-                </p> */}
                 <div className="center mt-30">
                   <button
                     className="btn-green"

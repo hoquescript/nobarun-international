@@ -24,7 +24,7 @@ const useAllProducts = async () => {
   const data = await Client.request(GET_ALL_PRODUCTS);
   return data.getAllTheProducts.map((product) => ({
     ...product,
-    category: product.populatedCategory ? product.populatedCategory.name : null,
+    category: product.populatedCategory ? product.populatedCategory.name : '',
   }));
 };
 

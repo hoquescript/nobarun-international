@@ -70,15 +70,14 @@ const defaultKeypoints = {
   },
 };
 
-const defaultQuestions = [
-  {
-    id: '',
+const defaultQuestions = {
+  [uuid()]: {
     title: '',
     question: '',
     isCollapsed: false,
     isDisabled: false,
   },
-];
+};
 
 const AddProduct = () => {
   const alert = useAlert();
@@ -103,7 +102,7 @@ const AddProduct = () => {
   }, []);
 
   const KeyPoint = useState<{ [k: string]: IKeyPoints }>(defaultKeypoints);
-  const question = useState<IQuestions[]>(defaultQuestions);
+  const question = useState<{ [k: string]: IQuestions }>(defaultQuestions);
 
   const [page, setPage] = useState('');
   const [postSectionKey, setPostSectionKey] = useState('');
@@ -134,6 +133,15 @@ const AddProduct = () => {
       };
     });
 
+    const questions = Object.keys(question[0]).map((key) => {
+      const data = question[0][key];
+      return {
+        id: key,
+        title: data.title,
+        question: data.question,
+      };
+    });
+
     const product = {
       ...data,
       price: +data.price,
@@ -145,7 +153,7 @@ const AddProduct = () => {
       keyPoints,
       features,
       specification,
-      questions: question[0],
+      questions: questions,
       tags: tagState[0],
       keywords,
     };
@@ -203,7 +211,6 @@ const AddProduct = () => {
             keypoint: data.keyPoints.media,
           }),
         );
-        // console.log(data.questions);
         question[1](data.questions);
         setFeatures(data.features);
         setSpecification(data.specification);

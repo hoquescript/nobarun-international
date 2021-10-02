@@ -14,6 +14,8 @@ import { useTypedSelector } from '../../hooks/useTypedSelector';
 import useQueryById from '../../hooks/Query/useQueryById';
 import styles from '../../styles/pages/query-report.module.scss';
 import ProductCode from '../../components/shared/ProductCode';
+import FileButton from '../../components/controls/file';
+import Toolbar from '../../components/shared/Toolbar';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -53,6 +55,8 @@ const AddNewQuery = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [attachment, setAttachment] = useState('');
+  const [productCode, setProductCode] = useState('');
+
   const fileInputRef = React.useRef();
 
   const addNewQuery = (data) => {
@@ -113,6 +117,7 @@ const AddNewQuery = () => {
 
   return (
     <div className={styles.addNewQuery}>
+      <Toolbar />
       <h1 className="heading-primary ml-5 mb-40">Add New Query</h1>
       <FormProvider {...methods}>
         <div className="grid two mb-20">
@@ -144,10 +149,11 @@ const AddNewQuery = () => {
         <div className="grid two mb-20">
           <div className="field">
             <label>Attachments</label>
-            <InputFileUpload
+            <FileButton showMedia page="review" />
+            {/* <InputFileUpload
               ref={fileInputRef}
               onChangeHandler={(url) => setAttachment(url)}
-            />
+            /> */}
           </div>
           <Textfield
             name="companyName"
@@ -156,7 +162,10 @@ const AddNewQuery = () => {
           />
         </div>
         <div className="grid three mt-30 mb-30">
-          <ProductCode />
+          <ProductCode
+            productCode={productCode}
+            setProductCode={setProductCode}
+          />
         </div>
         <div className="grid one mb-20">
           <Textarea name="message" label="Message" />

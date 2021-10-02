@@ -1,82 +1,86 @@
 import React from 'react';
 import { FaPlus, FaMinus, FaSave, FaEdit } from 'react-icons/fa';
+import { v4 as uuid } from 'uuid';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import TextEditor from '../../shared/TextEditor';
 
 export interface IQuestions {
-  id: string;
   title: string;
   question: string;
   isCollapsed?: boolean;
   isDisabled?: boolean;
 }
 interface QuestionsProps {
-  question: [IQuestions[], React.Dispatch<React.SetStateAction<IQuestions[]>>];
+  question: [{ [k: string]: IQuestions }, any];
 }
 const Questions = (props: QuestionsProps) => {
   const {
     question: [questions, setQuestions],
   } = props;
-  console.log(questions);
+
   const onQuestionsChange = (
-    idx: number,
+    idx: string,
     key: 'title' | 'question',
     value: string,
   ) => {
-    const questionArr = [...questions];
-    questionArr[idx][key] = value;
+    const questionArr = { ...questions };
+    if (questionArr[idx]) {
+      questionArr[idx][key] = value;
+    }
     setQuestions(questionArr);
   };
 
   const addQuestion = () => {
-    const modifiedQuestions = [...questions];
-    modifiedQuestions.forEach(
+    const modifiedQuestions = { ...questions };
+    Object.values(modifiedQuestions).forEach(
       //@ts-ignore
       (question) => (question.isCollapsed = true),
     );
-    setQuestions([
+    setQuestions({
       ...questions,
-      {
-        id: '',
+      [uuid()]: {
         title: '',
         question: '',
         isCollapsed: false,
         isDisabled: false,
       },
-    ]);
+    });
   };
 
+  // console.log('questions', questions);
+
   const saveEditQuestion = (idx) => {
-    const questionArr = [...questions];
+    const questionArr = { ...questions };
     questionArr[idx].isDisabled = !questionArr[idx].isDisabled;
     setQuestions(questionArr);
   };
+
   const deleteQuestion = (idx) => {
-    if (questions.length > 1) {
-      const questionArr = [...questions];
-      questionArr.splice(idx, 1);
+    if (Object.keys(questions).length > 1) {
+      const questionArr = { ...questions };
+      delete questionArr[idx];
+
       setQuestions(questionArr);
     }
   };
+
   const collapseQuestion = (idx) => {
-    const questionArr = [...questions];
+    const questionArr = { ...questions };
     questionArr[idx].isCollapsed = !questionArr[idx].isCollapsed;
     setQuestions(questionArr);
   };
 
-  // console.log(questions);
-
   return (
     <div className="wrapper-section">
-      {questions.map((question, idx) => (
-        <div className="form_accordion" key={idx}>
+      {Object.keys(questions).map((key) => (
+        <div className="form_accordion" key={key}>
           <div className="form_accordion__title flex sb">
             <input
               className="custom-input large"
-              disabled={question.isDisabled}
+              disabled={questions[key].isDisabled}
               placeholder="Question Title"
-              value={question.title}
-              onChange={(e) => onQuestionsChange(idx, 'title', e.target.value)}
+              value={questions[key].title}
+              onChange={(e) => onQuestionsChange(key, 'title', e.target.value)}
             />
             <div>
               <button
@@ -89,22 +93,22 @@ const Questions = (props: QuestionsProps) => {
               <button
                 type="button"
                 className="btn-icon-white ml-20"
-                onClick={() => deleteQuestion(idx)}
+                onClick={() => deleteQuestion(key)}
               >
                 <FaMinus />
               </button>
               <button
                 type="button"
                 className="btn-icon-white ml-20"
-                onClick={() => saveEditQuestion(idx)}
+                onClick={() => saveEditQuestion(key)}
               >
-                {question.isDisabled ? <FaEdit /> : <FaSave />}
+                {questions[key].isDisabled ? <FaEdit /> : <FaSave />}
               </button>
               <button
                 type="button"
                 className="btn-icon-white ml-20"
                 style={{ transform: 'translateY(.7rem)' }}
-                onClick={() => collapseQuestion(idx)}
+                onClick={() => collapseQuestion(key)}
               >
                 <MdKeyboardArrowDown
                   style={{
@@ -117,15 +121,15 @@ const Questions = (props: QuestionsProps) => {
           </div>
           <div
             className={`form_accordion__content ${
-              !question.isCollapsed ? 'active' : ''
+              !questions[key].isCollapsed ? 'active' : ''
             }`}
           >
             <TextEditor
-              value={question.question}
-              disabled={question.isDisabled}
+              value={questions[key].question}
+              disabled={questions[key].isDisabled}
               onChange={(content: string) => {
                 // console.log(content);
-                onQuestionsChange(idx, 'question', content);
+                onQuestionsChange(key, 'question', content);
                 // console.log('I was clicked');
               }}
             />

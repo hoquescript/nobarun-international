@@ -49,12 +49,19 @@ const useProductById = async (catid) => {
   const productById = data.getProductById;
   const media = {};
   const contents = {};
+  const questions = {};
   productById.keyPoints.forEach((keyPoint) => {
     media[keyPoint.id] = {
       images: keyPoint.images,
       videos: keyPoint.videos,
     };
     contents[keyPoint.id] = {
+      title: keyPoint.title,
+      content: keyPoint.content,
+    };
+  });
+  productById.questions.forEach((keyPoint) => {
+    questions[keyPoint.id] = {
       title: keyPoint.title,
       content: keyPoint.content,
     };

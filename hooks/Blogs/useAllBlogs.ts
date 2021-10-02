@@ -26,11 +26,11 @@ const useAllBlogCategories = async () => {
   return data.getAllTheBlog.map((blog) => ({
     id: blog.id,
     postTitle: blog.postTitle,
-    contact: blog.contact.name,
-    category: blog.category.name,
+    contact: blog.contact ? blog.contact.name : '',
+    category: blog.category ? blog.category.name : '',
     isPublished: blog.isPublished,
     publishedOn: blog.createdAt,
-    author: blog.author.productName,
+    author: blog.author ? blog.author.productName : '',
     createdAt: blog.createdAt,
   }));
 };
