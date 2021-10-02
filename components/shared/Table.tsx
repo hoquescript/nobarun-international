@@ -32,6 +32,7 @@ interface TableProps {
   filter?: {
     search: string;
     range: any;
+    sortBy?: string;
   };
   globalFilterFn?: any;
 }
@@ -120,9 +121,7 @@ const Table = (props: TableProps) => {
               if (pageName === 'product') editLink = 'product';
               return (
                 <tr {...row.getRowProps()}>
-                  <td
-                  // style={{ padding: '.5rem' }}
-                  >
+                  <td>
                     <span className="table__icon grip">
                       <FaGripVertical />
                     </span>
@@ -130,9 +129,7 @@ const Table = (props: TableProps) => {
                   {row.cells.map((cell) => (
                     <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   ))}
-                  <td
-                  // style={{ padding: '.5rem' }}
-                  >
+                  <td>
                     <span className="table__icon menu">
                       <FaEllipsisH />
                       <div

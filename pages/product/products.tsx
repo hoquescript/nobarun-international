@@ -25,6 +25,7 @@ const DELETE_PRODUCT = gql`
 const Products = () => {
   const [viewType, setViewType] = useState('grid');
   const [search, setSearch] = useState('');
+  const [sortBy, setSortBy] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -50,16 +51,23 @@ const Products = () => {
 
   const filterData = (rows, ids, query) => {
     const param = query.search.toLowerCase();
-    return rows.filter((row) => {
-      console.log(row.values);
-      return (
-        row.values?.productName.toLowerCase().includes(param) &&
-        isWithinInterval(new Date(row.values?.createdAt), {
-          start: query.range.startDate,
-          end: query.range.endDate,
-        })
-      );
-    });
+    const sortBy = query.sortBy;
+    return rows
+      .filter((row) => {
+        console.log(row.values);
+        return (
+          row.values?.productName.toLowerCase().includes(param) &&
+          isWithinInterval(new Date(row.values?.createdAt), {
+            start: query.range.startDate,
+            end: query.range.endDate,
+          })
+        );
+      })
+      .sort((firstEl, secondEl) => {
+        if (firstEl.values[sortBy] < secondEl.values[sortBy]) return -1;
+        if (firstEl.values[sortBy] > secondEl.values[sortBy]) return 1;
+        return 0;
+      });
   };
 
   return (
@@ -83,10 +91,16 @@ const Products = () => {
         <div className={styles.products__viewWrapper}>
           <div className="sort-by">
             <span className="mr-10">Sort by</span>
-            <select className="custom-input" style={{ padding: '1rem' }}>
-              <option value="">Name</option>
-              <option value="">Date</option>
-              <option value="">Stock Id</option>
+            <select
+              className="custom-input"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{ padding: '1rem' }}
+            >
+              <option value="productName">Name</option>
+              <option value="createdAt">Date</option>
+              <option value="productCode">Stock Id</option>
+              <option value="category">Category</option>
             </select>
           </div>
           <div className={styles.products__btnWrapper}>
@@ -129,6 +143,11 @@ const Products = () => {
                     })
                   );
                 })
+                .sort((firstEl, secondEl) => {
+                  if (firstEl[sortBy] < secondEl[sortBy]) return -1;
+                  if (firstEl[sortBy] > secondEl[sortBy]) return 1;
+                  return 0;
+                })
                 .map((product) => (
                   <div
                     className="col-xxl-4 col-xl-6 col-xs-12"
@@ -140,7 +159,7 @@ const Products = () => {
           </>
         ) : (
           <Table
-            filter={{ search, range: selectionRange[0] }}
+            filter={{ search, range: selectionRange[0], sortBy }}
             pageName="product"
             title="Products"
             columns={columns}

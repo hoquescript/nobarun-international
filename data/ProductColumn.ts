@@ -30,7 +30,6 @@ export const PRODUCT_COLUMNS = [
     Header: 'Stock',
     accessor: 'productCode',
     sticky: 'left',
-    Cell: 209,
   },
   {
     Header: 'Status',
