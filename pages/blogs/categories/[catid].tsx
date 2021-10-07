@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
-import { FaEye, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
+import { FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';

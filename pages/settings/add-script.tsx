@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
 import useAllScripts from '../../hooks/Settings/useAllScripts';
@@ -27,14 +28,15 @@ const DELETE_SCRIPT = gql`
 `;
 
 const AddScript = () => {
+  const alert = useAlert();
   const methods = useForm();
   const [scripts, setScripts] = useState({});
   const [deleteKey, setDeleteKey] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [createScript] = useMutation(CREATE_SCRIPT);
-  const [editScriptTag] = useMutation(EDIT_SCRIPT);
-  const [deleteScript] = useMutation(DELETE_SCRIPT);
+  const [createScript, createState] = useMutation(CREATE_SCRIPT);
+  const [editScriptTag, editState] = useMutation(EDIT_SCRIPT);
+  const [deleteScript, deleteState] = useMutation(DELETE_SCRIPT);
 
   useEffect(() => {
     useAllScripts().then((data) => {
@@ -65,7 +67,7 @@ const AddScript = () => {
     setScripts({ ...scripts, [id]: script });
   };
 
-  const saveHandler = (id: string) => {
+  const saveHandler = async (id: string) => {
     const script = scripts[id];
     script.isDisabled = true;
 
@@ -78,18 +80,29 @@ const AddScript = () => {
       editId: id,
       editableObject: scriptTags,
     };
-    script.isNewScript
-      ? createScript({
-          variables: {
-            data: scriptTags,
-          },
-        })
-      : editScriptTag({
-          variables: {
-            data: editScriptTags,
-          },
-        });
-
+    if (script.isNewScript) {
+      await createScript({
+        variables: {
+          data: scriptTags,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Saved Scripts Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    } else {
+      await editScriptTag({
+        variables: {
+          data: editScriptTags,
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Scripts Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    }
     setScripts({ ...scripts, [id]: script });
   };
 
@@ -99,18 +112,23 @@ const AddScript = () => {
     setScripts({ ...scripts, [id]: script });
   };
 
-  const deleteHandler = (id: string) => {
+  const deleteHandler = async (id: string) => {
     const newScripts = Object.keys(scripts).reduce((object, key) => {
       if (key !== id) {
         object[key] = scripts[key];
       }
       return object;
     }, {});
-    deleteScript({
+    await deleteScript({
       variables: {
         id,
       },
     });
+    if (!deleteState.error) {
+      alert.error('Deleted Scripts Successfully');
+    } else {
+      alert.error(deleteState.error.message);
+    }
     setScripts(newScripts);
   };
 

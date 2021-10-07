@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
-import { gql, useQuery, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
+import { gql, useMutation } from '@apollo/client';
 
 import {
   FaPlusCircle,
-  FaHome,
   FaEllipsisH,
   FaTrash,
   FaPen,
@@ -49,13 +49,14 @@ const DELETE_STOCK_STATUS = gql`
 `;
 
 const StockStatus = () => {
+  const alert = useAlert();
   const [stocks, setStocks] = useState<IStock>({});
   const [deleteKey, setDeleteKey] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [createStock] = useMutation(CREATE_STOCK_STATUS);
-  const [editStock] = useMutation(EDIT_STOCK_STATUS);
-  const [deleteStock] = useMutation(DELETE_STOCK_STATUS);
+  const [createStock, createState] = useMutation(CREATE_STOCK_STATUS);
+  const [editStock, editState] = useMutation(EDIT_STOCK_STATUS);
+  const [deleteStock, deleteState] = useMutation(DELETE_STOCK_STATUS);
 
   useEffect(() => {
     useAllStockStatus().then((data) => {
@@ -98,7 +99,7 @@ const StockStatus = () => {
     setStocks({ ...stocks, [id]: stock });
   };
 
-  const saveHandler = (id: string) => {
+  const saveHandler = async (id: string) => {
     const stock = stocks[id];
     stock.isDisabled = true;
 
@@ -114,18 +115,29 @@ const StockStatus = () => {
       editableObject: stockStatus,
     };
 
-    stock.isNewStocks
-      ? createStock({
-          variables: {
-            data: stockStatus,
-          },
-        })
-      : editStock({
-          variables: {
-            data: editStockStatus,
-          },
-        });
-
+    if (stock.isNewStocks) {
+      await createStock({
+        variables: {
+          data: stockStatus,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Saved Stock Status Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    } else {
+      await editStock({
+        variables: {
+          data: editStockStatus,
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Stock Status Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    }
     setStocks({ ...stocks, [id]: stock });
   };
 
@@ -135,18 +147,24 @@ const StockStatus = () => {
     setStocks({ ...stocks, [id]: stock });
   };
 
-  const deleteHandler = (id: string) => {
+  const deleteHandler = async (id: string) => {
     const newStocks = Object.keys(stocks).reduce((object, key) => {
       if (key !== id) {
         object[key] = stocks[key];
       }
       return object;
     }, {});
-    deleteStock({
+    await deleteStock({
       variables: {
         id,
       },
     });
+    if (!deleteState.error) {
+      alert.info('Deleted Redirects Successfully');
+    } else {
+      alert.error(deleteState.error.message);
+    }
+
     setStocks(newStocks);
   };
 

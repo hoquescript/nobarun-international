@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
+import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import {
   FaEllipsisH,
@@ -38,13 +39,14 @@ const DELETE_CONTACT_PERSON = gql`
 `;
 
 const ContactPerson = () => {
+  const alert = useAlert();
   const [contacts, setContacts] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteKey, setDeleteKey] = useState('');
 
-  const [createContact] = useMutation(CREATE_CONTACT_PERSON);
-  const [editContact] = useMutation(EDIT_CONTACT_PERSON);
-  const [deleteContact] = useMutation(DELETE_CONTACT_PERSON);
+  const [createContact, createState] = useMutation(CREATE_CONTACT_PERSON);
+  const [editContact, editState] = useMutation(EDIT_CONTACT_PERSON);
+  const [deleteContact, deleteState] = useMutation(DELETE_CONTACT_PERSON);
 
   useEffect(() => {
     useAllContactPerson().then((data) => {
@@ -68,7 +70,7 @@ const ContactPerson = () => {
     });
   };
 
-  const saveHandler = (id: string) => {
+  const saveHandler = async (id: string) => {
     const contact = contacts[id];
     contact.isDisabled = true;
 
@@ -86,18 +88,29 @@ const ContactPerson = () => {
       editableObject: contactPerson,
     };
 
-    contact.isNewContact
-      ? createContact({
-          variables: {
-            data: contactPerson,
-          },
-        })
-      : editContact({
-          variables: {
-            data: editContactPerson,
-          },
-        });
-
+    if (contact.isNewContact) {
+      await createContact({
+        variables: {
+          data: contactPerson,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Saved Contact Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    } else {
+      await editContact({
+        variables: {
+          data: editContactPerson,
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Contact Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    }
     setContacts({ ...contacts, [id]: contact });
   };
 
@@ -113,7 +126,6 @@ const ContactPerson = () => {
   };
 
   const deleteHandler = (id: string) => {
-    console.log(id);
     const newContacts = Object.keys(contacts).reduce((object, key) => {
       if (key !== id) {
         object[key] = contacts[key];
@@ -125,6 +137,11 @@ const ContactPerson = () => {
         id,
       },
     });
+    if (!deleteState.error) {
+      alert.info('Deleted Contact Successfully');
+    } else {
+      alert.error(deleteState.error.message);
+    }
     // @ts-ignore
     setContacts(newContacts);
   };

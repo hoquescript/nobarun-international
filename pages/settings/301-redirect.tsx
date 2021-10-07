@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { v4 as uuid } from 'uuid';
+import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import {
   FaArrowLeft,
@@ -37,13 +38,14 @@ const DELETE_REDIRECT = gql`
 `;
 
 const Redirect = () => {
+  const alert = useAlert();
   const [posts, setPosts] = useState({});
   const [deleteKey, setDeleteKey] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
-  const [createRedirect] = useMutation(CREATE_REDIRECT);
-  const [editingRedirect] = useMutation(EDIT_REDIRECT);
-  const [deleteRedirect] = useMutation(DELETE_REDIRECT);
+  const [createRedirect, createState] = useMutation(CREATE_REDIRECT);
+  const [editingRedirect, editState] = useMutation(EDIT_REDIRECT);
+  const [deleteRedirect, deleteState] = useMutation(DELETE_REDIRECT);
 
   useEffect(() => {
     useAllRedirects().then((data) => {
@@ -64,7 +66,7 @@ const Redirect = () => {
     });
   };
 
-  const saveHandler = (id: string) => {
+  const saveHandler = async (id: string) => {
     const post = posts[id];
     post.isDisabled = true;
 
@@ -79,18 +81,29 @@ const Redirect = () => {
       editableObject: redirects,
     };
 
-    post.isNewRedirect
-      ? createRedirect({
-          variables: {
-            data: redirects,
-          },
-        })
-      : editingRedirect({
-          variables: {
-            data: editRedirect,
-          },
-        });
-
+    if (post.isNewRedirect) {
+      await createRedirect({
+        variables: {
+          data: redirects,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Saved Redirects Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    } else {
+      await editingRedirect({
+        variables: {
+          data: editRedirect,
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Redirects Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    }
     setPosts({ ...posts, [id]: post });
   };
 
@@ -100,18 +113,23 @@ const Redirect = () => {
     setPosts({ ...posts, [id]: post });
   };
 
-  const deleteHandler = (id: string) => {
+  const deleteHandler = async (id: string) => {
     const newposts = Object.keys(posts).reduce((object, key) => {
       if (key !== id) {
         object[key] = posts[key];
       }
       return object;
     }, {});
-    deleteRedirect({
+    await deleteRedirect({
       variables: {
         id,
       },
     });
+    if (!deleteState.error) {
+      alert.info('Deleted Redirects Successfully');
+    } else {
+      alert.error(deleteState.error.message);
+    }
     setPosts(newposts);
   };
 
