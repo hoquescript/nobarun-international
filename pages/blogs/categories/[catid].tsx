@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect, useRef } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
@@ -59,7 +59,6 @@ const AddCategory = () => {
   const [createCategory, createState] = useMutation(CREATE_CATEGORY);
   const [editCategory, editState] = useMutation(EDIT_CATEGORY);
 
-  const textEditorRef = useRef(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [categories, setCategories] = useState([]);
   const [description, setDescription] = useState('');
@@ -196,7 +195,7 @@ const AddCategory = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor ref={textEditorRef} setValue={setDescription} />
+              <TextEditor value={description} setValue={setDescription} />
             </div>
           </div>
         </div>

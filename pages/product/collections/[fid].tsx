@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
@@ -50,7 +50,6 @@ const CollectionForm = () => {
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
 
-  const textEditorRef = useRef(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [description, setDescription] = useState('');
 
@@ -171,7 +170,7 @@ const CollectionForm = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor ref={textEditorRef} setValue={setDescription} />
+              <TextEditor value={description} setValue={setDescription} />
             </div>
           </div>
         </div>
