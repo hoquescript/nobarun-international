@@ -37,13 +37,13 @@ const Login = () => {
             label="Email"
             type="email"
             name="email"
-            // value="iss@gmail.com"
+            value="wahidhoquee@gmail.com"
             placeholder="Enter your Name"
           />
           <Textfield
             type="password"
             label="Password"
-            // value="one123123"
+            value="wahid1997"
             placeholder="Enter your Password"
             name="password"
           />

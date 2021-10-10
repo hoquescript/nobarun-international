@@ -8,8 +8,8 @@ import React, {
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-import { AiFillSetting, AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
-import { FaPlus } from 'react-icons/fa';
+import { AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
+import { FaPlus, FaSlack } from 'react-icons/fa';
 
 import getYoutubeId from '../../helpers/getYoutubeId';
 import useAllMedia from '../../hooks/Appearance/useAllMedia';
@@ -142,6 +142,16 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     };
   }, [ref]);
 
+  const fileName = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    const text = fileName.current?.innerText;
+    console.log('Media', text);
+    if (text && fileName.current && text?.length > 10) {
+      const value = text.substring(0, 10).concat('...');
+      fileName.current.innerText = value;
+    }
+  }, [images]);
+
   return (
     <div
       ref={toolbarRef}
@@ -156,12 +166,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
           dispatch(toggleToolbar());
         }}
       >
-        <AiFillSetting />
+        <FaSlack />
       </button>
-      <div className="side-panel__title">
-        <h3>Tools</h3>
-      </div>
-
       <div className="side-panel__content">
         <div className="accordion">
           <div className="accordion__title has-actions active flex sb">
@@ -171,6 +177,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                 type="file"
                 id="product"
                 accept="image/*, video/*"
+                multiple
                 style={{ display: 'none', height: '71px' }}
                 onChange={(e) => imageUploadHandler(e)}
               />
@@ -197,19 +204,25 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
               />
             </div>
             <div className="images-gallery">
-              {images.map((image, idx) => (
-                <div
-                  key={image.name + idx}
-                  className="images-gallery__image"
-                  onClick={() => selectImageHandler(image.src)}
-                >
-                  <i className="check-circle-icon selected-mark"></i>
-                  <figure>
-                    <img src={image.src} alt="" />
-                  </figure>
-                  <h5>{image.name}</h5>
-                </div>
-              ))}
+              {images.map((image, idx) => {
+                let name: string;
+                if (image.name?.length > 10)
+                  name = image.name.substring(0, 10).concat('...');
+                else name = image.name;
+                return (
+                  <div
+                    key={image.name + idx}
+                    className="images-gallery__image"
+                    onClick={() => selectImageHandler(image.src)}
+                  >
+                    <i className="check-circle-icon selected-mark"></i>
+                    <figure>
+                      <img src={image.src} alt="" />
+                    </figure>
+                    <h5 ref={fileName}>{name}</h5>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

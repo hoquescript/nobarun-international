@@ -86,13 +86,11 @@ const CategoryForm = () => {
         dispatch(setMedia({ path: asPath, src: data.image }));
         // @ts-ignore
         setDescription(data.description);
-        // @ts-ignore
-        // textEditorRef.current.set(data.description);
       });
     }
   }, [token]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
     const category = {
       name: categoryName,
@@ -106,12 +104,10 @@ const CategoryForm = () => {
 
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());
-    // @ts-ignore
-    textEditorRef.current.reset();
-
+    setDescription('');
     if (isEditMode) {
       delete category.parentCategory;
-      editCategory({
+      await editCategory({
         variables: {
           data: {
             editId: fid,
@@ -125,7 +121,7 @@ const CategoryForm = () => {
         alert.error(editState.error.message);
       }
     } else {
-      createCategory({
+      await createCategory({
         variables: {
           data: category,
         },
@@ -204,7 +200,10 @@ const CategoryForm = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor value={description} setValue={setDescription} />
+              <TextEditor
+                value={description}
+                onChange={(content: string) => setDescription(content)}
+              />
             </div>
           </div>
         </div>

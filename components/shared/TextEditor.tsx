@@ -43,14 +43,13 @@ const formats = [
 
 const TextEditor = (props: TextEditorProps) => {
   const { value, setValue, bodyClass, onChange, disabled } = props;
-  console.log('Description', value);
-
   return (
     <ReactQuill
       theme="snow"
       modules={modules}
       formats={formats}
-      value={value}
+      value={value || ''}
+      // defaultValue={value}
       onChange={onChange}
       readOnly={disabled}
     />

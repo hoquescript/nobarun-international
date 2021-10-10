@@ -7,12 +7,15 @@ import styles from './_header.module.scss';
 
 import logo from '../public/images/logo.png';
 import { AiOutlineLogout } from 'react-icons/ai';
-import { BsFillGridFill } from 'react-icons/bs';
+import { useTypedSelector } from '../hooks/useTypedSelector';
 
 const Header = () => {
   const logoutHandler = () => {
     signOut({ callbackUrl: `${process.env.NEXTAUTH_URL}/auth/login` });
   };
+  const { image, displayName } = useTypedSelector(
+    (state) => state.profile.info,
+  );
   return (
     <div className={styles.header}>
       {/* ---------Logo---------- */}
@@ -39,14 +42,14 @@ const Header = () => {
         <span className={styles.seperator} />
         <div className={styles.profile}>
           <Image
-            src="/images/profile.jpg"
+            src={image !== null ? image : '/user.png'}
             width="50"
             height="50"
             alt="Profile Picture"
           />
           <div>
             <h5>Welcome</h5>
-            <h3>Sam</h3>
+            <h3>{displayName}</h3>
           </div>
         </div>
       </div>

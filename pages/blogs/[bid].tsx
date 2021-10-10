@@ -28,7 +28,6 @@ import {
 } from '../../store/slices/blogs';
 import useBlogById from '../../hooks/Blogs/useBlogById';
 import { useRouter } from 'next/router';
-// import RichEditor from '../../components/shared/RichEditor';
 
 const ADD_NEW_BLOG = gql`
   mutation addNewBlog($data: CreateNewBlogInput!) {
@@ -90,6 +89,7 @@ const AddNewPost = () => {
 
   const dispatch = useTypedDispatch();
   const blogMedia = useTypedSelector((state) => state.blogs.blogsMedia.main);
+  const userId = useTypedSelector((state) => state.profile.userId);
   const blogPostSections = useTypedSelector(
     (state) => state.blogs.blogsMedia.postSection,
   );
@@ -110,7 +110,7 @@ const AddNewPost = () => {
       videos: blogMedia.videos,
       sections,
       tags,
-      author: '614db5fcc8d3558394d7e4a3',
+      author: userId,
     };
     methods.reset(defaultValues);
     dispatch(resetBlogMedia());

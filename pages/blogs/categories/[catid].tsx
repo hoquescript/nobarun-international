@@ -77,8 +77,6 @@ const AddCategory = () => {
         dispatch(setMedia({ path: router.asPath, src: data.image }));
         // @ts-ignore
         setDescription(data.description);
-        // @ts-ignore
-        // textEditorRef.current.set(data.description);
       });
     }
   }, [token]);
@@ -99,8 +97,8 @@ const AddCategory = () => {
     };
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());
-    // @ts-ignore
-    textEditorRef.current.reset();
+    setDescription('');
+
     if (isEditMode) {
       // @ts-ignore
       delete category.id;
@@ -195,7 +193,10 @@ const AddCategory = () => {
           </div>
           <div className="wrapper-section__content">
             <div className="field mt-20">
-              <TextEditor value={description} setValue={setDescription} />
+              <TextEditor
+                value={description}
+                onChange={(content: string) => setDescription(content)}
+              />
             </div>
           </div>
         </div>

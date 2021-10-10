@@ -121,7 +121,7 @@ const AddProduct = () => {
     (state) => state.products.productMedia.keyPoints,
   );
 
-  const handleAddProduct = (data: any) => {
+  const handleAddProduct = async (data: any) => {
     const keyPoints = Object.keys(KeyPoint[0]).map((key) => {
       const keypoint = KeyPoint[0][key];
       return {
@@ -170,7 +170,7 @@ const AddProduct = () => {
     dispatch(resetBlogMedia());
 
     if (isEditMode) {
-      editProduct({
+      await editProduct({
         variables: {
           data: {
             editId: pid,
@@ -185,7 +185,7 @@ const AddProduct = () => {
         alert.error(editState.error.message);
       }
     } else {
-      createNewProduct({
+      await createNewProduct({
         variables: {
           data: product,
         },

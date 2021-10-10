@@ -2,6 +2,9 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   grid-gap: 3rem;
+  max-height: 42rem;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .images-gallery__image {
@@ -172,6 +175,9 @@
   &__thumbnails {
     display: flex;
     flex-wrap: wrap;
+    max-height: 40rem;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
   &__thumbnail {
     cursor: pointer;

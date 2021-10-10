@@ -1,6 +1,7 @@
 import { getSession } from 'next-auth/client';
 import React, { useEffect } from 'react';
 import { useTypedDispatch } from '../hooks/useTypedSelector';
+import { setProfile } from '../store/slices/profile';
 import { setAuthToken } from '../store/slices/ui';
 
 import Header from './_header';
@@ -19,6 +20,14 @@ const Layout = (props: LayoutProps) => {
       const session = await getSession();
       if (session) {
         dispatch(setAuthToken(session?.accessToken));
+        dispatch(
+          setProfile({
+            userId: session.id,
+            image: session.image,
+            displayName: session.displayName,
+            permission: session.permission,
+          }),
+        );
       }
     }
     getToken();

@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
+import useAllProductCode from '../../../hooks/Products/useAllProductCode';
 import Chip from '../../controls/chip';
 
 import Combobox from '../../controls/combobox';
 import FileButton from '../../controls/file';
 import TextEditor from '../../shared/TextEditor';
-import KeyPoints, { IKeyPoints } from '../AddProduct/KeyPoints';
+import KeyPoints from '../AddProduct/KeyPoints';
 import Pricing from '../AddProduct/Pricing';
-import Questions, { IQuestions } from '../AddProduct/Questions';
+import ProductCode from '../AddProduct/ProductCode';
+import Questions from '../AddProduct/Questions';
 import RelatedProducts from '../AddProduct/RelatedProduct';
 
 interface DescriptionProps {
@@ -48,6 +50,15 @@ const Description = (props: DescriptionProps) => {
     setPostSectionKey,
   } = props;
 
+  const [productCodes, setProductCodes] = useState([]);
+
+  useEffect(() => {
+    useAllProductCode().then((data) => {
+      const products = data.map((product) => product.value);
+      setProductCodes(products);
+    });
+  }, []);
+
   return (
     <div id="description">
       <div className="wrapper-section">
@@ -64,6 +75,7 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="category"
                 label="Category"
+                required
                 options={info.categories || []}
               />
             </div>
@@ -78,6 +90,7 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="stockStatus"
                 label="Stock Status"
+                required
                 options={info.stocks || []}
               />
             </div>
@@ -85,6 +98,7 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="contactPerson"
                 label="Contact Person"
+                required
                 options={info.contacts || []}
               />
             </div>
@@ -95,25 +109,24 @@ const Description = (props: DescriptionProps) => {
               control={control}
               setValue={setValue}
             />
-            <div>
-              <input
-                type="text"
-                className="custom-input medium mb-10 center"
-                {...register('productCode')}
-              />
-              <span>Product Code</span>
-            </div>
+            <ProductCode register={register} productCodes={productCodes} />
           </div>
           <div className="mb-20">
             <div className={`field`}>
               <label>Related Products</label>
               <RelatedProducts
+                productCodes={productCodes}
                 chips={relatedProducts}
                 setChips={setRelatedProducts}
               />
             </div>
           </div>
-          <FileButton page={'pMain'} showMedia setPage={setPage} />
+          <div className="mb-20">
+            <div className={`field`}>
+              <label>Upload Media</label>
+              <FileButton page={'pMain'} showMedia setPage={setPage} />
+            </div>
+          </div>
         </div>
       </div>
       <KeyPoints
@@ -130,7 +143,6 @@ const Description = (props: DescriptionProps) => {
             <TextEditor
               value={features}
               onChange={(content) => {
-                console.log(features);
                 setFeatures(content);
               }}
             />

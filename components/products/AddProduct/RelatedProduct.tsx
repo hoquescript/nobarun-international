@@ -9,6 +9,7 @@ import styles from '../../../styles/pages/products.module.scss';
 interface RelatedProductsProps {
   chips: string[];
   setChips: any;
+  productCodes?: any[];
 }
 
 const defaultState = (products) => {
@@ -17,23 +18,17 @@ const defaultState = (products) => {
     products.forEach((product) => {
       defaultState[product] = '';
     });
-  console.log('Method', defaultState);
   return defaultState;
 };
 
 const RelatedProducts = (props: RelatedProductsProps) => {
-  const { chips, setChips } = props;
-  const [productCodes, setProductCodes] = useState([]);
+  const { chips, setChips, productCodes } = props;
   const [suggestions, setSuggestions] = useState<any>({});
   const [showSuggestion, setShowSuggestion] = useState(false);
 
   useEffect(() => {
-    useAllProductCode().then((data) => {
-      const products = data.map((product) => product.value);
-      setProductCodes(products);
-      setSuggestions(defaultState(products));
-    });
-  }, []);
+    setSuggestions(defaultState(productCodes));
+  }, [productCodes]);
 
   console.log('Component', suggestions);
   const ref = useRef<HTMLDivElement>(null);
@@ -52,10 +47,11 @@ const RelatedProducts = (props: RelatedProductsProps) => {
   const onChangeHandler = (e) => {
     const searchLists: any = {};
     setShowSuggestion(true);
-    productCodes.forEach((product) => {
-      const value = fuzzyMatch(product, e.target.value);
-      if (value) searchLists[product] = value;
-    });
+    productCodes &&
+      productCodes.forEach((product) => {
+        const value = fuzzyMatch(product, e.target.value);
+        if (value) searchLists[product] = value;
+      });
     setSuggestions(searchLists);
   };
 

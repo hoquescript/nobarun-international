@@ -12,14 +12,19 @@ interface ComboboxProps {
 }
 
 const Combobox = (props: ComboboxProps) => {
-  const { name, label, options, placeholder } = props;
+  const { name, label, options, placeholder, required } = props;
   const { register } = useFormContext();
 
   return (
     <div className="field">
-      <label htmlFor={name}>{label}</label>
-
-      <select className="custom-input" id={name} {...register(name)}>
+      <label htmlFor={name}>
+        {label} {required && <sup style={{ color: 'red' }}>*</sup>}
+      </label>
+      <select
+        className="custom-input"
+        id={name}
+        {...register(name, { required })}
+      >
         <option disabled selected value="">
           {placeholder}
         </option>

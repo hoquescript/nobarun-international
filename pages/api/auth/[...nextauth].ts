@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 
 import Providers from 'next-auth/providers';
 import client from '../../../apollo-client';
+import useUserInfo from '../../../hooks/useLoginData';
 
 const LOGIN_QUERY = gql`
   query getLoginData($data: LoginInput!) {
@@ -20,13 +21,8 @@ const providers = [
     // @ts-ignore
     authorize: async (credentials) => {
       try {
-        const { email, password } = credentials;
-        const user = await client.query({
-          query: LOGIN_QUERY,
-          variables: { data: { email, password } },
-        });
-        // console.log(user);
-        if (user) return { status: 'success', data: user.data?.login };
+        const user = await useUserInfo(credentials.email, credentials.password);
+        if (user) return { status: 'success', data: user };
       } catch (e: any) {
         const errorMessage = e.response.data.message;
         throw new Error(errorMessage + '&email=' + credentials.email);
@@ -49,13 +45,13 @@ const providers = [
 const callbacks = {
   async jwt(token: any, user: any) {
     if (user) {
-      token.accessToken = user.data.token;
+      token = user.data;
     }
     return token;
   },
 
-  async session(session: any, token: any) {
-    session.accessToken = token.accessToken;
+  async session(session: any, user: any) {
+    session = { ...session, ...user, accessToken: user.token };
     return session;
   },
 };
