@@ -21,7 +21,7 @@ const MENU: { [key: string]: string[] } = {
   Blogs: ['Add New Post', 'Blog Post', 'Categories'],
   Review: ['Add New Review', 'Reviews'],
   'Query Report': ['Add New Query', 'Queries'],
-  Clients: ['Add New Client', 'Clients'],
+  Client: ['Add New Client', 'Clients'],
   Settings: [
     'Accounts',
     'Contact Person',

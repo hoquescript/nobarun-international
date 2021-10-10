@@ -45,7 +45,7 @@ export const REVIEWS_COLUMNS = [
     accessor: 'images',
     Cell: ({ value }) => (
       <span className="flex">
-        {Number(value)} Files{' '}
+        {Number(value)} Files
         <FaDownload
           className="ml-10"
           style={{ height: '2.5rem', width: '2.5rem', color: '#777' }}

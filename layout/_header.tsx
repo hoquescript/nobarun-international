@@ -42,7 +42,7 @@ const Header = () => {
         <span className={styles.seperator} />
         <div className={styles.profile}>
           <Image
-            src={image !== null ? image : '/user.png'}
+            src={image && image !== null ? image : '/user.png'}
             width="50"
             height="50"
             alt="Profile Picture"

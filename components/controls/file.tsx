@@ -18,6 +18,8 @@ const FileButton = (props: {
     | 'product'
     | 'blog'
     | 'review'
+    | 'client'
+    | 'contact'
     | 'pMain'
     | 'pKeypoint'
     | 'pCategory'
@@ -35,6 +37,8 @@ const FileButton = (props: {
     media = useTypedSelector((state) => state.ui.productMedia);
   if (page === 'review')
     media = useTypedSelector((state) => state.ui.reviewMedia);
+  if (page === 'client')
+    media = useTypedSelector((state) => state.ui.clientMedia);
   if (page === 'pCategory')
     media = useTypedSelector((state) => state.ui.productCategoryMedia);
   if (page === 'pCollection')
@@ -50,6 +54,12 @@ const FileButton = (props: {
   if (page === 'pMain')
     media = useTypedSelector((state) => state.products.productMedia.main);
   if (page === 'pKeypoint')
+    media = useTypedSelector(
+      (state) =>
+        state.products.productMedia.keyPoints &&
+        state.products.productMedia.keyPoints[postKey as string],
+    );
+  if (page === 'contact')
     media = useTypedSelector(
       (state) =>
         state.products.productMedia.keyPoints &&
@@ -100,7 +110,7 @@ const FileButton = (props: {
           className="add-new-image"
           style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
           onClick={() => {
-            console.log('I was clicked' + postKey);
+            // console.log('I was clicked' + postKey);
             setPage && setPage(page);
             setPostSectionKey && setPostSectionKey(postKey);
             dispatch(toggleToolbar());

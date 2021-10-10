@@ -19,6 +19,10 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import Modal from '../../components/shared/Modal';
 import { InputFileUpload } from '../../components/controls/fileUpload';
+import FileButton from '../../components/controls/file';
+import Toolbar from '../../components/shared/Toolbar';
+import { useTypedDispatch } from '../../hooks/useTypedSelector';
+import { selectContactImage } from '../../store/slices/ui';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {
@@ -40,6 +44,9 @@ const DELETE_CONTACT_PERSON = gql`
 
 const ContactPerson = () => {
   const alert = useAlert();
+  const [page, setPage] = useState('');
+  const [postSectionKey, setPostSectionKey] = useState('');
+
   const [contacts, setContacts] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteKey, setDeleteKey] = useState('');
@@ -168,9 +175,13 @@ const ContactPerson = () => {
     setContacts({ ...contacts, [id]: contact });
   };
 
-  console.log(contacts);
+  const dispatch = useTypedDispatch();
+  const selectImageHandler = (imageSrc) => {
+    dispatch(selectContactImage({ page, src: imageSrc, key: postSectionKey }));
+  };
   return (
     <div className="container center">
+      <Toolbar imageSelector={selectImageHandler} />
       <Modal
         title="Contact Person"
         modalIsOpen={showDeleteModal}
@@ -231,7 +242,7 @@ const ContactPerson = () => {
                 </div>
               </div>
               <div className="col-4">
-                <div className="field video" style={{ position: 'relative' }}>
+                {/* <div className="field video" style={{ position: 'relative' }}>
                   <label>Company Logo</label>
                   <FaUpload
                     className="video__icon"
@@ -243,7 +254,19 @@ const ContactPerson = () => {
                       handleChangeInput(key, 'file', url)
                     }
                   />
+                </div> */}
+                {/* <div className="mb-20"> */}
+                <div className={`field`}>
+                  <label>Upload Media</label>
+                  <FileButton
+                    page="contact"
+                    setPage={setPage}
+                    showMedia
+                    postKey={key}
+                    setPostSectionKey={setPostSectionKey}
+                  />
                 </div>
+                {/* </div> */}
               </div>
             </div>
             <div className="row mt-20">

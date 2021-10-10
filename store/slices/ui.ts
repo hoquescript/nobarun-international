@@ -19,6 +19,7 @@ interface UIState {
     postSection: Media;
   };
   reviewMedia: Media;
+  clientMedia: Media;
   queryMedia: Media;
 }
 const initialState: UIState = {
@@ -53,6 +54,10 @@ const initialState: UIState = {
     videos: [],
   },
   reviewMedia: {
+    images: [],
+    videos: [],
+  },
+  clientMedia: {
     images: [],
     videos: [],
   },
@@ -106,6 +111,12 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
+      if (action.payload.path.startsWith('/client')) {
+        if (state.clientMedia.images.length === 1)
+          state.clientMedia.images = [];
+        // @ts-ignore
+        state.clientMedia.images.push(action.payload.src);
+      }
       if (action.payload.path.startsWith('/query-report')) {
         // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
@@ -120,6 +131,23 @@ export const uiSlice = createSlice({
         // @ts-ignore
         state.reviewMedia.videos.push(action.payload.src);
       }
+    },
+
+    selectContactImage: (state, action) => {
+      const page = action.payload.page;
+      const key = action.payload.key;
+      // if (page === 'bMain')
+      //   state.blogsMedia.main.images.push(action.payload.src);
+      // if (page === 'bPostSection') {
+      //   if (!state.blogsMedia.postSection[key])
+      //     state.blogsMedia.postSection[key] = {
+      //       images: [],
+      //       videos: [],
+      //     };
+      //   const post = state.blogsMedia.postSection[key];
+      //   // const noOfMedia = post.images.length + post.videos.length;
+      //   // if (noOfMedia < 2) post.images.push(action.payload.src);
+      // }
     },
 
     setMedia: (state, action) => {
@@ -171,6 +199,7 @@ export const {
   fetchMedia,
   setMedia,
   resetMediaSelection,
+  selectContactImage,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

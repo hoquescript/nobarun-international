@@ -158,6 +158,8 @@ const AddProduct = () => {
       keywords,
     };
 
+    if (!data.collectionName) delete data.collectionName;
+
     //Form Reset
     methods.reset(defaultValues);
     KeyPoint[1](defaultKeypoints);
