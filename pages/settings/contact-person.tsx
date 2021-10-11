@@ -10,7 +10,6 @@ import {
   FaPlusCircle,
   FaSave,
   FaTrash,
-  FaUpload,
   FaUser,
   FaWhatsapp,
 } from 'react-icons/fa';
@@ -18,11 +17,14 @@ import useAllContactPerson from '../../hooks/Settings/useAllContactPerson';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import Modal from '../../components/shared/Modal';
-import { InputFileUpload } from '../../components/controls/fileUpload';
 import FileButton from '../../components/controls/file';
 import Toolbar from '../../components/shared/Toolbar';
-import { useTypedDispatch } from '../../hooks/useTypedSelector';
-import { selectContactImage } from '../../store/slices/ui';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
+import { selectContactImage, setContactImage } from '../../store/slices/ui';
+import getMapsSrc from '../../helpers/getMapsSrc';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {
@@ -44,12 +46,13 @@ const DELETE_CONTACT_PERSON = gql`
 
 const ContactPerson = () => {
   const alert = useAlert();
-  const [page, setPage] = useState('');
   const [postSectionKey, setPostSectionKey] = useState('');
 
   const [contacts, setContacts] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteKey, setDeleteKey] = useState('');
+
+  const media = useTypedSelector((state) => state.ui.contactsMedia);
 
   const [createContact, createState] = useMutation(CREATE_CONTACT_PERSON);
   const [editContact, editState] = useMutation(EDIT_CONTACT_PERSON);
@@ -57,7 +60,8 @@ const ContactPerson = () => {
 
   useEffect(() => {
     useAllContactPerson().then((data) => {
-      setContacts(data);
+      setContacts(data.persons);
+      dispatch(setContactImage(data.media));
     });
   }, []);
 
@@ -87,7 +91,7 @@ const ContactPerson = () => {
       email: contact.email,
       address: contact.address,
       isPublished: contact.isPublished,
-      companyLogo: contact.logo,
+      companyLogo: media[id].images[0],
     };
 
     const editContactPerson = {
@@ -132,22 +136,32 @@ const ContactPerson = () => {
     setDeleteKey(key);
   };
 
-  const deleteHandler = (id: string) => {
+  const deleteHandler = async (id: string) => {
     const newContacts = Object.keys(contacts).reduce((object, key) => {
       if (key !== id) {
         object[key] = contacts[key];
       }
       return object;
     }, {});
-    deleteContact({
-      variables: {
-        id,
-      },
-    });
-    if (!deleteState.error) {
-      alert.info('Deleted Contact Successfully');
-    } else {
-      alert.error(deleteState.error.message);
+    try {
+      if (!contacts[id].isNewContact) {
+        await deleteContact({
+          variables: {
+            id,
+          },
+        });
+
+        if (!deleteState.error) {
+          alert.info('Deleted Contact Successfully');
+        } else {
+          alert.error(deleteState.error.message);
+        }
+      }
+    } catch (err) {
+      if (err) {
+        console.log(err);
+        alert.error(err);
+      }
     }
     // @ts-ignore
     setContacts(newContacts);
@@ -167,6 +181,8 @@ const ContactPerson = () => {
       const { name, value, checked } = event.target;
       if (name === 'isPublished') {
         contact[name] = checked;
+      } else if (name === 'address') {
+        contact[name] = getMapsSrc(value);
       } else {
         // @ts-ignore
         contact[name] = value;
@@ -177,7 +193,7 @@ const ContactPerson = () => {
 
   const dispatch = useTypedDispatch();
   const selectImageHandler = (imageSrc) => {
-    dispatch(selectContactImage({ page, src: imageSrc, key: postSectionKey }));
+    dispatch(selectContactImage({ src: imageSrc, key: postSectionKey }));
   };
   return (
     <div className="container center">
@@ -242,31 +258,15 @@ const ContactPerson = () => {
                 </div>
               </div>
               <div className="col-4">
-                {/* <div className="field video" style={{ position: 'relative' }}>
-                  <label>Company Logo</label>
-                  <FaUpload
-                    className="video__icon"
-                    style={{ transform: 'translate(2rem, 1.7rem)' }}
-                  />
-                  <InputFileUpload
-                    className="video__input mt--30"
-                    onChangeHandler={(url) =>
-                      handleChangeInput(key, 'file', url)
-                    }
-                  />
-                </div> */}
-                {/* <div className="mb-20"> */}
-                <div className={`field`}>
+                <div className={`field ml-60`}>
                   <label>Upload Media</label>
                   <FileButton
                     page="contact"
-                    setPage={setPage}
                     showMedia
                     postKey={key}
                     setPostSectionKey={setPostSectionKey}
                   />
                 </div>
-                {/* </div> */}
               </div>
             </div>
             <div className="row mt-20">
@@ -297,7 +297,7 @@ const ContactPerson = () => {
                   />
                   <textarea
                     className="custom-input video__input mt--30"
-                    placeholder="Enter Address"
+                    placeholder="Please Enter the Google Maps Embedded HTML Tag"
                     name="address"
                     disabled={contacts[key].isDisabled}
                     value={contacts[key].address}

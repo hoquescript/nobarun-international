@@ -21,6 +21,9 @@ interface UIState {
   reviewMedia: Media;
   clientMedia: Media;
   queryMedia: Media;
+  contactsMedia: {
+    [key: string]: Media;
+  };
 }
 const initialState: UIState = {
   showToolbar: false,
@@ -65,6 +68,7 @@ const initialState: UIState = {
     images: [],
     videos: [],
   },
+  contactsMedia: {},
 };
 export const uiSlice = createSlice({
   name: 'ui',
@@ -134,20 +138,20 @@ export const uiSlice = createSlice({
     },
 
     selectContactImage: (state, action) => {
-      const page = action.payload.page;
       const key = action.payload.key;
-      // if (page === 'bMain')
-      //   state.blogsMedia.main.images.push(action.payload.src);
-      // if (page === 'bPostSection') {
-      //   if (!state.blogsMedia.postSection[key])
-      //     state.blogsMedia.postSection[key] = {
-      //       images: [],
-      //       videos: [],
-      //     };
-      //   const post = state.blogsMedia.postSection[key];
-      //   // const noOfMedia = post.images.length + post.videos.length;
-      //   // if (noOfMedia < 2) post.images.push(action.payload.src);
-      // }
+      if (!state.contactsMedia[key])
+        state.contactsMedia[key] = {
+          images: [],
+          videos: [],
+        };
+      const post = state.contactsMedia[key];
+
+      if (post.images.length === 1) post.images = [];
+      post.images.push(action.payload.src);
+    },
+
+    setContactImage: (state, action) => {
+      state.contactsMedia = action.payload;
     },
 
     setMedia: (state, action) => {
@@ -200,6 +204,7 @@ export const {
   setMedia,
   resetMediaSelection,
   selectContactImage,
+  setContactImage,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

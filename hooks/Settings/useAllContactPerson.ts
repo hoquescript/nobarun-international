@@ -19,20 +19,24 @@ const useAllContactPerson = async () => {
   const data = await Client.request(GET_ALL_CONTACT_PERSON);
 
   const persons = {};
+  const media = {};
   if (data) {
     data.getAllTheContactPersons.forEach((contact) => {
       persons[contact.id] = {
         name: contact.name,
         whatsapp: contact.whatsAppNumber,
-        logo: contact.companyLogo,
         email: contact.email,
         address: contact.address,
         isPublished: contact.isPublished,
         isDisabled: true,
       };
+      media[contact.id] = {
+        images: [contact.companyLogo],
+        videos: [],
+      };
     });
   }
-  return persons;
+  return { persons, media };
 };
 
 export default useAllContactPerson;

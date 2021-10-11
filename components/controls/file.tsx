@@ -62,8 +62,7 @@ const FileButton = (props: {
   if (page === 'contact')
     media = useTypedSelector(
       (state) =>
-        state.products.productMedia.keyPoints &&
-        state.products.productMedia.keyPoints[postKey as string],
+        state.ui.contactsMedia && state.ui.contactsMedia[postKey as string],
     );
 
   return (

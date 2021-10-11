@@ -63,7 +63,6 @@ export const productSlice = createSlice({
     setProductMedia: (state, action) => {
       state.productMedia.main.images = action.payload.main.images;
       state.productMedia.main.videos = action.payload.main.videos;
-      console.log(action.payload);
       state.productMedia.keyPoints = action.payload.keypoint;
     },
     resetBlogMedia: (state) => {
