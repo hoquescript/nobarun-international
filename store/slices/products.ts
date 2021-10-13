@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type Media = {
+  featured: string;
   images: string[];
   videos: string[];
 };
@@ -16,6 +17,7 @@ interface UIState {
 const initialState: UIState = {
   productMedia: {
     main: {
+      featured: '',
       images: [],
       videos: [],
     },
@@ -34,6 +36,7 @@ export const productSlice = createSlice({
       if (page === 'pKeypoint') {
         if (!state.productMedia.keyPoints[key])
           state.productMedia.keyPoints[key] = {
+            featured: '',
             images: [],
             videos: [],
           };
@@ -50,6 +53,7 @@ export const productSlice = createSlice({
       if (page === 'pKeypoint') {
         if (!state.productMedia.keyPoints[key])
           state.productMedia.keyPoints[key] = {
+            featured: '',
             images: [],
             videos: [],
           };
@@ -58,6 +62,29 @@ export const productSlice = createSlice({
           state.productMedia.keyPoints[key].videos.length;
         if (noOfMedia < 2)
           state.productMedia.keyPoints[key].videos.push(action.payload.src);
+      }
+    },
+    featuredProductMedia: (state, action) => {
+      const page = action.payload.page;
+      const src = action.payload.src;
+      const key = action.payload.key;
+      if (page === 'pMain') {
+        state.productMedia.main.featured = src;
+      }
+      if (page === 'pKeypoint') {
+        state.productMedia.keyPoints[key].featured = src;
+      }
+    },
+    deleteProductMedia: (state, action) => {
+      const type = action.payload.type;
+      const page = action.payload.page;
+      const index = action.payload.index;
+      const key = action.payload.key;
+      if (page === 'pMain') {
+        state.productMedia.main[type].splice(index, 1);
+      }
+      if (page === 'pKeypoint') {
+        state.productMedia.keyPoints[key][type].splice(index, 1);
       }
     },
     setProductMedia: (state, action) => {
@@ -78,6 +105,8 @@ export const {
   selectProductVideo,
   setProductMedia,
   resetBlogMedia,
+  featuredProductMedia,
+  deleteProductMedia,
 } = productSlice.actions;
 
 export default productSlice.reducer;

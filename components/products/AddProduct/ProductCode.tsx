@@ -16,8 +16,14 @@ const ProductCode = (props: ProductCodeProps) => {
 
   const { onChange, ...rest } = register('productCode', {
     required: true,
-    maxLength: 4,
-    minLength: 4,
+    maxLength: {
+      value: 4,
+      message: "Product Code's length should be equal to 4",
+    },
+    minLength: {
+      value: 4,
+      message: "Product Code's length should be equal to 4",
+    },
   });
 
   return (

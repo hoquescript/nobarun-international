@@ -22,13 +22,17 @@ export const PRODUCT_COLUMNS = [
   },
   {
     Header: 'Assignee',
-    accessor: 'specification',
+    accessor: 'contactPerson',
     sticky: 'left',
-    Cell: 2078,
   },
   {
     Header: 'Stock',
     accessor: 'productCode',
+    sticky: 'left',
+  },
+  {
+    Header: 'Published By',
+    accessor: 'author',
     sticky: 'left',
   },
   {

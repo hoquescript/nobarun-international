@@ -16,6 +16,12 @@ const GET_ALL_PRODUCTS = gql`
       images
       isPublished
       createdAt
+      author {
+        displayName
+      }
+      contactPerson {
+        name
+      }
     }
   }
 `;
@@ -25,6 +31,8 @@ const useAllProducts = async () => {
   return data.getAllTheProducts.map((product) => ({
     ...product,
     category: product.populatedCategory ? product.populatedCategory.name : '',
+    contactPerson: product.contactPerson ? product.contactPerson.name : '',
+    author: product.author ? product.author.displayName : '',
   }));
 };
 

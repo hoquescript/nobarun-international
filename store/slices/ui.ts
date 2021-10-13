@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type Media = {
+  featured?: '';
   images: string[];
   videos: string[];
 };
@@ -57,6 +58,7 @@ const initialState: UIState = {
     videos: [],
   },
   reviewMedia: {
+    featured: '',
     images: [],
     videos: [],
   },
@@ -81,62 +83,71 @@ export const uiSlice = createSlice({
       state.showToolbar = !state.showToolbar;
     },
     addImage: (state, action) => {
-      // @ts-ignore
       state.images.push(action.payload);
     },
     addYoutubeLink: (state, action) => {
-      // @ts-ignore
       state.links.push(action.payload);
     },
     selectImage: (state, action) => {
-      // if (action.payload.path === '/product/add-new-product') {
-      //   // @ts-ignore
-      //   state.productMedia.images.push(action.payload.src);
-      // }
       if (action.payload.path.startsWith('/product/categories/')) {
         if (state.productCategoryMedia.images.length === 1)
           state.productCategoryMedia.images = [];
-        // @ts-ignore
         state.productCategoryMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         if (state.productCollectionMedia.images.length === 1)
           state.productCollectionMedia.images = [];
-        // @ts-ignore
         state.productCollectionMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/blogs/categories/')) {
         if (state.blogCategoryMedia.images.length === 1)
           state.blogCategoryMedia.images = [];
-        // @ts-ignore
         state.blogCategoryMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/review')) {
-        // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/client')) {
         if (state.clientMedia.images.length === 1)
           state.clientMedia.images = [];
-        // @ts-ignore
         state.clientMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/query-report')) {
-        // @ts-ignore
         state.reviewMedia.images.push(action.payload.src);
       }
     },
     selectVideo: (state, action) => {
-      // if (action.payload.path === '/product/add-new-product') {
-      //   // @ts-ignore
-      //   state.productMedia.videos.push(action.payload.src);
-      // }
       if (action.payload.path === '/review') {
-        // @ts-ignore
         state.reviewMedia.videos.push(action.payload.src);
       }
     },
-
+    featuredMedia: (state, action) => {
+      const page = action.payload.page;
+      const src = action.payload.src;
+      if (page === 'review') {
+        state.reviewMedia.featured = src;
+      }
+    },
+    deleteMedia: (state, action) => {
+      const type = action.payload.type;
+      const page = action.payload.page;
+      const index = action.payload.index;
+      if (page === 'pCategory') {
+        state.productCategoryMedia[type].splice(index, 1);
+      }
+      if (page === 'pCollection') {
+        state.productCollectionMedia[type].splice(index, 1);
+      }
+      if (page === 'bCategory') {
+        state.blogCategoryMedia[type].splice(index, 1);
+      }
+      if (page === 'review') {
+        state.reviewMedia[type].splice(index, 1);
+      }
+      if (page === 'client') {
+        state.clientMedia[type].splice(index, 1);
+      }
+    },
     selectContactImage: (state, action) => {
       const key = action.payload.key;
       if (!state.contactsMedia[key])
@@ -149,7 +160,15 @@ export const uiSlice = createSlice({
       if (post.images.length === 1) post.images = [];
       post.images.push(action.payload.src);
     },
+    deleteContactImage: (state, action) => {
+      const page = action.payload.page;
+      const key = action.payload.key;
+      const index = action.payload.index;
 
+      if (page === 'contact') {
+        state.contactsMedia[key].images.splice(index, 1);
+      }
+    },
     setContactImage: (state, action) => {
       state.contactsMedia = action.payload;
     },
@@ -202,8 +221,11 @@ export const {
   setAuthToken,
   fetchMedia,
   setMedia,
+  deleteMedia,
+  featuredMedia,
   resetMediaSelection,
   selectContactImage,
+  deleteContactImage,
   setContactImage,
 } = uiSlice.actions;
 

@@ -132,7 +132,11 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const toolbarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event) {
-      if (toolbarRef.current && !toolbarRef?.current.contains(event.target)) {
+      if (
+        show &&
+        toolbarRef.current &&
+        !toolbarRef?.current.contains(event.target)
+      ) {
         dispatch(closeToolbar());
       }
     }

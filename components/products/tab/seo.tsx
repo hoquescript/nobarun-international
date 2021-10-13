@@ -75,8 +75,6 @@ const SEO = (props: SEOProps) => {
               control={control}
               setValue={setValue}
             />
-            <Textfield name="url" label="Canonical URL" />
-            <Textfield name="siteMap" label="Site Map Priority" />
             <div className="field">
               <label>Keywords</label>
               <Chip chips={chips} setChips={setChips} />
@@ -95,6 +93,8 @@ const SEO = (props: SEOProps) => {
               ></textarea>
             </div>
           </div>
+          <Textfield name="url" label="Canonical URL" />
+          <Textfield name="siteMap" label="Site Map Priority" />
           <div className="center mt-40 mb-30">
             <button className="btn-green" onClick={handleAddProduct}>
               Save

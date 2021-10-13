@@ -1,14 +1,24 @@
 import React from 'react';
-import { FaPlus } from 'react-icons/fa';
+import { FaCheck, FaPlus, FaTimes } from 'react-icons/fa';
 import getYoutubeId from '../../helpers/getYoutubeId';
 import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
-import { toggleToolbar } from '../../store/slices/ui';
+import { deleteBlogMedia, featuredBlogMedia } from '../../store/slices/blogs';
+import {
+  deleteProductMedia,
+  featuredProductMedia,
+} from '../../store/slices/products';
+import {
+  deleteContactImage,
+  deleteMedia,
+  featuredMedia,
+  toggleToolbar,
+} from '../../store/slices/ui';
 import Toolbar from '../shared/Toolbar';
 
-const FileButton = (props: {
+interface FileButtonProps {
   showMedia?: boolean;
   setPage?: any;
   postKey?: string | number;
@@ -27,7 +37,9 @@ const FileButton = (props: {
     | 'bCategory'
     | 'bPostSection'
     | 'bMain';
-}) => {
+}
+
+const FileButton = (props: FileButtonProps) => {
   const { page, setPage, showMedia, postKey, setPostSectionKey } = props;
 
   const dispatch = useTypedDispatch();
@@ -65,15 +77,60 @@ const FileButton = (props: {
         state.ui.contactsMedia && state.ui.contactsMedia[postKey as string],
     );
 
+  const featureImageHandler = (page, src) => {
+    if (['pMain', 'pKeypoint'].includes(page)) {
+      dispatch(featuredProductMedia({ page, src, key: postKey }));
+    } else if (['bMain', 'bPostSection'].includes(page)) {
+      dispatch(featuredBlogMedia({ page, src, key: postKey }));
+    } else {
+      dispatch(featuredMedia({ page, src, key: postKey }));
+    }
+  };
+  const deleteImageHandler = (type, page, index) => {
+    if (['pMain', 'pKeypoint'].includes(page)) {
+      dispatch(deleteProductMedia({ type, page, index, key: postKey }));
+    } else if (['bMain', 'bPostSection'].includes(page)) {
+      dispatch(deleteBlogMedia({ type, page, index, key: postKey }));
+    } else if (page === 'contact') {
+      dispatch(deleteContactImage({ type, page, index, key: postKey }));
+    } else {
+      dispatch(deleteMedia({ type, page, index, key: postKey }));
+    }
+  };
   return (
     <div className="product-images">
       {showMedia &&
         media &&
         media.images &&
         media.images.map((src, idx) => (
-          <figure key={src + idx}>
-            <button type="button" className="remove-image">
-              <i className="times-icon"></i>
+          <figure
+            key={src + idx}
+            className={`${media.featured === src ? 'isFeatured' : ''} ${
+              ![
+                'pCategory',
+                'pCollection',
+                'bCategory',
+                'client',
+                'contact',
+              ].includes(page)
+                ? ''
+                : 'hideFeaturedOption'
+            }
+            `}
+          >
+            <button
+              type="button"
+              className="featured-image"
+              onClick={() => featureImageHandler(page, src)}
+            >
+              <FaCheck />
+            </button>
+            <button
+              type="button"
+              className="remove-image"
+              onClick={() => deleteImageHandler('images', page, idx)}
+            >
+              <FaTimes />
             </button>
             <img src={src} alt="" />
           </figure>
@@ -84,9 +141,30 @@ const FileButton = (props: {
         media.videos.map((src, idx) => {
           const id = getYoutubeId(src);
           return (
-            <figure key={id + idx}>
-              <button type="button" className="remove-image">
-                <i className="times-icon"></i>
+            <figure
+              key={id + idx}
+              className={
+                media.featured === src ||
+                !['pCategory', 'pCollection', 'bCategory', 'client'].includes(
+                  page,
+                )
+                  ? 'hideFeaturedOption'
+                  : ''
+              }
+            >
+              <button
+                type="button"
+                className="featured-image"
+                onClick={() => featureImageHandler(page, src)}
+              >
+                <FaCheck />
+              </button>
+              <button
+                type="button"
+                className="remove-image"
+                onClick={() => deleteImageHandler('videos', page, idx)}
+              >
+                <FaTimes />
               </button>
               <img
                 src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}
@@ -102,7 +180,13 @@ const FileButton = (props: {
       (page === 'bPostSection' &&
         media &&
         media.images &&
-        media.images.length + media.videos.length === 2) ? (
+        media.images.length + media.videos.length === 2) ||
+      (['pCategory', 'pCollection', 'bCategory', 'client', 'contact'].includes(
+        page,
+      ) &&
+        media &&
+        media.images &&
+        media.images.length === 1) ? (
         ''
       ) : (
         <button

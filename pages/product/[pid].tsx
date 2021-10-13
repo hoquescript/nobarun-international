@@ -120,6 +120,7 @@ const AddProduct = () => {
   const productKeypoints = useTypedSelector(
     (state) => state.products.productMedia.keyPoints,
   );
+  const author = useTypedSelector((state) => state.profile.userId);
 
   const handleAddProduct = async (data: any) => {
     const keyPoints = Object.keys(KeyPoint[0]).map((key) => {
@@ -156,20 +157,21 @@ const AddProduct = () => {
       questions: questions,
       tags: tagState[0],
       keywords,
+      author,
     };
 
-    if (!data.collectionName) delete data.collectionName;
+    if (data.collectionName === '') delete product.collectionName;
 
     //Form Reset
-    methods.reset(defaultValues);
-    KeyPoint[1](defaultKeypoints);
-    question[1](defaultQuestions);
-    setFeatures('');
-    setSpecification('');
-    setRelatedProducts([]);
-    setKeywords([]);
-    tagState[1]([]);
-    dispatch(resetBlogMedia());
+    // methods.reset(defaultValues);
+    // KeyPoint[1](defaultKeypoints);
+    // question[1](defaultQuestions);
+    // setFeatures('');
+    // setSpecification('');
+    // setRelatedProducts([]);
+    // setKeywords([]);
+    // tagState[1]([]);
+    // dispatch(resetBlogMedia());
 
     if (isEditMode) {
       await editProduct({
@@ -199,6 +201,13 @@ const AddProduct = () => {
         alert.error(createState.error.message);
       }
     }
+  };
+
+  const handleError = (error) => {
+    console.log(error);
+    Object.values(error).forEach((err) => {
+      alert.error(err.message);
+    });
   };
 
   useEffect(() => {
@@ -251,7 +260,7 @@ const AddProduct = () => {
               <button
                 type="button"
                 className="btn-icon-white ml-20"
-                onClick={methods.handleSubmit(handleAddProduct)}
+                onClick={methods.handleSubmit(handleAddProduct, handleError)}
               >
                 <FaSave />
               </button>
@@ -298,7 +307,10 @@ const AddProduct = () => {
                 setValue={methods.setValue}
                 chips={keywords}
                 setChips={setKeywords}
-                handleAddProduct={methods.handleSubmit(handleAddProduct)}
+                handleAddProduct={methods.handleSubmit(
+                  handleAddProduct,
+                  handleError,
+                )}
               />
             </TabContent>
           </TabMenu>

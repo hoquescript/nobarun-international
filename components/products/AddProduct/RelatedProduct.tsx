@@ -30,7 +30,6 @@ const RelatedProducts = (props: RelatedProductsProps) => {
     setSuggestions(defaultState(productCodes));
   }, [productCodes]);
 
-  console.log('Component', suggestions);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClickOutside(event) {

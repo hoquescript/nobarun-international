@@ -41,13 +41,28 @@
       height: 100%;
       object-fit: cover;
       border-radius: 0.8rem;
+      // border: 3px solid saddlebrown;
     }
-    &:hover .remove-image {
+    &:hover .remove-image,
+    &:hover .featured-image {
       opacity: 1;
       visibility: visible;
     }
   }
-
+  .isFeatured {
+    & > img {
+      border: 4px solid #3a9acd;
+    }
+  }
+  .hideFeaturedOption {
+    .featured-image {
+      display: none;
+    }
+    .remove-image {
+      top: -0.8rem;
+    }
+  }
+  .featured-image,
   .remove-image {
     @include buttonReset();
     background-color: $darkGrey;
@@ -63,13 +78,24 @@
     padding: 0.3rem;
     cursor: pointer;
     & > svg {
-      width: 1.6rem;
-      height: 1.6rem;
+      width: 1.4rem;
+      height: 1.4rem;
     }
     &:hover {
       background-color: $primaryColor;
       color: white;
     }
+  }
+  .featured-image {
+    right: 0rem;
+    top: -0.8rem;
+    & > svg {
+      width: 1.3rem;
+      height: 1.3rem;
+    }
+  }
+  .remove-image {
+    top: 1.5rem;
   }
 
   .add-new-image {

@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type Media = {
+  featured: string;
   images: string[];
   videos: string[];
 };
@@ -16,6 +17,7 @@ interface UIState {
 const initialState: UIState = {
   blogsMedia: {
     main: {
+      featured: '',
       images: [],
       videos: [],
     },
@@ -34,6 +36,7 @@ export const blogSlice = createSlice({
       if (page === 'bPostSection') {
         if (!state.blogsMedia.postSection[key])
           state.blogsMedia.postSection[key] = {
+            featured: '',
             images: [],
             videos: [],
           };
@@ -50,6 +53,7 @@ export const blogSlice = createSlice({
       if (page === 'bPostSection') {
         if (!state.blogsMedia.postSection[key])
           state.blogsMedia.postSection[key] = {
+            featured: '',
             images: [],
             videos: [],
           };
@@ -58,6 +62,29 @@ export const blogSlice = createSlice({
           state.blogsMedia.postSection[key].videos.length;
         if (noOfMedia < 2)
           state.blogsMedia.postSection[key].videos.push(action.payload.src);
+      }
+    },
+    featuredBlogMedia: (state, action) => {
+      const page = action.payload.page;
+      const src = action.payload.src;
+      const key = action.payload.key;
+      if (page === 'bMain') {
+        state.blogsMedia.main.featured = src;
+      }
+      if (page === 'bPostSection') {
+        state.blogsMedia.postSection[key].featured = src;
+      }
+    },
+    deleteBlogMedia: (state, action) => {
+      const type = action.payload.type;
+      const page = action.payload.page;
+      const index = action.payload.index;
+      const key = action.payload.key;
+      if (page === 'bMain') {
+        state.blogsMedia.main[type].splice(index, 1);
+      }
+      if (page === 'bPostSection') {
+        state.blogsMedia.postSection[key][type].splice(index, 1);
       }
     },
     setBlogMedia: (state, action) => {
@@ -78,6 +105,8 @@ export const {
   selectBlogVideo,
   setBlogMedia,
   resetBlogMedia,
+  featuredBlogMedia,
+  deleteBlogMedia,
 } = blogSlice.actions;
 
 export default blogSlice.reducer;
