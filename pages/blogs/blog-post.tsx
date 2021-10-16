@@ -5,6 +5,7 @@ import { getSession } from 'next-auth/client';
 import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -22,6 +23,8 @@ const DELETE_BLOG = gql`
 `;
 
 const BlogPost = () => {
+  const alert = useAlert();
+
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
@@ -41,7 +44,7 @@ const BlogPost = () => {
   const columns = useMemo(() => BLOG_COLUMNS, []);
   const [posts, setPosts] = useState([]);
 
-  const [deleteBlog] = useMutation(DELETE_BLOG);
+  const [deleteBlog, deleteState] = useMutation(DELETE_BLOG);
 
   useEffect(() => {
     useAllBlogCategories().then((blogs) => {
@@ -95,15 +98,22 @@ const BlogPost = () => {
         pageName="blog"
         columns={columns}
         data={posts}
-        deleteHandler={(id, idx) => {
+        deleteHandler={async (id, idx) => {
           const modifiedData = [...posts];
           modifiedData.splice(idx, 1);
           setPosts(modifiedData);
-          deleteBlog({
+
+          await deleteBlog({
             variables: {
               id,
             },
           });
+
+          if (!deleteState.error) {
+            alert.error('Deleted Blog Successfully');
+          } else {
+            alert.error(deleteState.error.message);
+          }
         }}
       />
     </div>

@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { sub, format } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -22,6 +23,8 @@ const DELETE_CLIENT = gql`
 `;
 
 const Clients = () => {
+  const alert = useAlert();
+
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
@@ -38,7 +41,7 @@ const Clients = () => {
     },
   ]);
 
-  const [deleteAdmin] = useMutation(DELETE_CLIENT);
+  const [deleteAdmin, deleteState] = useMutation(DELETE_CLIENT);
   const token = useTypedSelector((state) => state.ui.token);
 
   const [clients, setClients] = useState([]);
@@ -94,15 +97,22 @@ const Clients = () => {
         globalFilterFn={filterData}
         columns={columns}
         data={clients}
-        deleteHandler={(id, idx) => {
+        deleteHandler={async (id, idx) => {
           const modifiedData = [...clients];
           modifiedData.splice(idx, 1);
           setClients(modifiedData);
-          deleteAdmin({
+
+          await deleteAdmin({
             variables: {
               id,
             },
           });
+
+          if (!deleteState.error) {
+            alert.error('Deleted Clients Successfully');
+          } else {
+            alert.error(deleteState.error.message);
+          }
         }}
       />
     </div>

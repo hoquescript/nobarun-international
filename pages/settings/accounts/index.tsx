@@ -2,6 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 
 import TimePeriod from '../../../components/controls/period';
 import Search from '../../../components/controls/search';
@@ -22,6 +23,8 @@ const DELETE_ADMIN = gql`
 `;
 
 const Accounts = () => {
+  const alert = useAlert();
+
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
@@ -38,7 +41,7 @@ const Accounts = () => {
     },
   ]);
 
-  const [deleteAdmin] = useMutation(DELETE_ADMIN);
+  const [deleteAdmin, deleteState] = useMutation(DELETE_ADMIN);
   const token = useTypedSelector((state) => state.ui.token);
 
   const [admins, setAdmins] = useState([]);
@@ -94,15 +97,22 @@ const Accounts = () => {
         globalFilterFn={filterData}
         columns={columns}
         data={admins}
-        deleteHandler={(id, idx) => {
+        deleteHandler={async (id, idx) => {
           const modifiedData = [...admins];
           modifiedData.splice(idx, 1);
           setAdmins(modifiedData);
-          deleteAdmin({
+
+          await deleteAdmin({
             variables: {
               id,
             },
           });
+
+          if (!deleteState.error) {
+            alert.error('Deleted Product Successfully');
+          } else {
+            alert.error(deleteState.error.message);
+          }
         }}
       />
     </div>

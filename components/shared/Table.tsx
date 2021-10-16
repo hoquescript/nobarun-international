@@ -41,6 +41,8 @@ const Table = (props: TableProps) => {
   const { pageName, columns, data, deleteHandler, filter, globalFilterFn } =
     props;
 
+  const [deleteKey, setDeleteKey] = useState('');
+  const [deleteIdx, setDeleteIdx] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const defaultColumn = React.useMemo(
@@ -146,12 +148,15 @@ const Table = (props: TableProps) => {
                             // @ts-ignore
                             row.original.id &&
                               // @ts-ignore
-                              deleteHandler(row.original.id, row.index);
+                              deleteHandler(deleteKey, deleteIdx);
                           }}
                         />
                         <button
                           onClick={() => {
                             setShowDeleteModal(true);
+                            // @ts-ignore
+                            setDeleteKey(row.original?.id);
+                            setDeleteIdx(row.index);
                           }}
                         >
                           <FaTrash />

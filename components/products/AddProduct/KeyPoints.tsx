@@ -80,9 +80,10 @@ const KeyPoints = (props: KeyPointsProps) => {
     <div className="wrapper-section">
       {Object.keys(keyPoints).map((point) => (
         <div className="form_accordion" key={point}>
-          <div className="form_accordion__title flex">
+          <div className="form_accordion__title flex sb">
             <input
               className="custom-input large"
+              style={{ height: '5rem', width: '50rem' }}
               disabled={keyPoints[point].isDisabled}
               placeholder="Key Points of Product"
               value={keyPoints[point].title}
@@ -90,51 +91,47 @@ const KeyPoints = (props: KeyPointsProps) => {
                 onKeyPointsContentChange(point, 'title', e.target.value)
               }
             />
-            <div className="row ml-30">
-              <div className="col-5">
-                <FileButton
-                  page="pKeypoint"
-                  setPage={setPage}
-                  showMedia
-                  postKey={point}
-                  setPostSectionKey={setPostSectionKey}
+            <div className="flex">
+              <FileButton
+                page="pKeypoint"
+                setPage={setPage}
+                showMedia
+                postKey={point}
+                setPostSectionKey={setPostSectionKey}
+              />
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={addKeyPoints}
+              >
+                <FaPlus />
+              </button>
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={() => deleteKeyPoints(point)}
+              >
+                <FaMinus />
+              </button>
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={() => saveEditKeyPoints(point)}
+              >
+                {keyPoints[point].isDisabled ? <FaEdit /> : <FaSave />}
+              </button>
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={() => collapseKeyPoints(point)}
+              >
+                <MdKeyboardArrowDown
+                  style={{
+                    height: 30,
+                    width: 30,
+                  }}
                 />
-              </div>
-              <div className="col-6 flex">
-                <button
-                  type="button"
-                  className="btn-icon-white ml-20"
-                  onClick={addKeyPoints}
-                >
-                  <FaPlus />
-                </button>
-                <button
-                  type="button"
-                  className="btn-icon-white ml-20"
-                  onClick={() => deleteKeyPoints(point)}
-                >
-                  <FaMinus />
-                </button>
-                <button
-                  type="button"
-                  className="btn-icon-white ml-20"
-                  onClick={() => saveEditKeyPoints(point)}
-                >
-                  {keyPoints[point].isDisabled ? <FaEdit /> : <FaSave />}
-                </button>
-                <button
-                  type="button"
-                  className="btn-icon-white ml-20"
-                  onClick={() => collapseKeyPoints(point)}
-                >
-                  <MdKeyboardArrowDown
-                    style={{
-                      height: 30,
-                      width: 30,
-                    }}
-                  />
-                </button>
-              </div>
+              </button>
             </div>
           </div>
 

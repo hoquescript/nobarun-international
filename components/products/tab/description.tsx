@@ -135,7 +135,10 @@ const Description = (props: DescriptionProps) => {
         setPostSectionKey={setPostSectionKey}
       />
       <div className="wrapper-section">
-        <div className="wrapper-section__title">
+        <div
+          className="wrapper-section__title"
+          style={{ marginBottom: '-2rem' }}
+        >
           <h3 className="heading-secondary">Feature List</h3>
         </div>
         <div className="wrapper-section__content">
@@ -150,7 +153,10 @@ const Description = (props: DescriptionProps) => {
         </div>
       </div>
       <div className="wrapper-section">
-        <div className="wrapper-section__title">
+        <div
+          className="wrapper-section__title"
+          style={{ marginBottom: '-2rem' }}
+        >
           <h3 className="heading-secondary">Specification</h3>
         </div>
         <div className="wrapper-section__content">

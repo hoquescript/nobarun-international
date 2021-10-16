@@ -75,6 +75,7 @@ const Categories = () => {
         id,
       },
     });
+    setLoading(true);
     router.reload();
   };
 

@@ -4,6 +4,7 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { FaPlusCircle, FaGripHorizontal, FaList } from 'react-icons/fa';
 import { gql, useMutation } from '@apollo/client';
+import { useAlert } from 'react-alert';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -24,6 +25,8 @@ const DELETE_PRODUCT = gql`
 `;
 
 const Products = () => {
+  const alert = useAlert();
+
   const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState('grid');
   const [search, setSearch] = useState('');
@@ -42,14 +45,13 @@ const Products = () => {
     },
   ]);
 
-  const [deleteProduct] = useMutation(DELETE_PRODUCT);
+  const [deleteProduct, deleteState] = useMutation(DELETE_PRODUCT);
 
   const [products, setProducts] = useState<any[]>([]);
   const columns = useMemo(() => PRODUCT_COLUMNS, []);
 
   useEffect(() => {
     useAllProducts().then((data) => {
-      console.log(data);
       setProducts(data);
       setLoading(false);
     });
@@ -155,12 +157,31 @@ const Products = () => {
                   if (firstEl[sortBy] > secondEl[sortBy]) return 1;
                   return 0;
                 })
-                .map((product) => (
+                .map((product, idx) => (
                   <div
                     className="col-xxl-4 col-xl-6 col-xs-12"
                     key={product.id}
                   >
-                    <Product {...product} />
+                    <Product
+                      {...product}
+                      deleteHandler={async () => {
+                        const modifiedData = [...products];
+                        modifiedData.splice(idx, 1);
+                        setProducts(modifiedData);
+
+                        await deleteProduct({
+                          variables: {
+                            id: product.id,
+                          },
+                        });
+
+                        if (!deleteState.error) {
+                          alert.error('Deleted Product Successfully');
+                        } else {
+                          alert.error(deleteState.error.message);
+                        }
+                      }}
+                    />
                   </div>
                 ))}
           </>
@@ -172,15 +193,22 @@ const Products = () => {
             columns={columns}
             data={products}
             globalFilterFn={filterData}
-            deleteHandler={(id, idx) => {
+            deleteHandler={async (id, idx) => {
               const modifiedData = [...products];
               modifiedData.splice(idx, 1);
               setProducts(modifiedData);
-              deleteProduct({
+
+              await deleteProduct({
                 variables: {
                   id,
                 },
               });
+
+              if (!deleteState.error) {
+                alert.info('Deleted Product Successfully');
+              } else {
+                alert.error(deleteState.error.message);
+              }
             }}
           />
         )}

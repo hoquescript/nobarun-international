@@ -77,6 +77,7 @@ const Questions = (props: QuestionsProps) => {
           <div className="form_accordion__title flex sb">
             <input
               className="custom-input large"
+              style={{ height: '5rem', width: '50rem' }}
               disabled={questions[key].isDisabled}
               placeholder="Question Title"
               value={questions[key].title}
@@ -128,9 +129,7 @@ const Questions = (props: QuestionsProps) => {
               value={questions[key].question}
               disabled={questions[key].isDisabled}
               onChange={(content: string) => {
-                // console.log(content);
                 onQuestionsChange(key, 'question', content);
-                // console.log('I was clicked');
               }}
             />
           </div>

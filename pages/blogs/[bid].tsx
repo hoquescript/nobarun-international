@@ -118,6 +118,7 @@ const AddNewPost = () => {
       tags,
       author: userId,
     };
+
     methods.reset(defaultValues);
     dispatch(resetBlogMedia());
     setTags([]);
@@ -213,7 +214,7 @@ const AddNewPost = () => {
               />
             </div>
             <div className="wrapper-section__content">
-              <div className="row mb-60">
+              <div className="row mb-20">
                 <div className="col-4">
                   <Combobox
                     name="category"
@@ -238,7 +239,7 @@ const AddNewPost = () => {
               </div>
               <div className="row" style={{ alignItems: 'baseline' }}>
                 <div className="col-5">
-                  <div className="mt-50 mb-20 flex">
+                  <div className="mb-20 flex">
                     <h4 className="heading-tertiary mr-20">Featured Post</h4>
                     <Checkbox name="isFeatured" />
                   </div>

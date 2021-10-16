@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Link from 'next/link';
 import { FaPen, FaEye, FaStar, FaTrash } from 'react-icons/fa';
 import { BiDotsVerticalRounded } from 'react-icons/bi';
 
-import Link from 'next/link';
-
+import Modal from '../../shared/Modal';
 import styles from '../../../styles/pages/products.module.scss';
-import Checkbox from '../../controls/checkbox';
-import Togglebar from '../../controls/togglebar';
 
 const Product = (props) => {
   const {
@@ -20,8 +18,10 @@ const Product = (props) => {
     contactPerson,
     noOfReview,
     avgRating,
+    deleteHandler,
   } = props;
 
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
 
   const descriptionRef = useRef<HTMLDivElement>(null);
@@ -29,7 +29,6 @@ const Product = (props) => {
     const text = descriptionRef.current?.innerText;
     if (text && descriptionRef.current && text?.length > 70) {
       const value = text.substring(0, 70).concat('...');
-      // console.log(object);
       descriptionRef.current.innerText = value;
     }
   }, []);
@@ -45,6 +44,14 @@ const Product = (props) => {
         style={{ justifyContent: 'space-between', width: '100%' }}
       >
         <h4>{productName}</h4>
+        <Modal
+          title="Confirmation Alert"
+          modalIsOpen={showDeleteModal}
+          setIsOpen={setShowDeleteModal}
+          confirmHandler={() => {
+            deleteHandler();
+          }}
+        />
         <div className="dropdown">
           <button
             type="button"
@@ -52,12 +59,10 @@ const Product = (props) => {
             onClick={(e) => {
               e.stopPropagation();
               setShowDropdown(true);
-              // dispatch(setListDropdown({ value: true }));
             }}
           >
             <BiDotsVerticalRounded />
           </button>
-          {/* <div> */}
           <div
             className="dropdown__menu"
             style={{ transform: showDropdown ? 'scale(1)' : 'scale(0)' }}
@@ -73,7 +78,6 @@ const Product = (props) => {
                   <a
                     onClick={(e) => {
                       e.stopPropagation();
-                      // dispatch(setSelectedProductId({ value: _id }));
                       setShowDropdown(false);
                     }}
                   >
@@ -85,12 +89,10 @@ const Product = (props) => {
               <li style={{ cursor: 'pointer' }}>
                 <a
                   className="text-red"
-                  // onClick={(e) => {
-                  //   e.stopPropagation();
-                  //   dispatch(removeProductByID({ id: _id }));
-                  //   DeleteProductById({ variables: { productId: _id } });
-                  //   setShowDropdown(false);
-                  // }}
+                  onClick={(e) => {
+                    setShowDropdown(false);
+                    setShowDeleteModal(true);
+                  }}
                 >
                   <FaTrash />
                   Delete

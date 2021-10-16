@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { CSVLink } from 'react-csv';
 import { sub, format, isWithinInterval } from 'date-fns';
 import { FaPlusCircle } from 'react-icons/fa';
+import { useAlert } from 'react-alert';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
@@ -14,6 +15,7 @@ import useAllQuery from '../../hooks/Query/useAllQuery';
 import { gql, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import Loader from '../../components/shared/Loader';
 
 const headers = [
   { label: 'Full Name', key: 'name' },
@@ -32,6 +34,8 @@ const DELETE_QUERY = gql`
   }
 `;
 const Queries = () => {
+  const alert = useAlert();
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -50,7 +54,7 @@ const Queries = () => {
     },
   ]);
 
-  const [deleteQuery] = useMutation(DELETE_QUERY);
+  const [deleteQuery, deleteState] = useMutation(DELETE_QUERY);
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
@@ -81,6 +85,7 @@ const Queries = () => {
 
   return (
     <div className={styles.query}>
+      {loading && <Loader />}
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />
@@ -119,15 +124,22 @@ const Queries = () => {
           columns={QUERY_COLUMNS}
           data={data}
           globalFilterFn={filterData}
-          deleteHandler={(id, idx) => {
+          deleteHandler={async (id, idx) => {
             const modifiedData = [...data];
             modifiedData.splice(idx, 1);
             setData(modifiedData);
-            deleteQuery({
+
+            await deleteQuery({
               variables: {
                 id,
               },
             });
+
+            if (!deleteState.error) {
+              alert.error('Deleted Query Report Successfully');
+            } else {
+              alert.error(deleteState.error.message);
+            }
           }}
         />
       )}
