@@ -18,6 +18,7 @@ import Modal from '../../../components/shared/Modal';
 
 import useBlogCategoriesTree from '../../../hooks/Blogs/useBlogCategoriesTree';
 import styles from '../../../styles/pages/products.module.scss';
+import Loader from '../../../components/shared/Loader';
 
 const SET_CATEGORIES_TREE = gql`
   mutation setBlogCategoriesTree($items: [CreateNewBlogCategoryInput!]!) {
@@ -33,6 +34,7 @@ const DELETE_BLOG_CATEGORY = gql`
 
 const Categories = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [items, setItems] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -40,7 +42,10 @@ const Categories = () => {
   const [deleteCategory] = useMutation(DELETE_BLOG_CATEGORY);
 
   useEffect(() => {
-    useBlogCategoriesTree().then((category) => setItems(category));
+    useBlogCategoriesTree().then((category) => {
+      setItems(category);
+      setLoading(false);
+    });
   }, []);
 
   const setCategoryTreeHandler = (dragInfo) => {
@@ -135,6 +140,7 @@ const Categories = () => {
 
   return (
     <div className="container center">
+      {loading && <Loader />}
       <div className="flex sb mb-60">
         <h1 className="heading-primary">Categories</h1>
         <Link href="/blogs/categories/add">

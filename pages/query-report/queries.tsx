@@ -33,6 +33,8 @@ const DELETE_QUERY = gql`
 `;
 const Queries = () => {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -52,7 +54,10 @@ const Queries = () => {
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    useAllQuery(token).then((data) => setData(data));
+    useAllQuery(token).then((data) => {
+      setData(data);
+      setLoading(false);
+    });
   }, [token]);
 
   const csvReport = {

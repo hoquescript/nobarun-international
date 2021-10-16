@@ -30,6 +30,7 @@ import useAllReviews from '../../hooks/Review/useAllReview';
 
 import styles from '../../styles/pages/query-report.module.scss';
 import { REVIEWS_COLUMNS } from '../../data/ReviewsColumn';
+import Loader from '../../components/shared/Loader';
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -41,6 +42,8 @@ const formatIsPublished = (data) => {
 
 const Reviews = () => {
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(true);
+
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -60,7 +63,10 @@ const Reviews = () => {
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
-    useAllReviews(token).then((reviews) => setReviews(reviews));
+    useAllReviews(token).then((reviews) => {
+      setReviews(reviews);
+      setLoading(false);
+    });
   }, [token]);
 
   const filterData = (rows, ids, query) => {
@@ -124,6 +130,7 @@ const Reviews = () => {
 
   return (
     <div className={styles.query}>
+      {loading && <Loader />}
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />

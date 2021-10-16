@@ -20,6 +20,7 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import Modal from '../../../components/shared/Modal';
 import { useRouter } from 'next/router';
+import Loader from '../../../components/shared/Loader';
 
 interface renderItemProps {
   item: any;
@@ -42,6 +43,8 @@ const DELETE_CATEGORY = gql`
 
 const Categories = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
+
   const [key, setKey] = useState('');
   const [categoryItem, setCategoryItem] = useState();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -50,7 +53,10 @@ const Categories = () => {
   const [deleteCategory] = useMutation(DELETE_CATEGORY);
 
   useEffect(() => {
-    useProductCategoryTree().then((data) => setCategoryItem(data));
+    useProductCategoryTree().then((data) => {
+      setCategoryItem(data);
+      setLoading(false);
+    });
   }, []);
 
   const setCategoryTreeHandler = (dragInfo) => {
@@ -86,6 +92,7 @@ const Categories = () => {
     const { item } = props;
     return (
       <div className="row">
+        {loading && <Loader />}
         <div className="col-1 flex ct" style={{ cursor: 'move' }}>
           <FaGripVertical className="mb-20" />
         </div>

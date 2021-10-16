@@ -17,6 +17,7 @@ import styles from '../../../styles/pages/products.module.scss';
 import useAllCollections from '../../../hooks/Products/useAllCollections';
 import Modal from '../../../components/shared/Modal';
 import { useRef } from 'react';
+import Loader from '../../../components/shared/Loader';
 
 const DELETE_COLLECTION = gql`
   mutation deleteCollection($id: String!) {
@@ -26,6 +27,7 @@ const DELETE_COLLECTION = gql`
 
 const Collections = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(true);
   const [key, setKey] = useState('');
   const [collections, setCollections] =
     useState<{ [key: string]: string | number }[]>();
@@ -34,7 +36,10 @@ const Collections = () => {
   const [deleteCollection] = useMutation(DELETE_COLLECTION);
 
   useEffect(() => {
-    useAllCollections().then((collections) => setCollections(collections));
+    useAllCollections().then((collections) => {
+      setCollections(collections);
+      setLoading(false);
+    });
   }, []);
 
   const deleteHandler = async (id) => {
@@ -45,7 +50,7 @@ const Collections = () => {
     });
     router.reload();
   };
-  console.log(collections);
+
   const description = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const text = description.current?.innerText;
@@ -122,6 +127,7 @@ const Collections = () => {
 
   return (
     <div className="container center mt-30">
+      {loading && <Loader />}
       <div className="flex sb mb-60">
         <h1 className="page-title">Collections</h1>
         <Link href="/product/collections/add">

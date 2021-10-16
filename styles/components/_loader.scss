@@ -1,18 +1,9 @@
 :root {
-  --main-color: #aba1ff;
-  --main-color-dark: #675fb2;
-  --ray-color: #ffd6bb;
-  --spark-color: #70b268;
-  --back-color: #2f2e4e;
-}
-body {
-  // margin: 0;
-  // padding: 0;
-  // background: var(--back-color);
-}
-.container {
-  // max-width: 800px;
-  // margin: auto;
+  --main-color: #99ddff;
+  --main-color-dark: #1e8cc5;
+  --ray-color: #e27777;
+  --spark-color: #f0363e;
+  --back-color: rgb(254 254 254 / 95%);
 }
 #lastray {
   margin: auto;

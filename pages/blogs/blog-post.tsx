@@ -13,6 +13,7 @@ import Table from '../../components/shared/Table';
 import styles from '../../styles/pages/query-report.module.scss';
 import { BLOG_COLUMNS } from '../../data/BlogColumn';
 import useAllBlogCategories from '../../hooks/Blogs/useAllBlogs';
+import Loader from '../../components/shared/Loader';
 
 const DELETE_BLOG = gql`
   mutation deleteUserById($id: String!) {
@@ -21,6 +22,7 @@ const DELETE_BLOG = gql`
 `;
 
 const BlogPost = () => {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -42,7 +44,10 @@ const BlogPost = () => {
   const [deleteBlog] = useMutation(DELETE_BLOG);
 
   useEffect(() => {
-    useAllBlogCategories().then((blogs) => setPosts(blogs));
+    useAllBlogCategories().then((blogs) => {
+      setPosts(blogs);
+      setLoading(false);
+    });
   }, []);
 
   const filterData = (rows, ids, query) => {
@@ -59,6 +64,7 @@ const BlogPost = () => {
 
   return (
     <div className={styles.query}>
+      {loading && <Loader />}
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />

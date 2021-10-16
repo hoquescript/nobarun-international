@@ -13,6 +13,7 @@ import useAllAdmin from '../../../hooks/Settings/useAllAdmin';
 import { useTypedSelector } from '../../../hooks/useTypedSelector';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import Loader from '../../../components/shared/Loader';
 
 const DELETE_ADMIN = gql`
   mutation deleteUserById($id: String!) {
@@ -21,6 +22,7 @@ const DELETE_ADMIN = gql`
 `;
 
 const Accounts = () => {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -41,7 +43,10 @@ const Accounts = () => {
 
   const [admins, setAdmins] = useState([]);
   useEffect(() => {
-    useAllAdmin(token).then((admin) => setAdmins(admin));
+    useAllAdmin(token).then((admin) => {
+      setAdmins(admin);
+      setLoading(false);
+    });
   }, [token]);
 
   const columns = useMemo(() => ADMIN_COLUMNS, []);
@@ -60,6 +65,7 @@ const Accounts = () => {
 
   return (
     <div className={styles.query}>
+      {loading && <Loader />}
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />

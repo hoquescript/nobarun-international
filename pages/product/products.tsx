@@ -15,6 +15,7 @@ import useAllProducts from '../../hooks/Products/useAllProducts';
 import { PRODUCT_COLUMNS } from '../../data/ProductColumn';
 import Link from 'next/link';
 import fuzzyMatch from '../../helpers/fuzzySearch';
+import Loader from '../../components/shared/Loader';
 
 const DELETE_PRODUCT = gql`
   mutation deleteProduct($id: String!) {
@@ -23,6 +24,7 @@ const DELETE_PRODUCT = gql`
 `;
 
 const Products = () => {
+  const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState('grid');
   const [search, setSearch] = useState('');
   const [sortBy, setSortBy] = useState('');
@@ -46,7 +48,10 @@ const Products = () => {
   const columns = useMemo(() => PRODUCT_COLUMNS, []);
 
   useEffect(() => {
-    useAllProducts().then((data) => setProducts(data));
+    useAllProducts().then((data) => {
+      setProducts(data);
+      setLoading(false);
+    });
   }, []);
 
   const filterData = (rows, ids, query) => {
@@ -72,6 +77,7 @@ const Products = () => {
 
   return (
     <div className="container center">
+      {loading && <Loader />}
       <div className="row mb-30">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />

@@ -22,6 +22,7 @@ const DELETE_CLIENT = gql`
 `;
 
 const Clients = () => {
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -42,7 +43,10 @@ const Clients = () => {
 
   const [clients, setClients] = useState([]);
   useEffect(() => {
-    useAllClients().then((client) => setClients(client));
+    useAllClients().then((client) => {
+      setClients(client);
+      setLoading(false);
+    });
   }, [token]);
 
   const columns = useMemo(() => COLUMNS, []);
@@ -61,7 +65,7 @@ const Clients = () => {
 
   return (
     <div className={styles.query}>
-      <Loader />
+      {loading && <Loader />}
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />
