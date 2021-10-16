@@ -1,11 +1,11 @@
 function fuzzyMatch(companyCode: string, searchInput: string) {
   const search = searchInput.replace(/ /g, '').toLowerCase();
-  const tokens: any[] = companyCode.split('');
+  const tokens: any[] = companyCode?.split('');
 
   let searchPosition = 0;
 
   // Comparing values character by character
-  tokens.forEach((textChar, index) => {
+  tokens?.forEach((textChar, index) => {
     if (textChar.toLowerCase() === search[searchPosition]) {
       if (searchPosition >= search.length) {
         return;
@@ -18,7 +18,7 @@ function fuzzyMatch(companyCode: string, searchInput: string) {
   if (searchPosition !== search.length) {
     return '';
   }
-  return tokens.join('');
+  return tokens?.join('');
 }
 
 export default fuzzyMatch;

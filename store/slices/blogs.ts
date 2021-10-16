@@ -67,12 +67,8 @@ export const blogSlice = createSlice({
     featuredBlogMedia: (state, action) => {
       const page = action.payload.page;
       const src = action.payload.src;
-      const key = action.payload.key;
       if (page === 'bMain') {
         state.blogsMedia.main.featured = src;
-      }
-      if (page === 'bPostSection') {
-        state.blogsMedia.postSection[key].featured = src;
       }
     },
     deleteBlogMedia: (state, action) => {

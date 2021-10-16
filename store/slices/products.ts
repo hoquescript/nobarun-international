@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type Media = {
-  featured: string;
+  featured?: string;
   images: string[];
   videos: string[];
 };
@@ -67,12 +67,8 @@ export const productSlice = createSlice({
     featuredProductMedia: (state, action) => {
       const page = action.payload.page;
       const src = action.payload.src;
-      const key = action.payload.key;
       if (page === 'pMain') {
         state.productMedia.main.featured = src;
-      }
-      if (page === 'pKeypoint') {
-        state.productMedia.keyPoints[key].featured = src;
       }
     },
     deleteProductMedia: (state, action) => {

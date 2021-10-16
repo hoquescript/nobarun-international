@@ -9,14 +9,15 @@ import Table from '../../components/shared/Table';
 
 import styles from '../../styles/pages/query-report.module.scss';
 import { COLUMNS } from '../../data/ClientColumn';
-import useAllAdmin from '../../hooks/Settings/useAllAdmin';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import useAllClients from '../../hooks/Client/useAllClient';
+import Loader from '../../components/shared/Loader';
 
-const DELETE_ADMIN = gql`
-  mutation deleteUserById($id: String!) {
-    deleteUserById(userId: $id)
+const DELETE_CLIENT = gql`
+  mutation deleteClientById($id: String!) {
+    RemoveClientById(clientId: $id)
   }
 `;
 
@@ -36,12 +37,12 @@ const Clients = () => {
     },
   ]);
 
-  const [deleteAdmin] = useMutation(DELETE_ADMIN);
+  const [deleteAdmin] = useMutation(DELETE_CLIENT);
   const token = useTypedSelector((state) => state.ui.token);
 
-  const [admins, setAdmins] = useState([]);
+  const [clients, setClients] = useState([]);
   useEffect(() => {
-    // useAllAdmin(token).then((admin) => setAdmins(admin));
+    useAllClients().then((client) => setClients(client));
   }, [token]);
 
   const columns = useMemo(() => COLUMNS, []);
@@ -49,7 +50,7 @@ const Clients = () => {
   const filterData = (rows, ids, query) => {
     const param = query.search.toLowerCase();
     return rows.filter((row) => {
-      return row.values?.fullName.toLowerCase().includes(param);
+      return row.values?.clientName.toLowerCase().includes(param);
       // &&
       // isWithinInterval(new Date(row.values?.createdAt), {
       //   start: query.range.startDate,
@@ -60,6 +61,7 @@ const Clients = () => {
 
   return (
     <div className={styles.query}>
+      <Loader />
       <div className="row">
         <div className="col-6">
           <Search search={search} setSearch={setSearch} />
@@ -83,15 +85,15 @@ const Clients = () => {
         </div>
       </div>
       <Table
-        pageName="account"
+        pageName="client"
         filter={{ search, range: selectionRange[0] }}
         globalFilterFn={filterData}
         columns={columns}
-        data={admins}
+        data={clients}
         deleteHandler={(id, idx) => {
-          const modifiedData = [...admins];
+          const modifiedData = [...clients];
           modifiedData.splice(idx, 1);
-          setAdmins(modifiedData);
+          setClients(modifiedData);
           deleteAdmin({
             variables: {
               id,

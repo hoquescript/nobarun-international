@@ -28,6 +28,7 @@ interface FileButtonProps {
     | 'product'
     | 'blog'
     | 'review'
+    | 'query'
     | 'client'
     | 'contact'
     | 'pMain'
@@ -49,6 +50,8 @@ const FileButton = (props: FileButtonProps) => {
     media = useTypedSelector((state) => state.ui.productMedia);
   if (page === 'review')
     media = useTypedSelector((state) => state.ui.reviewMedia);
+  if (page === 'query')
+    media = useTypedSelector((state) => state.ui.queryMedia);
   if (page === 'client')
     media = useTypedSelector((state) => state.ui.clientMedia);
   if (page === 'pCategory')
@@ -78,9 +81,9 @@ const FileButton = (props: FileButtonProps) => {
     );
 
   const featureImageHandler = (page, src) => {
-    if (['pMain', 'pKeypoint'].includes(page)) {
+    if (['pMain'].includes(page)) {
       dispatch(featuredProductMedia({ page, src, key: postKey }));
-    } else if (['bMain', 'bPostSection'].includes(page)) {
+    } else if (['bMain'].includes(page)) {
       dispatch(featuredBlogMedia({ page, src, key: postKey }));
     } else {
       dispatch(featuredMedia({ page, src, key: postKey }));
@@ -109,9 +112,13 @@ const FileButton = (props: FileButtonProps) => {
               ![
                 'pCategory',
                 'pCollection',
+                'pKeypoint',
+                'bPostSection',
                 'bCategory',
                 'client',
                 'contact',
+                'review',
+                'query',
               ].includes(page)
                 ? ''
                 : 'hideFeaturedOption'
@@ -143,14 +150,22 @@ const FileButton = (props: FileButtonProps) => {
           return (
             <figure
               key={id + idx}
-              className={
-                media.featured === src ||
-                !['pCategory', 'pCollection', 'bCategory', 'client'].includes(
-                  page,
-                )
-                  ? 'hideFeaturedOption'
-                  : ''
+              className={`${media.featured === src ? 'isFeatured' : ''} ${
+                ![
+                  'pCategory',
+                  'pCollection',
+                  'pKeypoint',
+                  'bPostSection',
+                  'bCategory',
+                  'client',
+                  'contact',
+                  'review',
+                  'query',
+                ].includes(page)
+                  ? ''
+                  : 'hideFeaturedOption'
               }
+              `}
             >
               <button
                 type="button"

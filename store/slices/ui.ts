@@ -113,12 +113,15 @@ export const uiSlice = createSlice({
         state.clientMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/query-report')) {
-        state.reviewMedia.images.push(action.payload.src);
+        state.queryMedia.images.push(action.payload.src);
       }
     },
     selectVideo: (state, action) => {
-      if (action.payload.path === '/review') {
+      if (action.payload.path.startsWith('/review')) {
         state.reviewMedia.videos.push(action.payload.src);
+      }
+      if (action.payload.path.startsWith('/query-report')) {
+        state.queryMedia.videos.push(action.payload.src);
       }
     },
     featuredMedia: (state, action) => {
@@ -146,6 +149,9 @@ export const uiSlice = createSlice({
       }
       if (page === 'client') {
         state.clientMedia[type].splice(index, 1);
+      }
+      if (page === 'query') {
+        state.queryMedia[type].splice(index, 1);
       }
     },
     selectContactImage: (state, action) => {
@@ -188,8 +194,11 @@ export const uiSlice = createSlice({
         state.reviewMedia.videos = action.payload.src?.videos;
       }
       if (action.payload.path.startsWith('/query-report')) {
-        state.reviewMedia.images = action.payload.src?.images;
-        state.reviewMedia.videos = action.payload.src?.videos;
+        state.queryMedia.images = action.payload.src?.images;
+        state.queryMedia.videos = action.payload.src?.videos;
+      }
+      if (action.payload.path.startsWith('/client')) {
+        state.clientMedia.images = [action.payload.src];
       }
     },
     resetMediaSelection: (state) => {
@@ -200,6 +209,10 @@ export const uiSlice = createSlice({
       state.blogCategoryMedia.images = [];
       state.reviewMedia.images = [];
       state.reviewMedia.videos = [];
+      state.queryMedia.images = [];
+      state.queryMedia.videos = [];
+      state.clientMedia.images = [];
+      state.clientMedia.videos = [];
     },
     setAuthToken: (state, action) => {
       state.token = action.payload;

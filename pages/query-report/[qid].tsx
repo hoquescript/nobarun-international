@@ -9,13 +9,17 @@ import { useAlert } from 'react-alert';
 import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
 
-import { InputFileUpload } from '../../components/controls/fileUpload';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
+
 import useQueryById from '../../hooks/Query/useQueryById';
 import styles from '../../styles/pages/query-report.module.scss';
 import ProductCode from '../../components/shared/ProductCode';
 import FileButton from '../../components/controls/file';
 import Toolbar from '../../components/shared/Toolbar';
+import { resetMediaSelection } from '../../store/slices/ui';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -54,12 +58,12 @@ const AddNewQuery = () => {
   const [editQuery, editState] = useMutation(EDIT_NEW_QUERY);
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [attachment, setAttachment] = useState('');
+  const attachment = useTypedSelector((state) => state.ui.queryMedia);
   const [productCode, setProductCode] = useState('');
 
-  const fileInputRef = React.useRef();
+  const dispatch = useTypedDispatch();
 
-  const addNewQuery = (data) => {
+  const addNewQuery = async (data) => {
     const query = {
       company: data.companyName,
       email: data.email,
@@ -69,14 +73,14 @@ const AddNewQuery = () => {
       phone: data.number,
       address: data.address,
       productCode: data.productCode,
-      attachment,
+      attachment: attachment.images[0],
     };
     methods.reset(defaultValues);
-    setAttachment('');
+    dispatch(resetMediaSelection());
+
     // @ts-ignore
-    fileInputRef.current.value = '';
     if (isEditMode) {
-      editQuery({
+      await editQuery({
         variables: {
           data: {
             editId: qid,
@@ -90,7 +94,7 @@ const AddNewQuery = () => {
         alert.error(editState.error.message);
       }
     } else {
-      createQuery({
+      await createQuery({
         variables: {
           data: query,
         },
@@ -124,12 +128,14 @@ const AddNewQuery = () => {
           <Textfield
             name="fullName"
             label="Full Name"
+            required
             placeholder="Enter your Name"
           />
           <Textfield
             type="tel"
             name="number"
             label="Phone"
+            required
             placeholder="Enter your Number"
           />
         </div>
@@ -138,22 +144,20 @@ const AddNewQuery = () => {
             type="email"
             name="email"
             label="Email"
+            required
             placeholder="Enter your Email"
           />
           <Textfield
             name="address"
             label="Address"
+            required
             placeholder="Enter your Address"
           />
         </div>
         <div className="grid two mb-20">
           <div className="field">
             <label>Attachments</label>
-            <FileButton showMedia page="review" />
-            {/* <InputFileUpload
-              ref={fileInputRef}
-              onChangeHandler={(url) => setAttachment(url)}
-            /> */}
+            <FileButton showMedia page="query" />
           </div>
           <Textfield
             name="companyName"

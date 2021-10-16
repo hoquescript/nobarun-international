@@ -23,24 +23,25 @@ import Toolbar from '../../components/shared/Toolbar';
 import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 import Togglebar from '../../components/controls/togglebar';
 import Textfield from '../../components/controls/textfield';
+import Category from '../../components/clients/Category';
+import useClientById from '../../hooks/Client/useClientById';
 
-const CREATE_CATEGORY = gql`
-  mutation addNewCategory($data: CreateNewCategoryInput!) {
-    addNewCategory(data: $data) {
-      _id
+const CREATE_CLIENT = gql`
+  mutation addClient($data: NewClientInput!) {
+    addNewClient(data: $data) {
+      id
     }
   }
 `;
 
-const EDIT_CATEGORY = gql`
-  mutation editProductCategory($data: EditCategory!) {
-    editCategory(data: $data)
+const EDIT_CLIENT = gql`
+  mutation editClient($data: EditClient!) {
+    EditClientById(data: $data)
   }
 `;
 
 const defaultValues = {
   clientName: '',
-  relatedCategory: '',
 };
 
 const AddClient = () => {
@@ -56,16 +57,10 @@ const AddClient = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [description, setDescription] = useState('');
-  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState('');
 
-  const [createCategory, createState] = useMutation(CREATE_CATEGORY);
-  const [editCategory, editState] = useMutation(EDIT_CATEGORY);
-
-  useEffect(() => {
-    useAllCategories().then((data) => {
-      setCategories(data);
-    });
-  }, []);
+  const [createClient, createState] = useMutation(CREATE_CLIENT);
+  const [editClient, editState] = useMutation(EDIT_CLIENT);
 
   const dispatch = useTypedDispatch();
 
@@ -75,60 +70,57 @@ const AddClient = () => {
   useEffect(() => {
     if (clid !== 'add-new-client') {
       setIsEditMode(true);
-      useProductCategoryById(clid, token).then((data) => {
-        console.log(data);
+      useClientById(clid, token).then((data) => {
         methods.reset(data);
         // @ts-ignore
-        dispatch(setMedia({ path: asPath, src: data.image }));
+        dispatch(setMedia({ path: asPath, src: data?.image }));
         // @ts-ignore
-        setDescription(data.description);
+        setDescription(data?.description);
+        setCategory(data.relatedCategory);
       });
     }
   }, [token]);
 
   const onSubmit = async (data) => {
-    // const { categoryName, categorySlug, parentCategory } = data;
-    console.log({ ...data, description, logo: images[0] });
-    // const client = {
-    //   name: categoryName,
-    //   description,
-    //   image: images[0],
-    //   isPublished: data.isPublished,
-    //   parentCategory: parentCategory,
-    //   slug: categorySlug,
-    //   id: uuid(),
-    // };
+    const client = {
+      clientName: data?.clientName,
+      description,
+      logo: images[0],
+      isPublished: data.isPublished,
+      relatedCategory: category,
+    };
 
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());
+    setCategory('');
     setDescription('');
-    // if (isEditMode) {
-    //   delete category.parentCategory;
-    //   await editCategory({
-    //     variables: {
-    //       data: {
-    //         editId: clid,
-    //         editableObject: category,
-    //       },
-    //     },
-    //   });
-    //   if (!editState.error) {
-    //     alert.info('Edited Query Successfully');
-    //   } else {
-    //     alert.error(editState.error.message);
-    //   }
-    // } else {
-    //   await createCategory({
-    //     variables: {
-    //       data: category,
-    //     },
-    //   });
-    //   if (!createState.error) {
-    //     alert.success('Posted Query Successfully');
-    //   } else {
-    //     alert.error(createState.error.message);
-    //   }
-    // }
+
+    if (isEditMode) {
+      await editClient({
+        variables: {
+          data: {
+            editId: clid,
+            editableObject: client,
+          },
+        },
+      });
+      if (!editState.error) {
+        alert.info('Edited Client Successfully');
+      } else {
+        alert.error(editState.error.message);
+      }
+    } else {
+      await createClient({
+        variables: {
+          data: client,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Posted Client Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
+    }
   };
   return (
     <div className="container center">
@@ -171,20 +163,13 @@ const AddClient = () => {
                   name="clientName"
                 />
               </div>
-              {!isEditMode && (
-                <div className="col-4 mt-20">
-                  <Combobox
-                    name="relatedCategory"
-                    label="Related Category"
-                    placeholder="Related Category"
-                    options={categories || []}
-                  />
-                </div>
-              )}
+              <div className="col-4 mt-20">
+                <Category productCode={category} setProductCode={setCategory} />
+              </div>
               <div
-                className={isEditMode ? 'col-6 mt-20' : 'col-6 ml-60'}
+                className={isEditMode ? 'col-6 ml-60 mt-20' : 'col-6 ml-60'}
                 style={{
-                  transform: isEditMode ? '' : 'translateY(30px)',
+                  transform: isEditMode ? '' : 'translateY(15px)',
                   flexDirection: 'row',
                 }}
               >

@@ -25,9 +25,13 @@ const Combobox = (props: ComboboxProps) => {
         id={name}
         {...register(name, { required })}
       >
-        <option disabled selected value="">
-          {placeholder}
-        </option>
+        {required ? (
+          <option disabled selected value="">
+            {placeholder}
+          </option>
+        ) : (
+          <option value="">{placeholder}</option>
+        )}
         {options.map((option) => (
           <option key={option.id} value={option.id}>
             {option.value}

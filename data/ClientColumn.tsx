@@ -14,11 +14,13 @@ export const COLUMNS = [
   {
     Header: 'Description',
     accessor: 'description',
-    Cell: ({ value }) => value.substring(0, 30).concat('...'),
+    Cell: ({ value }) => (value ? value.substring(0, 30).concat('...') : ''),
   },
   {
     Header: 'Attachment',
     accessor: 'logo',
-    Cell: ({ value }) => <Image src={value} height={80} width={80} />,
+    Cell: ({ value }) => (
+      <img style={{ textAlign: 'center' }} src={value} height={50} width={50} />
+    ),
   },
 ];

@@ -23,7 +23,7 @@ import {
 import Modal from './Modal';
 
 interface TableProps {
-  pageName: 'account' | 'query' | 'blog' | 'product';
+  pageName: 'account' | 'query' | 'blog' | 'product' | 'client';
   title?: string;
   columns: any[];
   data: any[];
@@ -119,6 +119,7 @@ const Table = (props: TableProps) => {
               if (pageName === 'query') editLink = 'query-report';
               if (pageName === 'blog') editLink = 'blogs';
               if (pageName === 'product') editLink = 'product';
+              if (pageName === 'client') editLink = 'client';
               return (
                 <tr {...row.getRowProps()}>
                   <td>

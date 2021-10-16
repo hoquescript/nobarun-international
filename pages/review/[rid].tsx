@@ -63,7 +63,7 @@ const AddReview = () => {
   const dispatch = useTypedDispatch();
   const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
 
-  const addNewReview = (data) => {
+  const addNewReview = async (data) => {
     const review = {
       ...data,
       createdAt: new Date(data.createdAt),
@@ -78,7 +78,7 @@ const AddReview = () => {
       delete review.createdAt;
     }
     if (isEditMode) {
-      editReview({
+      await editReview({
         variables: {
           data: {
             editId: rid,
@@ -92,7 +92,7 @@ const AddReview = () => {
         alert.error(editState.error.message);
       }
     } else {
-      createReview({
+      await createReview({
         variables: {
           data: review,
         },

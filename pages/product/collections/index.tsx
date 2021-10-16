@@ -45,7 +45,7 @@ const Collections = () => {
     });
     router.reload();
   };
-
+  console.log(collections);
   const description = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const text = description.current?.innerText;
