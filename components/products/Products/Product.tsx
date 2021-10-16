@@ -1,0 +1,163 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { FaPen, FaEye, FaStar, FaTrash } from 'react-icons/fa';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+
+import Link from 'next/link';
+
+import styles from '../../../styles/pages/products.module.scss';
+import Checkbox from '../../controls/checkbox';
+import Togglebar from '../../controls/togglebar';
+
+const Product = (props) => {
+  const {
+    id,
+    productName,
+    category,
+    description,
+    productCode,
+    images,
+    isPublished,
+    contactPerson,
+    noOfReview,
+    avgRating,
+  } = props;
+
+  const [showDropdown, setShowDropdown] = useState<boolean>(false);
+
+  const descriptionRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const text = descriptionRef.current?.innerText;
+    if (text && descriptionRef.current && text?.length > 70) {
+      const value = text.substring(0, 70).concat('...');
+      // console.log(object);
+      descriptionRef.current.innerText = value;
+    }
+  }, []);
+
+  return (
+    <div
+      className="product"
+      style={{ flexDirection: 'column' }}
+      onClick={() => setShowDropdown(false)}
+    >
+      <div
+        className="product__title"
+        style={{ justifyContent: 'space-between', width: '100%' }}
+      >
+        <h4>{productName}</h4>
+        <div className="dropdown">
+          <button
+            type="button"
+            className="btn-icon-fade btn-icon-small dropdown__toggle"
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowDropdown(true);
+              // dispatch(setListDropdown({ value: true }));
+            }}
+          >
+            <BiDotsVerticalRounded />
+          </button>
+          {/* <div> */}
+          <div
+            className="dropdown__menu"
+            style={{ transform: showDropdown ? 'scale(1)' : 'scale(0)' }}
+          >
+            <ul>
+              <li style={{ cursor: 'pointer' }}>
+                <Link
+                  href={{
+                    pathname: '/product/[productId]',
+                    query: { productId: id },
+                  }}
+                >
+                  <a
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      // dispatch(setSelectedProductId({ value: _id }));
+                      setShowDropdown(false);
+                    }}
+                  >
+                    <FaPen />
+                    Edit
+                  </a>
+                </Link>
+              </li>
+              <li style={{ cursor: 'pointer' }}>
+                <a
+                  className="text-red"
+                  // onClick={(e) => {
+                  //   e.stopPropagation();
+                  //   dispatch(removeProductByID({ id: _id }));
+                  //   DeleteProductById({ variables: { productId: _id } });
+                  //   setShowDropdown(false);
+                  // }}
+                >
+                  <FaTrash />
+                  Delete
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div style={{ display: 'flex', width: '100%', height: 120 }}>
+        <figure className="product__img">
+          <img src={images[0]} alt={`product-image-${id}`} />
+        </figure>
+
+        <div className="product__content">
+          <div className="d-flex align-items-center">
+            <div className="product__tags">
+              <span className="product__tags__tag">{category}</span>
+            </div>
+            <label htmlFor="product" className={`custom-switch`}>
+              <input
+                type="checkbox"
+                id="isPublished"
+                defaultChecked={isPublished}
+              />
+              <span>&nbsp;</span>
+            </label>
+          </div>
+          <div
+            className="mt-10"
+            style={{ height: 50 }}
+            ref={descriptionRef}
+            dangerouslySetInnerHTML={{
+              __html: description,
+            }}
+          />
+          <h4>
+            SKU
+            <input
+              type="text"
+              className="custom-input small ml-20"
+              style={{ width: '9rem' }}
+              value={productCode}
+              disabled
+            />
+          </h4>
+        </div>
+      </div>
+
+      <div className="product__footer">
+        <div className={styles.product__info}>
+          <span className={styles.product__meta}>
+            <span></span>
+            <h5 style={{ color: '#e81f1f' }}>{contactPerson}</h5>
+          </span>
+          <span className={styles.product__meta}>
+            <FaEye className="mr-10" />
+            3.5k
+          </span>
+          <span className={styles.product__meta}>
+            <FaStar className="mr-10 mb-5" />
+            {avgRating} ({noOfReview})
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Product;

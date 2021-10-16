@@ -7,7 +7,7 @@ import { gql, useMutation } from '@apollo/client';
 
 import TimePeriod from '../../components/controls/period';
 import Search from '../../components/controls/search';
-import Product from '../../components/products/product';
+import Product from '../../components/products/Products/Product';
 
 import styles from '../../styles/pages/products.module.scss';
 import Table from '../../components/shared/Table';
@@ -49,6 +49,7 @@ const Products = () => {
 
   useEffect(() => {
     useAllProducts().then((data) => {
+      console.log(data);
       setProducts(data);
       setLoading(false);
     });

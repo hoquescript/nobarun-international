@@ -94,6 +94,11 @@ const AddNewPost = () => {
     (state) => state.blogs.blogsMedia.postSection,
   );
   const postBlogHandler = (data) => {
+    if (!blogMedia.featured) {
+      alert.error('Please set a Featured Image');
+      return;
+    }
+
     const sections = Object.keys(PostSectionState[0]).map((key) => {
       const section = PostSectionState[0][key];
       return {
@@ -106,6 +111,7 @@ const AddNewPost = () => {
     });
     const post = {
       ...data,
+      featured: blogMedia.featured,
       images: blogMedia.images,
       videos: blogMedia.videos,
       sections,
@@ -127,7 +133,7 @@ const AddNewPost = () => {
         },
       });
       if (!editState.error) {
-        alert.info('Edited Query Successfully');
+        alert.info('Edited Post Successfully');
       } else {
         alert.error(editState.error.message);
       }
@@ -138,7 +144,7 @@ const AddNewPost = () => {
         },
       });
       if (!createState.error) {
-        alert.success('Posted Query Successfully');
+        alert.success('Created Post Successfully');
       } else {
         alert.error(createState.error.message);
       }

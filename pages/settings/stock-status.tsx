@@ -160,7 +160,7 @@ const StockStatus = () => {
       },
     });
     if (!deleteState.error) {
-      alert.info('Deleted Redirects Successfully');
+      alert.info('Deleted Stock Status Successfully');
     } else {
       alert.error(deleteState.error.message);
     }

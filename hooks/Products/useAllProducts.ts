@@ -3,24 +3,29 @@ import Client from '../../config/GraphqlClient';
 
 const GET_ALL_PRODUCTS = gql`
   query getAllProducts {
-    getAllTheProducts {
-      id
-      productName
-      populatedCategory {
-        name
-        _id
-      }
-      specification
-      price
-      productCode
-      images
-      isPublished
-      createdAt
-      author {
-        displayName
-      }
-      contactPerson {
-        name
+    getAllThePopulatedProducts {
+      productData {
+        product {
+          id
+          productName
+          populatedCategory {
+            name
+          }
+          description: title
+          price
+          productCode
+          images
+          isPublished
+          createdAt
+          author {
+            displayName
+          }
+          contactPerson {
+            name
+          }
+        }
+        reviewCount
+        ratingAverage
       }
     }
   }
@@ -28,11 +33,19 @@ const GET_ALL_PRODUCTS = gql`
 
 const useAllProducts = async () => {
   const data = await Client.request(GET_ALL_PRODUCTS);
-  return data.getAllTheProducts.map((product) => ({
-    ...product,
-    category: product.populatedCategory ? product.populatedCategory.name : '',
-    contactPerson: product.contactPerson ? product.contactPerson.name : '',
-    author: product.author ? product.author.displayName : '',
+  return data.getAllThePopulatedProducts.map(({ productData }) => ({
+    ...productData.product,
+    category: productData.product.populatedCategory
+      ? productData.product.populatedCategory.name
+      : '',
+    contactPerson: productData.product.contactPerson
+      ? productData.product.contactPerson.name
+      : '',
+    author: productData.product.author
+      ? productData.product.author.displayName
+      : '',
+    noOfReview: productData.reviewCount,
+    avgRating: productData.ratingAverage,
   }));
 };
 

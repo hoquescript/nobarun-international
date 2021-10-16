@@ -7,7 +7,7 @@
   right: 0;
   top: 0;
   background-color: white;
-  border-radius: .8rem;
+  border-radius: 0.8rem;
   box-shadow: 1px 2px 4px $shadowGrey;
   border: 1px solid $lightBgGrey;
   padding: 1rem;
@@ -15,21 +15,22 @@
   z-index: 9;
   transform: scale(0);
   transform-origin: right top;
-  transition: .3s;
+  transition: 0.3s;
 
   a {
     display: flex;
     align-items: center;
     color: $textColor;
     padding: 1rem;
-    border-radius: .8rem;
+    border-radius: 0.8rem;
 
     &:hover {
-      background-color: rgba($color: $textColor, $alpha: .05);
+      background-color: rgba($color: $textColor, $alpha: 0.05);
     }
 
-    i {
+    svg {
       margin-right: 1rem;
+      color: #555;
     }
   }
 
@@ -37,7 +38,6 @@
     border: 0;
     padding: 0;
   }
-
 
   .show & {
     transform: scale(1);

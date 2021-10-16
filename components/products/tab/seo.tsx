@@ -13,15 +13,28 @@ import Textfield from '../../controls/textfield';
 interface WordCountProps {
   control: Control<FieldValues, object>;
   name: string;
+  limit: string;
 }
 const WordCount = (props: WordCountProps) => {
-  const { control, name } = props;
+  const { control, name, limit } = props;
   const count = useWatch({
     control,
     name,
     defaultValue: '',
   });
-  return <span className="chr-count ml-10">{count.length} of 70</span>;
+  if (count.length > limit) {
+    return (
+      <span className="chr-count ml-10" style={{ color: 'red' }}>
+        *No of Characters overflowed
+      </span>
+    );
+  } else {
+    return (
+      <span className="chr-count ml-10">
+        {count.length} of {limit}
+      </span>
+    );
+  }
 };
 
 interface SlugGeneratorProps {
@@ -44,9 +57,20 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
           <label htmlFor="" className="flex-1">
             Title
           </label>
+          <span
+            className="chr-count ml-10"
+            style={{ color: title.length > 70 ? 'red' : 'inherit' }}
+          >
+            {title.length > 70
+              ? '*No of Characters overflowed'
+              : `${title.length} of 70`}
+          </span>
         </div>
-        <span className="chr-count ml-10">{title.length} of 70</span>
-        <input type="text" className="custom-input" {...register('SeoTitle')} />
+        <input
+          type="text"
+          className="custom-input"
+          {...register('SeoTitle', { maxLength: 70 })}
+        />
       </div>
       <Textfield name="slug" label="Slug" />
     </>
@@ -79,22 +103,26 @@ const SEO = (props: SEOProps) => {
               <label>Keywords</label>
               <Chip chips={chips} setChips={setChips} />
             </div>
-            <div className="field">
+            <div className="field" style={{ marginTop: '-2.5rem' }}>
               <div className="d-flex">
                 <label htmlFor="" className="flex-1">
                   Meta Description
                 </label>
-                <WordCount control={control} name="title" />
+                <WordCount control={control} name="title" limit="160" />
               </div>
               <textarea
                 className="custom-input"
                 placeholder="Enter Meta Description"
-                {...register('title')}
+                {...register('title', { maxLength: 160 })}
               ></textarea>
             </div>
           </div>
-          <Textfield name="url" label="Canonical URL" />
-          <Textfield name="siteMap" label="Site Map Priority" />
+          <div className="mt-20">
+            <Textfield name="url" label="Canonical URL" />
+          </div>
+          <div className="mt-20">
+            <Textfield name="siteMap" label="Site Map Priority" />
+          </div>
           <div className="center mt-40 mb-30">
             <button className="btn-green" onClick={handleAddProduct}>
               Save

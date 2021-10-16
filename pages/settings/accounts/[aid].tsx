@@ -75,7 +75,6 @@ const AddAdmin = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isPasswordMatched, setIsPasswordMatched] = useState(true);
 
-  console.log(tabValue);
   // @ts-ignore
   const [permission, setPermission] = useState<PermissionProps>(Menu);
 

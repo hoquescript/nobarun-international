@@ -112,7 +112,7 @@ const AddCategory = () => {
         },
       });
       if (!editState.error) {
-        alert.info('Edited Query Successfully');
+        alert.info('Edited Blog Category Successfully');
       } else {
         alert.error(editState.error.message);
       }
@@ -123,7 +123,7 @@ const AddCategory = () => {
         },
       });
       if (!createState.error) {
-        alert.success('Posted Query Successfully');
+        alert.success('Posted Blog Category Successfully');
       } else {
         alert.error(createState.error.message);
       }

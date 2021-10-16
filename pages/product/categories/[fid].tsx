@@ -23,6 +23,7 @@ import Toolbar from '../../../components/shared/Toolbar';
 import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
 import CategorySlug from '../../../components/products/CategorySlug';
 import Togglebar from '../../../components/controls/togglebar';
+import Checkbox from '../../../components/controls/checkbox';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory($data: CreateNewCategoryInput!) {
@@ -43,6 +44,7 @@ const defaultValues = {
   categorySlug: '',
   parentCategory: '',
   isPublished: false,
+  isFeatured: false,
 };
 
 const CategoryForm = () => {
@@ -75,6 +77,9 @@ const CategoryForm = () => {
   const images = useTypedSelector(
     (state) => state.ui.productCategoryMedia.images,
   );
+  const icon = useTypedSelector(
+    (state) => state.ui.productCategoryMedia.featured,
+  );
 
   useEffect(() => {
     if (fid !== 'add') {
@@ -92,11 +97,18 @@ const CategoryForm = () => {
 
   const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
+    if (!icon) {
+      alert.error('Please set a Featured Image');
+      return;
+    }
+
     const category = {
       name: categoryName,
       description,
       image: images[0],
+      icon,
       isPublished: data.isPublished,
+      isFeatured: data.isFeatured,
       parentCategory: parentCategory,
       slug: categorySlug,
       id: uuid(),
@@ -116,7 +128,7 @@ const CategoryForm = () => {
         },
       });
       if (!editState.error) {
-        alert.info('Edited Query Successfully');
+        alert.info('Edited Product Category Successfully');
       } else {
         alert.error(editState.error.message);
       }
@@ -127,7 +139,7 @@ const CategoryForm = () => {
         },
       });
       if (!createState.error) {
-        alert.success('Posted Query Successfully');
+        alert.success('Posted Product Category Successfully');
       } else {
         alert.error(createState.error.message);
       }
@@ -183,13 +195,19 @@ const CategoryForm = () => {
                 </div>
               )}
               <div
-                className={isEditMode ? 'col-6 mt-20' : 'col-6 mt-20 ml-60'}
+                className={isEditMode ? 'col-3 ml-60 mt-20' : 'col-3 ml-60'}
                 style={{
-                  transform: isEditMode ? '' : 'translateY(30px)',
+                  transform: isEditMode ? '' : 'translateY(15px)',
                   flexDirection: 'row',
                 }}
               >
-                <FileButton showMedia page="pCategory" />
+                <div className={`field`}>
+                  <label>Category Image</label>
+                  <FileButton showMedia page="pCategory" />
+                </div>
+              </div>
+              <div className="col-12 mt-30">
+                <Checkbox name="isFeatured">Featured Category</Checkbox>
               </div>
             </div>
           </div>

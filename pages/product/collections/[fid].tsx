@@ -75,7 +75,7 @@ const CollectionForm = () => {
     }
   }, [token]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { collectionName, collectionSlug, isPublished } = data;
     const collection = {
       name: collectionName,
@@ -89,7 +89,7 @@ const CollectionForm = () => {
     setDescription('');
 
     if (isEditMode) {
-      editCollection({
+      await editCollection({
         variables: {
           data: {
             editId: fid,
@@ -98,18 +98,18 @@ const CollectionForm = () => {
         },
       });
       if (!editState.error) {
-        alert.info('Edited Query Successfully');
+        alert.info('Edited Product Collection Successfully');
       } else {
         alert.error(editState.error.message);
       }
     } else {
-      createCollection({
+      await createCollection({
         variables: {
           data: collection,
         },
       });
       if (!createState.error) {
-        alert.success('Posted Query Successfully');
+        alert.success('Posted Product Collection Successfully');
       } else {
         alert.error(createState.error.message);
       }

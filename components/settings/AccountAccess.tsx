@@ -61,7 +61,7 @@ const AccountAccess = (props: AccountAccessProps) => {
   const [createAccount, createState] = useMutation(CREATE_ACCOUNT);
   const [editAccount, editState] = useMutation(EDIT_ADMIN);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
       setTabValue('information');
       return;
@@ -89,7 +89,7 @@ const AccountAccess = (props: AccountAccessProps) => {
     // Posting
     if (isEditMode) {
       delete account.password;
-      editAccount({
+      await editAccount({
         variables: {
           data: {
             editId: accountId,
@@ -103,7 +103,7 @@ const AccountAccess = (props: AccountAccessProps) => {
         alert.error(editState.error.message);
       }
     } else {
-      createAccount({
+      await createAccount({
         variables: {
           data: account,
         },
@@ -115,9 +115,11 @@ const AccountAccess = (props: AccountAccessProps) => {
       }
     }
   };
+
   const onError = (error) => {
     alert.error('Please Fillup all the Required Fields(*)');
   };
+
   const onSelectAllChange = (e) => {
     const allPermission = { ...permission };
     Object.keys(allPermission).forEach((key) => {

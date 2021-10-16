@@ -15,8 +15,6 @@ import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
-import useAllCategories from '../../hooks/Products/useAllCategories';
-import useProductCategoryById from '../../hooks/Products/useProductCategoryById';
 import FileButton from '../../components/controls/file';
 import Toolbar from '../../components/shared/Toolbar';
 

@@ -90,8 +90,8 @@ export const uiSlice = createSlice({
     },
     selectImage: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
-        if (state.productCategoryMedia.images.length === 1)
-          state.productCategoryMedia.images = [];
+        // if (state.productCategoryMedia.images.length === 2)
+        //   state.productCategoryMedia.images = [];
         state.productCategoryMedia.images.push(action.payload.src);
       }
       if (action.payload.path.startsWith('/product/collections/')) {
@@ -129,6 +129,9 @@ export const uiSlice = createSlice({
       const src = action.payload.src;
       if (page === 'review') {
         state.reviewMedia.featured = src;
+      }
+      if (page === 'pCategory') {
+        state.productCategoryMedia.featured = src;
       }
     },
     deleteMedia: (state, action) => {

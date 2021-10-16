@@ -123,6 +123,10 @@ const AddProduct = () => {
   const author = useTypedSelector((state) => state.profile.userId);
 
   const handleAddProduct = async (data: any) => {
+    if (!productMedia.featured) {
+      alert.error('Please set a Featured Image');
+      return;
+    }
     const keyPoints = Object.keys(KeyPoint[0]).map((key) => {
       const keypoint = KeyPoint[0][key];
       return {
@@ -149,6 +153,7 @@ const AddProduct = () => {
       originalPrice: +data.price,
       discount: +data.discount,
       relatedProducts,
+      featured: productMedia.featured,
       images: productMedia.images,
       videos: productMedia.videos,
       keyPoints,
@@ -163,15 +168,15 @@ const AddProduct = () => {
     if (data.collectionName === '') delete product.collectionName;
 
     //Form Reset
-    // methods.reset(defaultValues);
-    // KeyPoint[1](defaultKeypoints);
-    // question[1](defaultQuestions);
-    // setFeatures('');
-    // setSpecification('');
-    // setRelatedProducts([]);
-    // setKeywords([]);
-    // tagState[1]([]);
-    // dispatch(resetBlogMedia());
+    methods.reset(defaultValues);
+    KeyPoint[1](defaultKeypoints);
+    question[1](defaultQuestions);
+    setFeatures('');
+    setSpecification('');
+    setRelatedProducts([]);
+    setKeywords([]);
+    tagState[1]([]);
+    dispatch(resetBlogMedia());
 
     if (isEditMode) {
       await editProduct({
@@ -184,7 +189,7 @@ const AddProduct = () => {
       });
       setTabValue('description');
       if (!editState.error) {
-        alert.info('Edited Review Successfully');
+        alert.info('Edited Product Successfully');
       } else {
         alert.error(editState.error.message);
       }
@@ -196,7 +201,7 @@ const AddProduct = () => {
       });
       setTabValue('description');
       if (!createState.error) {
-        alert.success('Posted Query Successfully');
+        alert.success('Added New Product Successfully');
       } else {
         alert.error(createState.error.message);
       }
@@ -206,6 +211,7 @@ const AddProduct = () => {
   const handleError = (error) => {
     console.log(error);
     Object.values(error).forEach((err) => {
+      // @ts-ignore
       alert.error(err.message);
     });
   };

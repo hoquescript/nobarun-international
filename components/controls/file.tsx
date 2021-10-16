@@ -16,7 +16,6 @@ import {
   featuredMedia,
   toggleToolbar,
 } from '../../store/slices/ui';
-import Toolbar from '../shared/Toolbar';
 
 interface FileButtonProps {
   showMedia?: boolean;
@@ -37,6 +36,7 @@ interface FileButtonProps {
     | 'pCollection'
     | 'bCategory'
     | 'bPostSection'
+    | 'pCategoryIcon'
     | 'bMain';
 }
 
@@ -110,7 +110,6 @@ const FileButton = (props: FileButtonProps) => {
             key={src + idx}
             className={`${media.featured === src ? 'isFeatured' : ''} ${
               ![
-                'pCategory',
                 'pCollection',
                 'pKeypoint',
                 'bPostSection',
@@ -196,9 +195,11 @@ const FileButton = (props: FileButtonProps) => {
         media &&
         media.images &&
         media.images.length + media.videos.length === 2) ||
-      (['pCategory', 'pCollection', 'bCategory', 'client', 'contact'].includes(
-        page,
-      ) &&
+      (page === 'pCategory' &&
+        media &&
+        media.images &&
+        media.images.length + media.videos.length === 2) ||
+      (['pCollection', 'bCategory', 'client', 'contact'].includes(page) &&
         media &&
         media.images &&
         media.images.length === 1) ? (

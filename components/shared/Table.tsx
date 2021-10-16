@@ -139,7 +139,7 @@ const Table = (props: TableProps) => {
                         }`}
                       >
                         <Modal
-                          title="Contact Person"
+                          title="Confirmation Alert"
                           modalIsOpen={showDeleteModal}
                           setIsOpen={setShowDeleteModal}
                           confirmHandler={() => {
