@@ -8,6 +8,7 @@ const GET_BLOG_BY_ID = gql`
       blogTitle
       relatedProduct
       contactPerson
+      featured
       images
       videos
       category
@@ -50,6 +51,7 @@ const useBlogById = async (catid) => {
       isFeatured: blogById.isFeatured,
     },
     main: {
+      featured: blogById.featured,
       images: blogById.images,
       videos: blogById.videos,
     },

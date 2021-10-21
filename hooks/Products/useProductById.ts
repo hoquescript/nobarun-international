@@ -13,6 +13,7 @@ const GET_PRODUCT_BY_ID = gql`
       originalPrice
       discount
       productCode
+      featured
       images
       videos
       keyPoints {
@@ -85,6 +86,7 @@ const useProductById = async (catid) => {
       siteMap: productById.siteMap,
     },
     main: {
+      featured: productById.featured,
       images: productById.images,
       videos: productById.videos,
     },

@@ -187,37 +187,47 @@ const FileButton = (props: FileButtonProps) => {
             </figure>
           );
         })}
-      {(page === 'pKeypoint' &&
+      {
+        // (page === 'pKeypoint' &&
+        //   media &&
+        //   media.images &&
+        //   media.images.length + media.videos.length === 2) ||
+        // (page === 'bPostSection' &&
+        //   media &&
+        //   media.images &&
+        //   media.images.length + media.videos.length === 2) ||
+        // (page === 'pCategory' &&
+        //   media &&
+        //   media.images &&
+        //   media.images.length + media.videos.length === 2) ||
+        [
+          'pKeypoint',
+          'pCollection',
+          'bPostSection',
+          'pCategory',
+          'bCategory',
+          'client',
+          'contact',
+        ].includes(page) &&
         media &&
         media.images &&
-        media.images.length + media.videos.length === 2) ||
-      (page === 'bPostSection' &&
-        media &&
-        media.images &&
-        media.images.length + media.videos.length === 2) ||
-      (page === 'pCategory' &&
-        media &&
-        media.images &&
-        media.images.length + media.videos.length === 2) ||
-      (['pCollection', 'bCategory', 'client', 'contact'].includes(page) &&
-        media &&
-        media.images &&
-        media.images.length === 1) ? (
-        ''
-      ) : (
-        <button
-          className="add-new-image"
-          style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
-          onClick={() => {
-            // console.log('I was clicked' + postKey);
-            setPage && setPage(page);
-            setPostSectionKey && setPostSectionKey(postKey);
-            dispatch(toggleToolbar());
-          }}
-        >
-          <FaPlus />
-        </button>
-      )}
+        media.images.length === 1 ? (
+          ''
+        ) : (
+          <button
+            className="add-new-image"
+            style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
+            onClick={() => {
+              // console.log('I was clicked' + postKey);
+              setPage && setPage(page);
+              setPostSectionKey && setPostSectionKey(postKey);
+              dispatch(toggleToolbar());
+            }}
+          >
+            <FaPlus />
+          </button>
+        )
+      }
     </div>
   );
 };

@@ -41,8 +41,8 @@ export const productSlice = createSlice({
             videos: [],
           };
         const post = state.productMedia.keyPoints[key];
-        const noOfMedia = post.images.length + post.videos.length;
-        if (noOfMedia < 2) post.images.push(action.payload.src);
+        if (post.images.length === 1) post.images = [];
+        post.images.push(action.payload.src);
       }
     },
     selectProductVideo: (state, action) => {
@@ -57,11 +57,9 @@ export const productSlice = createSlice({
             images: [],
             videos: [],
           };
-        const noOfMedia =
-          state.productMedia.keyPoints[key].images.length +
-          state.productMedia.keyPoints[key].videos.length;
-        if (noOfMedia < 2)
-          state.productMedia.keyPoints[key].videos.push(action.payload.src);
+        if (state.productMedia.keyPoints[key].images.length === 1)
+          state.productMedia.keyPoints[key].images = [];
+        state.productMedia.keyPoints[key].videos.push(action.payload.src);
       }
     },
     featuredProductMedia: (state, action) => {
@@ -84,11 +82,13 @@ export const productSlice = createSlice({
       }
     },
     setProductMedia: (state, action) => {
+      state.productMedia.main.featured = action.payload.main.featured;
       state.productMedia.main.images = action.payload.main.images;
       state.productMedia.main.videos = action.payload.main.videos;
       state.productMedia.keyPoints = action.payload.keypoint;
     },
-    resetBlogMedia: (state) => {
+    resetProductMedia: (state) => {
+      state.productMedia.main.featured = '';
       state.productMedia.main.images = [];
       state.productMedia.main.videos = [];
       state.productMedia.keyPoints = {};
@@ -100,7 +100,7 @@ export const {
   selectProductImage,
   selectProductVideo,
   setProductMedia,
-  resetBlogMedia,
+  resetProductMedia,
   featuredProductMedia,
   deleteProductMedia,
 } = productSlice.actions;

@@ -133,7 +133,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        show &&
+        // show &&
         toolbarRef.current &&
         !toolbarRef?.current.contains(event.target)
       ) {
@@ -156,6 +156,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     }
   }, [images]);
 
+  const [imageSearch, setImageSearch] = useState('');
   return (
     <div
       ref={toolbarRef}
@@ -205,28 +206,38 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                 type="text"
                 className="custom-input"
                 placeholder="Search"
+                onChange={(e) => {
+                  setImageSearch(e.target.value);
+                }}
               />
             </div>
             <div className="images-gallery">
-              {images.map((image, idx) => {
-                let name: string;
-                if (image.name?.length > 10)
-                  name = image.name.substring(0, 10).concat('...');
-                else name = image.name;
-                return (
-                  <div
-                    key={image.name + idx}
-                    className="images-gallery__image"
-                    onClick={() => selectImageHandler(image.src)}
-                  >
-                    <FaTimes />
-                    <figure>
-                      <img src={image.src} alt="" />
-                    </figure>
-                    <h5 ref={fileName}>{name}</h5>
-                  </div>
-                );
-              })}
+              {[...images]
+                .reverse()
+                .filter((image) =>
+                  image.name
+                    .toLowerCase()
+                    .startsWith(imageSearch.toLowerCase()),
+                )
+                .map((image, idx) => {
+                  let name: string;
+                  if (image.name?.length > 10)
+                    name = image.name.substring(0, 10).concat('...');
+                  else name = image.name;
+                  return (
+                    <div
+                      key={image.name + idx}
+                      className="images-gallery__image"
+                      onClick={() => selectImageHandler(image.src)}
+                    >
+                      <FaTimes />
+                      <figure>
+                        <img src={image.src} alt="" />
+                      </figure>
+                      <h5 ref={fileName}>{name}</h5>
+                    </div>
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -253,7 +264,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
             </div>
           </div>
           <div className="youtube__thumbnails">
-            {links.map((link, idx) => {
+            {[...links].reverse().map((link, idx) => {
               const id = getYoutubeId(link.src);
               return (
                 <div
@@ -261,7 +272,9 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                   className="youtube__thumbnail"
                   onClick={() => selectVideoHandler(link.src)}
                 >
-                  <FaTimes />
+                  <div className="youtube__thumbnail_remove">
+                    <FaTimes />
+                  </div>
                   <figure>
                     <img
                       src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}

@@ -15,12 +15,13 @@ import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
 import useProductInfo from '../../hooks/Products/useProductInfo';
+
 import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
 import {
-  resetBlogMedia,
+  resetProductMedia,
   selectProductImage,
   selectProductVideo,
   setProductMedia,
@@ -176,7 +177,7 @@ const AddProduct = () => {
     setRelatedProducts([]);
     setKeywords([]);
     tagState[1]([]);
-    dispatch(resetBlogMedia());
+    dispatch(resetProductMedia());
 
     if (isEditMode) {
       await editProduct({

@@ -41,8 +41,8 @@ export const blogSlice = createSlice({
             videos: [],
           };
         const post = state.blogsMedia.postSection[key];
-        const noOfMedia = post.images.length + post.videos.length;
-        if (noOfMedia < 2) post.images.push(action.payload.src);
+        if (post.images.length === 1) post.images = [];
+        post.images.push(action.payload.src);
       }
     },
     selectBlogVideo: (state, action) => {
@@ -51,17 +51,7 @@ export const blogSlice = createSlice({
       if (page === 'bMain')
         state.blogsMedia.main.videos.push(action.payload.src);
       if (page === 'bPostSection') {
-        if (!state.blogsMedia.postSection[key])
-          state.blogsMedia.postSection[key] = {
-            featured: '',
-            images: [],
-            videos: [],
-          };
-        const noOfMedia =
-          state.blogsMedia.postSection[key].images.length +
-          state.blogsMedia.postSection[key].videos.length;
-        if (noOfMedia < 2)
-          state.blogsMedia.postSection[key].videos.push(action.payload.src);
+        return;
       }
     },
     featuredBlogMedia: (state, action) => {

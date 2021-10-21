@@ -13,8 +13,8 @@ const GET_ALL_BLOGS = gql`
         name
       }
       isPublished
-      author: populatedRelatedProduct {
-        productName
+      author {
+        displayName
       }
       createdAt
     }
@@ -30,7 +30,7 @@ const useAllBlogCategories = async () => {
     category: blog.category ? blog.category.name : '',
     isPublished: blog.isPublished,
     publishedOn: blog.createdAt,
-    author: blog.author ? blog.author.productName : '',
+    author: blog.author ? blog.author.displayName : '',
     createdAt: blog.createdAt,
   }));
 };
