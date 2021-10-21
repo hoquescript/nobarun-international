@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { signIn } from 'next-auth/client';
@@ -7,8 +7,12 @@ import Textfield from '../../components/controls/textfield';
 
 import styles from '../../styles/pages/auth.module.scss';
 
+const defaultValues = { email: '', password: '' };
+
 const Login = () => {
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: useMemo(() => defaultValues, [defaultValues]),
+  });
   const { error } = useRouter().query;
 
   const onSubmit = (data: any) => {
@@ -18,7 +22,7 @@ const Login = () => {
       password,
       callbackUrl: `${window.location.origin}/`,
     });
-    methods.reset({ email: '', password: '' });
+    methods.reset();
   };
   return (
     <div className={styles.auth}>
@@ -37,13 +41,11 @@ const Login = () => {
             label="Email"
             type="email"
             name="email"
-            value="wahidhoquee@gmail.com"
             placeholder="Enter your Name"
           />
           <Textfield
             type="password"
             label="Password"
-            value="wahid1997"
             placeholder="Enter your Password"
             name="password"
           />

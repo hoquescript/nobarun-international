@@ -9,7 +9,7 @@ import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
-import { FaPlus, FaSlack } from 'react-icons/fa';
+import { FaPlus, FaSlack, FaTimes } from 'react-icons/fa';
 
 import getYoutubeId from '../../helpers/getYoutubeId';
 import useAllMedia from '../../hooks/Appearance/useAllMedia';
@@ -219,7 +219,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                     className="images-gallery__image"
                     onClick={() => selectImageHandler(image.src)}
                   >
-                    <i className="check-circle-icon selected-mark"></i>
+                    <FaTimes />
                     <figure>
                       <img src={image.src} alt="" />
                     </figure>
@@ -261,7 +261,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                   className="youtube__thumbnail"
                   onClick={() => selectVideoHandler(link.src)}
                 >
-                  <i className="check-circle-icon selected-mark"></i>
+                  <FaTimes />
                   <figure>
                     <img
                       src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}
