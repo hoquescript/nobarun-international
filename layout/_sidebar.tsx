@@ -8,8 +8,8 @@ import {
   BiCog,
   BiCustomize,
 } from 'react-icons/bi';
-import { RiQuestionAnswerLine } from 'react-icons/ri';
-import { BsFillGridFill } from 'react-icons/bs';
+import { RiQuestionAnswerLine, RiSlackFill } from 'react-icons/ri';
+import { BsFillGridFill, BsPeople } from 'react-icons/bs';
 
 import styles from './_sidebar.module.scss';
 import slug from '../helpers/slugGenerator';
@@ -22,6 +22,7 @@ const MENU: { [key: string]: string[] } = {
   Review: ['Add New Review', 'Reviews'],
   'Query Report': ['Add New Query', 'Queries'],
   Client: ['Add New Client', 'Clients'],
+  Media: ['Images', 'Videos'],
   Settings: [
     'Accounts',
     'Contact Person',
@@ -36,7 +37,8 @@ const ICONS = [
   <BiAt />,
   <BiCommentDots />,
   <RiQuestionAnswerLine />,
-  <BiCustomize />,
+  <BsPeople />,
+  <RiSlackFill />,
   <BiCog />,
 ];
 

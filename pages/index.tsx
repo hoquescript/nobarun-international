@@ -26,10 +26,26 @@ const Home: NextPage<HomeProps> = (props) => {
   return (
     <div className="container center">
       <div className="row">
-        <Summary title="Total Products" ammount={summary.totalProducts} />
-        <Summary title="Customer Enquiry" ammount={summary.totalQueries} />
-        <Summary title="Blog Post" ammount={summary.totalPosts} />
-        <Summary title="Reviews" ammount={summary.totalReviews} />
+        <Summary
+          title="Total Products"
+          ammount={summary.totalProducts}
+          redirects="/product/products"
+        />
+        <Summary
+          title="Customer Enquiry"
+          ammount={summary.totalQueries}
+          redirects="/query-report/queries"
+        />
+        <Summary
+          title="Blog Post"
+          ammount={summary.totalPosts}
+          redirects="/blogs/blog-post"
+        />
+        <Summary
+          title="Reviews"
+          ammount={summary.totalReviews}
+          redirects="/review/reviews"
+        />
       </div>
       <div className="row mt-50">
         <div className="col-4">

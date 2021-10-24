@@ -13,23 +13,26 @@ const defaultState = (products) => {
   const defaultState: any = {};
   products &&
     products.forEach((product) => {
-      defaultState[product] = '';
+      defaultState[product.id] = {
+        id: '',
+        value: product.value,
+      };
     });
-  console.log('Method', defaultState);
   return defaultState;
 };
 
 const RelatedProducts = (props: RelatedProductsProps) => {
   const { productCode, setProductCode } = props;
-  const [productCodes, setProductCodes] = useState([]);
+  const [productCodes, setProductCodes] = useState<
+    { id: string; value: string }[]
+  >([]);
   const [suggestions, setSuggestions] = useState<any>({});
   const [showSuggestion, setShowSuggestion] = useState(false);
 
   useEffect(() => {
     useAllProductCode().then((data) => {
-      const products = data.map((product) => product.value);
-      setProductCodes(products);
-      setSuggestions(defaultState(products));
+      setProductCodes(data);
+      setSuggestions(defaultState(data));
     });
   }, []);
 
@@ -50,10 +53,15 @@ const RelatedProducts = (props: RelatedProductsProps) => {
     const searchLists: any = {};
     setShowSuggestion(true);
     setProductCode(e.target.value);
-    productCodes.forEach((product) => {
-      const value = fuzzyMatch(product, e.target.value);
-      if (value) searchLists[product] = value;
-    });
+    productCodes &&
+      productCodes.forEach((product) => {
+        const value = fuzzyMatch(product.id, e.target.value);
+        if (value)
+          searchLists[product.id] = {
+            id: value,
+            value: product.value,
+          };
+      });
     setSuggestions(searchLists);
   };
 
@@ -83,10 +91,10 @@ const RelatedProducts = (props: RelatedProductsProps) => {
               key={suggestion}
               className={styles.pCode__searchItem}
               dangerouslySetInnerHTML={{
-                __html: suggestions[suggestion] || suggestion,
+                __html: suggestions[suggestion].id || suggestion,
               }}
               onClick={() => {
-                setProductCode(suggestion);
+                setProductCode(suggestions[suggestion].value);
                 setShowSuggestion(false);
               }}
             />

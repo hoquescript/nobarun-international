@@ -6,6 +6,8 @@ import {
   usePagination,
   useGlobalFilter,
   useFlexLayout,
+  useBlockLayout,
+  useResizeColumns,
 } from 'react-table';
 import {
   FaGripVertical,
@@ -49,7 +51,7 @@ const Table = (props: TableProps) => {
     () => ({
       // When using the useFlexLayout:
       minWidth: 30, // minWidth is only used as a limit for resizing
-      width: 50, // width is used for both the flex-basis and flex-grow
+      width: 100, // width is used for both the flex-basis and flex-grow
       maxWidth: 200, // maxWidth is only used as a limit for resizing
     }),
     [],
@@ -60,7 +62,8 @@ const Table = (props: TableProps) => {
     { columns, data, defaultColumn, globalFilter: globalFilterFn },
     useGlobalFilter,
     useSortBy,
-    useFlexLayout,
+    // useBlockLayout,
+    // useResizeColumns,
     usePagination,
   );
 
@@ -94,9 +97,18 @@ const Table = (props: TableProps) => {
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
-                <th>&nbsp;</th>
+                <th style={{ width: 30, padding: 5 }}>&nbsp;</th>
                 {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  <th
+                    {...column.getHeaderProps(
+                      column.getSortByToggleProps({
+                        style: {
+                          // minWidth: column.minWidth,
+                          width: column.width,
+                        },
+                      }),
+                    )}
+                  >
                     {column.render('Header')}
                     {column.isSorted ? (
                       column.isSortedDesc ? (
@@ -109,7 +121,7 @@ const Table = (props: TableProps) => {
                     )}
                   </th>
                 ))}
-                <th>&nbsp;</th>
+                <th style={{ width: 30, padding: 5 }}>&nbsp;</th>
               </tr>
             ))}
           </thead>
@@ -124,7 +136,7 @@ const Table = (props: TableProps) => {
               if (pageName === 'client') editLink = 'client';
               return (
                 <tr {...row.getRowProps()}>
-                  <td>
+                  <td width="30" style={{ width: 30, padding: 5 }}>
                     <span className="table__icon grip">
                       <FaGripVertical />
                     </span>
@@ -132,7 +144,7 @@ const Table = (props: TableProps) => {
                   {row.cells.map((cell) => (
                     <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                   ))}
-                  <td>
+                  <td style={{ width: 30, padding: 5 }}>
                     <span className="table__icon menu">
                       <FaEllipsisH />
                       <div

@@ -49,30 +49,35 @@
   background-color: azure !important;
 }
 
-// react-highlight-within-textarea
-// .DraftEditor-root {
-//   border: 1px solid #dbdbdb;
-//   height: 15rem;
-//   padding: 0 1rem;
-// }
-
 // React TextEditor
-.quill {
+.sun-editor {
   padding: 1rem 2rem !important;
 }
-.ql-toolbar.ql-snow {
+.se-toolbar {
   border: 1px solid #dbdbdb !important;
-  padding: 1.2rem 1rem !important;
+  padding: 5px 1rem !important;
+  outline: none !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
-.ql-container.ql-snow {
-  border: 1px solid #dbdbdb !important;
+.se-btn-module.se-btn-module-border {
+  border: none !important;
+  box-shadow: 0px 0px 2px #888 !important;
 }
-.ql-container.ql-snow > .ql-editor {
-  min-height: 10rem !important;
+.se-toolbar-separator-vertical {
+  margin: 0 4px !important;
+}
+.sun-editor .se-wrapper {
+  border: 1px solid #dbdbdb;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.sun-editor .se-resizing-bar {
+  border-top: none !important;
 }
 
 //React File Structure
-
 div.rendered-react-keyed-file-browser div.action-bar {
   margin-bottom: 0.5rem;
   flex-wrap: wrap;

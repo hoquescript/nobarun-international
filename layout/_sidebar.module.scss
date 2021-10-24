@@ -2,10 +2,10 @@
 
 .sidebar {
   height: calc(100vh - 7rem);
-  width: 40rem;
+  width: 35rem;
   overflow-y: auto;
   @include respond(1400px) {
-    width: 35rem;
+    width: 32rem;
   }
   box-shadow: 1px 3px 6px #ececec;
   &__list {

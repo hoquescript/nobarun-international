@@ -82,7 +82,9 @@ const BlogPost = () => {
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
-        <h1 className="heading-primary mt-40 mb-40">Blog Post (4 post)</h1>
+        <h1 className="heading-primary mt-40 mb-40">
+          Blog Post ({posts.length || 0} post)
+        </h1>
         <div>
           <Link href="/blogs/add-new-post">
             <a className="btn-outline-green small mr-20">

@@ -100,7 +100,7 @@ const SEO = (props: SEOProps) => {
               setValue={setValue}
             />
             <div className="field">
-              <label>Keywords</label>
+              <label>Targeted Keywords</label>
               <Chip chips={chips} setChips={setChips} />
             </div>
             <div className="field" style={{ marginTop: '-2.5rem' }}>

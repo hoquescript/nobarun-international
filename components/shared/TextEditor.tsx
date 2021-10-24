@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import dynamic from 'next/dynamic';
 
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false });
+const SunEditor = dynamic(() => import('suneditor-react'), {
+  ssr: false,
+});
 
 interface TextEditorProps {
   value: string;
@@ -12,46 +14,31 @@ interface TextEditorProps {
   disabled?: boolean;
 }
 
-const modules = {
-  toolbar: [
-    [{ header: [1, 2, false] }],
-    ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' },
-    ],
-    ['link', 'image'],
-    ['clean'],
+import 'suneditor/dist/css/suneditor.min.css';
+
+const options = {
+  buttonList: [
+    ['font', 'fontSize', 'formatBlock'],
+    ['blockquote'],
+    ['bold', 'underline', 'italic', 'subscript', 'superscript'],
+    ['fontColor', 'hiliteColor'],
+    ['align', 'horizontalRule', 'list', 'lineHeight'],
+    ['table', 'link', 'image'],
+    ['fullScreen'],
   ],
 };
 
-const formats = [
-  'header',
-  'bold',
-  'italic',
-  'underline',
-  'strike',
-  'blockquote',
-  'list',
-  'bullet',
-  'indent',
-  'link',
-  'image',
-];
-
 const TextEditor = (props: TextEditorProps) => {
-  const { value, setValue, bodyClass, onChange, disabled } = props;
+  const { value, onChange, disabled } = props;
+
   return (
-    <ReactQuill
-      theme="snow"
-      modules={modules}
-      formats={formats}
-      value={value || ''}
-      // defaultValue={value}
+    <SunEditor
+      height="150px"
+      disable={disabled}
+      placeholder="Please Write..."
+      setOptions={options}
+      setContents={value}
       onChange={onChange}
-      readOnly={disabled}
     />
   );
 };

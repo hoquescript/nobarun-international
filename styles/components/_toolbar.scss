@@ -27,10 +27,26 @@
     opacity: 0;
     transition: 0.3s;
   }
-  svg {
+  button {
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 5px;
+    top: 5px;
+    background: #fff;
+    z-index: 1000;
+    border-radius: 50%;
+    // height: 2rem;
+    // width: 2rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem;
+    cursor: pointer;
+    border: none;
+    color: $primaryColor;
+    &:hover {
+      background-color: #aaa;
+      color: #333;
+    }
   }
   figure {
     position: relative;
@@ -66,6 +82,9 @@
     }
     figure {
       border-color: $primaryColor;
+    }
+    button {
+      display: flex;
     }
   }
 
@@ -186,24 +205,27 @@
   }
   &__thumbnail {
     cursor: pointer;
-    height: 13rem;
-    width: 17rem;
     padding: 0.5rem;
     border: 1px solid #ccc;
     transition: 0.2s border;
     position: relative;
+    width: 105%;
+    & img {
+      width: 100%;
+    }
     &_remove {
       position: absolute;
-      right: 10px;
-      top: 10px;
+      right: 5px;
+      top: 5px;
       background: #fff;
       z-index: 1000;
       border-radius: 50%;
       height: 2rem;
       width: 2rem;
-      display: flex;
+      display: none;
       align-items: center;
       justify-content: center;
+      color: #333;
       &:hover {
         background-color: #aaa;
       }
@@ -211,11 +233,23 @@
     &:hover {
       border: 2px solid $primaryColor;
     }
+    &:hover &_remove {
+      display: flex;
+    }
+
     &:nth-of-type(odd) {
       margin-right: 1rem;
     }
     &:not(:last-child) {
       margin-bottom: 1rem;
     }
+  }
+}
+
+.toolbar {
+  &_images {
+    max-height: 42rem;
+    overflow-y: auto;
+    overflow-x: hidden;
   }
 }

@@ -5,20 +5,19 @@ export const PRODUCT_COLUMNS = [
     Header: 'Product Name',
     accessor: 'productName',
     sticky: 'left',
+    width: 350,
+    maxWidth: 350,
   },
   {
     Header: 'Category',
     accessor: 'category',
+    width: 200,
   },
   {
     Header: 'Published Date',
     accessor: 'createdAt',
     Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
-  },
-  {
-    Header: 'Price',
-    accessor: 'price',
-    sticky: 'left',
+    width: 120,
   },
   {
     Header: 'Assignee',
@@ -26,9 +25,15 @@ export const PRODUCT_COLUMNS = [
     sticky: 'left',
   },
   {
-    Header: 'Stock',
+    Header: 'Price',
+    accessor: 'price',
+    sticky: 'left',
+  },
+  {
+    Header: 'Views',
     accessor: 'productCode',
     sticky: 'left',
+    Cell: 0,
   },
   {
     Header: 'Published By',

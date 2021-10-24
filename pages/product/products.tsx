@@ -79,7 +79,7 @@ const Products = () => {
   };
 
   return (
-    <div className="container center">
+    <div className="container-fluid center">
       {loading && <Loader />}
       <div className="row mb-30">
         <div className="col-6">

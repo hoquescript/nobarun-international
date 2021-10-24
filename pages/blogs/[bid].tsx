@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaEye, FaSave, FaTimes } from 'react-icons/fa';
+import { FaSave, FaTimes } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
@@ -95,7 +95,7 @@ const AddNewPost = () => {
   );
   const postBlogHandler = (data) => {
     if (!blogMedia.featured) {
-      alert.error('Please set a Featured Image');
+      alert.error('Please set a Featured Blog Image');
       return;
     }
 

@@ -116,7 +116,6 @@ const FileButton = (props: FileButtonProps) => {
                 'bCategory',
                 'client',
                 'contact',
-                'review',
                 'query',
               ].includes(page)
                 ? ''
@@ -151,14 +150,12 @@ const FileButton = (props: FileButtonProps) => {
               key={id + idx}
               className={`${media.featured === src ? 'isFeatured' : ''} ${
                 ![
-                  'pCategory',
                   'pCollection',
                   'pKeypoint',
                   'bPostSection',
                   'bCategory',
                   'client',
                   'contact',
-                  'review',
                   'query',
                 ].includes(page)
                   ? ''
@@ -187,47 +184,36 @@ const FileButton = (props: FileButtonProps) => {
             </figure>
           );
         })}
-      {
-        // (page === 'pKeypoint' &&
-        //   media &&
-        //   media.images &&
-        //   media.images.length + media.videos.length === 2) ||
-        // (page === 'bPostSection' &&
-        //   media &&
-        //   media.images &&
-        //   media.images.length + media.videos.length === 2) ||
-        // (page === 'pCategory' &&
-        //   media &&
-        //   media.images &&
-        //   media.images.length + media.videos.length === 2) ||
-        [
-          'pKeypoint',
-          'pCollection',
-          'bPostSection',
-          'pCategory',
-          'bCategory',
-          'client',
-          'contact',
-        ].includes(page) &&
+      {([
+        'pKeypoint',
+        'pCollection',
+        'bPostSection',
+        // ,
+        'bCategory',
+        'client',
+        'contact',
+      ].includes(page) &&
         media &&
         media.images &&
-        media.images.length === 1 ? (
-          ''
-        ) : (
-          <button
-            className="add-new-image"
-            style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
-            onClick={() => {
-              // console.log('I was clicked' + postKey);
-              setPage && setPage(page);
-              setPostSectionKey && setPostSectionKey(postKey);
-              dispatch(toggleToolbar());
-            }}
-          >
-            <FaPlus />
-          </button>
-        )
-      }
+        media.images.length === 1) ||
+      (page === 'pCategory' &&
+        media &&
+        media.images &&
+        media.images.length === 2) ? (
+        ''
+      ) : (
+        <button
+          className="add-new-image"
+          style={{ height: '71px', background: '#fff', cursor: 'pointer' }}
+          onClick={() => {
+            setPage && setPage(page);
+            setPostSectionKey && setPostSectionKey(postKey);
+            dispatch(toggleToolbar());
+          }}
+        >
+          <FaPlus />
+        </button>
+      )}
     </div>
   );
 };

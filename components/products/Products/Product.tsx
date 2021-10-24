@@ -13,6 +13,7 @@ const Product = (props) => {
     category,
     description,
     productCode,
+    price,
     images,
     isPublished,
     contactPerson,
@@ -27,8 +28,8 @@ const Product = (props) => {
   const descriptionRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const text = descriptionRef.current?.innerText;
-    if (text && descriptionRef.current && text?.length > 70) {
-      const value = text.substring(0, 70).concat('...');
+    if (text && descriptionRef.current && text?.length > 20) {
+      const value = text.substring(0, 20).concat('...');
       descriptionRef.current.innerText = value;
     }
   }, []);
@@ -121,14 +122,16 @@ const Product = (props) => {
               <span>&nbsp;</span>
             </label>
           </div>
-          <div
-            className="mt-10"
-            style={{ height: 50 }}
-            ref={descriptionRef}
-            dangerouslySetInnerHTML={{
-              __html: description,
-            }}
-          />
+          <h4>
+            Price
+            <input
+              type="text"
+              className="custom-input small ml-20 mb-20 mt-20"
+              style={{ width: '9rem' }}
+              value={price}
+              disabled
+            />
+          </h4>
           <h4>
             SKU
             <input

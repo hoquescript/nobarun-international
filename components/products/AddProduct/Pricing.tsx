@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useWatch, useFormState, useFormContext } from 'react-hook-form';
 
@@ -9,6 +9,7 @@ interface PricingProps {
 }
 const Pricing = (props: PricingProps) => {
   const { register, control, setValue } = props;
+
   const { dirtyFields } = useFormState();
   const {
     setError,
@@ -32,81 +33,112 @@ const Pricing = (props: PricingProps) => {
     defaultValue: '',
   });
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   const price = priceValue !== '' ? parseInt(priceValue) : '';
+  //   const discount = discountValue !== '' ? parseInt(discountValue) : '';
+  //   const originalPrice =
+  //     originalPriceValue !== '' ? parseInt(originalPriceValue) : '';
+  //   if (price > originalPrice) {
+  //     setError('price', {
+  //       type: 'price < originalPrice',
+  //       message: 'Original Price should be higher than Price',
+  //     });
+  //     setError('originalPrice', {
+  //       type: 'price < originalPrice',
+  //       message: 'Original Price should be higher than Price',
+  //     });
+  //   } else {
+  //     clearErrors('price');
+  //     clearErrors('originalPrice');
+  //   }
+  //   if (discount > 100) {
+  //     setError('discount', {
+  //       type: 'Invalid Discount',
+  //       message: 'Discount Percantage cant be more than 100%',
+  //     });
+  //   } else {
+  //     clearErrors('discount');
+  //   }
+  //   // Finding Discount
+  //   if (price && originalPrice && price < originalPrice) {
+  //     const discount = originalPrice - price;
+  //     const cDiscount = Math.ceil((discount / originalPrice) * 100);
+  //     setValue('discount', cDiscount);
+  //   }
+  //   // //Finding Original Price
+  //   // // if (
+  //   // //   price &&
+  //   // //   discount &&
+  //   // //   dirtyFields.price &&
+  //   // //   !dirtyFields.originalPrice &&
+  //   // //   dirtyFields.discount &&
+  //   // //   discount <= 100
+  //   // // ) {
+  //   // //   const pricePercentage = 100 - discount;
+  //   // //   const oPrice = Math.ceil((price / pricePercentage) * 100);
+  //   // //   setValue('originalPrice', oPrice);
+  //   // // }
+  //   // //Finding Discounted Price
+  //   if (discount && originalPrice) {
+  //     const discountAmmount = Math.ceil((discount / 100) * originalPrice);
+  //     const discountPrice = originalPrice - discountAmmount;
+  //     setValue('price', discountPrice);
+  //   }
+  // }, [priceValue, discountValue, originalPriceValue]);
+
+  const { onChange: onPriceChange, ...priceState } = register('price', {
+    required: true,
+  });
+  const { onChange: onOriginalPriceChange, ...originalPriceState } = register(
+    'originalPrice',
+    {
+      required: true,
+    },
+  );
+  const { onChange: onDiscountChange, ...discountState } = register(
+    'discount',
+    {
+      required: true,
+    },
+  );
+
+  const [price, setPrice] = useState('');
+  const [originalPrice, setOriginalPrice] = useState('');
+  const [discount, setDiscount] = useState('');
+
+  const handleChange = (active) => {
     const price = priceValue !== '' ? parseInt(priceValue) : '';
     const discount = discountValue !== '' ? parseInt(discountValue) : '';
     const originalPrice =
       originalPriceValue !== '' ? parseInt(originalPriceValue) : '';
 
-    if (
-      dirtyFields.price &&
-      dirtyFields.originalPrice &&
-      price > originalPrice
-    ) {
-      setError('price', {
-        type: 'price < originalPrice',
-        message: 'Original Price should be higher than Price',
-      });
-      setError('originalPrice', {
-        type: 'price < originalPrice',
-        message: 'Original Price should be higher than Price',
-      });
-    } else {
-      clearErrors('price');
-      clearErrors('originalPrice');
-    }
-
-    if (dirtyFields.discount && discount > 100) {
-      setError('discount', {
-        type: 'Invalid Discount',
-        message: 'Discount Percantage cant be more than 100%',
-      });
-    } else {
-      clearErrors('discount');
-    }
+    // if (discount > 100) {
+    //   setError('discount', {
+    //     type: 'Invalid Discount',
+    //     message: 'Discount Percantage cant be more than 100%',
+    //   });
+    // } else {
+    //   clearErrors('discount');
+    // }
 
     // Finding Discount
-    if (
-      price &&
-      originalPrice &&
-      dirtyFields.price &&
-      dirtyFields.originalPrice &&
-      !dirtyFields.discount &&
-      price < originalPrice
-    ) {
+    if (active === 'price' && price && originalPrice && price < originalPrice) {
+      console.log('object');
+
       const discount = originalPrice - price;
       const cDiscount = Math.ceil((discount / originalPrice) * 100);
       setValue('discount', cDiscount);
+      // setDiscount(cDiscount);
     }
 
-    //Finding Original Price
-    if (
-      price &&
-      discount &&
-      dirtyFields.price &&
-      !dirtyFields.originalPrice &&
-      dirtyFields.discount &&
-      discount <= 100
-    ) {
-      const pricePercentage = 100 - discount;
-      const oPrice = Math.ceil((price / pricePercentage) * 100);
-      setValue('originalPrice', oPrice);
-    }
-
-    //Finding Discounted Price
-    if (
-      discount &&
-      originalPrice &&
-      !dirtyFields.price &&
-      dirtyFields.originalPrice &&
-      dirtyFields.discount
-    ) {
+    // Finding Discounted Price
+    if (active === 'discount' && discount && originalPrice) {
       const discountAmmount = Math.ceil((discount / 100) * originalPrice);
       const discountPrice = originalPrice - discountAmmount;
       setValue('price', discountPrice);
+      // setPrice(discountPrice);
     }
-  }, [priceValue, discountValue, originalPriceValue]);
-
+  };
   return (
     <>
       <div>
@@ -120,13 +152,14 @@ const Pricing = (props: PricingProps) => {
         <input
           type="text"
           className="custom-input medium mb-10 center"
-          {...register('price', {
-            required: true,
-          })}
+          onChange={(e) => {
+            // setPrice(e.target.value);
+            onPriceChange(e);
+            handleChange('price');
+          }}
+          {...priceState}
         />
-        <span>
-          Discounted Price <sup style={{ color: 'red' }}>*</sup>
-        </span>
+        <span>Current Price</span>
       </div>
       <div>
         {errors.originalPrice ? (
@@ -139,13 +172,14 @@ const Pricing = (props: PricingProps) => {
         <input
           type="text"
           className="custom-input medium mb-10 center"
-          {...register('originalPrice', {
-            required: true,
-          })}
+          onChange={(e) => {
+            setOriginalPrice(e.target.value);
+            handleChange('originalPrice');
+            onOriginalPriceChange(e);
+          }}
+          {...originalPriceState}
         />
-        <span>
-          Original Price <sup style={{ color: 'red' }}>*</sup>
-        </span>
+        <span>Original Price</span>
       </div>
       <div>
         {errors.discount ? (
@@ -158,14 +192,17 @@ const Pricing = (props: PricingProps) => {
         <input
           type="text"
           className="custom-input medium mb-10 center"
-          {...register('discount', {
-            required: true,
-            maxLength: 3,
-          })}
+          onChange={(e) => {
+            setDiscount(e.target.value);
+            handleChange('discount');
+            onDiscountChange(e);
+          }}
+          {...discountState}
+          // {...register('discount', {
+          //   maxLength: 3,
+          // })}
         />
-        <span>
-          Discount (%) <sup style={{ color: 'red' }}>*</sup>
-        </span>
+        <span>Discount (%)</span>
       </div>
     </>
   );

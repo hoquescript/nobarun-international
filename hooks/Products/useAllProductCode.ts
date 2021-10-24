@@ -4,7 +4,7 @@ import Client from '../../config/GraphqlClient';
 const GET_ALL_PRODUCT_CODE = gql`
   query getAllProductCode {
     getAllTheProducts {
-      id: productCode
+      id: productName
       value: productCode
     }
   }

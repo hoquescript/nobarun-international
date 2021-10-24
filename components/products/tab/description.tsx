@@ -23,7 +23,7 @@ interface DescriptionProps {
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
   info: any;
-  relatedProducts: string[];
+  relatedProducts: { id: string; value: string }[];
   setRelatedProducts: any;
   setValue: any;
   control: any;
@@ -54,8 +54,7 @@ const Description = (props: DescriptionProps) => {
 
   useEffect(() => {
     useAllProductCode().then((data) => {
-      const products = data.map((product) => product.value);
-      setProductCodes(products);
+      setProductCodes(data);
     });
   }, []);
 

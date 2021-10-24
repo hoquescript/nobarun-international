@@ -110,7 +110,9 @@ const AddProduct = () => {
 
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
-  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [relatedProducts, setRelatedProducts] = useState<
+    { id: string; value: string }[]
+  >([]);
   const [keywords, setKeywords] = useState<string[]>([]);
   const tagState = useState<string[]>([]);
 
@@ -153,7 +155,7 @@ const AddProduct = () => {
       price: +data.price,
       originalPrice: +data.price,
       discount: +data.discount,
-      relatedProducts,
+      relatedProducts: relatedProducts.map((product) => product.value),
       featured: productMedia.featured,
       images: productMedia.images,
       videos: productMedia.videos,

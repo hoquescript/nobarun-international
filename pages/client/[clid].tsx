@@ -172,7 +172,7 @@ const AddClient = () => {
                 }}
               >
                 <div className={`field`}>
-                  <label>Company Logo</label>
+                  <label>Client Logo</label>
                   <FileButton showMedia page="client" />
                 </div>
               </div>

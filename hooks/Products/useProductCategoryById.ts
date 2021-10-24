@@ -33,6 +33,7 @@ const useProductCategoryById = async (fid, token) => {
       categoryName: categoryById.name,
       description: categoryById.description,
       image: categoryById.image,
+      parentCategory: categoryById.parentCategory,
       categorySlug: categoryById.slug,
       isPublished: categoryById.isPublished,
     };

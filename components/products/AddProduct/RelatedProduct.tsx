@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { AiOutlineSearch, AiOutlineClose } from 'react-icons/ai';
 import fuzzyMatch from '../../../helpers/fuzzySearch';
-import useAllProductCode from '../../../hooks/Products/useAllProductCode';
 import styles from '../../../styles/pages/products.module.scss';
 
-// const products = ['SKU-01', 'SKU-02', 'SKU-03'];
-
 interface RelatedProductsProps {
-  chips: string[];
+  chips: { id: string; value: string }[];
   setChips: any;
-  productCodes?: any[];
+  productCodes?: { id: string; value: string }[];
 }
 
 const defaultState = (products) => {
   const defaultState: any = {};
   products &&
     products.forEach((product) => {
-      defaultState[product] = '';
+      defaultState[product.id] = {
+        id: '',
+        value: product.value,
+      };
     });
   return defaultState;
 };
@@ -48,8 +48,12 @@ const RelatedProducts = (props: RelatedProductsProps) => {
     setShowSuggestion(true);
     productCodes &&
       productCodes.forEach((product) => {
-        const value = fuzzyMatch(product, e.target.value);
-        if (value) searchLists[product] = value;
+        const value = fuzzyMatch(product.id, e.target.value);
+        if (value)
+          searchLists[product.id] = {
+            id: value,
+            value: product.value,
+          };
       });
     setSuggestions(searchLists);
   };
@@ -79,15 +83,20 @@ const RelatedProducts = (props: RelatedProductsProps) => {
           className={styles.chip__searchList}
           style={{ display: showSuggestion ? 'block' : 'none' }}
         >
-          {Object.keys(suggestions).map((suggestion: any) => (
+          {Object.keys(suggestions).map((suggestion: any, idx: number) => (
             <li
               key={suggestion}
               className={styles.chip__searchItem}
               dangerouslySetInnerHTML={{
-                __html: suggestions[suggestion] || suggestion,
+                __html: suggestions[suggestion].id || suggestion,
               }}
               onClick={() => {
-                setChips(chips.concat(suggestion));
+                setChips(
+                  chips.concat({
+                    id: suggestion,
+                    value: suggestions[suggestion].value,
+                  }),
+                );
               }}
             />
           ))}
@@ -95,8 +104,8 @@ const RelatedProducts = (props: RelatedProductsProps) => {
       </div>
       <div className={styles.chip__chips}>
         {chips.map((chip, idx) => (
-          <div className="chip ml-10" key={chip}>
-            <span className="chip__title">{chip}</span>
+          <div className="chip ml-10" key={chip.value}>
+            <span className="chip__title">{chip.id}</span>
             <button
               type="button"
               className="chip__remove"

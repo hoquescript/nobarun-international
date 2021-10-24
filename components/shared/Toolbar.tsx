@@ -7,6 +7,7 @@ import React, {
 } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
+import AWS from 'aws-sdk';
 import { useRouter } from 'next/router';
 import { AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
 import { FaPlus, FaSlack, FaTimes } from 'react-icons/fa';
@@ -17,6 +18,7 @@ import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
+
 import {
   addImage,
   addYoutubeLink,
@@ -46,6 +48,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
+  const token = useTypedSelector((state) => state.ui.token);
   const router = useRouter();
   const [addMedia] = useMutation(ADD_NEW_MEDIA);
 
@@ -76,8 +79,10 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
         const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
+        console.log(imageFile[i]);
         const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
         const objectUrl = `${objectBaseUrl}/${Key}`;
+        console.log(Key);
         dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
         addMedia({
           variables: {
@@ -89,6 +94,24 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         });
       }
     }
+  };
+
+  const deleteImageHandler = async (url: string) => {
+    const data = await axios.get(baseUrl, {
+      params: {
+        method: 'delete',
+        key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
+      },
+    });
+    // await axios.put(
+    //   baseUrl,
+    //   {
+    //     source: url,
+    //   },
+    //   {
+    //     headers: { Authorization: `${token}` },
+    //   },
+    // );
   };
 
   const youtubeLinkHandler = () => {
@@ -150,8 +173,9 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   useEffect(() => {
     const text = fileName.current?.innerText;
     console.log('Media', text);
-    if (text && fileName.current && text?.length > 10) {
-      const value = text.substring(0, 10).concat('...');
+    if (text && fileName.current && text?.length > 20) {
+      const value = text.substring(0, 20).concat('...');
+      console.log(value);
       fileName.current.innerText = value;
     }
   }, [images]);
@@ -211,33 +235,43 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                 }}
               />
             </div>
-            <div className="images-gallery">
-              {[...images]
-                .reverse()
-                .filter((image) =>
-                  image.name
-                    .toLowerCase()
-                    .startsWith(imageSearch.toLowerCase()),
-                )
-                .map((image, idx) => {
-                  let name: string;
-                  if (image.name?.length > 10)
-                    name = image.name.substring(0, 10).concat('...');
-                  else name = image.name;
-                  return (
-                    <div
-                      key={image.name + idx}
-                      className="images-gallery__image"
-                      onClick={() => selectImageHandler(image.src)}
-                    >
-                      <FaTimes />
-                      <figure>
-                        <img src={image.src} alt="" />
-                      </figure>
-                      <h5 ref={fileName}>{name}</h5>
-                    </div>
-                  );
-                })}
+            <div className="toolbar_images">
+              <div className="row">
+                {[...images]
+                  .reverse()
+                  .filter((image) =>
+                    image.name
+                      .toLowerCase()
+                      .startsWith(imageSearch.toLowerCase()),
+                  )
+                  .map((image, idx) => {
+                    let name: string;
+                    if (image.name?.length > 20)
+                      name = image.name.substring(0, 20).concat('...');
+                    else name = image.name;
+                    return (
+                      <div className="col-4">
+                        <div
+                          key={image.name + idx}
+                          className="images-gallery__image"
+                          onClick={() => selectImageHandler(image.src)}
+                        >
+                          <button>
+                            <FaTimes
+                              onClick={() => deleteImageHandler(image.src)}
+                            />
+                          </button>
+                          <figure>
+                            <img src={image.src} alt="" />
+                          </figure>
+                          <h5 ref={fileName} style={{ wordWrap: 'break-word' }}>
+                            {name}
+                          </h5>
+                        </div>
+                      </div>
+                    );
+                  })}
+              </div>
             </div>
           </div>
         </div>
@@ -263,27 +297,31 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
               </button>
             </div>
           </div>
-          <div className="youtube__thumbnails">
-            {[...links].reverse().map((link, idx) => {
-              const id = getYoutubeId(link.src);
-              return (
-                <div
-                  key={link.src + idx}
-                  className="youtube__thumbnail"
-                  onClick={() => selectVideoHandler(link.src)}
-                >
-                  <div className="youtube__thumbnail_remove">
-                    <FaTimes />
+          <div className="toolbar_images">
+            <div className="row">
+              {[...links].reverse().map((link, idx) => {
+                const id = getYoutubeId(link.src);
+                return (
+                  <div className="col-4">
+                    <div
+                      key={link.src + idx}
+                      className="youtube__thumbnail"
+                      onClick={() => selectVideoHandler(link.src)}
+                    >
+                      <div className="youtube__thumbnail_remove">
+                        <FaTimes />
+                      </div>
+                      <figure>
+                        <img
+                          src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}
+                          alt=""
+                        />
+                      </figure>
+                    </div>
                   </div>
-                  <figure>
-                    <img
-                      src={`https://img.youtube.com/vi/${id}/sddefault.jpg`}
-                      alt=""
-                    />
-                  </figure>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>

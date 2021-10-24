@@ -195,7 +195,7 @@ const CategoryForm = () => {
                 </div>
               )}
               <div
-                className={isEditMode ? 'col-3 ml-60 mt-20' : 'col-3 ml-60'}
+                className={isEditMode ? 'col-3 mt-20' : 'col-3 ml-60'}
                 style={{
                   transform: isEditMode ? '' : 'translateY(15px)',
                   flexDirection: 'row',
