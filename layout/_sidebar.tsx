@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
   BiDownArrow,
@@ -54,6 +54,14 @@ const Sidebar = () => {
   const router = useRouter();
 
   const [open, setOpen] = useState(resetState());
+
+  useEffect(() => {
+    const persistedMenuState: any = localStorage.getItem('menuState');
+    if (persistedMenuState) {
+      setOpen(persistedMenuState);
+    }
+  }, []);
+
   const menuOpenHandler = (key: string) => {
     if (key === 'Dashboard') return router.push('/');
     setOpen({

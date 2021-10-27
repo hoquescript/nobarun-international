@@ -9,6 +9,7 @@ const GET_ALL_CONTACT_PERSON = gql`
       whatsAppNumber
       email
       address
+      maps
       isPublished
       companyLogo
     }
@@ -27,6 +28,7 @@ const useAllContactPerson = async () => {
         whatsapp: contact.whatsAppNumber,
         email: contact.email,
         address: contact.address,
+        maps: contact.maps,
         isPublished: contact.isPublished,
         isDisabled: true,
       };

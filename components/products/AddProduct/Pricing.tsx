@@ -86,21 +86,10 @@ const Pricing = (props: PricingProps) => {
   //   }
   // }, [priceValue, discountValue, originalPriceValue]);
 
-  const { onChange: onPriceChange, ...priceState } = register('price', {
-    required: true,
-  });
-  const { onChange: onOriginalPriceChange, ...originalPriceState } = register(
-    'originalPrice',
-    {
-      required: true,
-    },
-  );
-  const { onChange: onDiscountChange, ...discountState } = register(
-    'discount',
-    {
-      required: true,
-    },
-  );
+  const { onChange: onPriceChange, ...priceState } = register('price');
+  const { onChange: onOriginalPriceChange, ...originalPriceState } =
+    register('originalPrice');
+  const { onChange: onDiscountChange, ...discountState } = register('discount');
 
   const [price, setPrice] = useState('');
   const [originalPrice, setOriginalPrice] = useState('');

@@ -10,6 +10,7 @@ import {
   FaPlusCircle,
   FaSave,
   FaTrash,
+  FaHome,
   FaUser,
   FaWhatsapp,
 } from 'react-icons/fa';
@@ -73,6 +74,7 @@ const ContactPerson = () => {
         logo: '',
         email: '',
         address: '',
+        maps: '',
         isPublished: true,
         isDisabled: false,
         isNewContact: true,
@@ -90,6 +92,7 @@ const ContactPerson = () => {
       whatsAppNumber: contact.whatsapp,
       email: contact.email,
       address: contact.address,
+      maps: contact.maps,
       isPublished: contact.isPublished,
       companyLogo: media[id].images[0],
     };
@@ -181,7 +184,7 @@ const ContactPerson = () => {
       const { name, value, checked } = event.target;
       if (name === 'isPublished') {
         contact[name] = checked;
-      } else if (name === 'address') {
+      } else if (name === 'maps') {
         contact[name] = getMapsSrc(value);
       } else {
         // @ts-ignore
@@ -226,7 +229,7 @@ const ContactPerson = () => {
                   <label>Name</label>
                   <FaUser
                     className="video__icon"
-                    style={{ transform: 'translate(2rem, 1.7rem)' }}
+                    style={{ transform: 'translate(2rem, 1.1rem)' }}
                   />
                   <input
                     type="text"
@@ -244,7 +247,7 @@ const ContactPerson = () => {
                   <label>Whats App</label>
                   <FaWhatsapp
                     className="video__icon"
-                    style={{ transform: 'translate(2rem, 1.7rem)' }}
+                    style={{ transform: 'translate(2rem, 1.1rem)' }}
                   />
                   <input
                     type="text"
@@ -258,24 +261,11 @@ const ContactPerson = () => {
                 </div>
               </div>
               <div className="col-4">
-                <div className={`field ml-60`}>
-                  <label>Upload Media</label>
-                  <FileButton
-                    page="contact"
-                    showMedia
-                    postKey={key}
-                    setPostSectionKey={setPostSectionKey}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="row mt-20">
-              <div className="col-4">
                 <div className="field video" style={{ position: 'relative' }}>
                   <label>Email</label>
                   <FaMailBulk
                     className="video__icon"
-                    style={{ transform: 'translate(2rem, 1.7rem)' }}
+                    style={{ transform: 'translate(2rem, 1.1rem)' }}
                   />
                   <input
                     type="text"
@@ -288,16 +278,18 @@ const ContactPerson = () => {
                   />
                 </div>
               </div>
+            </div>
+            <div className="row mt-20">
               <div className="col-4">
                 <div className="field video" style={{ position: 'relative' }}>
                   <label>Address</label>
-                  <FaLocationArrow
+                  <FaHome
                     className="video__icon"
                     style={{ transform: 'translate(2rem, 3rem)' }}
                   />
                   <textarea
                     className="custom-input video__input mt--30"
-                    placeholder="Please Enter the Google Maps Embedded HTML Tag"
+                    placeholder="Please Enter the Contact Person's Resident/Office Address"
                     name="address"
                     disabled={contacts[key].isDisabled}
                     value={contacts[key].address}
@@ -305,7 +297,35 @@ const ContactPerson = () => {
                   />
                 </div>
               </div>
-              <div className="col-4 flex">
+              <div className="col-4">
+                <div className="field video" style={{ position: 'relative' }}>
+                  <label>Maps</label>
+                  <FaLocationArrow
+                    className="video__icon"
+                    style={{ transform: 'translate(2rem, 3rem)' }}
+                  />
+                  <textarea
+                    className="custom-input video__input mt--30"
+                    placeholder="Please Enter the Google Maps Embedded HTML Tag"
+                    name="maps"
+                    disabled={contacts[key].isDisabled}
+                    value={contacts[key].maps}
+                    onChange={(e) => handleChangeInput(key, e)}
+                  />
+                </div>
+              </div>
+              <div className="col-2">
+                <div className={`field ml-60`}>
+                  <label>Upload Media</label>
+                  <FileButton
+                    page="contact"
+                    showMedia
+                    postKey={key}
+                    setPostSectionKey={setPostSectionKey}
+                  />
+                </div>
+              </div>
+              <div className="col-2 flex">
                 <div className="center">
                   <label htmlFor={key} className="custom-switch">
                     <input

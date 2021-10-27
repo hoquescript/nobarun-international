@@ -182,7 +182,7 @@ const AddNewPost = () => {
         imageSelector={selectImageHandler}
         videoSelector={selectVideoHandler}
       />
-      <div className="container center">
+      <div className="container">
         <div className="main__content__header mb-40">
           <h2 className="page-title">Post Editor</h2>
           <div>

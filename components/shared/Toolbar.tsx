@@ -99,7 +99,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const deleteImageHandler = async (url: string) => {
     const data = await axios.get(baseUrl, {
       params: {
-        method: 'delete',
+        // method: 'delete',
         key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
       },
     });
