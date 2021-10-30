@@ -184,6 +184,7 @@ const AddProduct = () => {
     };
 
     if (data.collectionName === '') delete product.collectionName;
+    delete product.isBangla;
 
     formReset();
 

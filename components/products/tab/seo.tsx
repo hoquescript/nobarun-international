@@ -69,7 +69,12 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
         <input
           type="text"
           className="custom-input"
-          {...register('SeoTitle', { maxLength: 70 })}
+          {...register('SeoTitle', {
+            maxLength: {
+              value: 70,
+              message: 'Meta description cannot be more than 70 Characters',
+            },
+          })}
         />
       </div>
       <Textfield name="slug" label="Slug" />
@@ -113,7 +118,13 @@ const SEO = (props: SEOProps) => {
               <textarea
                 className="custom-input"
                 placeholder="Enter Meta Description"
-                {...register('title', { maxLength: 160 })}
+                {...register('title', {
+                  maxLength: {
+                    value: 160,
+                    message:
+                      'Meta description cannot be more than 160 Characters',
+                  },
+                })}
               ></textarea>
             </div>
           </div>

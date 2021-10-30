@@ -21,7 +21,9 @@ const Checkbox = (props: CheckboxProps) => {
             type="checkbox"
             id={name}
             // checked={checked}
-            {...register(name, { required })}
+            {...register(name, {
+              required: `Please fill the value of ${children} field`,
+            })}
           />
           <div className="content">{children}</div>
         </label>

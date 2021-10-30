@@ -23,7 +23,9 @@ const Combobox = (props: ComboboxProps) => {
       <select
         className="custom-input"
         id={name}
-        {...register(name, { required })}
+        {...register(name, {
+          required: `Please fill the value of ${label} field`,
+        })}
       >
         {required ? (
           <option disabled selected value="">

@@ -64,8 +64,10 @@ const Description = (props: DescriptionProps) => {
         <div className="wrapper-section__title">
           <input
             className="page-headline-input mb-30"
-            placeholder="Product Name"
-            {...register('productName')}
+            placeholder="Product Name*"
+            {...register('productName', {
+              required: `Please fill the value of Product Name field`,
+            })}
           />
         </div>
         <div className="wrapper-section__content">

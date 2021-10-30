@@ -15,7 +15,7 @@ const ProductCode = (props: ProductCodeProps) => {
   } = useFormContext();
 
   const { onChange, ...rest } = register('productCode', {
-    required: true,
+    required: `Please fill the value of Product Code field`,
   });
 
   return (

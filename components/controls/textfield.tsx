@@ -24,7 +24,9 @@ const Textfield = (props: TextfieldProps) => {
         className="custom-input"
         placeholder={placeholder}
         value={value}
-        {...register(name, { required })}
+        {...register(name, {
+          required: `Please fill the value of ${label} field`,
+        })}
       />
     </div>
   );
