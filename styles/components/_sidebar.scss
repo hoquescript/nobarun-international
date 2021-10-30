@@ -3,7 +3,7 @@
   left: 0;
   top: 7rem;
   height: 100%;
-  width: 28rem;
+  width: 29rem;
   z-index: 9;
   background-color: white;
   box-shadow: 4px 4px 6px $shadowGrey;
@@ -14,7 +14,7 @@
     padding: 2rem;
   }
   a {
-    color: rgba($color: $textColor, $alpha: .7);
+    color: rgba($color: $textColor, $alpha: 0.7);
     display: flex;
     align-items: center;
     padding: 1.5rem 1rem;

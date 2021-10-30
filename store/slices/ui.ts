@@ -36,6 +36,7 @@ const initialState: UIState = {
     videos: [],
   },
   productCategoryMedia: {
+    featured: '',
     images: [],
     videos: [],
   },
@@ -184,7 +185,9 @@ export const uiSlice = createSlice({
 
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
-        state.productCategoryMedia.images = [action.payload.src];
+        state.productCategoryMedia.images = action.payload.src;
+        state.productCategoryMedia.featured =
+          action.payload.src && action.payload.src[1];
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         state.productCollectionMedia.images = [action.payload.src];
@@ -224,6 +227,15 @@ export const uiSlice = createSlice({
       state.images = action.payload.images;
       state.links = action.payload.videos;
     },
+    deleteMediaGallery: (state, action) => {
+      const content =
+        action.payload.type === 'image' ? state.images : state.links;
+      const index = content.findIndex(
+        (media) => media.src === action.payload.src,
+      );
+      console.log(action.payload.src, index);
+      content.splice(index, 1);
+    },
   },
 });
 
@@ -243,6 +255,7 @@ export const {
   selectContactImage,
   deleteContactImage,
   setContactImage,
+  deleteMediaGallery,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

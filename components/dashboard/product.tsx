@@ -16,13 +16,11 @@ const Product = (props: ProductProps) => {
   const { product, reviewCount, ratingAverage } = props;
   return (
     <div className={styles.product}>
-      <div>
-        <img
-          src={product.images && product.images[0]}
-          alt="Product"
-          className={styles.product__image}
-        />
-      </div>
+      <img
+        src={product.images && product.images[0]}
+        alt="Product"
+        className={styles.product__image}
+      />
       <div className="ml-10">
         <h2 className="heading-tertiary">{product.productName}</h2>
         <div className="flex mt-10">

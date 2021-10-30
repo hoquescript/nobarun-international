@@ -9,10 +9,12 @@ const GET_PRODUCT_BY_ID = gql`
       name
       description
       image
+      icon
       parentCategory
       children
       slug
       isPublished
+      isFeatured
     }
   }
 `;
@@ -32,10 +34,11 @@ const useProductCategoryById = async (fid, token) => {
       id: categoryById.id,
       categoryName: categoryById.name,
       description: categoryById.description,
-      image: categoryById.image,
+      images: [categoryById.image, categoryById.icon],
       parentCategory: categoryById.parentCategory,
       categorySlug: categoryById.slug,
       isPublished: categoryById.isPublished,
+      isFeatured: categoryById.isFeatured,
     };
     return category;
   } else return {};

@@ -5,9 +5,9 @@ import React, {
   forwardRef,
   useRef,
 } from 'react';
+import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
-import AWS from 'aws-sdk';
 import { useRouter } from 'next/router';
 import { AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
 import { FaPlus, FaSlack, FaTimes } from 'react-icons/fa';
@@ -27,6 +27,7 @@ import {
   selectImage,
   selectVideo,
   toggleToolbar,
+  deleteMediaGallery,
 } from '../../store/slices/ui';
 
 const baseUrl =
@@ -38,19 +39,33 @@ const ADD_NEW_MEDIA = gql`
     addImagesAndVideosTOGallery(data: $data)
   }
 `;
+const DELETE_IMAGE = gql`
+  mutation deleteImage($data: StaticInput!) {
+    removeImage(data: $data)
+  }
+`;
+const DELETE_VIDEO = gql`
+  mutation deleteVideo($data: StaticInput!) {
+    removeVideo(data: $data)
+  }
+`;
 
 interface ToolbarProps {
   imageSelector?: any;
   videoSelector?: any;
 }
 const Toolbar = forwardRef((props: ToolbarProps, ref) => {
+  const alert = useAlert();
+
   const { imageSelector, videoSelector } = props;
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
-  const token = useTypedSelector((state) => state.ui.token);
   const router = useRouter();
+
   const [addMedia] = useMutation(ADD_NEW_MEDIA);
+  const [deleteImage] = useMutation(DELETE_IMAGE);
+  const [deleteVideo] = useMutation(DELETE_VIDEO);
 
   const [imageFile, setImageFile] = useState<FileList | null>(null);
   const [link, setLink] = useState('');
@@ -78,8 +93,11 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const uploadImages = async () => {
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
+        if (imageFile[i].size > 2097152) {
+          alert.error(`${imageFile[i].name} is more than 2MB`);
+          break;
+        }
         const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        console.log(imageFile[i]);
         const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
         const objectUrl = `${objectBaseUrl}/${Key}`;
         console.log(Key);
@@ -96,22 +114,33 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     }
   };
 
-  const deleteImageHandler = async (url: string) => {
-    const data = await axios.get(baseUrl, {
-      params: {
-        // method: 'delete',
-        key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
-      },
-    });
-    // await axios.put(
-    //   baseUrl,
-    //   {
-    //     source: url,
-    //   },
-    //   {
-    //     headers: { Authorization: `${token}` },
-    //   },
-    // );
+  const deleteHandler = async (name: string, url: string, type: string) => {
+    dispatch(deleteMediaGallery({ src: url, type }));
+    if (type === 'image') {
+      const dummy = await axios.get(baseUrl, {
+        params: {
+          key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
+        },
+      });
+
+      await deleteImage({
+        variables: {
+          data: {
+            name,
+            src: url,
+          },
+        },
+      });
+    }
+    if (type === 'video')
+      deleteVideo({
+        variables: {
+          data: {
+            name,
+            src: url,
+          },
+        },
+      });
   };
 
   const youtubeLinkHandler = () => {
@@ -172,10 +201,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const fileName = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     const text = fileName.current?.innerText;
-    console.log('Media', text);
     if (text && fileName.current && text?.length > 20) {
       const value = text.substring(0, 20).concat('...');
-      console.log(value);
       fileName.current.innerText = value;
     }
   }, [images]);
@@ -256,10 +283,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                           className="images-gallery__image"
                           onClick={() => selectImageHandler(image.src)}
                         >
-                          <button>
-                            <FaTimes
-                              onClick={() => deleteImageHandler(image.src)}
-                            />
+                          <button
+                            onClick={() =>
+                              deleteHandler(image.name, image.src, 'image')
+                            }
+                          >
+                            <FaTimes />
                           </button>
                           <figure>
                             <img src={image.src} alt="" />
@@ -308,7 +337,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                       className="youtube__thumbnail"
                       onClick={() => selectVideoHandler(link.src)}
                     >
-                      <div className="youtube__thumbnail_remove">
+                      <div
+                        className="youtube__thumbnail_remove"
+                        onClick={() =>
+                          deleteHandler(link.name, link.src, 'video')
+                        }
+                      >
                         <FaTimes />
                       </div>
                       <figure>

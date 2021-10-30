@@ -88,7 +88,7 @@ const CategoryForm = () => {
         console.log(data);
         methods.reset(data);
         // @ts-ignore
-        dispatch(setMedia({ path: asPath, src: data.image }));
+        dispatch(setMedia({ path: asPath, src: data.images }));
         // @ts-ignore
         setDescription(data.description);
       });

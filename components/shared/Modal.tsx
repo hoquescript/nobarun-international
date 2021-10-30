@@ -18,9 +18,10 @@ interface ModalProps {
   setIsOpen: any;
   title: string;
   confirmHandler: any;
+  body?: string;
 }
 const Modal = (props: ModalProps) => {
-  const { modalIsOpen, setIsOpen, title, confirmHandler } = props;
+  const { modalIsOpen, setIsOpen, title, body, confirmHandler } = props;
 
   function closeModal() {
     setIsOpen(false);
@@ -39,7 +40,7 @@ const Modal = (props: ModalProps) => {
       <div className="text-wrapper">
         <h3>{title}</h3>
         <AiOutlineWarning className="modal__icon" />
-        <p>Are you sure you want to Delete this?</p>
+        <p>{body || 'Are you sure you want to Delete this?'}</p>
         <button className="button button-no" onClick={closeModal}>
           Cancel
         </button>

@@ -49,3 +49,23 @@
     color: #433;
   }
 }
+
+.custom_youtube {
+  & svg {
+    position: static;
+    transform: translate(1rem, 0.7rem);
+  }
+  & input {
+    border: none;
+    &:focus {
+      outline: none;
+    }
+  }
+  &::placeholder {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  & button svg {
+    transform: translate(0, 0);
+  }
+}

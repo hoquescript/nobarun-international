@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { signIn } from 'next-auth/client';
@@ -10,18 +10,24 @@ import styles from '../../styles/pages/auth.module.scss';
 const defaultValues = { email: '', password: '' };
 
 const Login = () => {
+  const [loading, setLoading] = useState(false);
+
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
   });
   const { error } = useRouter().query;
 
-  const onSubmit = (data: any) => {
+  const onSubmit = async (data: any) => {
+    setLoading(true);
+
     const { email, password } = data;
-    signIn('credentials', {
+    await signIn('credentials', {
       email,
       password,
       callbackUrl: `${window.location.origin}/`,
     });
+
+    setLoading(false);
     methods.reset();
   };
   return (

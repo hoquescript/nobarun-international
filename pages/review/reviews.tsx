@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { sub, format, isWithinInterval } from 'date-fns';
+import { useAlert } from 'react-alert';
 import {
   useTable,
   useSortBy,
@@ -9,6 +10,8 @@ import {
 import Link from 'next/link';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
+import { gql, useMutation } from '@apollo/client';
+
 import {
   FaGripVertical,
   FaSortUp,
@@ -18,7 +21,7 @@ import {
   FaForward,
   FaFastForward,
   FaPlusCircle,
-  FaEye,
+  FaTrash,
   FaEdit,
 } from 'react-icons/fa';
 
@@ -31,6 +34,13 @@ import useAllReviews from '../../hooks/Review/useAllReview';
 import styles from '../../styles/pages/query-report.module.scss';
 import { REVIEWS_COLUMNS } from '../../data/ReviewsColumn';
 import Loader from '../../components/shared/Loader';
+import Modal from '../../components/shared/Modal';
+
+const DELETE_REVIEW = gql`
+  mutation deleteReviewById($id: String!) {
+    removeSingleReview(reviewId: $id)
+  }
+`;
 
 const formatIsPublished = (data) => {
   const reviews = {};
@@ -41,8 +51,13 @@ const formatIsPublished = (data) => {
 };
 
 const Reviews = () => {
+  const alert = useAlert();
+
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
+  const [deleteKey, setDeleteKey] = useState('');
+  const [deleteIdx, setDeleteIdx] = useState(0);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -57,6 +72,8 @@ const Reviews = () => {
       key: 'Periods',
     },
   ]);
+
+  const [deleteReview, deleteState] = useMutation(DELETE_REVIEW);
 
   const [reviews, setReviews] = useState<any[]>([]);
   const columns = useMemo(() => REVIEWS_COLUMNS, []);
@@ -202,8 +219,41 @@ const Reviews = () => {
                     <td>
                       <div className="actions" style={{ padding: '0.5rem' }}>
                         <div>
-                          <span>
-                            <FaEye />
+                          <Modal
+                            title="Confirmation Alert"
+                            modalIsOpen={showDeleteModal}
+                            setIsOpen={setShowDeleteModal}
+                            confirmHandler={async () => {
+                              //@ts-ignore
+                              if (row.original.id) {
+                                const modifiedData = [...reviews];
+                                modifiedData.splice(deleteIdx, 1);
+                                setReviews(modifiedData);
+
+                                await deleteReview({
+                                  variables: {
+                                    id: deleteKey,
+                                  },
+                                });
+
+                                if (!deleteState.error) {
+                                  alert.error('Deleted Review Successfully');
+                                } else {
+                                  alert.error(deleteState.error.message);
+                                }
+                              }
+                            }}
+                          />
+
+                          <span
+                            onClick={() => {
+                              setShowDeleteModal(true);
+                              // @ts-ignore
+                              setDeleteKey(row.original?.id);
+                              setDeleteIdx(row.index);
+                            }}
+                          >
+                            <FaTrash />
                           </span>
                           <span>
                             <Link

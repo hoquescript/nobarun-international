@@ -22,7 +22,6 @@ interface HomeProps {
 }
 const Home: NextPage<HomeProps> = (props) => {
   const { summary, enquiries, recentProducts, recentReviews } = props;
-  console.log(props);
   return (
     <div className="container center">
       <div className="row">

@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
-import { useForm, FormProvider } from 'react-hook-form';
+import { useForm, useWatch, FormProvider } from 'react-hook-form';
 import { FaSave, FaTimes } from 'react-icons/fa';
 import Togglebar from '../../components/controls/togglebar';
 import { v4 as uuid } from 'uuid';
@@ -28,6 +28,7 @@ import {
 } from '../../store/slices/products';
 import useProductById from '../../hooks/Products/useProductById';
 import { useRouter } from 'next/router';
+import Version from '../../components/products/AddProduct/Version';
 
 const CREATE_NEW_PRODUCTS = gql`
   mutation addProduct($data: CreateNewProduct!) {
@@ -44,6 +45,7 @@ const EDIT_PRODUCT = gql`
 `;
 
 const defaultValues = {
+  isBangla: false,
   isPublished: false,
   productName: '',
   price: '',
@@ -125,6 +127,19 @@ const AddProduct = () => {
   );
   const author = useTypedSelector((state) => state.profile.userId);
 
+  const formReset = () => {
+    //Form Reset
+    methods.reset(defaultValues);
+    KeyPoint[1](defaultKeypoints);
+    question[1](defaultQuestions);
+    setFeatures('');
+    setSpecification('');
+    setRelatedProducts([]);
+    setKeywords([]);
+    tagState[1]([]);
+    dispatch(resetProductMedia());
+  };
+
   const handleAddProduct = async (data: any) => {
     if (!productMedia.featured) {
       alert.error('Please set a Featured Image');
@@ -170,16 +185,7 @@ const AddProduct = () => {
 
     if (data.collectionName === '') delete product.collectionName;
 
-    //Form Reset
-    methods.reset(defaultValues);
-    KeyPoint[1](defaultKeypoints);
-    question[1](defaultQuestions);
-    setFeatures('');
-    setSpecification('');
-    setRelatedProducts([]);
-    setKeywords([]);
-    tagState[1]([]);
-    dispatch(resetProductMedia());
+    formReset();
 
     if (isEditMode) {
       await editProduct({
@@ -247,6 +253,7 @@ const AddProduct = () => {
   const selectVideoHandler = (imageSrc) => {
     dispatch(selectProductVideo({ page, src: imageSrc, key: postSectionKey }));
   };
+
   return (
     <div className="container ml-50" style={{ maxWidth: '120rem' }}>
       <Toolbar
@@ -265,6 +272,7 @@ const AddProduct = () => {
           >
             <h2 className="page-title">Product Editor</h2>
             <div>
+              <Version control={methods.control} formReset={formReset} />
               <Togglebar name="isPublished">Publish</Togglebar>
               <button
                 type="button"

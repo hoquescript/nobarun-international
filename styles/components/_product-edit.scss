@@ -111,6 +111,21 @@
       color: $primaryColor;
     }
   }
+  .upload-image {
+    height: 4.4rem;
+    border: 2px dashed $darkGrey;
+    border-radius: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    place-content: center;
+    color: #999;
+    cursor: pointer;
+    &:hover {
+      border-color: $primaryColor;
+      color: $primaryColor;
+    }
+  }
 }
 
 .specs-fields__field {
