@@ -61,7 +61,11 @@ const AddReview = () => {
   const [editReview, editState] = useMutation(EDIT_REVIEW);
 
   const dispatch = useTypedDispatch();
-  const reviewMedia = useTypedSelector((state) => state.ui.reviewMedia);
+  const featuredImage = useTypedSelector(
+    (state) => state.ui.reviewMedia.featured,
+  );
+  const images = useTypedSelector((state) => state.ui.reviewMedia.images);
+  const videos = useTypedSelector((state) => state.ui.reviewMedia.videos);
 
   const addNewReview = async (data) => {
     const review = {
@@ -69,7 +73,11 @@ const AddReview = () => {
       createdAt: new Date(data.createdAt),
       rating,
       productCode: productCode,
-      reviewMedia,
+      reviewMedia: {
+        images,
+        videos,
+      },
+      featuredImage,
     };
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());

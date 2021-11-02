@@ -7,7 +7,7 @@ const GET_ALL_CLIENTS = gql`
       id
       clientName
       logo
-      categoryName: relatedCategory
+      categoryName: categories
       description
       isPublished
     }
