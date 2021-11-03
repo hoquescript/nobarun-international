@@ -19,17 +19,13 @@ const ProductCode = (props: ProductCodeProps) => {
   });
 
   return (
-    <div>
-      {errors.productCode ? (
-        <h6 style={{ color: 'red', marginBottom: '.5rem' }}>
-          {errors.productCode.message}
-        </h6>
-      ) : (
-        <h6>&nbsp;</h6>
-      )}
+    <div className="field">
+      <label>
+        Product Code <sup style={{ color: 'red' }}>*</sup>
+      </label>
       <input
         type="text"
-        className="custom-input medium mb-10 center"
+        className="custom-input"
         onChange={(e) => {
           let isDuplicate = productCodes.some(
             (code) => code === e.target.value,
@@ -47,9 +43,6 @@ const ProductCode = (props: ProductCodeProps) => {
         }}
         {...rest}
       />
-      <span>
-        Product Code <sup style={{ color: 'red' }}>*</sup>
-      </span>
     </div>
   );
 };

@@ -24,7 +24,10 @@ const Combobox = (props: ComboboxProps) => {
         className="custom-input"
         id={name}
         {...register(name, {
-          required: `Please fill the value of ${label} field`,
+          required: {
+            value: required as boolean,
+            message: `Please fill the value of ${label} field`,
+          },
         })}
       >
         {required ? (
@@ -42,6 +45,10 @@ const Combobox = (props: ComboboxProps) => {
       </select>
     </div>
   );
+};
+
+Combobox.defaultProps = {
+  required: false,
 };
 
 export default Combobox;

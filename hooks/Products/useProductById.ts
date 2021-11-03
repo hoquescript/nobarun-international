@@ -16,6 +16,7 @@ const GET_PRODUCT_BY_ID = gql`
       featured
       images
       videos
+      banglaVersionLink
       keyPoints {
         id
         title

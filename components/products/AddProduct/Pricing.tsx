@@ -1,200 +1,82 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
-import { useWatch, useFormState, useFormContext } from 'react-hook-form';
+import React from 'react';
+import { Control, FieldValues, useWatch } from 'react-hook-form';
+
+import Textfield from '../../controls/textfield';
 
 interface PricingProps {
-  register: any;
+  getValues: any;
   setValue: any;
-  control: any;
+  control: Control<FieldValues, object>;
 }
-const Pricing = (props: PricingProps) => {
-  const { register, control, setValue } = props;
 
-  const { dirtyFields } = useFormState();
-  const {
-    setError,
-    clearErrors,
-    formState: { errors },
-  } = useFormContext();
+const Details = (props: PricingProps) => {
+  const { control, getValues, setValue } = props;
 
-  const priceValue = useWatch({
-    control,
-    name: 'price',
-    defaultValue: '',
-  });
-  const originalPriceValue = useWatch({
-    control,
-    name: 'originalPrice',
-    defaultValue: '',
-  });
-  const discountValue = useWatch({
-    control,
-    name: 'discount',
-    defaultValue: '',
-  });
-
-  // useEffect(() => {
-  //   const price = priceValue !== '' ? parseInt(priceValue) : '';
-  //   const discount = discountValue !== '' ? parseInt(discountValue) : '';
-  //   const originalPrice =
-  //     originalPriceValue !== '' ? parseInt(originalPriceValue) : '';
-  //   if (price > originalPrice) {
-  //     setError('price', {
-  //       type: 'price < originalPrice',
-  //       message: 'Original Price should be higher than Price',
-  //     });
-  //     setError('originalPrice', {
-  //       type: 'price < originalPrice',
-  //       message: 'Original Price should be higher than Price',
-  //     });
-  //   } else {
-  //     clearErrors('price');
-  //     clearErrors('originalPrice');
-  //   }
-  //   if (discount > 100) {
-  //     setError('discount', {
-  //       type: 'Invalid Discount',
-  //       message: 'Discount Percantage cant be more than 100%',
-  //     });
-  //   } else {
-  //     clearErrors('discount');
-  //   }
-  //   // Finding Discount
-  //   if (price && originalPrice && price < originalPrice) {
-  //     const discount = originalPrice - price;
-  //     const cDiscount = Math.ceil((discount / originalPrice) * 100);
-  //     setValue('discount', cDiscount);
-  //   }
-  //   // //Finding Original Price
-  //   // // if (
-  //   // //   price &&
-  //   // //   discount &&
-  //   // //   dirtyFields.price &&
-  //   // //   !dirtyFields.originalPrice &&
-  //   // //   dirtyFields.discount &&
-  //   // //   discount <= 100
-  //   // // ) {
-  //   // //   const pricePercentage = 100 - discount;
-  //   // //   const oPrice = Math.ceil((price / pricePercentage) * 100);
-  //   // //   setValue('originalPrice', oPrice);
-  //   // // }
-  //   // //Finding Discounted Price
-  //   if (discount && originalPrice) {
-  //     const discountAmmount = Math.ceil((discount / 100) * originalPrice);
-  //     const discountPrice = originalPrice - discountAmmount;
-  //     setValue('price', discountPrice);
-  //   }
-  // }, [priceValue, discountValue, originalPriceValue]);
-
-  const { onChange: onPriceChange, ...priceState } = register('price');
-  const { onChange: onOriginalPriceChange, ...originalPriceState } =
-    register('originalPrice');
-  const { onChange: onDiscountChange, ...discountState } = register('discount');
-
-  const [price, setPrice] = useState('');
-  const [originalPrice, setOriginalPrice] = useState('');
-  const [discount, setDiscount] = useState('');
-
-  const handleChange = (active) => {
-    const price = priceValue !== '' ? parseInt(priceValue) : '';
-    const discount = discountValue !== '' ? parseInt(discountValue) : '';
-    const originalPrice =
-      originalPriceValue !== '' ? parseInt(originalPriceValue) : '';
-
-    // if (discount > 100) {
-    //   setError('discount', {
-    //     type: 'Invalid Discount',
-    //     message: 'Discount Percantage cant be more than 100%',
-    //   });
-    // } else {
-    //   clearErrors('discount');
-    // }
-
-    // Finding Discount
-    if (active === 'price' && price && originalPrice && price < originalPrice) {
-      console.log('object');
-
-      const discount = originalPrice - price;
+  const currentPriceHandler = (e) => {
+    const currentPrice = +e.target.value;
+    const originalPrice = +getValues('originalPrice');
+    if (currentPrice > originalPrice) {
+      return setValue('discount', 0);
+    }
+    if (originalPrice > currentPrice) {
+      const discount = originalPrice - currentPrice;
       const cDiscount = Math.ceil((discount / originalPrice) * 100);
       setValue('discount', cDiscount);
-      // setDiscount(cDiscount);
     }
+  };
 
-    // Finding Discounted Price
-    if (active === 'discount' && discount && originalPrice) {
-      const discountAmmount = Math.ceil((discount / 100) * originalPrice);
-      const discountPrice = originalPrice - discountAmmount;
-      setValue('price', discountPrice);
-      // setPrice(discountPrice);
+  // We have to change both the price and the discount
+  const originalPriceHandler = (e) => {
+    const originalPrice = e.target.value;
+    const currentPrice = +getValues('price');
+    const discount = +getValues('discount');
+    console.log(discount);
+    // Resetting Discount if OP is less than CP
+    if (currentPrice > originalPrice) {
+      return setValue('discount', 0);
     }
+    // Setting Discount based on OP and CP
+    if (currentPrice < originalPrice && discount <= 100) {
+      const discount = originalPrice - currentPrice;
+      const cDiscount = Math.ceil((discount / originalPrice) * 100);
+      setValue('discount', cDiscount);
+    }
+  };
+
+  const discountHandler = (e) => {
+    const discount = +e.target.value;
+    if (discount >= 100) return;
+
+    const originalPrice = +getValues('originalPrice');
+    const discountAmmount = Math.ceil((discount / 100) * originalPrice);
+    const discountPrice = originalPrice - discountAmmount;
+    setValue('price', discountPrice);
   };
   return (
     <>
-      <div>
-        {errors.price ? (
-          <h6 style={{ color: 'red', marginBottom: '.5rem' }}>
-            {errors.price.message}
-          </h6>
-        ) : (
-          <h6>&nbsp;</h6>
-        )}
-        <input
-          type="text"
-          className="custom-input medium mb-10 center"
-          onChange={(e) => {
-            // setPrice(e.target.value);
-            onPriceChange(e);
-            handleChange('price');
-          }}
-          {...priceState}
+      <div className="col-3">
+        <Textfield
+          name="price"
+          label="Current Price"
+          onChangeHandler={currentPriceHandler}
         />
-        <span>Current Price</span>
       </div>
-      <div>
-        {errors.originalPrice ? (
-          <h6 style={{ color: 'red', marginBottom: '.5rem' }}>
-            {errors.originalPrice.message}
-          </h6>
-        ) : (
-          <h6>&nbsp;</h6>
-        )}
-        <input
-          type="text"
-          className="custom-input medium mb-10 center"
-          onChange={(e) => {
-            setOriginalPrice(e.target.value);
-            handleChange('originalPrice');
-            onOriginalPriceChange(e);
-          }}
-          {...originalPriceState}
+      <div className="col-3">
+        <Textfield
+          name="originalPrice"
+          label="Original Price"
+          onChangeHandler={originalPriceHandler}
         />
-        <span>Original Price</span>
       </div>
-      <div>
-        {errors.discount ? (
-          <h6 style={{ color: 'red', marginBottom: '.5rem' }}>
-            {errors.discount.message}
-          </h6>
-        ) : (
-          <h6>&nbsp;</h6>
-        )}
-        <input
-          type="text"
-          className="custom-input medium mb-10 center"
-          onChange={(e) => {
-            setDiscount(e.target.value);
-            handleChange('discount');
-            onDiscountChange(e);
-          }}
-          {...discountState}
-          // {...register('discount', {
-          //   maxLength: 3,
-          // })}
+      <div className="col-3">
+        <Textfield
+          name="discount"
+          label="Discount"
+          onChangeHandler={discountHandler}
         />
-        <span>Discount (%)</span>
       </div>
     </>
   );
 };
 
-export default Pricing;
+export default Details;

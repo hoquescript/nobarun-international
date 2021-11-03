@@ -45,9 +45,9 @@ const EDIT_PRODUCT = gql`
 `;
 
 const defaultValues = {
-  isBangla: false,
   isPublished: false,
   productName: '',
+  banglaVersionLink: '',
   price: '',
   originalPrice: '',
   discount: '',
@@ -184,42 +184,52 @@ const AddProduct = () => {
     };
 
     if (data.collectionName === '') delete product.collectionName;
+    if (data.stockStatus === '') delete product.stockStatus;
+    if (data.contactPerson === '') delete product.contactPerson;
     delete product.isBangla;
 
     formReset();
 
     if (isEditMode) {
-      await editProduct({
-        variables: {
-          data: {
-            editId: pid,
-            editableObject: product,
+      try {
+        await editProduct({
+          variables: {
+            data: {
+              editId: pid,
+              editableObject: product,
+            },
           },
-        },
-      });
-      setTabValue('description');
-      if (!editState.error) {
-        alert.info('Edited Product Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+      } catch (Error) {
+      } finally {
+        setTabValue('description');
+        if (!editState.error) {
+          alert.info('Edited Product Successfully');
+        } else {
+          alert.error(editState.error.message);
+        }
       }
     } else {
-      await createNewProduct({
-        variables: {
-          data: product,
-        },
-      });
-      setTabValue('description');
-      if (!createState.error) {
-        alert.success('Added New Product Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createNewProduct({
+          variables: {
+            data: product,
+          },
+        });
+      } catch (Error) {
+      } finally {
+        setTabValue('description');
+        if (!createState.error) {
+          alert.success('Added New Product Successfully');
+        } else {
+          //! We have to further do error checking by changing one of the banglaUrl to banglaVersionLink
+          alert.error(createState.error.message);
+        }
       }
     }
   };
 
   const handleError = (error) => {
-    console.log(error);
     Object.values(error).forEach((err) => {
       // @ts-ignore
       alert.error(err.message);
@@ -273,7 +283,6 @@ const AddProduct = () => {
           >
             <h2 className="page-title">Product Editor</h2>
             <div>
-              <Version control={methods.control} formReset={formReset} />
               <Togglebar name="isPublished">Publish</Togglebar>
               <button
                 type="button"
@@ -300,6 +309,7 @@ const AddProduct = () => {
               <Description
                 register={methods.register}
                 control={methods.control}
+                getValues={methods.getValues}
                 setValue={methods.setValue}
                 keyPointState={KeyPoint}
                 question={question}

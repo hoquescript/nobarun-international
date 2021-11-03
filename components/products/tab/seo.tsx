@@ -49,7 +49,6 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
     name: 'SeoTitle',
     defaultValue: '',
   });
-  setValue('slug', slugStringGenarator(title));
   return (
     <>
       <div className="field">
@@ -72,12 +71,11 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
           {...register('SeoTitle', {
             maxLength: {
               value: 70,
-              message: 'Meta description cannot be more than 70 Characters',
+              message: 'Title cannot be more than 70 Characters',
             },
           })}
         />
       </div>
-      <Textfield name="slug" label="Slug" />
     </>
   );
 };

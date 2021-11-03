@@ -5,12 +5,14 @@ import Chip from '../../controls/chip';
 
 import Combobox from '../../controls/combobox';
 import FileButton from '../../controls/file';
+import Textfield from '../../controls/textfield';
 import TextEditor from '../../shared/TextEditor';
 import KeyPoints from '../AddProduct/KeyPoints';
 import Pricing from '../AddProduct/Pricing';
 import ProductCode from '../AddProduct/ProductCode';
 import Questions from '../AddProduct/Questions';
 import RelatedProducts from '../AddProduct/RelatedProduct';
+import SlugGenerator from '../AddProduct/SlugGenerator';
 
 interface DescriptionProps {
   register: UseFormRegister<FieldValues>;
@@ -25,6 +27,7 @@ interface DescriptionProps {
   info: any;
   relatedProducts: { id: string; value: string }[];
   setRelatedProducts: any;
+  getValues: any;
   setValue: any;
   control: any;
   setPage: any;
@@ -33,6 +36,7 @@ interface DescriptionProps {
 const Description = (props: DescriptionProps) => {
   const {
     register,
+    getValues,
     setValue,
     control,
     keyPointState,
@@ -61,17 +65,14 @@ const Description = (props: DescriptionProps) => {
   return (
     <div id="description">
       <div className="wrapper-section">
-        <div className="wrapper-section__title">
-          <input
-            className="page-headline-input mb-30"
-            placeholder="Product Name*"
-            {...register('productName', {
-              required: `Please fill the value of Product Name field`,
-            })}
-          />
-        </div>
         <div className="wrapper-section__content">
-          <div className="row mb-60">
+          <div className="row">
+            <SlugGenerator control={control} setValue={setValue} />
+            <div className="col-12">
+              <Textfield name="banglaVersionLink" label="Bangla Version" />
+            </div>
+          </div>
+          <div className="row mt-10 mb-20">
             <div className="col-3">
               <Combobox
                 name="category"
@@ -91,7 +92,6 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="stockStatus"
                 label="Stock Status"
-                required
                 options={info.stocks || []}
               />
             </div>
@@ -99,18 +99,20 @@ const Description = (props: DescriptionProps) => {
               <Combobox
                 name="contactPerson"
                 label="Contact Person"
-                required
                 options={info.contacts || []}
               />
             </div>
           </div>
-          <div className="product-specs mt-30 mb-50">
+          <div className="row mb-20">
             <Pricing
-              register={register}
               control={control}
               setValue={setValue}
+              getValues={getValues}
             />
-            <ProductCode register={register} productCodes={productCodes} />
+
+            <div className="col-3">
+              <ProductCode register={register} productCodes={productCodes} />
+            </div>
           </div>
           <div className="mb-20">
             <div className={`field`}>
@@ -122,6 +124,16 @@ const Description = (props: DescriptionProps) => {
               />
             </div>
           </div>
+          {/* <div className="mb-20">
+            <div className={`field`}>
+              <label>Related Clients</label>
+              <RelatedProducts
+                productCodes={productCodes}
+                chips={relatedProducts}
+                setChips={setRelatedProducts}
+              />
+            </div>
+          </div> */}
           <div className="mb-20">
             <div className={`field`}>
               <label>Upload Media</label>
