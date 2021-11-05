@@ -88,11 +88,6 @@ const AddClient = () => {
       categories,
     };
 
-    // methods.reset(defaultValues);
-    // dispatch(resetMediaSelection());
-    // setCategory('');
-    // setDescription('');
-
     if (isEditMode) {
       await editClient({
         variables: {
@@ -108,15 +103,30 @@ const AddClient = () => {
         alert.error(editState.error.message);
       }
     } else {
-      await createClient({
-        variables: {
-          data: client,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Client Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createClient({
+          variables: {
+            data: client,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Posted Client Successfully');
+
+          //Resetting
+          methods.reset(defaultValues);
+          dispatch(resetMediaSelection());
+          setCategories([]);
+          setDescription('');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          //Resetting
+          alert.success('Posted Client Successfully');
+        }
       }
     }
   };
@@ -156,6 +166,7 @@ const AddClient = () => {
             <div className="row">
               <div className="col-12">
                 <Textfield
+                  required
                   label="Client Name"
                   placeholder="Enter Client Name"
                   name="clientName"

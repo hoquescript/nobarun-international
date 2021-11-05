@@ -21,6 +21,7 @@ const CollectionSlug = (props: CollectionSlugProps) => {
     <>
       <div className="col-12">
         <Textfield
+          required
           name="collectionName"
           label="Name"
           placeholder="Enter Collection Name"
@@ -28,6 +29,7 @@ const CollectionSlug = (props: CollectionSlugProps) => {
       </div>
       <div className="col-12">
         <Textfield
+          required
           name="collectionSlug"
           label="Slug"
           placeholder="Enter Collection Slug"

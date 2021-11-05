@@ -70,6 +70,7 @@ const ClientCategory = (props: ClientCategoryProps) => {
       const newCategories = [...categories, category];
       const productCodeList = [...productCodes, category];
 
+      setCategory('');
       setCategories(newCategories);
       setProductCodes(productCodeList);
 

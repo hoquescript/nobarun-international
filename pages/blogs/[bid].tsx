@@ -22,7 +22,6 @@ import {
   useTypedDispatch,
 } from '../../hooks/useTypedSelector';
 import {
-  resetBlogMedia,
   selectBlogImage,
   selectBlogVideo,
   setBlogMedia,
@@ -53,6 +52,11 @@ const defaultValues = {
   relatedProduct: '',
   contactPerson: '',
   isFeatured: false,
+  slug: '',
+  title: '',
+  SeoTitle: '',
+  url: '',
+  siteMap: '',
 };
 
 const defaultPostSection = {
@@ -131,6 +135,9 @@ const AddNewPost = () => {
     // setKeywords([]);
     // PostSectionState[1](defaultPostSection);
 
+    if (data.stockStatus === '') delete post.stockStatus;
+    if (data.contactPerson === '') delete post.contactPerson;
+
     if (isEditMode) {
       editBlog({
         variables: {
@@ -146,17 +153,16 @@ const AddNewPost = () => {
         alert.error(editState.error.message);
       }
     } else {
-      console.log(post);
-      // addBlog({
-      //   variables: {
-      //     data: post,
-      //   },
-      // });
-      // if (!createState.error) {
-      //   alert.success('Created Post Successfully');
-      // } else {
-      //   alert.error(createState.error.message);
-      // }
+      addBlog({
+        variables: {
+          data: post,
+        },
+      });
+      if (!createState.error) {
+        alert.success('Created Post Successfully');
+      } else {
+        alert.error(createState.error.message);
+      }
     }
   };
 

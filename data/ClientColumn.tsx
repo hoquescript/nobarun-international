@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export const COLUMNS = [
   {
     Header: 'Client Name',
@@ -10,6 +8,13 @@ export const COLUMNS = [
     Header: 'Category',
     accessor: 'categoryName',
     sticky: 'left',
+    Cell: ({ value }) => {
+      let categories = '';
+      value.forEach((v) => {
+        categories = categories.concat(v).concat(', ');
+      });
+      return categories;
+    },
   },
   {
     Header: 'Description',

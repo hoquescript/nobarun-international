@@ -119,32 +119,57 @@ const CategoryForm = () => {
     setDescription('');
     if (isEditMode) {
       delete category.parentCategory;
-      await editCategory({
-        variables: {
-          data: {
-            editId: fid,
-            editableObject: category,
+      try {
+        await editCategory({
+          variables: {
+            data: {
+              editId: fid,
+              editableObject: category,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Product Category Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+
+        if (!editState.error) {
+          alert.info('Edited Product Category Successfully');
+        } else {
+          throw editState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Product Category Successfully');
+        }
       }
     } else {
-      await createCategory({
-        variables: {
-          data: category,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Product Category Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createCategory({
+          variables: {
+            data: category,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Posted Product Category Successfully');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Posted Product Category Successfully');
+        }
       }
     }
   };
+
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
+  };
+
   return (
     <div className="container center">
       <Toolbar />
@@ -163,7 +188,7 @@ const CategoryForm = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={methods.handleSubmit(onSubmit)}
+              onClick={methods.handleSubmit(onSubmit, handleError)}
             >
               <FaSave />
             </button>
@@ -228,7 +253,7 @@ const CategoryForm = () => {
         <div className="center mt-30">
           <button
             className="btn-green"
-            onClick={methods.handleSubmit(onSubmit)}
+            onClick={methods.handleSubmit(onSubmit, handleError)}
           >
             Save
           </button>

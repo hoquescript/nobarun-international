@@ -89,6 +89,7 @@ const Collections = () => {
               <input
                 type="checkbox"
                 id="isPublished"
+                disabled
                 defaultChecked={item.isPublished}
               />
               <span>&nbsp;</span>

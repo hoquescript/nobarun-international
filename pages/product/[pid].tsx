@@ -230,7 +230,6 @@ const AddProduct = () => {
     }
   };
 
-  console.log(relatedProducts);
   const handleError = (error) => {
     Object.values(error).forEach((err) => {
       // @ts-ignore

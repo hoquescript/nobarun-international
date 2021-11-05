@@ -21,6 +21,7 @@ const CategorySlug = (props: CategorySlugProps) => {
     <>
       <div className="col-12">
         <Textfield
+          required
           label="Name"
           placeholder="Enter Category Name"
           name="categoryName"
@@ -28,6 +29,7 @@ const CategorySlug = (props: CategorySlugProps) => {
       </div>
       <div className="col-12">
         <Textfield
+          required
           label="Slug"
           placeholder="Enter Category Slug"
           name="categorySlug"

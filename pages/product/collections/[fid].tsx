@@ -89,31 +89,54 @@ const CollectionForm = () => {
     setDescription('');
 
     if (isEditMode) {
-      await editCollection({
-        variables: {
-          data: {
-            editId: fid,
-            editableObject: collection,
+      try {
+        await editCollection({
+          variables: {
+            data: {
+              editId: fid,
+              editableObject: collection,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Product Collection Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Product Collection Successfully');
+        } else {
+          throw editState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Product Collection Successfully');
+        }
       }
     } else {
-      await createCollection({
-        variables: {
-          data: collection,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Product Collection Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createCollection({
+          variables: {
+            data: collection,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Posted Product Collection Successfully');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Posted Product Collection Successfully');
+        }
       }
     }
+  };
+
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
   };
 
   return (
@@ -134,7 +157,7 @@ const CollectionForm = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={methods.handleSubmit(onSubmit)}
+              onClick={methods.handleSubmit(onSubmit, handleError)}
             >
               <FaSave />
             </button>
@@ -177,7 +200,7 @@ const CollectionForm = () => {
         <div className="center mt-30">
           <button
             className="btn-green"
-            onClick={methods.handleSubmit(onSubmit)}
+            onClick={methods.handleSubmit(onSubmit, handleError)}
           >
             Save
           </button>
