@@ -98,9 +98,9 @@ const AccountAccess = (props: AccountAccessProps) => {
         } else {
           throw editState.error.message;
         }
-      } catch (error) {
-        if (error.message) {
-          alert.error(error.message);
+      } catch (error: any) {
+        if (error && error?.message) {
+          alert.error(error?.message);
         } else {
           alert.info('Edited Admin Account Successfully');
         }
@@ -122,9 +122,9 @@ const AccountAccess = (props: AccountAccessProps) => {
         } else {
           throw createState.error.message;
         }
-      } catch (error) {
-        if (error.message) {
-          alert.error(error.message);
+      } catch (error: any) {
+        if (error && error.message) {
+          alert.error(error?.message);
         } else {
           alert.success('Created a New Admin Account Successfully');
 

@@ -91,7 +91,7 @@ const AddNewQuery = () => {
         } else {
           alert.error(editState.error.message);
         }
-      } catch (error) {
+      } catch (error: any) {
         alert.error(error.message);
       }
     } else {
@@ -110,7 +110,7 @@ const AddNewQuery = () => {
         } else {
           alert.error(createState.error.message);
         }
-      } catch (error) {
+      } catch (error: any) {
         alert.error(error.message);
       }
     }

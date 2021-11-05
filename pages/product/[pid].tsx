@@ -199,7 +199,7 @@ const AddProduct = () => {
         } else {
           throw editState.error.message;
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.message) {
           alert.error(error.message);
         } else {
@@ -220,7 +220,7 @@ const AddProduct = () => {
         } else {
           throw createState.error.message;
         }
-      } catch (error) {
+      } catch (error: any) {
         if (error.message) {
           alert.error(error.message);
         } else {

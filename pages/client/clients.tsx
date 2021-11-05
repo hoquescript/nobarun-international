@@ -58,11 +58,6 @@ const Clients = () => {
     const param = query.search.toLowerCase();
     return rows.filter((row) => {
       return row.values?.clientName.toLowerCase().includes(param);
-      // &&
-      // isWithinInterval(new Date(row.values?.createdAt), {
-      //   start: query.range.startDate,
-      //   end: query.range.endDate,
-      // })
     });
   };
 
@@ -118,6 +113,7 @@ const Clients = () => {
     </div>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
   if (!session) {
