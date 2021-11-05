@@ -32,7 +32,6 @@ const Textfield = (props: TextfieldProps) => {
     },
   });
 
-  console.log('I am txtfld');
   return (
     <div className={`field ${className}`}>
       <label>

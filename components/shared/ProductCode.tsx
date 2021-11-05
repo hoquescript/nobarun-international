@@ -67,7 +67,10 @@ const RelatedProducts = (props: RelatedProductsProps) => {
 
   return (
     <div className="field">
-      <label>Product Code {<sup style={{ color: 'red' }}>*</sup>}</label>
+      <label>
+        Product Code
+        {/* {<sup style={{ color: 'red' }}>*</sup>} */}
+      </label>
       <div
         className={`field ${styles.pCode}`}
         style={{ position: 'relative' }}
@@ -76,7 +79,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
         <AiOutlineSearch className={styles.pCode__search_icon} />
         <input
           type="text"
-          className={`${styles.pCode__input}`}
+          className={`${styles.pCode__inputs}`}
           placeholder="Search Product Code"
           value={productCode}
           onClick={() => setShowSuggestion(true)}

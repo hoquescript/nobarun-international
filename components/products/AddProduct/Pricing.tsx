@@ -15,7 +15,7 @@ const Details = (props: PricingProps) => {
   const currentPriceHandler = (e) => {
     const currentPrice = +e.target.value;
     const originalPrice = +getValues('originalPrice');
-    if (currentPrice > originalPrice) {
+    if (currentPrice >= originalPrice) {
       return setValue('discount', 0);
     }
     if (originalPrice > currentPrice) {
@@ -27,12 +27,12 @@ const Details = (props: PricingProps) => {
 
   // We have to change both the price and the discount
   const originalPriceHandler = (e) => {
-    const originalPrice = e.target.value;
+    const originalPrice = +e.target.value;
     const currentPrice = +getValues('price');
     const discount = +getValues('discount');
-    console.log(discount);
-    // Resetting Discount if OP is less than CP
-    if (currentPrice > originalPrice) {
+    console.log(originalPrice, currentPrice);
+
+    if (currentPrice >= originalPrice) {
       return setValue('discount', 0);
     }
     // Setting Discount based on OP and CP

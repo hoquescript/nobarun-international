@@ -1,18 +1,18 @@
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
 
-const GET_ALL_PRODUCT_CODE = gql`
+const GET_ALL_CLIENT_CODE = gql`
   query getAllProductCode {
-    getAllTheProducts {
-      id: productName
-      value: productCode
+    getAllClients {
+      id: clientName
+      value: id
     }
   }
 `;
 
-const useAllProductCode = async () => {
-  const data = await Client.request(GET_ALL_PRODUCT_CODE);
-  return data.getAllTheProducts;
+const useAllClientCode = async () => {
+  const data = await Client.request(GET_ALL_CLIENT_CODE);
+  return data.getAllClients;
 };
 
-export default useAllProductCode;
+export default useAllClientCode;

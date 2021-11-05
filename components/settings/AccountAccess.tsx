@@ -81,43 +81,67 @@ const AccountAccess = (props: AccountAccessProps) => {
       sendMail: data.sendMail,
     };
 
-    // Resetting
-    reset(defaultValues);
-    setPermission(menu);
-    setImages('');
-
     // Posting
     if (isEditMode) {
       delete account.password;
-      await editAccount({
-        variables: {
-          data: {
-            editId: accountId,
-            editableObject: account,
+      try {
+        await editAccount({
+          variables: {
+            data: {
+              editId: accountId,
+              editableObject: account,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Admin Account Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Admin Account Successfully');
+        } else {
+          throw editState.error.message;
+        }
+      } catch (error) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Admin Account Successfully');
+        }
       }
     } else {
-      await createAccount({
-        variables: {
-          data: account,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Created a New Admin Account Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createAccount({
+          variables: {
+            data: account,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Created a New Admin Account Successfully');
+
+          // Resetting
+          reset(defaultValues);
+          setPermission(menu);
+          setImages('');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Created a New Admin Account Successfully');
+
+          // Resetting
+          reset(defaultValues);
+          setPermission(menu);
+          setImages('');
+        }
       }
     }
   };
 
-  const onError = (error) => {
-    alert.error('Please Fillup all the Required Fields(*)');
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
   };
 
   const onSelectAllChange = (e) => {
@@ -226,7 +250,10 @@ const AccountAccess = (props: AccountAccessProps) => {
             </label>
           </div>
         </div>
-        <button className="btn-green" onClick={handleSubmit(onSubmit, onError)}>
+        <button
+          className="btn-green"
+          onClick={handleSubmit(onSubmit, handleError)}
+        >
           Save
         </button>
       </div>

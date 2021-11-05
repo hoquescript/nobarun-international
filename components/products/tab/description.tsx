@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { UseFormRegister, FieldValues } from 'react-hook-form';
+import useAllClientCode from '../../../hooks/Client/useAllClientCode';
 import useAllProductCode from '../../../hooks/Products/useAllProductCode';
+import useProductInfo from '../../../hooks/Products/useProductInfo';
 import Chip from '../../controls/chip';
 
 import Combobox from '../../controls/combobox';
@@ -24,9 +26,10 @@ interface DescriptionProps {
   specification: string;
   setSpecification: React.Dispatch<React.SetStateAction<string>>;
   setTabValue: any;
-  info: any;
   relatedProducts: { id: string; value: string }[];
   setRelatedProducts: any;
+  relatedClients: { id: string; value: string }[];
+  setRelatedClients: any;
   getValues: any;
   setValue: any;
   control: any;
@@ -47,18 +50,28 @@ const Description = (props: DescriptionProps) => {
     specification,
     setSpecification,
     setTabValue,
-    info,
     relatedProducts,
     setRelatedProducts,
     setPage,
     setPostSectionKey,
+    relatedClients,
+    setRelatedClients,
   } = props;
 
   const [productCodes, setProductCodes] = useState([]);
+  const [clientCodes, setClientCodes] = useState([]);
+  const [info, setInfo] = useState<any>({});
 
+  // Getting Category | Collection | Contact | Stock || Products || Clients
   useEffect(() => {
+    useProductInfo().then((data) => {
+      setInfo(data);
+    });
     useAllProductCode().then((data) => {
       setProductCodes(data);
+    });
+    useAllClientCode().then((data) => {
+      setClientCodes(data);
     });
   }, []);
 
@@ -118,22 +131,24 @@ const Description = (props: DescriptionProps) => {
             <div className={`field`}>
               <label>Related Products</label>
               <RelatedProducts
+                placeholder="Product Code"
                 productCodes={productCodes}
                 chips={relatedProducts}
                 setChips={setRelatedProducts}
               />
             </div>
           </div>
-          {/* <div className="mb-20">
+          <div className="mb-20">
             <div className={`field`}>
               <label>Related Clients</label>
               <RelatedProducts
-                productCodes={productCodes}
-                chips={relatedProducts}
-                setChips={setRelatedProducts}
+                placeholder="Client Name"
+                productCodes={clientCodes}
+                chips={relatedClients}
+                setChips={setRelatedClients}
               />
             </div>
-          </div> */}
+          </div>
           <div className="mb-20">
             <div className={`field`}>
               <label>Upload Media</label>

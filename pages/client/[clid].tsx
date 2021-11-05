@@ -55,7 +55,7 @@ const AddClient = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
+  const [categories, setCategories] = useState([]);
 
   const [createClient, createState] = useMutation(CREATE_CLIENT);
   const [editClient, editState] = useMutation(EDIT_CLIENT);
@@ -74,7 +74,7 @@ const AddClient = () => {
         dispatch(setMedia({ path: asPath, src: data?.image }));
         // @ts-ignore
         setDescription(data?.description);
-        setCategory(data.relatedCategory);
+        setCategories(data.categories);
       });
     }
   }, [token]);
@@ -85,13 +85,13 @@ const AddClient = () => {
       description,
       logo: images[0],
       isPublished: data.isPublished,
-      relatedCategory: category,
+      categories,
     };
 
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
-    setCategory('');
-    setDescription('');
+    // methods.reset(defaultValues);
+    // dispatch(resetMediaSelection());
+    // setCategory('');
+    // setDescription('');
 
     if (isEditMode) {
       await editClient({
@@ -161,11 +161,14 @@ const AddClient = () => {
                   name="clientName"
                 />
               </div>
-              <div className="col-4 mt-20">
-                <Category productCode={category} setProductCode={setCategory} />
+              <div className="col-12 mt-20">
+                <Category
+                  categories={categories}
+                  setCategories={setCategories}
+                />
               </div>
               <div
-                className={isEditMode ? 'col-6 ml-60 mt-20' : 'col-6 ml-60'}
+                className={isEditMode ? 'col-6 mt-20' : 'col-6'}
                 style={{
                   transform: isEditMode ? '' : 'translateY(15px)',
                   flexDirection: 'row',

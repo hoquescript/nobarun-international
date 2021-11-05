@@ -7,7 +7,7 @@ const GET_CLIENT_BY_ID = gql`
       id
       clientName
       image: logo
-      relatedCategory
+      categories
       description
       isPublished
     }

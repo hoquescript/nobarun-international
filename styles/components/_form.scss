@@ -18,6 +18,9 @@
   transition: 0.3s;
   font-family: $font;
   background-color: #fff;
+  &:disabled {
+    background-color: #ddd;
+  }
   &::placeholder {
     color: rgba($color: $lightTextColor, $alpha: 0.7);
   }
@@ -47,6 +50,9 @@
   align-items: flex-start;
   input {
     display: none;
+    &:disabled {
+      background-color: #ddd;
+    }
 
     &:checked ~ .content:after {
       transform: scale(0.5);

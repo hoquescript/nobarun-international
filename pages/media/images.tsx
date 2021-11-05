@@ -152,9 +152,9 @@ const Images = () => {
       <div className="images-gallery" style={{ maxHeight: 'max-content' }}>
         {[...images]
           .reverse()
-          // .filter((image) =>
-          //   image.name.toLowerCase().startsWith(imageSearch.toLowerCase()),
-          // )
+          .filter((image) =>
+            image.name.toLowerCase().startsWith(search.toLowerCase()),
+          )
           .map((image, idx) => {
             let name: string;
             if (image.name?.length > 20)

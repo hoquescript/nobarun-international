@@ -54,6 +54,10 @@
     font-family: inherit;
     cursor: pointer;
     transition: all 0.3s;
+    &:disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
     &:hover {
       background-color: #ababab;
       color: #fff;

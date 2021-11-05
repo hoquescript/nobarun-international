@@ -88,7 +88,7 @@ const Videos = () => {
         <div className="col-6">
           <div
             className="field youtube custom_youtube"
-            style={{ border: '1px solid #dbdbdb;' }}
+            style={{ border: '1px solid #dbdbdb' }}
           >
             <AiFillYoutube className="youtube__icon" />
             <input

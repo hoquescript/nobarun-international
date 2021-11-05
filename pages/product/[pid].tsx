@@ -14,7 +14,6 @@ import Description from '../../components/products/tab/description';
 import SEO from '../../components/products/tab/seo';
 import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
-import useProductInfo from '../../hooks/Products/useProductInfo';
 
 import {
   useTypedDispatch,
@@ -28,7 +27,6 @@ import {
 } from '../../store/slices/products';
 import useProductById from '../../hooks/Products/useProductById';
 import { useRouter } from 'next/router';
-import Version from '../../components/products/AddProduct/Version';
 
 const CREATE_NEW_PRODUCTS = gql`
   mutation addProduct($data: CreateNewProduct!) {
@@ -92,17 +90,9 @@ const AddProduct = () => {
 
   const [isEditMode, setIsEditMode] = useState(false);
   const [tabValue, setTabValue] = useState('description');
-  const [info, setInfo] = useState({});
 
   const [createNewProduct, createState] = useMutation(CREATE_NEW_PRODUCTS);
   const [editProduct, editState] = useMutation(EDIT_PRODUCT);
-
-  // Getting Category | Collection | Contact | Stock
-  useEffect(() => {
-    useProductInfo().then((data) => {
-      setInfo(data);
-    });
-  }, []);
 
   const KeyPoint = useState<{ [k: string]: IKeyPoints }>(defaultKeypoints);
   const question = useState<{ [k: string]: IQuestions }>(defaultQuestions);
@@ -115,6 +105,10 @@ const AddProduct = () => {
   const [relatedProducts, setRelatedProducts] = useState<
     { id: string; value: string }[]
   >([]);
+  const [relatedClients, setRelatedClients] = useState<
+    { id: string; value: string }[]
+  >([]);
+
   const [keywords, setKeywords] = useState<string[]>([]);
   const tagState = useState<string[]>([]);
 
@@ -135,6 +129,7 @@ const AddProduct = () => {
     setFeatures('');
     setSpecification('');
     setRelatedProducts([]);
+    setRelatedClients([]);
     setKeywords([]);
     tagState[1]([]);
     dispatch(resetProductMedia());
@@ -171,6 +166,7 @@ const AddProduct = () => {
       originalPrice: +data.price,
       discount: +data.discount,
       relatedProducts: relatedProducts.map((product) => product.value),
+      relatedClients: relatedClients.map((client) => client.value),
       featured: productMedia.featured,
       images: productMedia.images,
       videos: productMedia.videos,
@@ -186,9 +182,6 @@ const AddProduct = () => {
     if (data.collectionName === '') delete product.collectionName;
     if (data.stockStatus === '') delete product.stockStatus;
     if (data.contactPerson === '') delete product.contactPerson;
-    delete product.isBangla;
-
-    formReset();
 
     if (isEditMode) {
       try {
@@ -200,13 +193,17 @@ const AddProduct = () => {
             },
           },
         });
-      } catch (Error) {
-      } finally {
-        setTabValue('description');
         if (!editState.error) {
           alert.info('Edited Product Successfully');
+          setTabValue('description');
         } else {
-          alert.error(editState.error.message);
+          throw editState.error.message;
+        }
+      } catch (error) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Product Successfully');
         }
       }
     } else {
@@ -216,19 +213,24 @@ const AddProduct = () => {
             data: product,
           },
         });
-      } catch (Error) {
-      } finally {
-        setTabValue('description');
         if (!createState.error) {
           alert.success('Added New Product Successfully');
+          setTabValue('description');
+          formReset();
         } else {
-          //! We have to further do error checking by changing one of the banglaUrl to banglaVersionLink
-          alert.error(createState.error.message);
+          throw createState.error.message;
+        }
+      } catch (error) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Added New Product Successfully');
         }
       }
     }
   };
 
+  console.log(relatedProducts);
   const handleError = (error) => {
     Object.values(error).forEach((err) => {
       // @ts-ignore
@@ -252,6 +254,7 @@ const AddProduct = () => {
         setFeatures(data.features);
         setSpecification(data.specification);
         setRelatedProducts(data.relatedProducts);
+        setRelatedClients(data.relatedClients);
         setKeywords(data.keywords);
         tagState[1](data.tags);
       });
@@ -319,13 +322,12 @@ const AddProduct = () => {
                 specification={specification}
                 setSpecification={setSpecification}
                 setTabValue={setTabValue}
-                info={info}
                 relatedProducts={relatedProducts}
                 setRelatedProducts={setRelatedProducts}
                 setPage={setPage}
                 setPostSectionKey={setPostSectionKey}
-                // fileBtn={fileBtn}
-                // setFileBtn={setFileBtn}
+                relatedClients={relatedClients}
+                setRelatedClients={setRelatedClients}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

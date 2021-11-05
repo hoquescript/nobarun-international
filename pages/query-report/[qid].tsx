@@ -75,46 +75,63 @@ const AddNewQuery = () => {
       productCode: data.productCode,
       attachment: attachment.images[0],
     };
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
 
-    // @ts-ignore
     if (isEditMode) {
-      await editQuery({
-        variables: {
-          data: {
-            editId: qid,
-            editableObject: query,
+      try {
+        await editQuery({
+          variables: {
+            data: {
+              editId: qid,
+              editableObject: query,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Query Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Query Successfully');
+        } else {
+          alert.error(editState.error.message);
+        }
+      } catch (error) {
+        alert.error(error.message);
       }
     } else {
-      await createQuery({
-        variables: {
-          data: query,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Query Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createQuery({
+          variables: {
+            data: query,
+          },
+        });
+
+        if (!createState.error) {
+          alert.success('Posted Query Successfully');
+          // Resetting
+          methods.reset(defaultValues);
+          dispatch(resetMediaSelection());
+        } else {
+          alert.error(createState.error.message);
+        }
+      } catch (error) {
+        alert.error(error.message);
       }
     }
+  };
+
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
   };
 
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
     if (qid !== 'add-new-query') {
       setIsEditMode(true);
-      useQueryById(qid, token).then((data) => {
+      useQueryById(qid, token).then((data: any) => {
         methods.reset(data);
-        // @ts-ignore
-        setAttachment(data.attachment);
+        setProductCode(data.productCode);
+        //! Attachment Resetting
+        // setAttachment(data.attachment);
       });
     }
   }, [token]);
@@ -150,7 +167,7 @@ const AddNewQuery = () => {
           <Textfield
             name="address"
             label="Address"
-            required
+            // required
             placeholder="Enter your Address"
           />
         </div>
@@ -180,7 +197,7 @@ const AddNewQuery = () => {
         <div className="center mt-30">
           <button
             className="btn-green"
-            onClick={methods.handleSubmit(addNewQuery)}
+            onClick={methods.handleSubmit(addNewQuery, handleError)}
           >
             Save
           </button>

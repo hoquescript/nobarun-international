@@ -23,14 +23,14 @@ const PasswordChecker = (props: PasswordCheckerProps) => {
   return (
     <div className="grid two mb-20">
       <Textfield
-        // required
+        required
         name="password"
         type="password"
         label="Password"
         placeholder="Enter your Password"
       />
       <Textfield
-        // required
+        required
         name="confirmPassword"
         type="password"
         label="Confirm Password"

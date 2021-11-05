@@ -40,7 +40,14 @@ const GET_PRODUCT_BY_ID = gql`
       slug
       url
       siteMap
-      relatedProducts
+      populatedRelatedProducts {
+        value: id
+        id: productName
+      }
+      relatedClients {
+        value: id
+        id: clientName
+      }
       createdAt
     }
   }
@@ -72,6 +79,7 @@ const useProductById = async (catid) => {
     mainContent: {
       isPublished: productById.isPublished,
       productName: productById.productName,
+      banglaVersionLink: productById.banglaVersionLink,
       price: productById.price,
       originalPrice: productById.originalPrice,
       discount: productById.discount,
@@ -100,7 +108,8 @@ const useProductById = async (catid) => {
     specification: productById.specification,
     keywords: productById.keywords,
     features: productById.features,
-    relatedProducts: productById.relatedProducts,
+    relatedProducts: productById.populatedRelatedProducts,
+    relatedClients: productById.relatedClients,
     createdAt: productById.createdAt,
   };
   return product;

@@ -172,7 +172,7 @@ const Redirect = () => {
   }
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  console.log(currentPage);
   return (
     <div className="container center">
       <Modal
@@ -207,7 +207,10 @@ const Redirect = () => {
             <div className="row flex">
               <div className="col-5">
                 <div className="field video" style={{ position: 'relative' }}>
-                  <FaHome className="video__icon" />
+                  <FaHome
+                    className="video__icon"
+                    style={{ transform: 'translate(2rem, 3.5rem)' }}
+                  />
                   <input
                     type="text"
                     className="custom-input video__input"
@@ -221,7 +224,10 @@ const Redirect = () => {
               </div>
               <div className="col-5">
                 <div className="field video" style={{ position: 'relative' }}>
-                  <FaHome className="video__icon" />
+                  <FaHome
+                    className="video__icon"
+                    style={{ transform: 'translate(2rem, 3.5rem)' }}
+                  />
                   <input
                     type="text"
                     className="custom-input video__input"
@@ -281,15 +287,17 @@ const Redirect = () => {
       </ul>
       <nav className={styles.pagination}>
         <ul className={styles.pagination__list}>
+          {/* {+currentPage !== 1 && ( */}
           <li className={styles.pagination__item}>
             <button
+              disabled={currentPage === 1}
               className={styles.pagination__button}
               onClick={() => setCurrentPage(currentPage - 1)}
             >
               <FaArrowLeft />
             </button>
           </li>
-
+          {/* )} */}
           {pageNumbers.map((number) => (
             <li key={number} className={styles.pagination__item}>
               <button
@@ -304,6 +312,7 @@ const Redirect = () => {
           ))}
           <li className={styles.pagination__item}>
             <button
+              disabled={currentPage === pageNumbers.length}
               className={styles.pagination__button}
               onClick={() => setCurrentPage(currentPage + 1)}
             >
@@ -315,6 +324,7 @@ const Redirect = () => {
     </div>
   );
 };
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession({ req: context.req });
   if (!session) {

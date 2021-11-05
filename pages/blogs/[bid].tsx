@@ -15,6 +15,7 @@ import FileButton from '../../components/controls/file';
 import Togglebar from '../../components/controls/togglebar';
 import Toolbar from '../../components/shared/Toolbar';
 import useBlogInfo from '../../hooks/Blogs/useBlogInfo';
+import SeoTab from '../../components/blogs/SeoTab';
 
 import {
   useTypedSelector,
@@ -28,6 +29,8 @@ import {
 } from '../../store/slices/blogs';
 import useBlogById from '../../hooks/Blogs/useBlogById';
 import { useRouter } from 'next/router';
+import { TabMenu, TabContent } from '../../components/shared/Tabmenu';
+import SlugGenerator from '../../components/blogs/SlugGenerator';
 
 const ADD_NEW_BLOG = gql`
   mutation addNewBlog($data: CreateNewBlogInput!) {
@@ -70,10 +73,12 @@ const AddNewPost = () => {
   const router = useRouter();
   const bid = router.query.bid;
 
+  const [tabValue, setTabValue] = useState('description');
   const [isEditMode, setIsEditMode] = useState(false);
   const [page, setPage] = useState('');
   const [postSectionKey, setPostSectionKey] = useState('');
   const [tags, setTags] = useState<string[]>([]);
+  const [keywords, setKeywords] = useState<string[]>([]);
   const PostSectionState =
     useState<{ [k: string]: IPostSection }>(defaultPostSection);
   const [info, setInfo] = useState<{ [k: string]: any }>({});
@@ -93,7 +98,8 @@ const AddNewPost = () => {
   const blogPostSections = useTypedSelector(
     (state) => state.blogs.blogsMedia.postSection,
   );
-  const postBlogHandler = (data) => {
+
+  const handlePostBlog = (data) => {
     if (!blogMedia.featured) {
       alert.error('Please set a Featured Blog Image');
       return;
@@ -119,10 +125,11 @@ const AddNewPost = () => {
       author: userId,
     };
 
-    methods.reset(defaultValues);
-    dispatch(resetBlogMedia());
-    setTags([]);
-    PostSectionState[1](defaultPostSection);
+    // methods.reset(defaultValues);
+    // dispatch(resetBlogMedia());
+    // setTags([]);
+    // setKeywords([]);
+    // PostSectionState[1](defaultPostSection);
 
     if (isEditMode) {
       editBlog({
@@ -139,17 +146,25 @@ const AddNewPost = () => {
         alert.error(editState.error.message);
       }
     } else {
-      addBlog({
-        variables: {
-          data: post,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Created Post Successfully');
-      } else {
-        alert.error(createState.error.message);
-      }
+      console.log(post);
+      // addBlog({
+      //   variables: {
+      //     data: post,
+      //   },
+      // });
+      // if (!createState.error) {
+      //   alert.success('Created Post Successfully');
+      // } else {
+      //   alert.error(createState.error.message);
+      // }
     }
+  };
+
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
   };
 
   useEffect(() => {
@@ -190,7 +205,7 @@ const AddNewPost = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={methods.handleSubmit(postBlogHandler)}
+              onClick={methods.handleSubmit(handlePostBlog, handleError)}
             >
               <FaSave />
             </button>
@@ -204,77 +219,101 @@ const AddNewPost = () => {
             </button>
           </div>
         </div>
-        <div id="description">
-          <div className="wrapper-section">
-            <div className="wrapper-section__title">
-              <input
-                className="page-headline-input mb-20"
-                placeholder="Title of the Blog Post"
-                {...methods.register('blogTitle')}
-              />
-            </div>
-            <div className="wrapper-section__content">
-              <div className="row mb-20">
-                <div className="col-4">
-                  <Combobox
-                    name="category"
-                    label="Category"
-                    options={info.categories || []}
-                  />
-                </div>
-                <div className="col-4">
-                  <Combobox
-                    name="relatedProduct"
-                    label="Related Product Category"
-                    options={info.relatedCategories || []}
-                  />
-                </div>
-                <div className="col-4">
-                  <Combobox
-                    name="contactPerson"
-                    label="Contact Person"
-                    options={info.contacts || []}
-                  />
-                </div>
-              </div>
-              <div className="row" style={{ alignItems: 'baseline' }}>
-                <div className="col-5">
-                  <div className="mb-20 flex">
-                    <h4 className="heading-tertiary mr-20">Featured Post</h4>
-                    <Checkbox name="isFeatured" />
+        <TabMenu
+          menus={['Description', 'SEO']}
+          value={tabValue}
+          setTabValue={setTabValue}
+        >
+          <TabContent id="description" value={tabValue}>
+            <div id="description">
+              <div className="wrapper-section">
+                <div className="wrapper-section__content">
+                  <div className="row">
+                    <SlugGenerator
+                      // @ts-ignore
+                      control={methods.control}
+                      setValue={methods.setValue}
+                    />
+                  </div>
+                  <div className="row mb-20">
+                    <div className="col-4">
+                      <Combobox
+                        required
+                        name="category"
+                        label="Category"
+                        options={info.categories || []}
+                      />
+                    </div>
+                    <div className="col-4">
+                      <Combobox
+                        name="relatedProduct"
+                        label="Related Product Category"
+                        options={info.relatedCategories || []}
+                      />
+                    </div>
+                    <div className="col-4">
+                      <Combobox
+                        name="contactPerson"
+                        label="Contact Person"
+                        options={info.contacts || []}
+                      />
+                    </div>
+                  </div>
+                  <div className="row" style={{ alignItems: 'baseline' }}>
+                    <div className="col-5">
+                      <div className="mb-20 flex">
+                        <h4 className="heading-tertiary mr-20">
+                          Featured Post
+                        </h4>
+                        <Checkbox name="isFeatured" />
+                      </div>
+                    </div>
+                    <div className="col-7">
+                      <FileButton page={'bMain'} showMedia setPage={setPage} />
+                    </div>
                   </div>
                 </div>
-                <div className="col-7">
-                  <FileButton page={'bMain'} showMedia setPage={setPage} />
+              </div>
+              <PostSection
+                keyPointState={PostSectionState}
+                setPage={setPage}
+                setPostSectionKey={setPostSectionKey}
+              />
+              {/* <RichEditor /> */}
+              <div className="wrapper-section">
+                <div className="wrapper-section__title flex sb">
+                  <h3 className="heading-secondary">Post Tags</h3>
+                </div>
+                <div className="wrapper-section__content">
+                  <div className="field mt-20">
+                    <Chip chips={tags} setChips={setTags} />
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <PostSection
-            keyPointState={PostSectionState}
-            setPage={setPage}
-            setPostSectionKey={setPostSectionKey}
-          />
-          {/* <RichEditor /> */}
-          <div className="wrapper-section">
-            <div className="wrapper-section__title flex sb">
-              <h3 className="heading-secondary">Post Tags</h3>
-            </div>
-            <div className="wrapper-section__content">
-              <div className="field mt-20">
-                <Chip chips={tags} setChips={setTags} />
+              <div className="center mt-40 mb-30">
+                <button
+                  className="btn-green"
+                  onClick={methods.handleSubmit(handlePostBlog, handleError)}
+                >
+                  Post
+                </button>
               </div>
             </div>
-          </div>
-          <div className="center mt-40 mb-30">
-            <button
-              className="btn-green"
-              onClick={methods.handleSubmit(postBlogHandler)}
-            >
-              Post
-            </button>
-          </div>
-        </div>
+          </TabContent>
+          <TabContent id="seo" value={tabValue}>
+            <SeoTab
+              register={methods.register}
+              control={methods.control}
+              setValue={methods.setValue}
+              chips={keywords}
+              setChips={setKeywords}
+              handleAddProduct={methods.handleSubmit(
+                handlePostBlog,
+                handleError,
+              )}
+            />
+          </TabContent>
+        </TabMenu>
       </div>
     </FormProvider>
   );

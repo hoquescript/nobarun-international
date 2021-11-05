@@ -4,6 +4,7 @@ import fuzzyMatch from '../../../helpers/fuzzySearch';
 import styles from '../../../styles/pages/products.module.scss';
 
 interface RelatedProductsProps {
+  placeholder?: string;
   chips: { id: string; value: string }[];
   setChips: any;
   productCodes?: { id: string; value: string }[];
@@ -22,7 +23,7 @@ const defaultState = (products) => {
 };
 
 const RelatedProducts = (props: RelatedProductsProps) => {
-  const { chips, setChips, productCodes } = props;
+  const { placeholder, chips, setChips, productCodes } = props;
   const [suggestions, setSuggestions] = useState<any>({});
   const [showSuggestion, setShowSuggestion] = useState(false);
 
@@ -75,7 +76,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
         <input
           type="text"
           className={`${styles.chip__input}`}
-          placeholder="Search Product Code"
+          placeholder={`Search ${placeholder}`}
           onClick={() => setShowSuggestion(true)}
           onChange={onChangeHandler}
         />

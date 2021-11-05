@@ -7,9 +7,10 @@ interface CheckboxProps {
   required?: boolean;
   children?: React.ReactNode;
   checked?: boolean;
+  label?: string;
 }
 const Checkbox = (props: CheckboxProps) => {
-  const { name, checked, required, className, children } = props;
+  const { name, checked, required, label, children } = props;
 
   const { register } = useFormContext();
 
@@ -22,7 +23,10 @@ const Checkbox = (props: CheckboxProps) => {
             id={name}
             // checked={checked}
             {...register(name, {
-              required: `Please fill the value of ${children} field`,
+              required: {
+                value: required as boolean,
+                message: `Please fill the value of ${label} field`,
+              },
             })}
           />
           <div className="content">{children}</div>
@@ -33,6 +37,7 @@ const Checkbox = (props: CheckboxProps) => {
 };
 Checkbox.defaultProps = {
   // checked: false,
+  label: 'Checkbox',
   required: false,
 };
 export default Checkbox;
