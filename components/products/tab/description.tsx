@@ -151,7 +151,9 @@ const Description = (props: DescriptionProps) => {
           </div>
           <div className="mb-20">
             <div className={`field`}>
-              <label>Upload Media</label>
+              <label>
+                Upload Media <sup style={{ color: 'red' }}>*</sup>
+              </label>
               <FileButton page={'pMain'} showMedia setPage={setPage} />
             </div>
           </div>

@@ -126,7 +126,7 @@ const Table = (props: TableProps) => {
             ))}
           </thead>
           <tbody {...getTableBodyProps()}>
-            {page.map((row, idx) => {
+            {page.reverse().map((row, idx) => {
               prepareRow(row);
               let editLink: string;
               if (pageName === 'account') editLink = 'settings/accounts';

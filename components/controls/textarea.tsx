@@ -5,18 +5,26 @@ interface TextareaProps {
   label: string;
   name: string;
   placeholder?: string;
+  required?: boolean;
 }
 const Textarea = (props: TextareaProps) => {
-  const { label, name, placeholder } = props;
+  const { label, name, placeholder, required } = props;
   const { register } = useFormContext();
 
   return (
     <div className="field">
-      <label>{label}</label>
+      <label>
+        {label} {required && <sup style={{ color: 'red' }}>*</sup>}
+      </label>
       <textarea
         className="custom-input"
         placeholder={placeholder}
-        {...register(name)}
+        {...register(name, {
+          required: {
+            value: required as boolean,
+            message: `Please fill the value of ${label} field`,
+          },
+        })}
       ></textarea>
     </div>
   );

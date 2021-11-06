@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
 
@@ -41,6 +42,7 @@ const useReviewById = async (qid, token) => {
       productCode: reviewById.productCode,
       reviewMedia: reviewById.reviewMedia,
       isPublished: reviewById.isPublished,
+      createdAt: format(new Date(reviewById.createdAt), 'yyyy-MM-dd'),
     };
     return review;
   } else return {};

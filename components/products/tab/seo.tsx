@@ -5,7 +5,6 @@ import {
   UseFormRegister,
   useWatch,
 } from 'react-hook-form';
-import slugStringGenarator from '../../../helpers/slugGenerator';
 
 import Chip from '../../controls/chip';
 import Textfield from '../../controls/textfield';
@@ -65,16 +64,7 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
               : `${title.length} of 70`}
           </span>
         </div>
-        <input
-          type="text"
-          className="custom-input"
-          {...register('SeoTitle', {
-            maxLength: {
-              value: 70,
-              message: 'Title cannot be more than 70 Characters',
-            },
-          })}
-        />
+        <input type="text" className="custom-input" {...register('SeoTitle')} />
       </div>
     </>
   );
@@ -116,13 +106,7 @@ const SEO = (props: SEOProps) => {
               <textarea
                 className="custom-input"
                 placeholder="Enter Meta Description"
-                {...register('title', {
-                  maxLength: {
-                    value: 160,
-                    message:
-                      'Meta description cannot be more than 160 Characters',
-                  },
-                })}
+                {...register('title')}
               ></textarea>
             </div>
           </div>

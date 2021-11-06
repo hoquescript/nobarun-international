@@ -202,7 +202,7 @@ const Reviews = () => {
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {page.map((row) => {
+              {page.reverse().map((row) => {
                 prepareRow(row);
                 return (
                   <tr {...row.getRowProps()}>

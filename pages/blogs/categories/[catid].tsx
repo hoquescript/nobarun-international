@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
-import { FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
@@ -85,7 +85,7 @@ const AddCategory = () => {
     useAllBlogCategories().then((category) => setCategories(category));
   }, []);
 
-  const onSubmit = (data) => {
+  const onSubmit = (data: any) => {
     const category = {
       name: data.name,
       description,
@@ -95,40 +95,66 @@ const AddCategory = () => {
       parentCategory: data.parentCategory,
       id: uuid(),
     };
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
-    setDescription('');
 
     if (isEditMode) {
       // @ts-ignore
       delete category.id;
       delete category.parentCategory;
-      editCategory({
-        variables: {
-          data: {
-            editId: catid,
-            editableObject: category,
+      try {
+        editCategory({
+          variables: {
+            data: {
+              editId: catid,
+              editableObject: category,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Blog Category Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Blog Category Successfully');
+        } else {
+          throw editState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Blog Category Successfully');
+        }
       }
     } else {
-      createCategory({
-        variables: {
-          data: category,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Blog Category Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        createCategory({
+          variables: {
+            data: category,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Posted Blog Category Successfully');
+
+          //Resetting
+          methods.reset(defaultValues);
+          dispatch(resetMediaSelection());
+          setDescription('');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Posted Blog Category Successfully');
+        }
       }
     }
   };
+
+  const handleError = (error) => {
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
+  };
+
   return (
     <div className="container center">
       <Toolbar />
@@ -140,9 +166,16 @@ const AddCategory = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={methods.handleSubmit(onSubmit)}
+              onClick={methods.handleSubmit(onSubmit, handleError)}
             >
               <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => router.push('/blogs/categories/add')}
+            >
+              <FaPlus />
             </button>
             <button
               type="button"
@@ -203,7 +236,7 @@ const AddCategory = () => {
         <div className="center mt-30">
           <button
             className="btn-green"
-            onClick={methods.handleSubmit(onSubmit)}
+            onClick={methods.handleSubmit(onSubmit, handleError)}
           >
             Save
           </button>

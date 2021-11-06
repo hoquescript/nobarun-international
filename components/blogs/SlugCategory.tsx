@@ -21,13 +21,19 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
     <>
       <div className="col-12">
         <Textfield
+          required
           name="name"
           label="Category Name"
           placeholder="Enter your Name"
         />
       </div>
       <div className="col-12">
-        <Textfield name="slug" label="Slug" placeholder="Enter your Name" />
+        <Textfield
+          required
+          name="slug"
+          label="Slug"
+          placeholder="Enter your Name"
+        />
       </div>
     </>
   );

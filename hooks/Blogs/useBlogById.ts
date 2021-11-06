@@ -14,6 +14,12 @@ const GET_BLOG_BY_ID = gql`
       category
       isFeatured
       isPublished
+      slug
+      title
+      SeoTitle
+      url
+      siteMap
+      keywords
       sections {
         id
         title
@@ -49,6 +55,11 @@ const useBlogById = async (catid) => {
       relatedProduct: blogById.relatedProduct,
       contactPerson: blogById.contactPerson,
       isFeatured: blogById.isFeatured,
+      slug: blogById.slug,
+      title: blogById.title,
+      SeoTitle: blogById.SeoTitle,
+      url: blogById.url,
+      siteMap: blogById.siteMap,
     },
     main: {
       featured: blogById.featured,
@@ -60,6 +71,7 @@ const useBlogById = async (catid) => {
       contents,
     },
     tags: blogById.tags,
+    keywords: blogById.keywords,
   };
   return blog;
 };

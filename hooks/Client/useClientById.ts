@@ -10,6 +10,7 @@ const GET_CLIENT_BY_ID = gql`
       categories
       description
       isPublished
+      isFeatured
     }
   }
 `;

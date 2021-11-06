@@ -7,6 +7,7 @@ import styles from '../../styles/pages/products.module.scss';
 interface RelatedProductsProps {
   productCode: string;
   setProductCode: any;
+  required?: boolean;
 }
 
 const defaultState = (products) => {
@@ -22,7 +23,7 @@ const defaultState = (products) => {
 };
 
 const RelatedProducts = (props: RelatedProductsProps) => {
-  const { productCode, setProductCode } = props;
+  const { productCode, setProductCode, required } = props;
   const [productCodes, setProductCodes] = useState<
     { id: string; value: string }[]
   >([]);
@@ -69,7 +70,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
     <div className="field">
       <label>
         Product Code
-        {/* {<sup style={{ color: 'red' }}>*</sup>} */}
+        {required && <sup style={{ color: 'red', marginLeft: '.5rem' }}>*</sup>}
       </label>
       <div
         className={`field ${styles.pCode}`}

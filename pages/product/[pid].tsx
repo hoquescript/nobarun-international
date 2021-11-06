@@ -3,8 +3,8 @@ import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
-import { useForm, useWatch, FormProvider } from 'react-hook-form';
-import { FaSave, FaTimes } from 'react-icons/fa';
+import { useForm, FormProvider } from 'react-hook-form';
+import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import Togglebar from '../../components/controls/togglebar';
 import { v4 as uuid } from 'uuid';
 
@@ -292,6 +292,13 @@ const AddProduct = () => {
                 onClick={methods.handleSubmit(handleAddProduct, handleError)}
               >
                 <FaSave />
+              </button>
+              <button
+                type="button"
+                className="btn-icon-white ml-20"
+                onClick={() => router.push('/product/add-new-product')}
+              >
+                <FaPlus />
               </button>
               <button
                 type="button"

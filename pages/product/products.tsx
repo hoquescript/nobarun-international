@@ -30,7 +30,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [viewType, setViewType] = useState('grid');
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState('');
+  const [sortBy, setSortBy] = useState('name');
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
       new Date(),
@@ -152,10 +152,17 @@ const Products = () => {
                     })
                   );
                 })
+                .reverse()
                 .sort((firstEl, secondEl) => {
-                  if (firstEl[sortBy] < secondEl[sortBy]) return -1;
-                  if (firstEl[sortBy] > secondEl[sortBy]) return 1;
-                  return 0;
+                  if (sortBy !== 'date') {
+                    if (firstEl[sortBy] < secondEl[sortBy]) return -1;
+                    if (firstEl[sortBy] > secondEl[sortBy]) return 1;
+                    return 0;
+                  } else {
+                    if (firstEl[sortBy] < secondEl[sortBy]) return -1;
+                    if (firstEl[sortBy] > secondEl[sortBy]) return 1;
+                    return 0;
+                  }
                 })
                 .map((product, idx) => (
                   <div

@@ -74,6 +74,7 @@ export const blogSlice = createSlice({
       }
     },
     setBlogMedia: (state, action) => {
+      state.blogsMedia.main.featured = action.payload.main.featured;
       state.blogsMedia.main.images = action.payload.main.images;
       state.blogsMedia.main.videos = action.payload.main.videos;
       state.blogsMedia.postSection = action.payload.postSection;

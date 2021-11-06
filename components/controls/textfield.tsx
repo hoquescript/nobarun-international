@@ -31,7 +31,6 @@ const Textfield = (props: TextfieldProps) => {
       message: `Please fill the value of ${label} field`,
     },
   });
-
   return (
     <div className={`field ${className}`}>
       <label>

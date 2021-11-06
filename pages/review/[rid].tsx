@@ -6,7 +6,7 @@ import { useAlert } from 'react-alert';
 import { useRouter } from 'next/router';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaSave, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 
 import Toolbar from '../../components/shared/Toolbar';
 import Textarea from '../../components/controls/textarea';
@@ -68,6 +68,13 @@ const AddReview = () => {
   const videos = useTypedSelector((state) => state.ui.reviewMedia.videos);
 
   const addNewReview = async (data) => {
+    if (rating === 0) {
+      alert.error('You must give Rating Stars');
+    }
+    if (productCode === '') {
+      alert.error('You must select a relevant Product');
+    }
+
     const review = {
       ...data,
       createdAt: new Date(data.createdAt),
@@ -79,47 +86,89 @@ const AddReview = () => {
       },
       featuredImage,
     };
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
-    setRating(0);
-    if (!data.createdAt) {
-      delete review.createdAt;
-    }
+
+    // if (!data.createdAt) {
+    //   delete review.createdAt;
+    // }
+
     if (isEditMode) {
-      await editReview({
-        variables: {
-          data: {
-            editId: rid,
-            editableObject: review,
+      try {
+        await editReview({
+          variables: {
+            data: {
+              editId: rid,
+              editableObject: review,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Review Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Review Successfully');
+        } else {
+          throw editState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Review Successfully');
+        }
       }
     } else {
-      await createReview({
-        variables: {
-          data: review,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Posted Query Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createReview({
+          variables: {
+            data: review,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Posted Review Successfully');
+
+          //Resetting
+          methods.reset(defaultValues);
+          dispatch(resetMediaSelection());
+          setRating(0);
+          setProductCode('');
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Posted Review Successfully');
+
+          //Resetting
+          methods.reset(defaultValues);
+          dispatch(resetMediaSelection());
+          setRating(0);
+          setProductCode('');
+        }
       }
     }
   };
+
+  const handleError = (error) => {
+    if (rating === 0) {
+      alert.error('You must give Rating Stars');
+    }
+    if (productCode === '') {
+      alert.error('You must select a relevant Product');
+    }
+
+    Object.values(error).forEach((err) => {
+      // @ts-ignore
+      alert.error(err.message);
+    });
+  };
+
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
     if (rid !== 'add-new-review') {
       setIsEditMode(true);
-      useReviewById(rid, token).then((data) => {
+      useReviewById(rid, token).then((data: any) => {
         methods.reset(data);
-        console.log(data);
-        // @ts-ignore
+        setProductCode(data.productCode);
+        setRating(data.rating);
         dispatch(setMedia({ path: router.asPath, src: data.reviewMedia }));
       });
     }
@@ -139,9 +188,17 @@ const AddReview = () => {
                 <button
                   type="button"
                   className="btn-icon-white ml-20"
-                  onClick={methods.handleSubmit(addNewReview)}
+                  onClick={methods.handleSubmit(addNewReview, handleError)}
                 >
                   <FaSave />
+                </button>
+
+                <button
+                  type="button"
+                  className="btn-icon-white ml-20"
+                  onClick={() => router.push('/review/add-new-review')}
+                >
+                  <FaPlus />
                 </button>
                 <button
                   type="button"
@@ -174,36 +231,42 @@ const AddReview = () => {
                     </div>
                   </div>
                   <div className="col-12 mb-20">
-                    <Textfield name="title" label="Company Name" />
+                    <Textfield name="title" label="Company Name" required />
                   </div>
                   <div className="col-6 mb-20">
-                    <Textfield name="name" label="Your Name" />
+                    <Textfield name="name" label="Your Name" required />
                   </div>
                   <div className="col-6 mb-10">
-                    <Textfield name="email" label="Your e-Mail Address" />
+                    <Textfield
+                      name="email"
+                      label="Your e-Mail Address"
+                      required
+                    />
                   </div>
                   <div className="col-6 mb-20">
                     <Textfield
                       type="date"
                       name="createdAt"
+                      // value="2021-11-29"
                       label="Review Date"
                     />
                   </div>
                   <div className="col-6 mb-20">
                     <ProductCode
+                      required
                       productCode={productCode}
                       setProductCode={setProductCode}
                     />
                   </div>
                   <div className="col-12 mb-10">
-                    <Textarea name="reviewText" label="Your Reviews" />
+                    <Textarea name="reviewText" label="Your Reviews" required />
                   </div>
                   <FileButton showMedia page="review" />
                 </div>
                 <div className="center mt-30">
                   <button
                     className="btn-green"
-                    onClick={methods.handleSubmit(addNewReview)}
+                    onClick={methods.handleSubmit(addNewReview, handleError)}
                   >
                     Save
                   </button>

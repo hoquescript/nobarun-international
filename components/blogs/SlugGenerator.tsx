@@ -21,7 +21,7 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
         <Textfield required name="blogTitle" label="Blog Title" />
       </div>
       <div className="col-12 mb-10">
-        <Textfield name="slug" label="Slug" />
+        <Textfield required name="slug" label="Slug" />
       </div>
     </>
   );

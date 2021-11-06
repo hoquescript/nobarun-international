@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
-import { FaEye, FaSave, FaTimes } from 'react-icons/fa';
+import { FaEye, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { useAlert } from 'react-alert';
 
 import Combobox from '../../components/controls/combobox';
@@ -23,6 +23,7 @@ import Togglebar from '../../components/controls/togglebar';
 import Textfield from '../../components/controls/textfield';
 import Category from '../../components/clients/Category';
 import useClientById from '../../hooks/Client/useClientById';
+import Checkbox from '../../components/controls/checkbox';
 
 const CREATE_CLIENT = gql`
   mutation addClient($data: NewClientInput!) {
@@ -85,6 +86,7 @@ const AddClient = () => {
       description,
       logo: images[0],
       isPublished: data.isPublished,
+      isFeatured: data.isFeatured,
       categories,
     };
 
@@ -145,6 +147,7 @@ const AddClient = () => {
           <h2 className="heading-primary">Add Client</h2>
           <div>
             <Togglebar name="isPublished" />
+
             <button
               type="button"
               className="btn-icon-white ml-20"
@@ -155,7 +158,14 @@ const AddClient = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={() => push('/product/categories')}
+              onClick={() => push('/client/add-new-client')}
+            >
+              <FaPlus />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => push('/client/clients')}
             >
               <FaTimes />
             </button>
@@ -178,8 +188,13 @@ const AddClient = () => {
                   setCategories={setCategories}
                 />
               </div>
+            </div>
+            <div className="row" style={{ alignItems: 'center' }}>
+              <div className="col-4 mt-60">
+                <Checkbox name="isFeatured">Featured Client</Checkbox>
+              </div>
               <div
-                className={isEditMode ? 'col-6 mt-20' : 'col-6'}
+                className="col-8"
                 style={{
                   transform: isEditMode ? '' : 'translateY(15px)',
                   flexDirection: 'row',

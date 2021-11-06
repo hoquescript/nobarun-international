@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { v4 as uuid } from 'uuid';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaSave, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import PostSection, { IPostSection } from '../../components/blogs/PostSection';
 import { gql, useMutation } from '@apollo/client';
 import { GetServerSideProps } from 'next';
@@ -22,6 +22,7 @@ import {
   useTypedDispatch,
 } from '../../hooks/useTypedSelector';
 import {
+  resetBlogMedia,
   selectBlogImage,
   selectBlogVideo,
   setBlogMedia,
@@ -83,9 +84,9 @@ const AddNewPost = () => {
   const [postSectionKey, setPostSectionKey] = useState('');
   const [tags, setTags] = useState<string[]>([]);
   const [keywords, setKeywords] = useState<string[]>([]);
+  const [info, setInfo] = useState<{ [k: string]: any }>({});
   const PostSectionState =
     useState<{ [k: string]: IPostSection }>(defaultPostSection);
-  const [info, setInfo] = useState<{ [k: string]: any }>({});
 
   useEffect(() => {
     useBlogInfo().then((data) => {
@@ -121,6 +122,7 @@ const AddNewPost = () => {
     });
     const post = {
       ...data,
+      keywords,
       featured: blogMedia.featured,
       images: blogMedia.images,
       videos: blogMedia.videos,
@@ -129,39 +131,67 @@ const AddNewPost = () => {
       author: userId,
     };
 
-    // methods.reset(defaultValues);
-    // dispatch(resetBlogMedia());
-    // setTags([]);
-    // setKeywords([]);
-    // PostSectionState[1](defaultPostSection);
-
     if (data.stockStatus === '') delete post.stockStatus;
     if (data.contactPerson === '') delete post.contactPerson;
 
     if (isEditMode) {
-      editBlog({
-        variables: {
-          data: {
-            editId: bid,
-            editableObject: post,
+      try {
+        editBlog({
+          variables: {
+            data: {
+              editId: bid,
+              editableObject: post,
+            },
           },
-        },
-      });
-      if (!editState.error) {
-        alert.info('Edited Post Successfully');
-      } else {
-        alert.error(editState.error.message);
+        });
+        if (!editState.error) {
+          alert.info('Edited Blog Post Successfully');
+          setTabValue('description');
+        } else {
+          alert.error(editState.error.message);
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.info('Edited Blog Post Successfully');
+          setTabValue('description');
+        }
       }
     } else {
-      addBlog({
-        variables: {
-          data: post,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Created Post Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        addBlog({
+          variables: {
+            data: post,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Created Blog Post Successfully');
+
+          // Resetting
+          setTabValue('description');
+          methods.reset(defaultValues);
+          dispatch(resetBlogMedia());
+          setTags([]);
+          setKeywords([]);
+          PostSectionState[1](defaultPostSection);
+        } else {
+          throw createState.error.message;
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Created Blog Post Successfully');
+
+          // Resetting
+          setTabValue('description');
+          methods.reset(defaultValues);
+          dispatch(resetBlogMedia());
+          setTags([]);
+          setKeywords([]);
+          PostSectionState[1](defaultPostSection);
+        }
       }
     }
   };
@@ -180,6 +210,7 @@ const AddNewPost = () => {
         // console.log(data.postSection.contents);
         methods.reset(data.mainContent);
         setTags(data.tags);
+        setKeywords(data.keywords);
         PostSectionState[1](data.postSection.contents);
         dispatch(
           setBlogMedia({
@@ -215,7 +246,13 @@ const AddNewPost = () => {
             >
               <FaSave />
             </button>
-
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => router.push('/blogs/add-new-post')}
+            >
+              <FaPlus />
+            </button>
             <button
               type="button"
               className="btn-icon-white ml-20"
