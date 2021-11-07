@@ -153,15 +153,17 @@ const Products = () => {
                   );
                 })
                 .reverse()
-                .sort((firstEl, secondEl) => {
-                  if (sortBy !== 'date') {
+                .sort((firstEl, secondEl: any) => {
+                  if (sortBy !== 'createdAt') {
                     if (firstEl[sortBy] < secondEl[sortBy]) return -1;
                     if (firstEl[sortBy] > secondEl[sortBy]) return 1;
                     return 0;
                   } else {
-                    if (firstEl[sortBy] < secondEl[sortBy]) return -1;
-                    if (firstEl[sortBy] > secondEl[sortBy]) return 1;
-                    return 0;
+                    console.log(firstEl.createdAt, sortBy);
+                    return (
+                      // @ts-ignore
+                      new Date(secondEl.createdAt) - new Date(firstEl.createdAt)
+                    );
                   }
                 })
                 .map((product, idx) => (

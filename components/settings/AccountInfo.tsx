@@ -21,7 +21,7 @@ interface AccountInfoProps {
 }
 const AccountInfo = (props: AccountInfoProps) => {
   const { images, setImages, setTabValue, isPasswordMatched, control } = props;
-  console.log(isPasswordMatched);
+
   const imageUploadHandler = async (e) => {
     const { files } = e.target;
     if (files) {
