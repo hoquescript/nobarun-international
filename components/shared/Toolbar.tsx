@@ -101,16 +101,16 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
         console.log(url, Key);
         const objectUrl = `${objectBaseUrl}/${Key}`;
-        const dummy = await axios.get(baseUrl, {
-          params: {
-            url: objectUrl,
-            key: objectUrl.replace(
-              'https://nobarun.s3.us-east-2.amazonaws.com/',
-              '',
-            ),
-          },
-        });
-        console.log(dummy);
+        // const dummy = await axios.get(baseUrl, {
+        //   params: {
+        //     url: objectUrl,
+        //     key: objectUrl.replace(
+        //       'https://nobarun.s3.us-east-2.amazonaws.com/',
+        //       '',
+        //     ),
+        //   },
+        // });
+        // console.log(dummy);
 
         console.log(objectUrl);
         dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
