@@ -4,6 +4,7 @@ import { FaEdit, FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import TextEditor from '../../shared/TextEditor';
 import FileButton from '../../controls/file';
+import formatText from '../../../helpers/formatText';
 
 export interface IKeyPoints {
   id: string;
@@ -61,6 +62,7 @@ const KeyPoints = (props: KeyPointsProps) => {
   const saveEditKeyPoints = (idx) => {
     const keyPointsArr = { ...keyPoints };
     keyPointsArr[idx].isDisabled = !keyPointsArr[idx].isDisabled;
+    console.log(keyPointsArr[idx].content);
     setKeyPoints(keyPointsArr);
   };
   const deleteKeyPoints = (idx) => {
@@ -144,9 +146,9 @@ const KeyPoints = (props: KeyPointsProps) => {
               value={keyPoints[point].content}
               multiple
               disabled={keyPoints[point].isDisabled}
-              onChange={(content: string) =>
-                onKeyPointsContentChange(point, 'content', content)
-              }
+              onChange={(content: string) => {
+                onKeyPointsContentChange(point, 'content', content);
+              }}
             />
           </div>
         </div>

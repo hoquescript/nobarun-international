@@ -13,6 +13,7 @@ export const COLUMNS = [
       value.forEach((v) => {
         categories = categories.concat(v).concat(', ');
       });
+      if (value.length === 1) categories = categories.replace(',', '');
       return categories;
     },
   },
@@ -20,6 +21,16 @@ export const COLUMNS = [
     Header: 'Description',
     accessor: 'description',
     Cell: ({ value }) => (value ? value.substring(0, 30).concat('...') : ''),
+  },
+  {
+    Header: 'Featured',
+    accessor: 'isFeatured',
+    Cell: ({ value }) => (
+      <label className={`custom-switch`}>
+        <input type="checkbox" checked={value} />
+        <span>&nbsp;</span>
+      </label>
+    ),
   },
   {
     Header: 'Attachment',

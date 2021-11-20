@@ -14,6 +14,7 @@ import {
   deleteContactImage,
   deleteMedia,
   featuredMedia,
+  setGlobalPage,
   toggleToolbar,
 } from '../../store/slices/ui';
 
@@ -33,6 +34,7 @@ interface FileButtonProps {
     | 'pMain'
     | 'pKeypoint'
     | 'pCategory'
+    | 'pCategoryFeatured'
     | 'pCollection'
     | 'bCategory'
     | 'bPostSection'
@@ -56,6 +58,8 @@ const FileButton = (props: FileButtonProps) => {
     media = useTypedSelector((state) => state.ui.clientMedia);
   if (page === 'pCategory')
     media = useTypedSelector((state) => state.ui.productCategoryMedia);
+  if (page === 'pCategoryFeatured')
+    media = useTypedSelector((state) => state.ui.productCategoryCoverMedia);
   if (page === 'pCollection')
     media = useTypedSelector((state) => state.ui.productCollectionMedia);
   if (page === 'bCategory')
@@ -188,7 +192,7 @@ const FileButton = (props: FileButtonProps) => {
         'pKeypoint',
         'pCollection',
         'bPostSection',
-        // ,
+        'pCategoryFeatured',
         'bCategory',
         'client',
         'contact',
@@ -208,6 +212,11 @@ const FileButton = (props: FileButtonProps) => {
           onClick={() => {
             setPage && setPage(page);
             setPostSectionKey && setPostSectionKey(postKey);
+            if (page === 'pCategoryFeatured') {
+              dispatch(setGlobalPage(page));
+            } else {
+              dispatch(setGlobalPage(''));
+            }
             dispatch(toggleToolbar());
           }}
         >

@@ -13,6 +13,7 @@ interface UIState {
   links: { src: string; name: string }[];
   productMedia: Media;
   productCategoryMedia: Media;
+  productCategoryCoverMedia: Media;
   productCollectionMedia: Media;
   blogCategoryMedia: Media;
   blogsImage: {
@@ -25,6 +26,7 @@ interface UIState {
   contactsMedia: {
     [key: string]: Media;
   };
+  pageName: string;
 }
 const initialState: UIState = {
   showToolbar: false,
@@ -37,6 +39,10 @@ const initialState: UIState = {
   },
   productCategoryMedia: {
     featured: '',
+    images: [],
+    videos: [],
+  },
+  productCategoryCoverMedia: {
     images: [],
     videos: [],
   },
@@ -72,6 +78,7 @@ const initialState: UIState = {
     videos: [],
   },
   contactsMedia: {},
+  pageName: '',
 };
 export const uiSlice = createSlice({
   name: 'ui',
@@ -91,9 +98,13 @@ export const uiSlice = createSlice({
     },
     selectImage: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
-        // if (state.productCategoryMedia.images.length === 2)
-        //   state.productCategoryMedia.images = [];
-        state.productCategoryMedia.images.push(action.payload.src);
+        if (state.pageName === 'pCategoryFeatured') {
+          if (state.productCategoryCoverMedia.images.length < 1)
+            state.productCategoryCoverMedia.images.push(action.payload.src);
+        } else {
+          if (state.productCategoryMedia.images.length < 2)
+            state.productCategoryMedia.images.push(action.payload.src);
+        }
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         if (state.productCollectionMedia.images.length === 1)
@@ -141,6 +152,9 @@ export const uiSlice = createSlice({
       const index = action.payload.index;
       if (page === 'pCategory') {
         state.productCategoryMedia[type].splice(index, 1);
+      }
+      if (page === 'pCategoryFeatured') {
+        state.productCategoryCoverMedia[type].splice(index, 1);
       }
       if (page === 'pCollection') {
         state.productCollectionMedia[type].splice(index, 1);
@@ -211,6 +225,7 @@ export const uiSlice = createSlice({
       state.productMedia.images = [];
       state.productMedia.videos = [];
       state.productCategoryMedia.images = [];
+      state.productCategoryCoverMedia.images = [];
       state.productCollectionMedia.images = [];
       state.blogCategoryMedia.images = [];
       state.reviewMedia.images = [];
@@ -236,6 +251,9 @@ export const uiSlice = createSlice({
       console.log(action.payload.src, index);
       content.splice(index, 1);
     },
+    setGlobalPage: (state, action) => {
+      state.pageName = action.payload;
+    },
   },
 });
 
@@ -256,6 +274,7 @@ export const {
   deleteContactImage,
   setContactImage,
   deleteMediaGallery,
+  setGlobalPage,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

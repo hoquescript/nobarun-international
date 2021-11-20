@@ -7,7 +7,9 @@
   display: flex;
   align-items: flex-start;
   flex-wrap: wrap;
-
+  &:hover {
+    background-color: #f7f7f7;
+  }
   .list & {
     background-color: transparent;
     padding: 0;

@@ -104,6 +104,15 @@ const AddNewPost = () => {
     (state) => state.blogs.blogsMedia.postSection,
   );
 
+  const formReset = () => {
+    // Resetting
+    setTabValue('description');
+    methods.reset(defaultValues);
+    dispatch(resetBlogMedia());
+    setTags([]);
+    setKeywords([]);
+    PostSectionState[1](defaultPostSection);
+  };
   const handlePostBlog = (data) => {
     if (!blogMedia.featured) {
       alert.error('Please set a Featured Blog Image');
@@ -167,14 +176,7 @@ const AddNewPost = () => {
         });
         if (!createState.error) {
           alert.success('Created Blog Post Successfully');
-
-          // Resetting
-          setTabValue('description');
-          methods.reset(defaultValues);
-          dispatch(resetBlogMedia());
-          setTags([]);
-          setKeywords([]);
-          PostSectionState[1](defaultPostSection);
+          formReset();
         } else {
           throw createState.error.message;
         }
@@ -183,14 +185,7 @@ const AddNewPost = () => {
           alert.error(error.message);
         } else {
           alert.success('Created Blog Post Successfully');
-
-          // Resetting
-          setTabValue('description');
-          methods.reset(defaultValues);
-          dispatch(resetBlogMedia());
-          setTags([]);
-          setKeywords([]);
-          PostSectionState[1](defaultPostSection);
+          formReset();
         }
       }
     }
@@ -249,7 +244,10 @@ const AddNewPost = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={() => router.push('/blogs/add-new-post')}
+              onClick={() => {
+                formReset();
+                router.push('/blogs/add-new-post');
+              }}
             >
               <FaPlus />
             </button>

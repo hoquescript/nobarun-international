@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React from 'react';
 import { AiOutlineStar } from 'react-icons/ai';
 import styles from '../../styles/pages/dashboard.module.scss';
@@ -15,30 +16,34 @@ interface ProductProps {
 const Product = (props: ProductProps) => {
   const { product, reviewCount, ratingAverage } = props;
   return (
-    <div className={styles.product}>
-      <img
-        src={product.images && product.images[0]}
-        alt="Product"
-        className={styles.product__image}
-      />
-      <div className="ml-10">
-        <h2 className="heading-tertiary">{product.productName}</h2>
-        <div className="flex mt-10">
-          <h5>{reviewCount} Reviews</h5>
-          <span className={styles.product__circle}>&nbsp;</span>
-          <span className="flex ml-10">
-            <AiOutlineStar />
-            {ratingAverage} ({reviewCount})
-          </span>
+    <Link href={`/product/${product.id}`}>
+      <a>
+        <div className={styles.product}>
+          <img
+            src={product.images && product.images[0]}
+            alt="Product"
+            className={styles.product__image}
+          />
+          <div className="ml-10">
+            <h2 className="heading-tertiary">{product.productName}</h2>
+            <div className="flex mt-10">
+              <h5>{reviewCount} Reviews</h5>
+              <span className={styles.product__circle}>&nbsp;</span>
+              <span className="flex ml-10">
+                <AiOutlineStar />
+                {ratingAverage} ({reviewCount})
+              </span>
+            </div>
+          </div>
+          <div className={styles.product__rating} style={{ display: 'none' }}>
+            <span className="flex">
+              <AiOutlineStar />
+              4.9(71)
+            </span>
+          </div>
         </div>
-      </div>
-      <div className={styles.product__rating} style={{ display: 'none' }}>
-        <span className="flex">
-          <AiOutlineStar />
-          4.9(71)
-        </span>
-      </div>
-    </div>
+      </a>
+    </Link>
   );
 };
 

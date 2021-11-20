@@ -85,6 +85,12 @@ const AddCategory = () => {
     useAllBlogCategories().then((category) => setCategories(category));
   }, []);
 
+  const formReset = () => {
+    //Resetting
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    setDescription('');
+  };
   const onSubmit = (data: any) => {
     const category = {
       name: data.name,
@@ -129,12 +135,8 @@ const AddCategory = () => {
           },
         });
         if (!createState.error) {
+          formReset();
           alert.success('Posted Blog Category Successfully');
-
-          //Resetting
-          methods.reset(defaultValues);
-          dispatch(resetMediaSelection());
-          setDescription('');
         } else {
           throw createState.error.message;
         }
@@ -142,6 +144,7 @@ const AddCategory = () => {
         if (error.message) {
           alert.error(error.message);
         } else {
+          formReset();
           alert.success('Posted Blog Category Successfully');
         }
       }
@@ -173,7 +176,10 @@ const AddCategory = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={() => router.push('/blogs/categories/add')}
+              onClick={() => {
+                formReset();
+                router.push('/blogs/categories/add');
+              }}
             >
               <FaPlus />
             </button>

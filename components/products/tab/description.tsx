@@ -131,7 +131,7 @@ const Description = (props: DescriptionProps) => {
             <div className={`field`}>
               <label>Related Products</label>
               <RelatedProducts
-                placeholder="Product Code"
+                placeholder="Products"
                 productCodes={productCodes}
                 chips={relatedProducts}
                 setChips={setRelatedProducts}
@@ -147,6 +147,13 @@ const Description = (props: DescriptionProps) => {
                 chips={relatedClients}
                 setChips={setRelatedClients}
               />
+            </div>
+          </div>
+          <div className="mb-20">
+            <div className="row">
+              <div className="col-12">
+                <Textfield name="document" label="Attachment" />
+              </div>
             </div>
           </div>
           <div className="mb-20">

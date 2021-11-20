@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import { v4 as uuid } from 'uuid';
-import { FaEye, FaSave, FaTimes } from 'react-icons/fa';
+import { FaEye, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { useAlert } from 'react-alert';
 
 import Combobox from '../../../components/controls/combobox';
@@ -95,6 +95,11 @@ const CategoryForm = () => {
     }
   }, [token]);
 
+  const formReset = () => {
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    setDescription('');
+  };
   const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
     if (!icon) {
@@ -114,9 +119,6 @@ const CategoryForm = () => {
       id: uuid(),
     };
 
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
-    setDescription('');
     if (isEditMode) {
       delete category.parentCategory;
       try {
@@ -150,6 +152,7 @@ const CategoryForm = () => {
         });
         if (!createState.error) {
           alert.success('Posted Product Category Successfully');
+          formReset();
         } else {
           throw createState.error.message;
         }
@@ -158,6 +161,7 @@ const CategoryForm = () => {
           alert.error(error.message);
         } else {
           alert.success('Posted Product Category Successfully');
+          formReset();
         }
       }
     }
@@ -191,6 +195,16 @@ const CategoryForm = () => {
               onClick={methods.handleSubmit(onSubmit, handleError)}
             >
               <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => {
+                formReset();
+                push('/product/categories/add');
+              }}
+            >
+              <FaPlus />
             </button>
             <button
               type="button"
@@ -229,6 +243,18 @@ const CategoryForm = () => {
                 <div className={`field`}>
                   <label>Category Image</label>
                   <FileButton showMedia page="pCategory" />
+                </div>
+              </div>
+              <div
+                className={isEditMode ? 'col-2 mt-20' : 'col-2'}
+                style={{
+                  transform: isEditMode ? '' : 'translateY(15px)',
+                  flexDirection: 'row',
+                }}
+              >
+                <div className={`field`}>
+                  <label>Featured Image</label>
+                  <FileButton showMedia page="pCategoryFeatured" />
                 </div>
               </div>
               <div className="col-12 mt-30">

@@ -296,7 +296,10 @@ const AddProduct = () => {
               <button
                 type="button"
                 className="btn-icon-white ml-20"
-                onClick={() => router.push('/product/add-new-product')}
+                onClick={() => {
+                  formReset();
+                  router.push('/product/add-new-product');
+                }}
               >
                 <FaPlus />
               </button>

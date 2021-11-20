@@ -35,7 +35,7 @@ const Chip = (props: ChipProps) => {
           <input
             type="text"
             className={`${styles.chip__input} mr-20 mb-20`}
-            placeholder="Search"
+            placeholder="Paste Your Tags"
             ref={ref}
           />
           {chips.map((chip, idx) => (

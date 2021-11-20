@@ -41,6 +41,7 @@ const EDIT_CLIENT = gql`
 
 const defaultValues = {
   clientName: '',
+  isFeatured: false,
 };
 
 const AddClient = () => {
@@ -80,6 +81,14 @@ const AddClient = () => {
     }
   }, [token]);
 
+  const formReset = () => {
+    //Resetting
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    setCategories([]);
+    setDescription('');
+  };
+
   const onSubmit = async (data) => {
     const client = {
       clientName: data?.clientName,
@@ -112,13 +121,8 @@ const AddClient = () => {
           },
         });
         if (!createState.error) {
+          formReset();
           alert.success('Posted Client Successfully');
-
-          //Resetting
-          methods.reset(defaultValues);
-          dispatch(resetMediaSelection());
-          setCategories([]);
-          setDescription('');
         } else {
           throw createState.error.message;
         }
@@ -126,7 +130,7 @@ const AddClient = () => {
         if (error.message) {
           alert.error(error.message);
         } else {
-          //Resetting
+          formReset();
           alert.success('Posted Client Successfully');
         }
       }
@@ -158,7 +162,10 @@ const AddClient = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={() => push('/client/add-new-client')}
+              onClick={() => {
+                formReset();
+                push('/client/add-new-client');
+              }}
             >
               <FaPlus />
             </button>

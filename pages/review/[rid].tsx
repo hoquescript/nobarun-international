@@ -67,6 +67,13 @@ const AddReview = () => {
   const images = useTypedSelector((state) => state.ui.reviewMedia.images);
   const videos = useTypedSelector((state) => state.ui.reviewMedia.videos);
 
+  const formReset = () => {
+    //Resetting
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    setRating(0);
+    setProductCode('');
+  };
   const addNewReview = async (data) => {
     if (rating === 0) {
       alert.error('You must give Rating Stars');
@@ -121,13 +128,8 @@ const AddReview = () => {
           },
         });
         if (!createState.error) {
+          formReset();
           alert.success('Posted Review Successfully');
-
-          //Resetting
-          methods.reset(defaultValues);
-          dispatch(resetMediaSelection());
-          setRating(0);
-          setProductCode('');
         } else {
           throw createState.error.message;
         }
@@ -135,13 +137,8 @@ const AddReview = () => {
         if (error.message) {
           alert.error(error.message);
         } else {
+          formReset();
           alert.success('Posted Review Successfully');
-
-          //Resetting
-          methods.reset(defaultValues);
-          dispatch(resetMediaSelection());
-          setRating(0);
-          setProductCode('');
         }
       }
     }
@@ -196,7 +193,10 @@ const AddReview = () => {
                 <button
                   type="button"
                   className="btn-icon-white ml-20"
-                  onClick={() => router.push('/review/add-new-review')}
+                  onClick={() => {
+                    formReset();
+                    router.push('/review/add-new-review');
+                  }}
                 >
                   <FaPlus />
                 </button>

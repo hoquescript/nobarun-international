@@ -15,10 +15,11 @@ interface TextEditorProps {
 }
 
 import 'suneditor/dist/css/suneditor.min.css';
+import formatText from '../../helpers/formatText';
 
 const options = {
   buttonList: [
-    ['font', 'fontSize', 'formatBlock'],
+    // ['font', 'fontSize', 'formatBlock'],
     ['blockquote'],
     ['bold', 'underline', 'italic', 'subscript', 'superscript'],
     ['fontColor', 'hiliteColor'],
@@ -37,7 +38,8 @@ const TextEditor = (props: TextEditorProps) => {
       disable={disabled}
       placeholder="Please Write..."
       setOptions={options}
-      setContents={value}
+      setContents={formatText(value)}
+      // setContents={value}
       onChange={onChange}
     />
   );

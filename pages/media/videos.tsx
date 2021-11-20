@@ -48,7 +48,12 @@ const Videos = () => {
   }, [links]);
 
   const youtubeLinkHandler = () => {
-    dispatch(addYoutubeLink(link));
+    dispatch(
+      addYoutubeLink({
+        name: 'Tube-1',
+        src: link,
+      }),
+    );
     addMedia({
       variables: {
         data: {

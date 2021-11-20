@@ -10,6 +10,7 @@ const GET_ALL_CLIENTS = gql`
       categoryName: categories
       description
       isPublished
+      isFeatured
     }
   }
 `;

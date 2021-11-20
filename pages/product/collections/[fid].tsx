@@ -5,7 +5,7 @@ import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useAlert } from 'react-alert';
 import { FormProvider, useForm } from 'react-hook-form';
-import { FaEye, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
+import { FaEye, FaPlus, FaPlusCircle, FaSave, FaTimes } from 'react-icons/fa';
 
 import FileButton from '../../../components/controls/file';
 import Textfield from '../../../components/controls/textfield';
@@ -75,6 +75,12 @@ const CollectionForm = () => {
     }
   }, [token]);
 
+  const formReset = () => {
+    methods.reset(defaultValues);
+    dispatch(resetMediaSelection());
+    setDescription('');
+  };
+
   const onSubmit = async (data) => {
     const { collectionName, collectionSlug, isPublished } = data;
     const collection = {
@@ -84,9 +90,6 @@ const CollectionForm = () => {
       slug: collectionSlug,
       isPublished: isPublished,
     };
-    methods.reset(defaultValues);
-    dispatch(resetMediaSelection());
-    setDescription('');
 
     if (isEditMode) {
       try {
@@ -119,6 +122,7 @@ const CollectionForm = () => {
         });
         if (!createState.error) {
           alert.success('Posted Product Collection Successfully');
+          formReset();
         } else {
           throw createState.error.message;
         }
@@ -127,6 +131,7 @@ const CollectionForm = () => {
           alert.error(error.message);
         } else {
           alert.success('Posted Product Collection Successfully');
+          formReset();
         }
       }
     }
@@ -160,6 +165,16 @@ const CollectionForm = () => {
               onClick={methods.handleSubmit(onSubmit, handleError)}
             >
               <FaSave />
+            </button>
+            <button
+              type="button"
+              className="btn-icon-white ml-20"
+              onClick={() => {
+                formReset();
+                push('/product/collections/add');
+              }}
+            >
+              <FaPlus />
             </button>
             <button
               type="button"

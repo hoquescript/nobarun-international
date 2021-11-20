@@ -156,7 +156,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   };
 
   const youtubeLinkHandler = () => {
-    dispatch(addYoutubeLink(link));
+    dispatch(
+      addYoutubeLink({
+        name: 'Tube-1',
+        src: link,
+      }),
+    );
     addMedia({
       variables: {
         data: {
@@ -173,7 +178,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     setLink('');
   };
 
-  const selectImageHandler = (imageSrc) => {
+  const selectImageHandler = (imageSrc, evt) => {
+    if (!evt.target) {
+      evt.target = evt.srcElement; //extend target property for IE
+    }
+    if (['BUTTON', 'svg', 'path'].includes(evt.target.tagName)) return;
+
     if (imageSelector) {
       imageSelector(imageSrc);
     } else {
@@ -181,7 +191,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     }
   };
 
-  const selectVideoHandler = (videoSrc) => {
+  const selectVideoHandler = (videoSrc, evt) => {
+    if (!evt.target) {
+      evt.target = evt.srcElement; //extend target property for IE
+    }
+    if (['BUTTON', 'svg', 'path'].includes(evt.target.tagName)) return;
+
     if (videoSelector) {
       videoSelector(videoSrc);
     } else {
@@ -293,7 +308,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                         <div
                           key={image.name + idx}
                           className="images-gallery__image"
-                          onClick={() => selectImageHandler(image.src)}
+                          onClick={(e) => selectImageHandler(image.src, e)}
                         >
                           <button
                             onClick={() =>
@@ -347,7 +362,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                     <div
                       key={link.src + idx}
                       className="youtube__thumbnail"
-                      onClick={() => selectVideoHandler(link.src)}
+                      onClick={(e) => selectVideoHandler(link.src, e)}
                     >
                       <div
                         className="youtube__thumbnail_remove"

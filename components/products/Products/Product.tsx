@@ -35,133 +35,142 @@ const Product = (props) => {
   }, []);
 
   return (
-    <div
-      className="product"
-      style={{ flexDirection: 'column' }}
-      onClick={() => setShowDropdown(false)}
+    <Link
+      href={{
+        pathname: '/product/[productId]',
+        query: { productId: id },
+      }}
     >
-      <div
-        className="product__title"
-        style={{ justifyContent: 'space-between', width: '100%' }}
-      >
-        <h4>{productName}</h4>
-        <Modal
-          title="Confirmation Alert"
-          modalIsOpen={showDeleteModal}
-          setIsOpen={setShowDeleteModal}
-          confirmHandler={() => {
-            deleteHandler();
-          }}
-        />
-        <div className="dropdown">
-          <button
-            type="button"
-            className="btn-icon-fade btn-icon-small dropdown__toggle"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDropdown(true);
-            }}
-          >
-            <BiDotsVerticalRounded />
-          </button>
+      <a>
+        <div
+          className="product"
+          style={{ flexDirection: 'column' }}
+          onClick={() => setShowDropdown(false)}
+        >
           <div
-            className="dropdown__menu"
-            style={{ transform: showDropdown ? 'scale(1)' : 'scale(0)' }}
+            className="product__title"
+            style={{ justifyContent: 'space-between', width: '100%' }}
           >
-            <ul>
-              <li style={{ cursor: 'pointer' }}>
-                <Link
-                  href={{
-                    pathname: '/product/[productId]',
-                    query: { productId: id },
-                  }}
-                >
-                  <a
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setShowDropdown(false);
-                    }}
-                  >
-                    <FaPen />
-                    Edit
-                  </a>
-                </Link>
-              </li>
-              <li style={{ cursor: 'pointer' }}>
-                <a
-                  className="text-red"
-                  onClick={(e) => {
-                    setShowDropdown(false);
-                    setShowDeleteModal(true);
-                  }}
-                >
-                  <FaTrash />
-                  Delete
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div style={{ display: 'flex', width: '100%', height: 120 }}>
-        <figure className="product__img">
-          <img src={images[0]} alt={`product-image-${id}`} />
-        </figure>
-
-        <div className="product__content">
-          <div className="d-flex align-items-center">
-            <div className="product__tags">
-              <span className="product__tags__tag">{category}</span>
+            <h4>{productName}</h4>
+            <Modal
+              title="Confirmation Alert"
+              modalIsOpen={showDeleteModal}
+              setIsOpen={setShowDeleteModal}
+              confirmHandler={() => {
+                deleteHandler();
+              }}
+            />
+            <div className="dropdown">
+              <button
+                type="button"
+                className="btn-icon-fade btn-icon-small dropdown__toggle"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowDropdown(true);
+                }}
+              >
+                <BiDotsVerticalRounded />
+              </button>
+              <div
+                className="dropdown__menu"
+                style={{ transform: showDropdown ? 'scale(1)' : 'scale(0)' }}
+              >
+                <ul>
+                  <li style={{ cursor: 'pointer' }}>
+                    <Link
+                      href={{
+                        pathname: '/product/[productId]',
+                        query: { productId: id },
+                      }}
+                    >
+                      <a
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setShowDropdown(false);
+                        }}
+                      >
+                        <FaPen />
+                        Edit
+                      </a>
+                    </Link>
+                  </li>
+                  <li style={{ cursor: 'pointer' }}>
+                    <a
+                      className="text-red"
+                      onClick={(e) => {
+                        setShowDropdown(false);
+                        setShowDeleteModal(true);
+                      }}
+                    >
+                      <FaTrash />
+                      Delete
+                    </a>
+                  </li>
+                </ul>
+              </div>
             </div>
-            <label htmlFor="product" className={`custom-switch`}>
-              <input
-                type="checkbox"
-                id="isPublished"
-                defaultChecked={isPublished}
-              />
-              <span>&nbsp;</span>
-            </label>
           </div>
-          <h4>
-            Price
-            <input
-              type="text"
-              className="custom-input small ml-20 mb-20 mt-20"
-              style={{ width: '9rem' }}
-              value={price}
-              disabled
-            />
-          </h4>
-          <h4>
-            SKU
-            <input
-              type="text"
-              className="custom-input small ml-20"
-              style={{ width: '9rem' }}
-              value={productCode}
-              disabled
-            />
-          </h4>
-        </div>
-      </div>
+          <div style={{ display: 'flex', width: '100%', height: 120 }}>
+            <figure className="product__img">
+              <img src={images[0]} alt={`product-image-${id}`} />
+            </figure>
 
-      <div className="product__footer">
-        <div className={styles.product__info}>
-          <span className={styles.product__meta}>
-            <span></span>
-            <h5 style={{ color: '#e81f1f' }}>{contactPerson}</h5>
-          </span>
-          <span className={styles.product__meta}>
-            <FaEye className="mr-10" />
-            3.5k
-          </span>
-          <span className={styles.product__meta}>
-            <FaStar className="mr-10 mb-5" />
-            {avgRating} ({noOfReview})
-          </span>
+            <div className="product__content">
+              <div className="d-flex align-items-center">
+                <div className="product__tags">
+                  <span className="product__tags__tag">{category}</span>
+                </div>
+                <label htmlFor="product" className={`custom-switch`}>
+                  <input
+                    type="checkbox"
+                    id="isPublished"
+                    defaultChecked={isPublished}
+                  />
+                  <span>&nbsp;</span>
+                </label>
+              </div>
+              <h4>
+                Price
+                <input
+                  type="text"
+                  className="custom-input small ml-10 mb-20 mt-20"
+                  style={{ width: '12rem', textAlign: 'center' }}
+                  value={price}
+                  disabled
+                />
+              </h4>
+              <h4>
+                SKU
+                <input
+                  type="text"
+                  className="custom-input small ml-20"
+                  style={{ width: '12rem', textAlign: 'center' }}
+                  value={productCode}
+                  disabled
+                />
+              </h4>
+            </div>
+          </div>
+
+          <div className="product__footer">
+            <div className={styles.product__info}>
+              <span className={styles.product__meta}>
+                <span></span>
+                <h5 style={{ color: '#e81f1f' }}>{contactPerson}</h5>
+              </span>
+              <span className={styles.product__meta}>
+                <FaEye className="mr-10" />
+                3.5k
+              </span>
+              <span className={styles.product__meta}>
+                <FaStar className="mr-10 mb-5" />
+                {avgRating} ({noOfReview})
+              </span>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      </a>
+    </Link>
   );
 };
 

@@ -81,7 +81,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
         <input
           type="text"
           className={`${styles.pCode__inputs}`}
-          placeholder="Search Product Code"
+          placeholder="Search Products"
           value={productCode}
           onClick={() => setShowSuggestion(true)}
           onChange={onChangeHandler}
