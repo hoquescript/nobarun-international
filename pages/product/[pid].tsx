@@ -133,6 +133,7 @@ const AddProduct = () => {
     setKeywords([]);
     tagState[1]([]);
     dispatch(resetProductMedia());
+    setIsEditMode(false);
   };
 
   const handleAddProduct = async (data: any) => {

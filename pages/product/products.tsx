@@ -174,8 +174,9 @@ const Products = () => {
                     <Product
                       {...product}
                       deleteHandler={async () => {
-                        const modifiedData = [...products];
-                        modifiedData.splice(idx, 1);
+                        const modifiedData = products.filter(
+                          (p) => p.id !== product.id,
+                        );
                         setProducts(modifiedData);
 
                         await deleteProduct({
