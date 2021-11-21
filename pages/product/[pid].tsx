@@ -182,7 +182,7 @@ const AddProduct = () => {
     if (data.collectionName === '') delete product.collectionName;
     if (data.stockStatus === '') delete product.stockStatus;
     if (data.contactPerson === '') delete product.contactPerson;
-
+    delete product.document;
     if (isEditMode) {
       try {
         await editProduct({
