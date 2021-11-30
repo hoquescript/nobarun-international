@@ -13,6 +13,9 @@ interface UIState {
       [k: string]: Media;
     };
   };
+  productKeypoints: {
+    [k: string]: string;
+  };
 }
 const initialState: UIState = {
   productMedia: {
@@ -23,6 +26,7 @@ const initialState: UIState = {
     },
     keyPoints: {},
   },
+  productKeypoints: {},
 };
 export const productSlice = createSlice({
   name: 'products',
@@ -93,6 +97,13 @@ export const productSlice = createSlice({
       state.productMedia.main.videos = [];
       state.productMedia.keyPoints = {};
     },
+    setAllKeypoints: (state, action) => {
+      state.productKeypoints = action.payload;
+    },
+    setKeypoints: (state, action) => {
+      const { id, content } = action.payload;
+      state.productKeypoints[id] = content;
+    },
   },
 });
 
@@ -103,6 +114,8 @@ export const {
   resetProductMedia,
   featuredProductMedia,
   deleteProductMedia,
+  setKeypoints,
+  setAllKeypoints,
 } = productSlice.actions;
 
 export default productSlice.reducer;

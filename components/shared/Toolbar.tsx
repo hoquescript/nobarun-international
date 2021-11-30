@@ -39,6 +39,11 @@ const ADD_NEW_MEDIA = gql`
     addImagesAndVideosTOGallery(data: $data)
   }
 `;
+const ADD_HALLMARK_IMAGE = gql`
+  mutation AddHallmarkedImage($data: Hallmark!) {
+    uploadImageinS3withHallmark(data: $data)
+  }
+`;
 const DELETE_IMAGE = gql`
   mutation deleteImage($data: StaticInput!) {
     removeImage(data: $data)
@@ -64,6 +69,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const router = useRouter();
 
   const [addMedia] = useMutation(ADD_NEW_MEDIA);
+  const [addHallmark] = useMutation(ADD_HALLMARK_IMAGE);
   const [deleteImage] = useMutation(DELETE_IMAGE);
   const [deleteVideo] = useMutation(DELETE_VIDEO);
 
@@ -99,7 +105,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         }
         const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
         const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
-        console.log(url, Key);
+
+        // console.log(url, Key);
         const objectUrl = `${objectBaseUrl}/${Key}`;
         // const dummy = await axios.get(baseUrl, {
         //   params: {
@@ -112,7 +119,15 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         // });
         // console.log(dummy);
 
-        console.log(objectUrl);
+        // console.log(objectUrl);
+        await addHallmark({
+          variables: {
+            data: {
+              key: Key,
+              url: objectUrl,
+            },
+          },
+        });
         dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
         addMedia({
           variables: {

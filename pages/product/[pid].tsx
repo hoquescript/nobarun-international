@@ -23,6 +23,8 @@ import {
   resetProductMedia,
   selectProductImage,
   selectProductVideo,
+  setAllKeypoints,
+  setKeypoints,
   setProductMedia,
 } from '../../store/slices/products';
 import useProductById from '../../hooks/Products/useProductById';
@@ -63,7 +65,6 @@ const defaultValues = {
 
 const defaultKeypoints = {
   [uuid()]: {
-    id: '',
     title: '',
     content: '',
     images: [] as string[],
@@ -119,6 +120,8 @@ const AddProduct = () => {
   const productKeypoints = useTypedSelector(
     (state) => state.products.productMedia.keyPoints,
   );
+  const points = useTypedSelector((state) => state.products.productKeypoints);
+
   const author = useTypedSelector((state) => state.profile.userId);
 
   const formReset = () => {
@@ -146,7 +149,7 @@ const AddProduct = () => {
       return {
         id: key,
         title: keypoint.title,
-        content: keypoint.content,
+        content: points[key],
         images: productKeypoints[key] && productKeypoints[key].images,
         videos: productKeypoints[key] && productKeypoints[key].videos,
       };
@@ -244,6 +247,7 @@ const AddProduct = () => {
       useProductById(pid).then((data) => {
         methods.reset(data.mainContent);
         KeyPoint[1](data.keyPoints.contents);
+        dispatch(setAllKeypoints(data.keyPoints.points));
         dispatch(
           setProductMedia({
             main: data.main,

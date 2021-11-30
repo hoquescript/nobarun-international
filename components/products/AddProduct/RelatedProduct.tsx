@@ -60,8 +60,9 @@ const RelatedProducts = (props: RelatedProductsProps) => {
   };
 
   const chipRemoveHandler = (idx) => {
-    const newChips = [...chips];
-    newChips.splice(idx, 1);
+    console.log(idx);
+    const newChips = chips.filter((chip) => chip.id !== idx);
+    // newChips.splice(idx, 1);
     setChips(newChips);
   };
 
@@ -86,7 +87,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
         >
           {Object.keys(suggestions).map((suggestion: any, idx: number) => (
             <li
-              key={suggestion}
+              key={suggestion + idx}
               className={styles.chip__searchItem}
               dangerouslySetInnerHTML={{
                 __html: suggestions[suggestion].id || suggestion,
@@ -105,12 +106,12 @@ const RelatedProducts = (props: RelatedProductsProps) => {
       </div>
       <div className={styles.chip__chips}>
         {chips.map((chip, idx) => (
-          <div className="chip ml-10" key={chip.value}>
+          <div className="chip ml-10" key={chip.value + idx + Math.random()}>
             <span className="chip__title">{chip.id}</span>
             <button
               type="button"
               className="chip__remove"
-              onClick={() => chipRemoveHandler(idx)}
+              onClick={() => chipRemoveHandler(chip.id)}
             >
               <AiOutlineClose />
             </button>

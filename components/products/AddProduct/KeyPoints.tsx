@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { FaEdit, FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import TextEditor from '../../shared/TextEditor';
 import FileButton from '../../controls/file';
 import formatText from '../../../helpers/formatText';
+import SunEditorCore from 'suneditor/src/lib/core';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../../hooks/useTypedSelector';
+import { setKeypoints } from '../../../store/slices/products';
 
 export interface IKeyPoints {
-  id: string;
   title: string;
   content: string;
   images: string[];
@@ -30,15 +35,23 @@ const KeyPoints = (props: KeyPointsProps) => {
     setPage,
     setPostSectionKey,
   } = props;
+  const editor = useRef<SunEditorCore>();
+
+  const dispatch = useTypedDispatch();
+  const points = useTypedSelector((state) => state.products.productKeypoints);
 
   const onKeyPointsContentChange = (
     idx: string,
     key: 'title' | 'content',
     value: string,
   ) => {
-    const points = { ...keyPoints };
-    points[idx][key] = value;
-    setKeyPoints(points);
+    const newKPoints = { ...keyPoints };
+    const newPoint = newKPoints[idx];
+    if (key === 'title') {
+      newPoint.title = value;
+    }
+    newKPoints[idx] = newPoint;
+    setKeyPoints(newKPoints);
   };
 
   const addKeyPoints = () => {
@@ -50,7 +63,6 @@ const KeyPoints = (props: KeyPointsProps) => {
     setKeyPoints({
       ...modifiedKeyPoint,
       [uuid()]: {
-        id: '',
         title: '',
         content: '',
         images: [],
@@ -77,7 +89,6 @@ const KeyPoints = (props: KeyPointsProps) => {
     keyPointsArr[idx].isCollapsed = !keyPointsArr[idx].isCollapsed;
     setKeyPoints(keyPointsArr);
   };
-
   return (
     <div className="wrapper-section">
       {Object.keys(keyPoints).map((point) => (
@@ -143,11 +154,13 @@ const KeyPoints = (props: KeyPointsProps) => {
             }`}
           >
             <TextEditor
-              value={keyPoints[point].content}
+              ref={editor}
+              name={point}
+              value={points[point]}
               multiple
               disabled={keyPoints[point].isDisabled}
               onChange={(content: string) => {
-                onKeyPointsContentChange(point, 'content', content);
+                dispatch(setKeypoints({ id: point, content }));
               }}
             />
           </div>

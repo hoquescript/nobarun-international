@@ -58,6 +58,7 @@ const useProductById = async (catid) => {
   const productById = data.getProductById;
   const media = {};
   const contents = {};
+  const points = {};
   const questions = {};
   productById.keyPoints.forEach((keyPoint) => {
     media[keyPoint.id] = {
@@ -68,6 +69,7 @@ const useProductById = async (catid) => {
       title: keyPoint.title,
       content: keyPoint.content,
     };
+    points[keyPoint.id] = keyPoint.content;
   });
   productById.questions.forEach((keyPoint) => {
     questions[keyPoint.id] = {
@@ -102,6 +104,7 @@ const useProductById = async (catid) => {
     keyPoints: {
       media,
       contents,
+      points,
     },
     tags: productById.tags,
     questions: productById.questions,
