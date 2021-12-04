@@ -1,4 +1,5 @@
-function getMapsSrc(html) {
+function getMapsSrc(html: string) {
+  if (!html.startsWith('<iframe')) return html;
   const regex = /<iframe.*?src=['"](.*?)['"]/;
   const src =
     regex.exec(html) &&

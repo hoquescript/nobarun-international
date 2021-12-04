@@ -87,6 +87,7 @@ const ContactPerson = () => {
     const contact = contacts[id];
     contact.isDisabled = true;
 
+    console.log(contact);
     const contactPerson = {
       name: contact.name,
       whatsAppNumber: contact.whatsapp,
@@ -186,6 +187,7 @@ const ContactPerson = () => {
         contact[name] = checked;
       } else if (name === 'maps') {
         contact[name] = getMapsSrc(value);
+        console.log(getMapsSrc(value));
       } else {
         // @ts-ignore
         contact[name] = value;

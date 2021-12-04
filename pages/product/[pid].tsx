@@ -5,28 +5,29 @@ import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
 import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
-import Togglebar from '../../components/controls/togglebar';
 import { v4 as uuid } from 'uuid';
+import Togglebar from '../../components/controls/togglebar';
 
+import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import { IKeyPoints } from '../../components/products/AddProduct/KeyPoints';
 import { IQuestions } from '../../components/products/AddProduct/Questions';
 import Description from '../../components/products/tab/description';
 import SEO from '../../components/products/tab/seo';
-import { TabContent, TabMenu } from '../../components/shared/Tabmenu';
 import Toolbar from '../../components/shared/Toolbar';
 
 import {
   useTypedDispatch,
   useTypedSelector,
 } from '../../hooks/useTypedSelector';
+
 import {
   resetProductMedia,
   selectProductImage,
   selectProductVideo,
   setAllKeypoints,
-  setKeypoints,
   setProductMedia,
 } from '../../store/slices/products';
+
 import useProductById from '../../hooks/Products/useProductById';
 import { useRouter } from 'next/router';
 
@@ -48,6 +49,7 @@ const defaultValues = {
   isPublished: false,
   productName: '',
   banglaVersionLink: '',
+  document: '',
   price: '',
   originalPrice: '',
   discount: '',
@@ -186,7 +188,6 @@ const AddProduct = () => {
     if (data.collectionName === '') delete product.collectionName;
     if (data.stockStatus === '') delete product.stockStatus;
     if (data.contactPerson === '') delete product.contactPerson;
-    delete product.document;
     if (isEditMode) {
       try {
         await editProduct({

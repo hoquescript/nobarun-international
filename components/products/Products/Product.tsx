@@ -5,14 +5,14 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 import Modal from '../../shared/Modal';
 import styles from '../../../styles/pages/products.module.scss';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
 
 const Product = (props) => {
   const {
     id,
     productName,
     category,
-    description,
+    slug,
     productCode,
     price,
     images,
@@ -22,7 +22,6 @@ const Product = (props) => {
     avgRating,
     deleteHandler,
   } = props;
-  const router = useRouter();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDropdown, setShowDropdown] = useState<boolean>(false);
@@ -165,10 +164,14 @@ const Product = (props) => {
             <span></span>
             <h5 style={{ color: '#e81f1f' }}>{contactPerson}</h5>
           </span>
-          <span className={styles.product__meta}>
+          <a
+            href={`https://nobarunbd.vercel.app/${slug}`}
+            target="_blank"
+            className={styles.product__meta}
+          >
             <FaEye className="mr-10" />
             3.5k
-          </span>
+          </a>
           <span className={styles.product__meta}>
             <FaStar className="mr-10 mb-5" />
             {avgRating} ({noOfReview})

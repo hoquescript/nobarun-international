@@ -8,6 +8,7 @@ const GET_ALL_PRODUCTS = gql`
         product {
           id
           productName
+          slug
           populatedCategory {
             name
           }

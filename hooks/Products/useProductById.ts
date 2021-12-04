@@ -17,6 +17,7 @@ const GET_PRODUCT_BY_ID = gql`
       images
       videos
       banglaVersionLink
+      document
       keyPoints {
         id
         title
@@ -82,6 +83,7 @@ const useProductById = async (catid) => {
       isPublished: productById.isPublished,
       productName: productById.productName,
       banglaVersionLink: productById.banglaVersionLink,
+      document: productById.document,
       price: productById.price,
       originalPrice: productById.originalPrice,
       discount: productById.discount,
