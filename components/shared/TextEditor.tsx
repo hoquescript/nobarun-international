@@ -54,8 +54,7 @@ const TextEditor = React.forwardRef((props: TextEditorProps, ref) => {
       setOptions={options}
       // defaultValue={'Hello ' + name}
       // getSunEditorInstance={getSunEditorInstance}
-      // setContents={formatText(value)}
-      setContents={value}
+      setContents={formatText(value)}
       onChange={onChange}
     />
   );

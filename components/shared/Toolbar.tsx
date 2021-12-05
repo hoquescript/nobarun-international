@@ -29,6 +29,7 @@ import {
   toggleToolbar,
   deleteMediaGallery,
 } from '../../store/slices/ui';
+import fuzzyMatch from '../../helpers/fuzzySearch';
 
 const baseUrl =
   'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
@@ -101,6 +102,13 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
       for (let i = 0; i < imageFile?.length; i++) {
         if (imageFile[i].size > 2097152) {
           alert.error(`${imageFile[i].name} is more than 2MB`);
+          break;
+        }
+        const isDuplicate = images.some(
+          (image) => image.name === imageFile[i].name,
+        );
+        if (isDuplicate) {
+          alert.error(`${imageFile[i].name} was Already Uploaded`);
           break;
         }
         const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
@@ -299,6 +307,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                 type="text"
                 className="custom-input"
                 placeholder="Search"
+                style={{ width: '90%' }}
                 onChange={(e) => {
                   setImageSearch(e.target.value);
                 }}
@@ -309,15 +318,15 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                 {[...images]
                   .reverse()
                   .filter((image) =>
-                    image.name
-                      .toLowerCase()
-                      .startsWith(imageSearch.toLowerCase()),
+                    fuzzyMatch(image.name, imageSearch.toLowerCase()),
                   )
                   .map((image, idx) => {
                     let name: string;
                     if (image.name?.length > 20)
                       name = image.name.substring(0, 20).concat('...');
                     else name = image.name;
+                    const searchRegex = new RegExp(imageSearch, 'gim');
+                    const matched = name.match(searchRegex);
                     return (
                       <div className="col-4">
                         <div
@@ -335,9 +344,20 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                           <figure>
                             <img src={image.src} alt="" />
                           </figure>
-                          <h5 ref={fileName} style={{ wordWrap: 'break-word' }}>
-                            {name}
-                          </h5>
+                          <h5
+                            ref={fileName}
+                            style={{ wordWrap: 'break-word' }}
+                            dangerouslySetInnerHTML={{
+                              __html: name.replace(
+                                searchRegex,
+                                `<strong>${
+                                  matched && matched.length > 0
+                                    ? matched[0]
+                                    : ''
+                                }</strong>`,
+                              ) as string,
+                            }}
+                          />
                         </div>
                       </div>
                     );

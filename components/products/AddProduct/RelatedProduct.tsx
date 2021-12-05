@@ -60,9 +60,7 @@ const RelatedProducts = (props: RelatedProductsProps) => {
   };
 
   const chipRemoveHandler = (idx) => {
-    console.log(idx);
     const newChips = chips.filter((chip) => chip.id !== idx);
-    // newChips.splice(idx, 1);
     setChips(newChips);
   };
 

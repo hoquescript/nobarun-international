@@ -15,6 +15,7 @@ import {
   deleteMediaGallery,
   fetchMedia,
 } from '../../store/slices/ui';
+import fuzzyMatch from '../../helpers/fuzzySearch';
 
 const ADD_NEW_MEDIA = gql`
   mutation addImage($data: GalleryInput!) {
@@ -66,6 +67,13 @@ const Images = () => {
       for (let i = 0; i < imageFile?.length; i++) {
         if (imageFile[i].size > 2097152) {
           alert.error(`${imageFile[i].name} is more than 2MB`);
+          break;
+        }
+        const isDuplicate = images.some(
+          (image) => image.name === imageFile[i].name,
+        );
+        if (isDuplicate) {
+          alert.error(`${imageFile[i].name} was Already Uploaded`);
           break;
         }
         const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
@@ -152,14 +160,14 @@ const Images = () => {
       <div className="images-gallery" style={{ maxHeight: 'max-content' }}>
         {[...images]
           .reverse()
-          .filter((image) =>
-            image.name.toLowerCase().startsWith(search.toLowerCase()),
-          )
+          .filter((image) => fuzzyMatch(image.name, search.toLowerCase()))
           .map((image, idx) => {
             let name: string;
             if (image.name?.length > 20)
               name = image.name.substring(0, 20).concat('...');
             else name = image.name;
+            const searchRegex = new RegExp(search, 'gim');
+            const matched = name.match(searchRegex);
             return (
               <div
                 key={image.name + idx}
@@ -174,9 +182,18 @@ const Images = () => {
                 <figure>
                   <img src={image.src} alt="" />
                 </figure>
-                <h5 ref={fileName} style={{ wordWrap: 'break-word' }}>
-                  {name}
-                </h5>
+                <h5
+                  ref={fileName}
+                  style={{ wordWrap: 'break-word' }}
+                  dangerouslySetInnerHTML={{
+                    __html: name.replace(
+                      searchRegex,
+                      `<strong>${
+                        matched && matched.length > 0 ? matched[0] : ''
+                      }</strong>`,
+                    ) as string,
+                  }}
+                />
               </div>
             );
           })}

@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/client';
 import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
 import { useForm, FormProvider } from 'react-hook-form';
-import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
+import { FaEye, FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 import { v4 as uuid } from 'uuid';
 import Togglebar from '../../components/controls/togglebar';
 
@@ -92,6 +92,7 @@ const AddProduct = () => {
   const pid = router.query.pid;
 
   const [isEditMode, setIsEditMode] = useState(false);
+  const [slug, setSlug] = useState('');
   const [tabValue, setTabValue] = useState('description');
 
   const [createNewProduct, createState] = useMutation(CREATE_NEW_PRODUCTS);
@@ -246,6 +247,7 @@ const AddProduct = () => {
     if (pid !== 'add-new-product') {
       setIsEditMode(true);
       useProductById(pid).then((data) => {
+        setSlug(data.mainContent.slug);
         methods.reset(data.mainContent);
         KeyPoint[1](data.keyPoints.contents);
         dispatch(setAllKeypoints(data.keyPoints.points));
@@ -299,6 +301,15 @@ const AddProduct = () => {
               >
                 <FaSave />
               </button>
+              {isEditMode && (
+                <a
+                  className="btn-icon-white ml-20"
+                  href={`https://nobarunbd.vercel.app/${slug}`}
+                  target="_blank"
+                >
+                  <FaEye />
+                </a>
+              )}
               <button
                 type="button"
                 className="btn-icon-white ml-20"
