@@ -80,6 +80,7 @@ const useProductById = async (catid) => {
   });
   const product = {
     mainContent: {
+      id: productById.id,
       isPublished: productById.isPublished,
       productName: productById.productName,
       banglaVersionLink: productById.banglaVersionLink,
@@ -97,6 +98,7 @@ const useProductById = async (catid) => {
       slug: productById.slug,
       url: productById.url,
       siteMap: productById.siteMap,
+      viewCount: productById.viewCount,
     },
     main: {
       featured: productById.featured,

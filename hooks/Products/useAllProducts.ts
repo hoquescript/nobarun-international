@@ -16,6 +16,7 @@ const GET_ALL_PRODUCTS = gql`
           price
           productCode
           images
+          viewCount
           isPublished
           createdAt
           author {

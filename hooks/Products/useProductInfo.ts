@@ -3,6 +3,7 @@ import Client from '../../config/GraphqlClient';
 
 const GET_ALL_PRODUCT_INFO = gql`
   query productInfo {
+    getAllTheProductSlugs
     getAllTheContactPersons {
       id
       value: name
@@ -25,6 +26,7 @@ const GET_ALL_PRODUCT_INFO = gql`
 const useProductInfo = async () => {
   const data = await Client.request(GET_ALL_PRODUCT_INFO);
   return {
+    slugs: JSON.parse(data.getAllTheProductSlugs),
     categories: data.getAllCategoriesWithoutParent,
     contacts: data.getAllTheContactPersons,
     stocks: data.getAllTheStockStatus,

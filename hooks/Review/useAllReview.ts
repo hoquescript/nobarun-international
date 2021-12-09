@@ -35,6 +35,7 @@ const useAllReviews = async (token) => {
       title: review.title,
       rating: review.rating,
       reviewText: review.reviewText,
+      isPublished: review.isPublished,
       images:
         +review.reviewMedia.images.length + +review.reviewMedia.videos.length,
     }));

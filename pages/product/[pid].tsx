@@ -92,7 +92,7 @@ const AddProduct = () => {
   const pid = router.query.pid;
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [slug, setSlug] = useState('');
+  const [productId, setProductId] = useState('');
   const [tabValue, setTabValue] = useState('description');
 
   const [createNewProduct, createState] = useMutation(CREATE_NEW_PRODUCTS);
@@ -190,11 +190,12 @@ const AddProduct = () => {
     if (data.stockStatus === '') delete product.stockStatus;
     if (data.contactPerson === '') delete product.contactPerson;
     if (isEditMode) {
+      delete product.id;
       try {
         await editProduct({
           variables: {
             data: {
-              editId: pid,
+              editId: productId,
               editableObject: product,
             },
           },
@@ -247,7 +248,7 @@ const AddProduct = () => {
     if (pid !== 'add-new-product') {
       setIsEditMode(true);
       useProductById(pid).then((data) => {
-        setSlug(data.mainContent.slug);
+        setProductId(data.mainContent.id);
         methods.reset(data.mainContent);
         KeyPoint[1](data.keyPoints.contents);
         dispatch(setAllKeypoints(data.keyPoints.points));
@@ -304,7 +305,7 @@ const AddProduct = () => {
               {isEditMode && (
                 <a
                   className="btn-icon-white ml-20"
-                  href={`https://nobarunbd.vercel.app/${slug}`}
+                  href={`https://nobarunbd.vercel.app/${pid}`}
                   target="_blank"
                 >
                   <FaEye />

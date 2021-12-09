@@ -42,11 +42,18 @@ const DELETE_REVIEW = gql`
   }
 `;
 
+const EDIT_REVIEW = gql`
+  mutation editReview($data: EditReview!) {
+    editReview(data: $data)
+  }
+`;
+
 const formatIsPublished = (data) => {
   const reviews = {};
   data.forEach((review) => {
     reviews[review.id] = Boolean(review.isPublished);
   });
+  console.log(reviews);
   return reviews;
 };
 
@@ -58,6 +65,7 @@ const Reviews = () => {
   const [deleteKey, setDeleteKey] = useState('');
   const [deleteIdx, setDeleteIdx] = useState(0);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isPublished, setIsPublished] = useState({});
 
   const [period, setPeriod] = useState(
     `${format(sub(new Date(), { months: 6 }), 'yyyy-MM-dd')} - ${format(
@@ -73,6 +81,7 @@ const Reviews = () => {
     },
   ]);
 
+  const [editReview, editState] = useMutation(EDIT_REVIEW);
   const [deleteReview, deleteState] = useMutation(DELETE_REVIEW);
 
   const [reviews, setReviews] = useState<any[]>([]);
@@ -81,7 +90,9 @@ const Reviews = () => {
   const token = useTypedSelector((state) => state.ui.token);
   useEffect(() => {
     useAllReviews(token).then((reviews) => {
+      // console.log(reviews);
       setReviews(reviews);
+      setIsPublished(formatIsPublished(reviews));
       setLoading(false);
     });
   }, [token]);
@@ -127,12 +138,6 @@ const Reviews = () => {
 
   const { pageIndex, pageSize } = state;
 
-  const [isPublished, setIsPublished] = useState({});
-
-  useEffect(() => {
-    setIsPublished(formatIsPublished(reviews));
-  }, []);
-
   useEffect(() => {
     setGlobalFilter({
       search,
@@ -140,8 +145,18 @@ const Reviews = () => {
     }); // Set the Global Filter to the filter prop.
   }, [search, selectionRange, setGlobalFilter]);
 
-  const isPublishedHandler = (id, event) => {
+  const isPublishedHandler = async (id, event) => {
     const newIsPublished = { ...isPublished, [id]: event.target.checked };
+    await editReview({
+      variables: {
+        data: {
+          editId: id,
+          editableObject: {
+            isPublished: event.target.checked,
+          },
+        },
+      },
+    });
     setIsPublished(newIsPublished);
   };
 
@@ -202,7 +217,7 @@ const Reviews = () => {
               ))}
             </thead>
             <tbody {...getTableBodyProps()}>
-              {page.reverse().map((row) => {
+              {page.reverse().map((row: any) => {
                 prepareRow(row);
                 return (
                   <tr {...row.getRowProps()}>
@@ -273,8 +288,13 @@ const Reviews = () => {
                           <input
                             type="checkbox"
                             id={row.id}
-                            checked={isPublished[row.id] || false}
-                            onChange={(e) => isPublishedHandler(row.id, e)}
+                            checked={
+                              isPublished[row.original && row.original.id] ||
+                              false
+                            }
+                            onChange={async (e) => {
+                              isPublishedHandler(row.original.id, e);
+                            }}
                           />
                           <span>&nbsp;</span>
                         </label>

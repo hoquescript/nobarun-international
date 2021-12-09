@@ -14,18 +14,18 @@ import {
   FaUser,
   FaWhatsapp,
 } from 'react-icons/fa';
-import useAllContactPerson from '../../hooks/Settings/useAllContactPerson';
+import useAllContactPerson from '../../../hooks/Settings/useAllContactPerson';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import Modal from '../../components/shared/Modal';
-import FileButton from '../../components/controls/file';
-import Toolbar from '../../components/shared/Toolbar';
+import Modal from '../../../components/shared/Modal';
+import FileButton from '../../../components/controls/file';
+import Toolbar from '../../../components/shared/Toolbar';
 import {
   useTypedDispatch,
   useTypedSelector,
-} from '../../hooks/useTypedSelector';
-import { selectContactImage, setContactImage } from '../../store/slices/ui';
-import getMapsSrc from '../../helpers/getMapsSrc';
+} from '../../../hooks/useTypedSelector';
+import { selectContactImage, setContactImage } from '../../../store/slices/ui';
+import getMapsSrc from '../../../helpers/getMapsSrc';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {

@@ -6,6 +6,7 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 import Modal from '../../shared/Modal';
 import styles from '../../../styles/pages/products.module.scss';
 import { Router, useRouter } from 'next/router';
+import abbrNum from '../../../helpers/abbrNum';
 
 const Product = (props) => {
   const {
@@ -16,6 +17,7 @@ const Product = (props) => {
     productCode,
     price,
     images,
+    viewCount,
     isPublished,
     contactPerson,
     noOfReview,
@@ -85,8 +87,8 @@ const Product = (props) => {
               <li style={{ cursor: 'pointer' }}>
                 <Link
                   href={{
-                    pathname: '/product/[productId]',
-                    query: { productId: id },
+                    pathname: '/product/[slug]',
+                    query: { slug: slug },
                   }}
                 >
                   <a
@@ -162,7 +164,7 @@ const Product = (props) => {
         <div className={styles.product__info}>
           <span className={styles.product__meta}>
             <span></span>
-            <h5 style={{ color: '#e81f1f' }}>{contactPerson}</h5>
+            <h5 style={{ color: '#e81f1f' }}>{contactPerson || 'Anonymous'}</h5>
           </span>
           <a
             href={`https://nobarunbd.vercel.app/${slug}`}
@@ -170,7 +172,7 @@ const Product = (props) => {
             className={styles.product__meta}
           >
             <FaEye className="mr-10" />
-            3.5k
+            {viewCount ? abbrNum(viewCount, 1) : '0'}
           </a>
           <span className={styles.product__meta}>
             <FaStar className="mr-10 mb-5" />

@@ -342,7 +342,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                             <FaTimes />
                           </button>
                           <figure>
-                            <img src={image.src} alt="" />
+                            <img src={image.src} alt={image.name} />
                           </figure>
                           <h5
                             ref={fileName}
