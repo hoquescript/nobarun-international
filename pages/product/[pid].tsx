@@ -103,6 +103,7 @@ const AddProduct = () => {
 
   const [page, setPage] = useState('');
   const [postSectionKey, setPostSectionKey] = useState('');
+  const [info, setInfo] = useState<any>({});
 
   const [features, setFeatures] = useState('');
   const [specification, setSpecification] = useState('');
@@ -147,6 +148,11 @@ const AddProduct = () => {
       alert.error('Please set a Featured Image');
       return;
     }
+    if (info.slugs.some((row) => row.slug === data.slug && data.slug !== pid)) {
+      alert.error('Duplicate Product Slug');
+      return;
+    }
+
     const keyPoints = Object.keys(KeyPoint[0]).map((key) => {
       const keypoint = KeyPoint[0][key];
       return {
@@ -355,6 +361,8 @@ const AddProduct = () => {
                 setPostSectionKey={setPostSectionKey}
                 relatedClients={relatedClients}
                 setRelatedClients={setRelatedClients}
+                info={info}
+                setInfo={setInfo}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

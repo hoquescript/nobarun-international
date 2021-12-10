@@ -80,16 +80,18 @@ const CategoryForm = () => {
   const icon = useTypedSelector(
     (state) => state.ui.productCategoryMedia.featured,
   );
+  const featured = useTypedSelector(
+    (state) => state.ui.productCategoryCoverMedia.images,
+  );
 
   useEffect(() => {
     if (fid !== 'add') {
       setIsEditMode(true);
-      useProductCategoryById(fid, token).then((data) => {
-        console.log(data);
+      useProductCategoryById(fid, token).then((data: any) => {
         methods.reset(data);
-        // @ts-ignore
-        dispatch(setMedia({ path: asPath, src: data.images }));
-        // @ts-ignore
+        dispatch(
+          setMedia({ path: asPath, src: data.images, featured: data.featured }),
+        );
         setDescription(data.description);
       });
     }
@@ -111,6 +113,7 @@ const CategoryForm = () => {
       name: categoryName,
       description,
       image: images[0],
+      featuredImage: featured[0],
       icon,
       isPublished: data.isPublished,
       isFeatured: data.isFeatured,

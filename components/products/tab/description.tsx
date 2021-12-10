@@ -35,6 +35,8 @@ interface DescriptionProps {
   control: any;
   setPage: any;
   setPostSectionKey: any;
+  info: any;
+  setInfo: any;
 }
 const Description = (props: DescriptionProps) => {
   const {
@@ -56,11 +58,12 @@ const Description = (props: DescriptionProps) => {
     setPostSectionKey,
     relatedClients,
     setRelatedClients,
+    info,
+    setInfo,
   } = props;
 
   const [productCodes, setProductCodes] = useState([]);
   const [clientCodes, setClientCodes] = useState([]);
-  const [info, setInfo] = useState<any>({});
 
   // Getting Category | Collection | Contact | Stock || Products || Clients
   useEffect(() => {

@@ -202,6 +202,7 @@ export const uiSlice = createSlice({
         state.productCategoryMedia.images = action.payload.src;
         state.productCategoryMedia.featured =
           action.payload.src && action.payload.src[1];
+        state.productCategoryCoverMedia.images = action.payload.featured;
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         state.productCollectionMedia.images = [action.payload.src];

@@ -10,6 +10,7 @@ const GET_PRODUCT_BY_ID = gql`
       description
       image
       icon
+      featuredImage
       parentCategory
       children
       slug
@@ -35,6 +36,7 @@ const useProductCategoryById = async (fid, token) => {
       categoryName: categoryById.name,
       description: categoryById.description,
       images: [categoryById.image, categoryById.icon],
+      featured: [categoryById.featuredImage],
       parentCategory: categoryById.parentCategory,
       categorySlug: categoryById.slug,
       isPublished: categoryById.isPublished,
