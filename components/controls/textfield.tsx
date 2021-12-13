@@ -10,6 +10,7 @@ interface TextfieldProps {
   required?: boolean;
   value?: string;
   onChangeHandler?: (value: any) => void;
+  iconAdornment?: React.ReactNode;
 }
 
 const Textfield = (props: TextfieldProps) => {
@@ -22,6 +23,7 @@ const Textfield = (props: TextfieldProps) => {
     required,
     className,
     onChangeHandler,
+    iconAdornment,
   } = props;
   const { register } = useFormContext();
 
@@ -32,14 +34,20 @@ const Textfield = (props: TextfieldProps) => {
     },
   });
   return (
-    <div className={`field ${className}`}>
+    <div
+      className={`field ${className}`}
+      style={{ position: iconAdornment ? 'relative' : 'static' }}
+    >
       <label>
         {label} {required && <sup style={{ color: 'red' }}>*</sup>}
       </label>
+      {iconAdornment}
       {onChangeHandler ? (
         <input
           type={type}
-          className="custom-input"
+          className={`custom-input ${
+            iconAdornment ? ' video__input mt-30' : ''
+          }`}
           placeholder={placeholder}
           value={value}
           onChange={(e) => {
@@ -53,7 +61,7 @@ const Textfield = (props: TextfieldProps) => {
       ) : (
         <input
           type={type}
-          className="custom-input"
+          className={`custom-input ${iconAdornment ? ' video__input' : ''}`}
           placeholder={placeholder}
           value={value}
           {...register(name, {

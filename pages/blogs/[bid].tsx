@@ -25,6 +25,7 @@ import {
   resetBlogMedia,
   selectBlogImage,
   selectBlogVideo,
+  setAllKeypoints,
   setBlogMedia,
 } from '../../store/slices/blogs';
 import useBlogById from '../../hooks/Blogs/useBlogById';
@@ -103,6 +104,7 @@ const AddNewPost = () => {
   const blogPostSections = useTypedSelector(
     (state) => state.blogs.blogsMedia.postSection,
   );
+  const points = useTypedSelector((state) => state.blogs.postSection);
 
   const formReset = () => {
     // Resetting
@@ -124,7 +126,7 @@ const AddNewPost = () => {
       return {
         id: key,
         title: section.title,
-        content: section.content,
+        content: points[key],
         images: blogPostSections[key] && blogPostSections[key].images,
         videos: blogPostSections[key] && blogPostSections[key].videos,
       };
@@ -206,6 +208,7 @@ const AddNewPost = () => {
         methods.reset(data.mainContent);
         setTags(data.tags);
         setKeywords(data.keywords);
+        dispatch(setAllKeypoints(data.postSection.points));
         PostSectionState[1](data.postSection.contents);
         dispatch(
           setBlogMedia({

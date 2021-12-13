@@ -31,6 +31,7 @@ interface FileButtonProps {
     | 'query'
     | 'client'
     | 'contact'
+    | 'contactLogo'
     | 'pMain'
     | 'pKeypoint'
     | 'pCategory'
@@ -84,6 +85,9 @@ const FileButton = (props: FileButtonProps) => {
         state.ui.contactsMedia && state.ui.contactsMedia[postKey as string],
     );
 
+  if (page === 'contactLogo')
+    media = useTypedSelector((state) => state.ui.contactLogoMedia);
+
   const featureImageHandler = (page, src) => {
     if (['pMain'].includes(page)) {
       dispatch(featuredProductMedia({ page, src, key: postKey }));
@@ -121,10 +125,11 @@ const FileButton = (props: FileButtonProps) => {
                 'client',
                 'contact',
                 'query',
+                'contactLogo',
               ].includes(page)
                 ? ''
                 : 'hideFeaturedOption'
-            }
+            } ${page === 'contact' ? 'contact__figure' : ''}
             `}
           >
             <button
@@ -164,7 +169,7 @@ const FileButton = (props: FileButtonProps) => {
                 ].includes(page)
                   ? ''
                   : 'hideFeaturedOption'
-              }
+              } 
               `}
             >
               <button
@@ -196,6 +201,7 @@ const FileButton = (props: FileButtonProps) => {
         'bCategory',
         'client',
         'contact',
+        'contactLogo',
       ].includes(page) &&
         media &&
         media.images &&

@@ -37,6 +37,7 @@ const useBlogById = async (catid) => {
   const blogById = data.getASingleBlog;
   const media = {};
   const contents = {};
+  const points = {};
   blogById.sections.forEach((section) => {
     media[section.id] = {
       images: section.images,
@@ -46,6 +47,7 @@ const useBlogById = async (catid) => {
       title: section.title,
       content: section.content,
     };
+    points[section.id] = section.content;
   });
   const blog = {
     mainContent: {
@@ -69,6 +71,7 @@ const useBlogById = async (catid) => {
     postSection: {
       media,
       contents,
+      points,
     },
     tags: blogById.tags,
     keywords: blogById.keywords,

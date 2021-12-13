@@ -25,7 +25,7 @@ import {
 import Modal from './Modal';
 
 interface TableProps {
-  pageName: 'account' | 'query' | 'blog' | 'product' | 'client';
+  pageName: 'account' | 'query' | 'blog' | 'product' | 'client' | 'contact';
   title?: string;
   columns: any[];
   data: any[];
@@ -134,6 +134,9 @@ const Table = (props: TableProps) => {
               if (pageName === 'blog') editLink = 'blogs';
               if (pageName === 'product') editLink = 'product';
               if (pageName === 'client') editLink = 'client';
+              if (pageName === 'contact')
+                editLink = '/settings/contact-person/';
+
               return (
                 <tr {...row.getRowProps()}>
                   <td width="30" style={{ width: 30, padding: 5 }}>

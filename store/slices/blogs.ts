@@ -13,6 +13,9 @@ interface UIState {
       [k: string]: Media;
     };
   };
+  postSection: {
+    [k: string]: string;
+  };
 }
 const initialState: UIState = {
   blogsMedia: {
@@ -23,6 +26,7 @@ const initialState: UIState = {
     },
     postSection: {},
   },
+  postSection: {},
 };
 export const blogSlice = createSlice({
   name: 'blogs',
@@ -84,6 +88,13 @@ export const blogSlice = createSlice({
       state.blogsMedia.main.videos = [];
       state.blogsMedia.postSection = {};
     },
+    setAllKeypoints: (state, action) => {
+      state.postSection = action.payload;
+    },
+    setKeypoints: (state, action) => {
+      const { id, content } = action.payload;
+      state.postSection[id] = content;
+    },
   },
 });
 
@@ -94,6 +105,8 @@ export const {
   resetBlogMedia,
   featuredBlogMedia,
   deleteBlogMedia,
+  setKeypoints,
+  setAllKeypoints,
 } = blogSlice.actions;
 
 export default blogSlice.reducer;

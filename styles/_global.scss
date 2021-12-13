@@ -69,3 +69,11 @@
     transform: translate(0, 0);
   }
 }
+
+.contact {
+  &__figure {
+    &::before {
+      padding-top: 75% !important;
+    }
+  }
+}

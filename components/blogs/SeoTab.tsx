@@ -21,7 +21,7 @@ const WordCount = (props: WordCountProps) => {
     name,
     defaultValue: '',
   });
-  if (count.length > limit) {
+  if (count?.length > limit) {
     return (
       <span className="chr-count ml-10" style={{ color: 'red' }}>
         *No of Characters overflowed
@@ -30,7 +30,7 @@ const WordCount = (props: WordCountProps) => {
   } else {
     return (
       <span className="chr-count ml-10">
-        {count.length} of {limit}
+        {count?.length} of {limit}
       </span>
     );
   }
@@ -57,11 +57,11 @@ const SlugGenerator = (props: SlugGeneratorProps) => {
           </label>
           <span
             className="chr-count ml-10"
-            style={{ color: title.length > 70 ? 'red' : 'inherit' }}
+            style={{ color: title?.length > 70 ? 'red' : 'inherit' }}
           >
-            {title.length > 70
+            {title?.length > 70
               ? '*No of Characters overflowed'
-              : `${title.length} of 70`}
+              : `${title?.length} of 70`}
           </span>
         </div>
         <input

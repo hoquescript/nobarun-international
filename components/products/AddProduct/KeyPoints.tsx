@@ -1,10 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { v4 as uuid } from 'uuid';
-import { FaEdit, FaMinus, FaPlus, FaPlusCircle, FaSave } from 'react-icons/fa';
+import { FaEdit, FaMinus, FaPlus, FaSave } from 'react-icons/fa';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import TextEditor from '../../shared/TextEditor';
 import FileButton from '../../controls/file';
-import formatText from '../../../helpers/formatText';
 import SunEditorCore from 'suneditor/src/lib/core';
 import {
   useTypedDispatch,

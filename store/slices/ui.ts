@@ -23,6 +23,7 @@ interface UIState {
   reviewMedia: Media;
   clientMedia: Media;
   queryMedia: Media;
+  contactLogoMedia: Media;
   contactsMedia: {
     [key: string]: Media;
   };
@@ -74,6 +75,10 @@ const initialState: UIState = {
     videos: [],
   },
   queryMedia: {
+    images: [],
+    videos: [],
+  },
+  contactLogoMedia: {
     images: [],
     videos: [],
   },
@@ -171,18 +176,30 @@ export const uiSlice = createSlice({
       if (page === 'query') {
         state.queryMedia[type].splice(index, 1);
       }
+      if (page === 'contact') {
+        state.contactLogoMedia[type].splice(index, 1);
+      }
     },
     selectContactImage: (state, action) => {
-      const key = action.payload.key;
-      if (!state.contactsMedia[key])
-        state.contactsMedia[key] = {
-          images: [],
-          videos: [],
-        };
-      const post = state.contactsMedia[key];
+      const page = action.payload.page;
+      if (page === 'contactLogo') {
+        if (state.contactLogoMedia.images.length === 1)
+          state.contactLogoMedia.images = [];
+        state.contactLogoMedia.images.push(action.payload.src);
+      }
+      if (page === 'contact') {
+        const key = action.payload.key;
+        console.log(key);
+        if (!(key in state.contactsMedia))
+          state.contactsMedia[key] = {
+            images: [],
+            videos: [],
+          };
+        const post = state.contactsMedia && state.contactsMedia[key];
 
-      if (post.images.length === 1) post.images = [];
-      post.images.push(action.payload.src);
+        if (post?.images.length === 1) post.images = [];
+        post?.images.push(action.payload.src);
+      }
     },
     deleteContactImage: (state, action) => {
       const page = action.payload.page;
@@ -194,9 +211,9 @@ export const uiSlice = createSlice({
       }
     },
     setContactImage: (state, action) => {
-      state.contactsMedia = action.payload;
+      state.contactLogoMedia = action.payload.contactLogoMedia;
+      state.contactsMedia = action.payload.amenitiesMedia;
     },
-
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
         state.productCategoryMedia.images = action.payload.src;
@@ -235,6 +252,11 @@ export const uiSlice = createSlice({
       state.queryMedia.videos = [];
       state.clientMedia.images = [];
       state.clientMedia.videos = [];
+      state.contactLogoMedia = {
+        images: [],
+        videos: [],
+      };
+      state.contactsMedia = {};
     },
     setAuthToken: (state, action) => {
       state.token = action.payload;

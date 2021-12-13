@@ -4,20 +4,27 @@ import { useFormContext } from 'react-hook-form';
 interface TextareaProps {
   label: string;
   name: string;
+  className?: string;
   placeholder?: string;
   required?: boolean;
+  iconAdornment?: React.ReactNode;
 }
 const Textarea = (props: TextareaProps) => {
-  const { label, name, placeholder, required } = props;
+  const { label, name, className, placeholder, required, iconAdornment } =
+    props;
   const { register } = useFormContext();
 
   return (
-    <div className="field">
+    <div
+      className={`field ${className}`}
+      style={{ position: iconAdornment ? 'relative' : 'static' }}
+    >
       <label>
         {label} {required && <sup style={{ color: 'red' }}>*</sup>}
       </label>
+      {iconAdornment}
       <textarea
-        className="custom-input"
+        className={`custom-input ${iconAdornment ? ' video__input' : ''}`}
         placeholder={placeholder}
         {...register(name, {
           required: {

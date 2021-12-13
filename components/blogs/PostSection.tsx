@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { v4 as uuid } from 'uuid';
 import { FaEdit, FaMinus, FaPlus, FaSave } from 'react-icons/fa';
 import { MdKeyboardArrowDown } from 'react-icons/md';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import SunEditorCore from 'suneditor/src/lib/core';
+import {
+  useTypedDispatch,
+  useTypedSelector,
+} from '../../hooks/useTypedSelector';
 import FileButton from '../controls/file';
 import TextEditor from '../shared/TextEditor';
+import { setKeypoints } from '../../store/slices/blogs';
 
 export interface IPostSection {
   id?: string;
@@ -27,13 +32,16 @@ const PostSection = (props: PostSectionProps) => {
     setPage,
     setPostSectionKey,
   } = props;
+  const editor = useRef<SunEditorCore>();
+
+  const dispatch = useTypedDispatch();
+  const points = useTypedSelector((state) => state.blogs.postSection);
 
   const onKeyPointsContentChange = (
     idx: string,
     key: 'title' | 'content',
     value: string,
   ) => {
-    console.log('Changing');
     const points = { ...keyPoints };
     points[idx][key] = value;
     setKeyPoints(points);
@@ -139,12 +147,14 @@ const PostSection = (props: PostSectionProps) => {
             }`}
           >
             <TextEditor
+              ref={editor}
+              name={key}
+              value={points[key]}
               multiple
-              value={keyPoints[key].content}
               disabled={keyPoints[key].isDisabled}
-              onChange={(content: string) =>
-                onKeyPointsContentChange(key, 'content', content)
-              }
+              onChange={(content: string) => {
+                dispatch(setKeypoints({ id: key, content }));
+              }}
             />
           </div>
         </div>
