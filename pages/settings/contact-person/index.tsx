@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useAlert } from 'react-alert';
 import { gql, useMutation } from '@apollo/client';
-import {
-  FaEllipsisH,
-  FaLocationArrow,
-  FaMailBulk,
-  FaPen,
-  FaPlusCircle,
-  FaSave,
-  FaTrash,
-  FaHome,
-  FaUser,
-  FaWhatsapp,
-} from 'react-icons/fa';
+import { FaPlusCircle } from 'react-icons/fa';
 import useAllContactPerson from '../../../hooks/Settings/useAllContactPerson';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
-import Modal from '../../../components/shared/Modal';
 import styles from '../../../styles/pages/query-report.module.scss';
 import Toolbar from '../../../components/shared/Toolbar';
 import {
@@ -42,7 +30,7 @@ const ContactPerson = () => {
 
   useEffect(() => {
     useAllContactPerson().then((data) => {
-      setContacts(Object.values(data.persons));
+      setContacts(data);
     });
   }, []);
 

@@ -29,14 +29,7 @@ const useContactPersonById = async (contactPersonId) => {
       id: contactPersonId,
     });
 
-    const amenities = {
-      [uuid()]: {
-        title: '',
-        notes: '',
-        isPublished: true,
-        isDisabled: false,
-      },
-    };
+    const amenities = {};
     const amenitiesMedia = {};
     const data = response?.getASingleContactPerson;
     const contact = {
@@ -59,7 +52,7 @@ const useContactPersonById = async (contactPersonId) => {
         isDisabled: true,
       };
       amenitiesMedia[amenity.id] = {
-        images: [amenity.image],
+        images: [amenity.image || ''],
         videos: [],
       };
     });

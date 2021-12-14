@@ -23,25 +23,6 @@ export interface IAmenities {
     isNewStocks?: true;
   };
 }
-const CREATE_STOCK_STATUS = gql`
-  mutation addNewStockStatus($data: CreateNewStockStatus!) {
-    createNewStockStatus(data: $data) {
-      title
-    }
-  }
-`;
-
-const EDIT_STOCK_STATUS = gql`
-  mutation editStockStatus($data: EditStockStatus!) {
-    editStockStatus(data: $data)
-  }
-`;
-
-const DELETE_STOCK_STATUS = gql`
-  mutation deleteStockStatus($id: String!) {
-    deleteAStockStatus(stockStatusId: $id)
-  }
-`;
 
 interface OfficeAmenitiesProps {
   stocks: IAmenities;
@@ -50,16 +31,11 @@ interface OfficeAmenitiesProps {
   postSectionKey: string;
   setPostSectionKey: any;
 }
+
 const OfficeAmenities = (props: OfficeAmenitiesProps) => {
-  const { stocks, setStocks, setPage, postSectionKey, setPostSectionKey } =
-    props;
-  const alert = useAlert();
+  const { stocks, setStocks, setPage, setPostSectionKey } = props;
   const [deleteKey, setDeleteKey] = useState('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-
-  const [createStock, createState] = useMutation(CREATE_STOCK_STATUS);
-  const [editStock, editState] = useMutation(EDIT_STOCK_STATUS);
-  const [deleteStock, deleteState] = useMutation(DELETE_STOCK_STATUS);
 
   const addNewStockHandler = () => {
     setStocks({
@@ -115,24 +91,7 @@ const OfficeAmenities = (props: OfficeAmenitiesProps) => {
       }
       return object;
     }, {});
-    await deleteStock({
-      variables: {
-        id,
-      },
-    });
-    if (!deleteState.error) {
-      alert.info('Deleted Stock Status Successfully');
-    } else {
-      alert.error(deleteState.error.message);
-    }
-
     setStocks(newStocks);
-  };
-
-  const removeImage = (id) => {
-    const stock = stocks[id];
-    stock.image = '';
-    setStocks({ ...stocks, [id]: stock });
   };
 
   const openModal = (key) => {
@@ -213,28 +172,6 @@ const OfficeAmenities = (props: OfficeAmenitiesProps) => {
                         setPostSectionKey={setPostSectionKey}
                         setPage={setPage}
                       />
-                      {/* <div className="product-images">
-                      {stocks[key].image ? (
-                        <figure className="ml-10 contact__figure">
-                          <button
-                            type="button"
-                            className="remove-image"
-                            disabled={stocks[key].isDisabled}
-                            onClick={() => removeImage(key)}
-                          >
-                            <FaTimes />
-                          </button>
-                          <img src={stocks[key].image} alt="" />
-                        </figure>
-                      ) : (
-                        <BoxFileupload
-                          disabled={stocks[key].isDisabled}
-                          onChangeHandler={(url) =>
-                            handleChangeInput(key, 'file', url)
-                          }
-                        />
-                      )}
-                    </div> */}
                     </div>
                     <div
                       className="col-2"

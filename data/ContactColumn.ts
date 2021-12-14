@@ -10,7 +10,7 @@ export const CONTACT_COLUMNS = [
   },
   {
     Header: 'Phone',
-    accessor: 'whatsapp',
+    accessor: 'whatsAppNumber',
   },
   {
     Header: 'Address',

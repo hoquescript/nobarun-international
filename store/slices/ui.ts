@@ -151,6 +151,28 @@ export const uiSlice = createSlice({
         state.productCategoryMedia.featured = src;
       }
     },
+    selectContactImage: (state, action) => {
+      const page = action.payload.page;
+      console.log(state);
+      if (page === 'contactLogo') {
+        if (state.contactLogoMedia.images.length === 1)
+          state.contactLogoMedia.images = [];
+        state.contactLogoMedia.images.push(action.payload.src);
+      }
+      if (page === 'contact') {
+        const key = action.payload.key;
+        console.log(key);
+        if (!(key in state.contactsMedia))
+          state.contactsMedia[key] = {
+            images: [],
+            videos: [],
+          };
+        const post = state.contactsMedia && state.contactsMedia[key];
+
+        if (post?.images.length === 1) post.images = [];
+        post?.images.push(action.payload.src);
+      }
+    },
     deleteMedia: (state, action) => {
       const type = action.payload.type;
       const page = action.payload.page;
@@ -176,29 +198,8 @@ export const uiSlice = createSlice({
       if (page === 'query') {
         state.queryMedia[type].splice(index, 1);
       }
-      if (page === 'contact') {
-        state.contactLogoMedia[type].splice(index, 1);
-      }
-    },
-    selectContactImage: (state, action) => {
-      const page = action.payload.page;
       if (page === 'contactLogo') {
-        if (state.contactLogoMedia.images.length === 1)
-          state.contactLogoMedia.images = [];
-        state.contactLogoMedia.images.push(action.payload.src);
-      }
-      if (page === 'contact') {
-        const key = action.payload.key;
-        console.log(key);
-        if (!(key in state.contactsMedia))
-          state.contactsMedia[key] = {
-            images: [],
-            videos: [],
-          };
-        const post = state.contactsMedia && state.contactsMedia[key];
-
-        if (post?.images.length === 1) post.images = [];
-        post?.images.push(action.payload.src);
+        state.contactLogoMedia[type].splice(index, 1);
       }
     },
     deleteContactImage: (state, action) => {
@@ -211,8 +212,9 @@ export const uiSlice = createSlice({
       }
     },
     setContactImage: (state, action) => {
+      console.log(action.payload);
       state.contactLogoMedia = action.payload.contactLogoMedia;
-      state.contactsMedia = action.payload.amenitiesMedia;
+      state.contactsMedia = action.payload.contactsMedia;
     },
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {

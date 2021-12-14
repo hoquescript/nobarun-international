@@ -33,6 +33,7 @@ import OfficeAmenities, {
   IAmenities,
 } from '../../../components/settings/Ammenities';
 import useContactPersonById from '../../../hooks/Settings/useContactPersonById';
+import getMapsSrc from '../../../helpers/getMapsSrc';
 
 const CREATE_CONTACT_PERSON = gql`
   mutation addNewContactPerson($data: CreateNewContactPerson!) {
@@ -58,10 +59,8 @@ const defaultValues = {
 
 const ContactPersonPage = () => {
   const alert = useAlert();
-  const {
-    query: { contactPersonId },
-    push,
-  } = useRouter();
+  const router = useRouter();
+  const contactPersonId = router.query.contactPersonId;
 
   const [amenities, setAmenities] = useState<IAmenities>({
     [uuid()]: {
@@ -78,6 +77,7 @@ const ContactPersonPage = () => {
   const dispatch = useTypedDispatch();
 
   const media = useTypedSelector((state) => state.ui.contactLogoMedia);
+  const amenitiesMedia = useTypedSelector((state) => state.ui.contactsMedia);
 
   const methods = useForm({
     defaultValues: useMemo(() => defaultValues, [defaultValues]),
@@ -87,20 +87,27 @@ const ContactPersonPage = () => {
   const [editContact, editState] = useMutation(EDIT_CONTACT_PERSON);
 
   const onSubmit = async (data) => {
+    const amenitiesList: any = [];
+    Object.keys(amenities).map((key) => {
+      const amenity = amenities[key];
+      amenitiesList.push({
+        title: amenity.title,
+        notes: amenity.notes,
+        image: amenitiesMedia[key]?.images[0],
+        isPublished: amenity.isPublished,
+      });
+    });
     const contact = {
       name: data.name,
       whatsAppNumber: data.whatsapp,
       email: data.email,
       address: data.address,
-      maps: data.maps,
+      maps: getMapsSrc(data.maps),
       isPublished: data.isPublished,
       companyLogo: media.images[0],
-      amenities: Object.values(amenities).map((amenity) => {
-        delete amenity.isDisabled;
-        return amenity;
-      }),
+      amenities: amenitiesList,
     };
-
+    console.log(contact);
     if (isEditMode) {
       await editContact({
         variables: {
@@ -116,15 +123,24 @@ const ContactPersonPage = () => {
         alert.error(editState.error.message);
       }
     } else {
-      await createContact({
-        variables: {
-          data: contact,
-        },
-      });
-      if (!createState.error) {
-        alert.success('Saved Contact Successfully');
-      } else {
-        alert.error(createState.error.message);
+      try {
+        await createContact({
+          variables: {
+            data: contact,
+          },
+        });
+        if (!createState.error) {
+          alert.success('Saved Contact Successfully');
+          formReset();
+        } else {
+          alert.error(createState.error.message);
+        }
+      } catch (error: any) {
+        if (error.message) {
+          alert.error(error.message);
+        } else {
+          alert.success('Saved Contact Successfully');
+        }
       }
     }
   };
@@ -143,20 +159,23 @@ const ContactPersonPage = () => {
   };
 
   useEffect(() => {
-    if (contactPersonId !== 'add' && contactPersonId !== '') {
+    if (contactPersonId !== 'add' && contactPersonId) {
       setIsEditMode(true);
+      console.log(contactPersonId);
       useContactPersonById(contactPersonId).then((data: any) => {
-        methods.reset(data?.contact);
-        setAmenities(data?.amenities);
-        dispatch(
-          setContactImage({
-            contactLogoMedia: data?.contactLogoMedia,
-            contactsMedia: data?.amenitiesMedia,
-          }),
-        );
+        if (data) {
+          methods.reset(data?.contact);
+          setAmenities(data?.amenities);
+          dispatch(
+            setContactImage({
+              contactLogoMedia: data?.contactLogoMedia,
+              contactsMedia: data?.amenitiesMedia,
+            }),
+          );
+        }
       });
     }
-  }, [contactPersonId]);
+  }, [router]);
 
   const selectImageHandler = (imageSrc) => {
     dispatch(selectContactImage({ src: imageSrc, page, key: postSectionKey }));
@@ -189,7 +208,7 @@ const ContactPersonPage = () => {
               className="btn-icon-white ml-20"
               onClick={() => {
                 formReset();
-                push('/product/categories/add');
+                router.push('/product/categories/add');
               }}
             >
               <FaPlus />
@@ -197,7 +216,7 @@ const ContactPersonPage = () => {
             <button
               type="button"
               className="btn-icon-white ml-20"
-              onClick={() => push('/product/categories')}
+              onClick={() => router.push('/product/categories')}
             >
               <FaTimes />
             </button>
@@ -213,7 +232,6 @@ const ContactPersonPage = () => {
                   label="Name"
                   placeholder="Name"
                   className="video"
-                  required
                   iconAdornment={
                     <FaUser
                       className="video__icon"
@@ -231,7 +249,6 @@ const ContactPersonPage = () => {
                   label="Whats App"
                   placeholder="Whatsapp Number"
                   className="video"
-                  required
                   iconAdornment={
                     <FaWhatsapp
                       className="video__icon"
@@ -250,7 +267,6 @@ const ContactPersonPage = () => {
                   placeholder="Email Address"
                   label="Email"
                   className="video"
-                  required
                   iconAdornment={
                     <FaMailBulk
                       className="video__icon"
@@ -270,7 +286,6 @@ const ContactPersonPage = () => {
                   placeholder="Please Enter the Contact Person's Resident/Office Address"
                   label="Address"
                   className="video"
-                  required
                   iconAdornment={
                     <FaHome
                       className="video__icon"
@@ -288,7 +303,6 @@ const ContactPersonPage = () => {
                   name="maps"
                   label="Maps"
                   className="video"
-                  required
                   iconAdornment={
                     <FaLocationArrow
                       className="video__icon"
@@ -303,14 +317,7 @@ const ContactPersonPage = () => {
               <div className="col-2">
                 <div className={`field ml-30`}>
                   <label>Upload Media</label>
-                  <FileButton
-                    page="contactLogo"
-                    showMedia
-                    setPage={setPage}
-
-                    // postKey={key}
-                    // setPostSectionKey={setPostSectionKey}
-                  />
+                  <FileButton page="contactLogo" showMedia setPage={setPage} />
                 </div>
               </div>
             </div>

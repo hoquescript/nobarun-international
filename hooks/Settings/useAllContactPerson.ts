@@ -18,27 +18,27 @@ const GET_ALL_CONTACT_PERSON = gql`
 
 const useAllContactPerson = async () => {
   const data = await Client.request(GET_ALL_CONTACT_PERSON);
-
-  const persons = {};
-  const media = {};
-  if (data) {
-    data.getAllTheContactPersons.forEach((contact) => {
-      persons[contact.id] = {
-        name: contact.name,
-        whatsapp: contact.whatsAppNumber,
-        email: contact.email,
-        address: contact.address,
-        maps: contact.maps,
-        isPublished: contact.isPublished,
-        isDisabled: true,
-      };
-      media[contact.id] = {
-        images: [contact.companyLogo],
-        videos: [],
-      };
-    });
-  }
-  return { persons, media };
+  return data.getAllTheContactPersons;
+  // const persons = {};
+  // const media = {};
+  // if (data) {
+  //   data.getAllTheContactPersons.forEach((contact) => {
+  //     persons[contact.id] = {
+  //       name: contact.name,
+  //       whatsapp: contact.whatsAppNumber,
+  //       email: contact.email,
+  //       address: contact.address,
+  //       maps: contact.maps,
+  //       isPublished: contact.isPublished,
+  //       isDisabled: true,
+  //     };
+  //     media[contact.id] = {
+  //       images: [contact.companyLogo],
+  //       videos: [],
+  //     };
+  //   });
+  // }
+  // return { persons, media };
 };
 
 export default useAllContactPerson;
