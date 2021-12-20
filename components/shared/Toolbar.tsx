@@ -35,6 +35,10 @@ const baseUrl =
   'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
 const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
 
+// const baseUrl =
+//   'https://1qudotnf4l.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
+// const objectBaseUrl = 'http://nobarunn.s3.us-east-2.amazonaws.com';
+
 const ADD_NEW_MEDIA = gql`
   mutation addImage($data: GalleryInput!) {
     addImagesAndVideosTOGallery(data: $data)
@@ -128,14 +132,14 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         // console.log(dummy);
 
         // console.log(objectUrl);
-        await addHallmark({
-          variables: {
-            data: {
-              key: Key,
-              url: objectUrl,
-            },
-          },
-        });
+        // await addHallmark({
+        //   variables: {
+        //     data: {
+        //       key: Key,
+        //       url: objectUrl,
+        //     },
+        //   },
+        // });
         dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
         addMedia({
           variables: {

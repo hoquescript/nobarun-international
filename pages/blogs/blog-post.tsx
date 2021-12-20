@@ -17,8 +17,8 @@ import useAllBlogCategories from '../../hooks/Blogs/useAllBlogs';
 import Loader from '../../components/shared/Loader';
 
 const DELETE_BLOG = gql`
-  mutation deleteUserById($id: String!) {
-    deleteUserById(userId: $id)
+  mutation deleteBlog($id: String!) {
+    deleteBlog(blogId: $id)
   }
 `;
 
