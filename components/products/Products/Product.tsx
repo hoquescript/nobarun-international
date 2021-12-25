@@ -16,7 +16,7 @@ const Product = (props) => {
     slug,
     productCode,
     price,
-    images,
+    image,
     viewCount,
     isPublished,
     contactPerson,
@@ -120,7 +120,7 @@ const Product = (props) => {
       </div>
       <div style={{ display: 'flex', width: '100%', height: 120 }}>
         <figure className="product__img">
-          <img src={images[0]} alt={`product-image-${id}`} />
+          <img src={image} alt={`product-image-${id}`} />
         </figure>
 
         <div className="product__content">

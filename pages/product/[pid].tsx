@@ -209,6 +209,7 @@ const AddProduct = () => {
         if (!editState.error) {
           alert.info('Edited Product Successfully');
           setTabValue('description');
+          router.push(`/product/${product.slug}`);
         } else {
           throw editState.error.message;
         }
@@ -217,6 +218,8 @@ const AddProduct = () => {
           alert.error(error.message);
         } else {
           alert.info('Edited Product Successfully');
+          setTabValue('description');
+          router.push(`/product/${product.slug}`);
         }
       }
     } else {
@@ -363,6 +366,7 @@ const AddProduct = () => {
                 setRelatedClients={setRelatedClients}
                 info={info}
                 setInfo={setInfo}
+                isEditMode={isEditMode}
               />
             </TabContent>
             <TabContent id="seo" value={tabValue}>

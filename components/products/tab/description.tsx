@@ -37,6 +37,7 @@ interface DescriptionProps {
   setPostSectionKey: any;
   info: any;
   setInfo: any;
+  isEditMode?: boolean;
 }
 const Description = (props: DescriptionProps) => {
   const {
@@ -60,6 +61,7 @@ const Description = (props: DescriptionProps) => {
     setRelatedClients,
     info,
     setInfo,
+    isEditMode,
   } = props;
 
   const [productCodes, setProductCodes] = useState([]);
@@ -83,7 +85,11 @@ const Description = (props: DescriptionProps) => {
       <div className="wrapper-section">
         <div className="wrapper-section__content">
           <div className="row">
-            <SlugGenerator control={control} setValue={setValue} />
+            <SlugGenerator
+              control={control}
+              setValue={setValue}
+              isEditMode={isEditMode}
+            />
             <div className="col-12">
               <Textfield name="banglaVersionLink" label="Bangla Version" />
             </div>

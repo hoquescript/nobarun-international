@@ -16,7 +16,7 @@ export const PRODUCT_COLUMNS = [
   {
     Header: 'Published Date',
     accessor: 'createdAt',
-    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
+    Cell: ({ value }) => value && format(new Date(value), 'do MMMM, yyyy'),
     width: 120,
   },
   {

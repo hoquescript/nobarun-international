@@ -15,7 +15,7 @@ const GET_ALL_PRODUCTS = gql`
           description: title
           price
           productCode
-          images
+          image: featured
           viewCount
           isPublished
           createdAt

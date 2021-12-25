@@ -31,7 +31,7 @@ const Product = (props: ProductProps) => {
               <span className={styles.product__circle}>&nbsp;</span>
               <span className="flex ml-10">
                 <AiOutlineStar />
-                {ratingAverage} ({reviewCount})
+                {Math.round(ratingAverage)} ({Math.round(reviewCount)})
               </span>
             </div>
           </div>

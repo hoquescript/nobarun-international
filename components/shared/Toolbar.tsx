@@ -45,7 +45,7 @@ const ADD_NEW_MEDIA = gql`
   }
 `;
 const ADD_HALLMARK_IMAGE = gql`
-  mutation AddHallmarkedImage($data: Hallmark!) {
+  mutation hallmarkImage($data: Hallmark!) {
     uploadImageinS3withHallmark(data: $data)
   }
 `;
@@ -120,6 +120,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
 
         // console.log(url, Key);
         const objectUrl = `${objectBaseUrl}/${Key}`;
+        console.log(objectUrl);
         // const dummy = await axios.get(baseUrl, {
         //   params: {
         //     url: objectUrl,
@@ -146,6 +147,14 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
             data: {
               images: [{ src: objectUrl, name: imageFile[i].name }],
               videos: [],
+            },
+          },
+        });
+        addHallmark({
+          variables: {
+            data: {
+              key: Key,
+              url: objectUrl,
             },
           },
         });

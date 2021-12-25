@@ -6,15 +6,21 @@ import Textfield from '../../controls/textfield';
 interface SlugGeneratorProps {
   setValue: any;
   control: Control<FieldValues, object>;
+  isEditMode?: boolean;
 }
+
 const SlugGenerator = (props: SlugGeneratorProps) => {
-  const { control, setValue } = props;
+  const { control, setValue, isEditMode } = props;
   const title = useWatch({
     control,
     name: 'productName',
     defaultValue: '',
   });
-  setValue('slug', slugStringGenarator(title));
+
+  if (!isEditMode) {
+    setValue('slug', slugStringGenarator(title));
+  }
+
   return (
     <>
       <div className="col-12 mb-10">
