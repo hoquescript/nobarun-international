@@ -21,6 +21,7 @@ import {
 } from '../../hooks/useTypedSelector';
 import useReviewById from '../../hooks/Review/useReviewById';
 import { resetMediaSelection, setMedia } from '../../store/slices/ui';
+import TextEditor from '../../components/shared/TextEditor';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -38,7 +39,7 @@ const EDIT_REVIEW = gql`
 const defaultValues = {
   name: '',
   email: '',
-  reviewText: '',
+  // reviewText: '',
   title: '',
   createdAt: '',
   productCode: '',
@@ -56,6 +57,7 @@ const AddReview = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [rating, setRating] = useState(0);
   const [productCode, setProductCode] = useState('');
+  const [reviewText, setReviewText] = useState('');
 
   const [createReview, createState] = useMutation(CREATE_REVIEW);
   const [editReview, editState] = useMutation(EDIT_REVIEW);
@@ -84,19 +86,20 @@ const AddReview = () => {
 
     const review = {
       ...data,
+      reviewText,
       createdAt: new Date(data.createdAt),
       rating,
       productCode: productCode,
       reviewMedia: {
-        images,
+        images: images.filter((img) => img !== featuredImage),
         videos,
       },
       featuredImage,
     };
-
-    // if (!data.createdAt) {
-    //   delete review.createdAt;
-    // }
+    console.log(review);
+    if (!data.createdAt) {
+      delete review.createdAt;
+    }
 
     if (isEditMode) {
       try {
@@ -164,9 +167,16 @@ const AddReview = () => {
       setIsEditMode(true);
       useReviewById(rid, token).then((data: any) => {
         methods.reset(data);
+        setReviewText(data.reviewText);
         setProductCode(data.productCode);
         setRating(data.rating);
-        dispatch(setMedia({ path: router.asPath, src: data.reviewMedia }));
+        dispatch(
+          setMedia({
+            path: router.asPath,
+            src: data.reviewMedia,
+            featured: data.featuredImage,
+          }),
+        );
       });
     }
   }, [token]);
@@ -174,7 +184,7 @@ const AddReview = () => {
   return (
     <FormProvider {...methods}>
       <Toolbar />
-      <div className="container center">
+      <div className="container">
         <div className="row">
           <div className="col-xl-9">
             {/* <div className="container"> */}
@@ -259,7 +269,13 @@ const AddReview = () => {
                     />
                   </div>
                   <div className="col-12 mb-10">
-                    <Textarea name="reviewText" label="Your Reviews" required />
+                    {/* <Textarea name="reviewText" label="Your Reviews" required /> */}
+                    <TextEditor
+                      value={reviewText}
+                      onChange={(content) => {
+                        setReviewText(content);
+                      }}
+                    />
                   </div>
                   <FileButton showMedia page="review" />
                 </div>

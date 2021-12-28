@@ -13,6 +13,7 @@ interface ProductProps {
   reviewCount: number;
   ratingAverage: number;
 }
+
 const Product = (props: ProductProps) => {
   const { product, reviewCount, ratingAverage } = props;
   return (

@@ -32,8 +32,8 @@ import {
 import fuzzyMatch from '../../helpers/fuzzySearch';
 
 const baseUrl =
-  'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
-const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
+  'https://08ukyfgb42.execute-api.ap-south-1.amazonaws.com/signature';
+// const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
 
 // const baseUrl =
 //   'https://1qudotnf4l.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
@@ -64,6 +64,7 @@ interface ToolbarProps {
   imageSelector?: any;
   videoSelector?: any;
 }
+
 const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const alert = useAlert();
 
@@ -115,12 +116,21 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
           alert.error(`${imageFile[i].name} was Already Uploaded`);
           break;
         }
-        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
+        axios(
+          'https://08ukyfgb42.execute-api.ap-south-1.amazonaws.com/signature/',
+        ).then((data) => {
+          console.log(data);
+        });
+        // const formData = new FormData();
+        // formData.append('file', imageFile[i]);
+        // const { Key, uploadURL } = await (
+        //   await axios.post(baseUrl, formData)
+        // ).data;
+        // const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
 
         // console.log(url, Key);
-        const objectUrl = `${objectBaseUrl}/${Key}`;
-        console.log(objectUrl);
+        // const objectUrl = `${objectBaseUrl}/${Key}`;
+        // console.log(objectUrl);
         // const dummy = await axios.get(baseUrl, {
         //   params: {
         //     url: objectUrl,
@@ -141,23 +151,23 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         //     },
         //   },
         // });
-        dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
-        addMedia({
-          variables: {
-            data: {
-              images: [{ src: objectUrl, name: imageFile[i].name }],
-              videos: [],
-            },
-          },
-        });
-        addHallmark({
-          variables: {
-            data: {
-              key: Key,
-              url: objectUrl,
-            },
-          },
-        });
+        // dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
+        // addMedia({
+        //   variables: {
+        //     data: {
+        //       images: [{ src: objectUrl, name: imageFile[i].name }],
+        //       videos: [],
+        //     },
+        //   },
+        // });
+        // addHallmark({
+        //   variables: {
+        //     data: {
+        //       key: Key,
+        //       url: objectUrl,
+        //     },
+        //   },
+        // });
       }
     }
   };

@@ -12,6 +12,7 @@ const GET_REVIEW_BY_ID = gql`
       rating
       reviewText
       productCode
+      featuredImage
       reviewMedia {
         images
         videos
@@ -40,7 +41,11 @@ const useReviewById = async (qid, token) => {
       rating: reviewById.rating,
       reviewText: reviewById.reviewText,
       productCode: reviewById.productCode,
-      reviewMedia: reviewById.reviewMedia,
+      featuredImage: reviewById.featuredImage,
+      reviewMedia: {
+        images: [reviewById.featuredImage, ...reviewById.reviewMedia.images],
+        videos: reviewById.reviewMedia.videos,
+      },
       isPublished: reviewById.isPublished,
       createdAt: format(new Date(reviewById.createdAt), 'yyyy-MM-dd'),
     };

@@ -230,6 +230,7 @@ export const uiSlice = createSlice({
         state.blogCategoryMedia.images = [action.payload.src];
       }
       if (action.payload.path.startsWith('/review')) {
+        state.reviewMedia.featured = action.payload.featured;
         state.reviewMedia.images = action.payload.src?.images;
         state.reviewMedia.videos = action.payload.src?.videos;
       }
