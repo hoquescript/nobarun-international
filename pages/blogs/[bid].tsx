@@ -274,7 +274,7 @@ const AddNewPost = () => {
                 <div className="wrapper-section__content">
                   <div className="row">
                     <SlugGenerator
-                      // @ts-ignore
+                      isEditMode={isEditMode}
                       control={methods.control}
                       setValue={methods.setValue}
                     />

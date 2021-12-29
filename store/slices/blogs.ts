@@ -87,6 +87,7 @@ export const blogSlice = createSlice({
       state.blogsMedia.main.images = [];
       state.blogsMedia.main.videos = [];
       state.blogsMedia.postSection = {};
+      state.postSection = {};
     },
     setAllKeypoints: (state, action) => {
       state.postSection = action.payload;

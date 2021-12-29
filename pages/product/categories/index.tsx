@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { v4 as uuid } from 'uuid';
 
 import {
   FaGripVertical,
@@ -11,7 +10,6 @@ import {
 } from 'react-icons/fa';
 import Nestable from 'react-nestable';
 import 'react-nestable/dist/styles/index.css';
-import Togglebar from '../../../components/controls/togglebar';
 
 import styles from '../../../styles/pages/products.module.scss';
 import { gql, useMutation } from '@apollo/client';
@@ -84,7 +82,6 @@ const Categories = () => {
     const text = description.current?.innerText;
     if (text && description.current && text?.length > 70) {
       const value = text.substring(0, 70).concat('...');
-      // console.log(object);
       description.current.innerText = value;
     }
   }, []);

@@ -35,6 +35,7 @@ const DELETE_BLOG_CATEGORY = gql`
 const Categories = () => {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [key, setKey] = useState('');
   const [items, setItems] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -64,6 +65,7 @@ const Categories = () => {
         id,
       },
     });
+    setLoading(true);
     router.reload();
   };
 
@@ -72,7 +74,6 @@ const Categories = () => {
     const text = description.current?.innerText;
     if (text && description.current && text?.length > 50) {
       const value = text.substring(0, 50).concat('...');
-      // console.log(object);
       description.current.innerText = value;
     }
   }, []);
@@ -115,11 +116,12 @@ const Categories = () => {
                 title="Blog Category"
                 modalIsOpen={showDeleteModal}
                 setIsOpen={setShowDeleteModal}
-                confirmHandler={() => deleteHandler(item._id)}
+                confirmHandler={() => deleteHandler(key)}
               />
               <div className="table__action_menu">
                 <button
                   onClick={() => {
+                    setKey(item._id);
                     setShowDeleteModal(true);
                   }}
                 >
