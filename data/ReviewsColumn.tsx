@@ -10,12 +10,17 @@ export const REVIEWS_COLUMNS = [
     Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
   },
   {
-    Header: 'SKU',
+    Header: 'Product Code',
     accessor: 'SKU',
     sticky: 'left',
   },
   {
-    Header: 'Review Title',
+    Header: 'Name',
+    accessor: 'name',
+    sticky: 'left',
+  },
+  {
+    Header: 'Company',
     accessor: 'title',
     sticky: 'left',
   },
@@ -33,18 +38,6 @@ export const REVIEWS_COLUMNS = [
         starRatedColor="#F4643A"
         starHoverColor="#F4643A"
         starEmptyColor="#946557"
-      />
-    ),
-  },
-  {
-    Header: 'Message',
-    accessor: 'reviewText',
-    Cell: ({ value }) => (
-      <div
-        dangerouslySetInnerHTML={{
-          __html:
-            value?.length > 30 ? value?.substring(0, 30).concat('...') : value,
-        }}
       />
     ),
   },

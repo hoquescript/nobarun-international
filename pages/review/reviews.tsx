@@ -101,7 +101,8 @@ const Reviews = () => {
     const param = query.search.toLowerCase();
     return rows.filter((row) => {
       return (
-        row.values?.title.toLowerCase().includes(param) &&
+        (row.values?.title.toLowerCase().includes(param) ||
+          row.values?.name.toLowerCase().includes(param)) &&
         isWithinInterval(new Date(row.values?.createdAt), {
           start: query.range.startDate,
           end: query.range.endDate,

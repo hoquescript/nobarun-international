@@ -78,7 +78,9 @@ const Clients = () => {
         </div>
       </div>
       <div className={styles.query__btnWrapper}>
-        <h1 className="heading-primary mt-40 mb-40">All Clients</h1>
+        <h1 className="heading-primary mt-40 mb-40">
+          All Clients ({clients.length})
+        </h1>
         <div>
           <a href="/client/add-new-client" className="btn-outline-green mr-20">
             <FaPlusCircle className="btn-icon-small" />

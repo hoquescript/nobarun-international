@@ -7,9 +7,7 @@ const GET_ALL_REVIEWS = gql`
       id
       title
       name
-      email
       rating
-      reviewText
       productCode
       reviewMedia {
         images
@@ -33,8 +31,8 @@ const useAllReviews = async (token) => {
       createdAt: review.createdAt,
       SKU: review.productCode,
       title: review.title,
+      name: review.name,
       rating: review.rating,
-      reviewText: review.reviewText,
       isPublished: review.isPublished,
       images:
         +review.reviewMedia.images.length + +review.reviewMedia.videos.length,
