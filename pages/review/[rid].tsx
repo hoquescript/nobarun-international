@@ -9,7 +9,6 @@ import { useForm, FormProvider } from 'react-hook-form';
 import { FaPlus, FaSave, FaTimes } from 'react-icons/fa';
 
 import Toolbar from '../../components/shared/Toolbar';
-import Textarea from '../../components/controls/textarea';
 import Textfield from '../../components/controls/textfield';
 import Togglebar from '../../components/controls/togglebar';
 import FileButton from '../../components/controls/file';
@@ -39,7 +38,6 @@ const EDIT_REVIEW = gql`
 const defaultValues = {
   name: '',
   email: '',
-  // reviewText: '',
   title: '',
   createdAt: '',
   productCode: '',
@@ -78,10 +76,10 @@ const AddReview = () => {
   };
   const addNewReview = async (data) => {
     if (rating === 0) {
-      alert.error('You must give Rating Stars');
+      return alert.error('You must give Rating Stars');
     }
     if (productCode === '') {
-      alert.error('You must select a relevant Product');
+      return alert.error('You must select a relevant Product');
     }
 
     const review = {
@@ -205,6 +203,8 @@ const AddReview = () => {
                   className="btn-icon-white ml-20"
                   onClick={() => {
                     formReset();
+                    setReviewText('');
+                    setIsEditMode(false);
                     router.push('/review/add-new-review');
                   }}
                 >
