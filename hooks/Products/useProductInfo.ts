@@ -17,8 +17,8 @@ const GET_ALL_PRODUCT_INFO = gql`
       value: name
     }
     getAllCategoriesWithoutParent {
-      id
-      value: name
+      id: name
+      value: id
     }
   }
 `;

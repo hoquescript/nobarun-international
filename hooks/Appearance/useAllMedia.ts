@@ -7,10 +7,12 @@ const GET_ALL_MEDIAS = gql`
       images {
         name
         src
+        genre
       }
       videos {
         name
         src
+        genre
       }
     }
   }

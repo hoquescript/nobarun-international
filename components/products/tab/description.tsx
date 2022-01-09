@@ -30,6 +30,8 @@ interface DescriptionProps {
   setRelatedProducts: any;
   relatedClients: { id: string; value: string }[];
   setRelatedClients: any;
+  relatedCategories: { id: string; value: string }[];
+  setRelatedCategories: any;
   getValues: any;
   setValue: any;
   control: any;
@@ -39,6 +41,7 @@ interface DescriptionProps {
   setInfo: any;
   isEditMode?: boolean;
 }
+
 const Description = (props: DescriptionProps) => {
   const {
     register,
@@ -59,6 +62,8 @@ const Description = (props: DescriptionProps) => {
     setPostSectionKey,
     relatedClients,
     setRelatedClients,
+    relatedCategories,
+    setRelatedCategories,
     info,
     setInfo,
     isEditMode,
@@ -95,29 +100,21 @@ const Description = (props: DescriptionProps) => {
             </div>
           </div>
           <div className="row mt-10 mb-20">
-            <div className="col-3">
-              <Combobox
-                name="category"
-                label="Category"
-                required
-                options={info.categories || []}
-              />
-            </div>
-            <div className="col-3">
+            <div className="col-4">
               <Combobox
                 name="collectionName"
                 label="Collection"
                 options={info.collections || []}
               />
             </div>
-            <div className="col-3">
+            <div className="col-4">
               <Combobox
                 name="stockStatus"
                 label="Stock Status"
                 options={info.stocks || []}
               />
             </div>
-            <div className="col-3">
+            <div className="col-4">
               <Combobox
                 name="contactPerson"
                 label="Contact Person"
@@ -134,6 +131,17 @@ const Description = (props: DescriptionProps) => {
 
             <div className="col-3">
               <ProductCode register={register} productCodes={productCodes} />
+            </div>
+          </div>
+          <div className="mb-20">
+            <div className={`field`}>
+              <label>Related Categories</label>
+              <RelatedProducts
+                placeholder="Categories"
+                productCodes={info.categories}
+                chips={relatedCategories}
+                setChips={setRelatedCategories}
+              />
             </div>
           </div>
           <div className="mb-20">

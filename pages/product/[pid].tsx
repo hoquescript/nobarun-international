@@ -113,6 +113,9 @@ const AddProduct = () => {
   const [relatedClients, setRelatedClients] = useState<
     { id: string; value: string }[]
   >([]);
+  const [relatedCategories, setRelatedCategories] = useState<
+    { id: string; value: string }[]
+  >([]);
 
   const [keywords, setKeywords] = useState<string[]>([]);
   const tagState = useState<string[]>([]);
@@ -136,6 +139,7 @@ const AddProduct = () => {
     setFeatures('');
     setSpecification('');
     setRelatedProducts([]);
+    setRelatedCategories([]);
     setRelatedClients([]);
     setKeywords([]);
     tagState[1]([]);
@@ -144,10 +148,10 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async (data: any) => {
-    if (!productMedia.featured) {
-      alert.error('Please set a Featured Image');
-      return;
-    }
+    // if (!productMedia.featured) {
+    //   alert.error('Please set a Featured Image');
+    //   return;
+    // }
     if (info.slugs.some((row) => row.slug === data.slug && data.slug !== pid)) {
       alert.error('Duplicate Product Slug');
       return;
@@ -178,6 +182,7 @@ const AddProduct = () => {
       price: +data.price,
       originalPrice: +data.price,
       discount: +data.discount,
+      categories: relatedCategories.map((category) => category.value),
       relatedProducts: relatedProducts.map((product) => product.value),
       relatedClients: relatedClients.map((client) => client.value),
       featured: productMedia.featured,
@@ -272,6 +277,7 @@ const AddProduct = () => {
         setSpecification(data.specification);
         setRelatedProducts(data.relatedProducts);
         setRelatedClients(data.relatedClients);
+        setRelatedCategories(data.relatedCategories);
         setKeywords(data.keywords);
         tagState[1](data.tags);
       });
@@ -360,6 +366,8 @@ const AddProduct = () => {
                 setTabValue={setTabValue}
                 relatedProducts={relatedProducts}
                 setRelatedProducts={setRelatedProducts}
+                relatedCategories={relatedCategories}
+                setRelatedCategories={setRelatedCategories}
                 setPage={setPage}
                 setPostSectionKey={setPostSectionKey}
                 relatedClients={relatedClients}

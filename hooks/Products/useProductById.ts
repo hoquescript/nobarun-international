@@ -41,6 +41,10 @@ const GET_PRODUCT_BY_ID = gql`
       slug
       url
       siteMap
+      populatedCategories {
+        value: id
+        id: name
+      }
       populatedRelatedProducts {
         value: id
         id: productName
@@ -115,6 +119,7 @@ const useProductById = async (catid) => {
     specification: productById.specification,
     keywords: productById.keywords,
     features: productById.features,
+    relatedCategories: productById.populatedCategories,
     relatedProducts: productById.populatedRelatedProducts,
     relatedClients: productById.relatedClients,
     createdAt: productById.createdAt,

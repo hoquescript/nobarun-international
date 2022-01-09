@@ -5,7 +5,7 @@ const GET_ALL_PRODUCT_CODE = gql`
   query getAllProductCode {
     getAllTheProducts {
       id: productName
-      value: productCode
+      value: id
     }
   }
 `;

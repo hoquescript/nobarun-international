@@ -30,10 +30,13 @@ import {
   deleteMediaGallery,
 } from '../../store/slices/ui';
 import fuzzyMatch from '../../helpers/fuzzySearch';
+import { put } from '@redux-saga/core/effects';
+import { convertToBinary } from '../../helpers/convertToBinary';
 
 const baseUrl =
-  'https://08ukyfgb42.execute-api.ap-south-1.amazonaws.com/signature';
-// const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
+  'https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/v1?extension=';
+const objectBaseUrl =
+  'https://nobarunawsvideouploader.s3.ap-south-1.amazonaws.com';
 
 // const baseUrl =
 //   'https://1qudotnf4l.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
@@ -81,6 +84,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
 
   const [imageFile, setImageFile] = useState<FileList | null>(null);
   const [link, setLink] = useState('');
+  const [isImageLoade, setImageLoaded] = useState(false);
   const dispatch = useTypedDispatch();
 
   useImperativeHandle(ref, () => ({
@@ -105,87 +109,93 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const uploadImages = async () => {
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
+        const fileName = imageFile[i].name;
+        const extension = fileName.split('.').pop();
+
         if (imageFile[i].size > 2097152) {
-          alert.error(`${imageFile[i].name} is more than 2MB`);
+          alert.error(`${fileName} is more than 2MB`);
           break;
         }
-        const isDuplicate = images.some(
-          (image) => image.name === imageFile[i].name,
-        );
+        const isDuplicate = images.some((image) => image.name === fileName);
         if (isDuplicate) {
-          alert.error(`${imageFile[i].name} was Already Uploaded`);
+          alert.error(`${fileName} was Already Uploaded`);
           break;
         }
-        axios(
-          'https://08ukyfgb42.execute-api.ap-south-1.amazonaws.com/signature/',
-        ).then((data) => {
-          console.log(data);
+
+        const response = await axios.get(`${baseUrl}${extension}`);
+        const { obj_location, fields, upload_url } = response.data;
+        const formData = new FormData();
+        formData.append('key', fields?.key);
+        formData.append('policy', fields?.policy);
+        formData.append('x-amz-algorithm', fields['x-amz-algorithm']);
+        formData.append('x-amz-credential', fields['x-amz-credential']);
+        formData.append('x-amz-date', fields['x-amz-date']);
+        formData.append('x-amz-security-token', fields['x-amz-security-token']);
+        formData.append('x-amz-signature', fields['x-amz-signature']);
+        formData.append('file', imageFile[i]);
+        await axios.post(upload_url, formData);
+
+        const fileType = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(
+          extension!?.toLowerCase(),
+        )
+          ? 'video'
+          : 'image';
+
+        dispatch(
+          addImage({
+            src: obj_location,
+            name: fileName,
+            type: fileType,
+          }),
+        );
+
+        // setImageLoaded(true);
+
+        addMedia({
+          variables: {
+            data: {
+              images: [
+                {
+                  src: obj_location,
+                  name: fileName,
+                  genre: fileType,
+                },
+              ],
+              videos: [],
+            },
+          },
         });
-        // const formData = new FormData();
-        // formData.append('file', imageFile[i]);
-        // const { Key, uploadURL } = await (
-        //   await axios.post(baseUrl, formData)
-        // ).data;
-        // const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
 
-        // console.log(url, Key);
-        // const objectUrl = `${objectBaseUrl}/${Key}`;
-        // console.log(objectUrl);
-        // const dummy = await axios.get(baseUrl, {
-        //   params: {
-        //     url: objectUrl,
-        //     key: objectUrl.replace(
-        //       'https://nobarun.s3.us-east-2.amazonaws.com/',
-        //       '',
-        //     ),
-        //   },
-        // });
-        // console.log(dummy);
-
-        // console.log(objectUrl);
-        // await addHallmark({
-        //   variables: {
-        //     data: {
-        //       key: Key,
-        //       url: objectUrl,
-        //     },
-        //   },
-        // });
-        // dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
-        // addMedia({
-        //   variables: {
-        //     data: {
-        //       images: [{ src: objectUrl, name: imageFile[i].name }],
-        //       videos: [],
-        //     },
-        //   },
-        // });
-        // addHallmark({
-        //   variables: {
-        //     data: {
-        //       key: Key,
-        //       url: objectUrl,
-        //     },
-        //   },
-        // });
+        if (router.pathname === '/product/[pid]') {
+          addHallmark({
+            variables: {
+              data: {
+                key: obj_location.replace('media/', ''),
+                url: `${objectBaseUrl}/${obj_location}`,
+              },
+            },
+          });
+        }
       }
     }
   };
 
-  const deleteHandler = async (name: string, url: string, type: string) => {
+  const deleteHandler = async (
+    name: string,
+    url: string,
+    type: 'image' | 'video' | 'youtube',
+  ) => {
+    await axios.delete(
+      `https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/signature?object_path=${url}`,
+    );
     dispatch(deleteMediaGallery({ src: url, type }));
     if (type === 'image') {
-      const dummy = await axios.get(baseUrl, {
-        params: {
-          key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
-        },
-      });
-
       await deleteImage({
         variables: {
           data: {
             name,
             src: url,
+            genre: type,
           },
         },
       });
@@ -196,6 +206,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
           data: {
             name,
             src: url,
+            genre: type,
           },
         },
       });
@@ -206,6 +217,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
       addYoutubeLink({
         name: 'Tube-1',
         src: link,
+        genre: 'youtube',
       }),
     );
     addMedia({
@@ -216,6 +228,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
             {
               name: 'Tube-1',
               src: link,
+              genre: 'youtube',
             },
           ],
         },
@@ -350,6 +363,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                     else name = image.name;
                     const searchRegex = new RegExp(imageSearch, 'gim');
                     const matched = name.match(searchRegex);
+                    const imgURL = `${objectBaseUrl}/${image.src}`;
                     return (
                       <div className="col-4">
                         <div
@@ -365,7 +379,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                             <FaTimes />
                           </button>
                           <figure>
-                            <img src={image.src} alt={image.name} />
+                            <img src={imgURL} alt={image.name} />
                           </figure>
                           <h5
                             ref={fileName}

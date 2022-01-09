@@ -16,6 +16,7 @@
     "date-fns": "^2.23.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
+    "fs-web": "^1.0.1",
     "graphql": "^15.5.2",
     "graphql-request": "^3.5.0",
     "html-to-draftjs": "1.4.0",

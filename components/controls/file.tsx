@@ -17,6 +17,8 @@ import {
   setGlobalPage,
   toggleToolbar,
 } from '../../store/slices/ui';
+const objectBaseUrl =
+  'https://nobarunawsvideouploader.s3.ap-south-1.amazonaws.com';
 
 interface FileButtonProps {
   showMedia?: boolean;
@@ -146,7 +148,7 @@ const FileButton = (props: FileButtonProps) => {
             >
               <FaTimes />
             </button>
-            <img src={src} alt="" />
+            <img src={`${objectBaseUrl}/${src}`} alt="" />
           </figure>
         ))}
       {showMedia &&
