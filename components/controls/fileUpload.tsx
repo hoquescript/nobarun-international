@@ -3,8 +3,7 @@ import axios from 'axios';
 import { FaPlus } from 'react-icons/fa';
 
 const baseUrl =
-  'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
-const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
+  'https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/v1?extension=';
 
 interface InputFileProps {
   onChangeHandler: any;
@@ -13,42 +12,29 @@ interface InputFileProps {
   // fileInputRef: any;
 }
 
-export const InputFileUpload = forwardRef((props: InputFileProps, ref) => {
-  const { disabled, className, onChangeHandler } = props;
-  const imageUploadHandler = async (e) => {
-    const { files } = e.target;
-    if (files) {
-      for (let i = 0; i < files?.length; i++) {
-        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        const { url } = await (await axios.put(uploadURL, files[i])).config;
-        const objectUrl = `${objectBaseUrl}/${Key}`;
-        onChangeHandler(objectUrl);
-      }
-    }
-  };
-  return (
-    <input
-      // @ts-ignore
-      ref={ref}
-      type="file"
-      className={`custom-input ${className}`}
-      placeholder="Name"
-      disabled={disabled}
-      onChange={(e) => imageUploadHandler(e)}
-    />
-  );
-});
-
 export const BoxFileupload = (props: InputFileProps) => {
   const { disabled, onChangeHandler } = props;
   const imageUploadHandler = async (e) => {
     const { files } = e.target;
     if (files) {
       for (let i = 0; i < files?.length; i++) {
-        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        const { url } = await (await axios.put(uploadURL, files[i])).config;
-        const objectUrl = `${objectBaseUrl}/${Key}`;
-        onChangeHandler(objectUrl);
+        const fileName = files[i].name;
+        const extension = fileName.split('.').pop();
+
+        const response = await axios.get(`${baseUrl}${extension}`);
+        const { obj_location, fields, upload_url } = response.data;
+        const formData = new FormData();
+        formData.append('key', fields?.key);
+        formData.append('policy', fields?.policy);
+        formData.append('x-amz-algorithm', fields['x-amz-algorithm']);
+        formData.append('x-amz-credential', fields['x-amz-credential']);
+        formData.append('x-amz-date', fields['x-amz-date']);
+        formData.append('x-amz-security-token', fields['x-amz-security-token']);
+        formData.append('x-amz-signature', fields['x-amz-signature']);
+        formData.append('file', files[i]);
+        await axios.post(upload_url, formData);
+
+        onChangeHandler(obj_location);
       }
     }
   };

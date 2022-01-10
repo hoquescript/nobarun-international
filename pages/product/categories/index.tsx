@@ -107,7 +107,10 @@ const Categories = () => {
         <div className="col-3 row">
           <div className="col-5">
             <figure className={`${styles.category__image} center`}>
-              <img src={item.image} alt="" />
+              <img
+                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${item.image}`}
+                alt=""
+              />
             </figure>
           </div>
           <div className="col-7 flex">

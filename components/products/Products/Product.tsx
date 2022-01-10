@@ -5,7 +5,6 @@ import { BiDotsVerticalRounded } from 'react-icons/bi';
 
 import Modal from '../../shared/Modal';
 import styles from '../../../styles/pages/products.module.scss';
-import { Router, useRouter } from 'next/router';
 import abbrNum from '../../../helpers/abbrNum';
 
 const Product = (props) => {
@@ -120,7 +119,10 @@ const Product = (props) => {
       </div>
       <div style={{ display: 'flex', width: '100%', height: 120 }}>
         <figure className="product__img">
-          <img src={image} alt={`product-image-${id}`} />
+          <img
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${image}`}
+            alt="Image"
+          />
         </figure>
 
         <div className="product__content">

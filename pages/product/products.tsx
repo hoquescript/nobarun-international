@@ -159,7 +159,6 @@ const Products = () => {
                     if (firstEl[sortBy] > secondEl[sortBy]) return 1;
                     return 0;
                   } else {
-                    console.log(firstEl.createdAt, sortBy);
                     return (
                       // @ts-ignore
                       new Date(secondEl.createdAt) - new Date(firstEl.createdAt)

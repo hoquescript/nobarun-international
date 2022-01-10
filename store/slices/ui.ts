@@ -9,8 +9,8 @@ type Media = {
 interface UIState {
   showToolbar: boolean;
   token: string;
-  images: { src: string; name: string }[];
-  links: { src: string; name: string }[];
+  images: { src: string; name: string; genre: 'image' | 'video' }[];
+  links: { src: string; name: string; genre: 'youtube' }[];
   productMedia: Media;
   productCategoryMedia: Media;
   productCategoryCoverMedia: Media;
@@ -28,9 +28,11 @@ interface UIState {
     [key: string]: Media;
   };
   pageName: string;
+  shouldHallmark: boolean;
 }
 const initialState: UIState = {
   showToolbar: false,
+  shouldHallmark: false,
   token: '',
   images: [],
   links: [],
@@ -91,8 +93,12 @@ export const uiSlice = createSlice({
   reducers: {
     closeToolbar: (state) => {
       state.showToolbar = false;
+      state.shouldHallmark = false;
     },
     toggleToolbar: (state) => {
+      if (state.showToolbar) {
+        state.shouldHallmark = false;
+      }
       state.showToolbar = !state.showToolbar;
     },
     addImage: (state, action) => {
@@ -280,6 +286,10 @@ export const uiSlice = createSlice({
     setGlobalPage: (state, action) => {
       state.pageName = action.payload;
     },
+    setProductPage: (state, action) => {
+      const { value } = action.payload;
+      state.shouldHallmark = value;
+    },
   },
 });
 
@@ -301,6 +311,7 @@ export const {
   setContactImage,
   deleteMediaGallery,
   setGlobalPage,
+  setProductPage,
 } = uiSlice.actions;
 
 export default uiSlice.reducer;

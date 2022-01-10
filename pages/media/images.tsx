@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { gql, useMutation } from '@apollo/client';
 import { useAlert } from 'react-alert';
-import { FaPlus, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaTimes, FaVideo } from 'react-icons/fa';
 import axios from 'axios';
 import Search from '../../components/controls/search';
 import Loader from '../../components/shared/Loader';
@@ -29,8 +29,9 @@ const DELETE_IMAGE = gql`
 `;
 
 const baseUrl =
-  'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
-const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
+  'https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/v1?extension=';
+const objectBaseUrl =
+  'https://nobarunawsvideouploader.s3.ap-south-1.amazonaws.com';
 
 const Images = () => {
   const alert = useAlert();
@@ -46,14 +47,12 @@ const Images = () => {
 
   const dispatch = useTypedDispatch();
   useEffect(() => {
-    if (images.length === 0) {
-      setLoading(true);
-      useAllMedia().then((media) => {
-        dispatch(fetchMedia(media));
-        setLoading(false);
-      });
-    }
-  }, [images]);
+    setLoading(true);
+    useAllMedia().then((media) => {
+      dispatch(fetchMedia(media));
+      setLoading(false);
+    });
+  }, []);
 
   const imageUploadHandler = (e) => {
     const { files } = e.target;
@@ -65,6 +64,9 @@ const Images = () => {
   const uploadImages = async () => {
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
+        const fileName = imageFile[i].name;
+        const extension = fileName.split('.').pop();
+
         if (imageFile[i].size > 2097152) {
           alert.error(`${imageFile[i].name} is more than 2MB`);
           break;
@@ -76,15 +78,46 @@ const Images = () => {
           alert.error(`${imageFile[i].name} was Already Uploaded`);
           break;
         }
-        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        console.log(imageFile[i]);
-        const { url } = await (await axios.put(uploadURL, imageFile[i])).config;
-        const objectUrl = `${objectBaseUrl}/${Key}`;
-        dispatch(addImage({ src: objectUrl, name: imageFile[i].name }));
+
+        const response = await axios.get(`${baseUrl}${extension}`);
+        const { obj_location, fields, upload_url } = response.data;
+        const formData = new FormData();
+        formData.append('key', fields?.key);
+        formData.append('policy', fields?.policy);
+        formData.append('x-amz-algorithm', fields['x-amz-algorithm']);
+        formData.append('x-amz-credential', fields['x-amz-credential']);
+        formData.append('x-amz-date', fields['x-amz-date']);
+        formData.append('x-amz-security-token', fields['x-amz-security-token']);
+        formData.append('x-amz-signature', fields['x-amz-signature']);
+        formData.append('file', imageFile[i]);
+        await axios.post(upload_url, formData);
+
+        const fileType = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(
+          extension!?.toLowerCase(),
+        )
+          ? 'video'
+          : 'image';
+
+        dispatch(
+          addImage({
+            src: obj_location,
+            name: fileName,
+            type: fileType,
+          }),
+        );
+
+        // setImageLoaded(true);
+
         addMedia({
           variables: {
             data: {
-              images: [{ src: objectUrl, name: imageFile[i].name }],
+              images: [
+                {
+                  src: obj_location,
+                  name: fileName,
+                  genre: fileType,
+                },
+              ],
               videos: [],
             },
           },
@@ -99,22 +132,18 @@ const Images = () => {
 
   const deleteHandler = async (name: string, url: string, type: string) => {
     dispatch(deleteMediaGallery({ src: url, type }));
-    if (type === 'image') {
-      const dummy = await axios.get(baseUrl, {
-        params: {
-          key: url.replace('https://nobarun.s3.us-east-2.amazonaws.com/', ''),
+    await axios.delete(
+      `https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/signature?object_path=${url}`,
+    );
+    await deleteImage({
+      variables: {
+        data: {
+          name,
+          src: url,
+          genre: type,
         },
-      });
-
-      await deleteImage({
-        variables: {
-          data: {
-            name,
-            src: url,
-          },
-        },
-      });
-    }
+      },
+    });
   };
 
   const fileName = useRef<HTMLHeadingElement>(null);
@@ -133,7 +162,7 @@ const Images = () => {
       {loading && <Loader />}
       <div className="row mb-60">
         <div className="col-6">
-          <h1 className="heading-primary">Image Gallery</h1>
+          <h1 className="heading-primary">Image Gallery ({images.length})</h1>
         </div>
         <div className="col-5">
           <Search search={search} setSearch={setSearch} />
@@ -168,20 +197,32 @@ const Images = () => {
             else name = image.name;
             const searchRegex = new RegExp(search, 'gim');
             const matched = name.match(searchRegex);
+            const imgURL = `${objectBaseUrl}/${image.src}`;
             return (
-              <div
-                key={image.name + idx}
-                className="images-gallery__image"
-                // onClick={() => selectImageHandler(image.src)}
-              >
+              <div key={image.name + idx} className="images-gallery__image">
                 <button
                   onClick={() => deleteHandler(image.name, image.src, 'image')}
                 >
                   <FaTimes />
                 </button>
-                <figure>
-                  <img src={image.src} alt="" />
-                </figure>
+                {image.genre === 'video' ? (
+                  <figure className="gallery-video">
+                    <FaVideo />
+                    <video
+                      src={imgURL}
+                      controls={false}
+                      autoPlay={false}
+                      muted
+                      style={{ height: '7.5rem', width: '7.5rem' }}
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </figure>
+                ) : (
+                  <figure>
+                    <img src={imgURL} alt={image.name} />
+                  </figure>
+                )}
                 <h5
                   ref={fileName}
                   style={{ wordWrap: 'break-word' }}

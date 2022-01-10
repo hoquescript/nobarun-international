@@ -11,6 +11,19 @@
   text-align: center;
   cursor: pointer;
   position: relative;
+  .gallery-video {
+    position: relative;
+    & > svg {
+      position: absolute;
+      top: 50%;
+      z-index: 1000;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 3rem;
+      width: 3rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
   .selected-mark {
     position: absolute;
     right: 1rem;
@@ -60,7 +73,8 @@
       width: 100%;
       padding-top: 100%;
     }
-    img {
+    img,
+    video {
       position: absolute;
       left: 50%;
       top: 50%;

@@ -10,7 +10,7 @@ import { gql, useMutation } from '@apollo/client';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { AiFillYoutube, AiOutlineSearch } from 'react-icons/ai';
-import { FaPlus, FaSlack, FaTimes } from 'react-icons/fa';
+import { FaPlus, FaSlack, FaTimes, FaVideo } from 'react-icons/fa';
 
 import getYoutubeId from '../../helpers/getYoutubeId';
 import useAllMedia from '../../hooks/Appearance/useAllMedia';
@@ -30,17 +30,11 @@ import {
   deleteMediaGallery,
 } from '../../store/slices/ui';
 import fuzzyMatch from '../../helpers/fuzzySearch';
-import { put } from '@redux-saga/core/effects';
-import { convertToBinary } from '../../helpers/convertToBinary';
 
 const baseUrl =
   'https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/v1?extension=';
 const objectBaseUrl =
   'https://nobarunawsvideouploader.s3.ap-south-1.amazonaws.com';
-
-// const baseUrl =
-//   'https://1qudotnf4l.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
-// const objectBaseUrl = 'http://nobarunn.s3.us-east-2.amazonaws.com';
 
 const ADD_NEW_MEDIA = gql`
   mutation addImage($data: GalleryInput!) {
@@ -75,6 +69,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   const show = useTypedSelector((state) => state.ui.showToolbar);
   const images = useTypedSelector((state) => state.ui.images);
   const links = useTypedSelector((state) => state.ui.links);
+  const shouldHallmark = useTypedSelector((state) => state.ui.shouldHallmark);
+
   const router = useRouter();
 
   const [addMedia] = useMutation(ADD_NEW_MEDIA);
@@ -166,7 +162,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
           },
         });
 
-        if (router.pathname === '/product/[pid]') {
+        if (shouldHallmark) {
           addHallmark({
             variables: {
               data: {
@@ -185,11 +181,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     url: string,
     type: 'image' | 'video' | 'youtube',
   ) => {
-    await axios.delete(
-      `https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/signature?object_path=${url}`,
-    );
     dispatch(deleteMediaGallery({ src: url, type }));
-    if (type === 'image') {
+    if (type === 'image' || type === 'video') {
+      await axios.delete(
+        `https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/signature?object_path=${url}`,
+      );
+
       await deleteImage({
         variables: {
           data: {
@@ -200,7 +197,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         },
       });
     }
-    if (type === 'video')
+    if (type === 'youtube')
       deleteVideo({
         variables: {
           data: {
@@ -378,9 +375,24 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
                           >
                             <FaTimes />
                           </button>
-                          <figure>
-                            <img src={imgURL} alt={image.name} />
-                          </figure>
+                          {image.genre === 'video' ? (
+                            <figure className="gallery-video">
+                              <FaVideo />
+                              <video
+                                src={imgURL}
+                                controls={false}
+                                autoPlay={false}
+                                muted
+                                style={{ height: '7.5rem', width: '7.5rem' }}
+                              >
+                                Your browser does not support the video tag.
+                              </video>
+                            </figure>
+                          ) : (
+                            <figure>
+                              <img src={imgURL} alt={image.name} />
+                            </figure>
+                          )}
                           <h5
                             ref={fileName}
                             style={{ wordWrap: 'break-word' }}

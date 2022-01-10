@@ -3,8 +3,7 @@ import { FaCamera, FaInfoCircle } from 'react-icons/fa';
 import axios from 'axios';
 
 const baseUrl =
-  'https://eyeb3obcg1.execute-api.us-east-2.amazonaws.com/default/uploadAnyTypeMedia';
-const objectBaseUrl = 'https://nobarun.s3.us-east-2.amazonaws.com';
+  'https://xwkodx6vi3.execute-api.ap-south-1.amazonaws.com/v1?extension=';
 
 import Textarea from '../controls/textarea';
 import Textfield from '../controls/textfield';
@@ -26,11 +25,23 @@ const AccountInfo = (props: AccountInfoProps) => {
     const { files } = e.target;
     if (files) {
       for (let i = 0; i < files?.length; i++) {
-        const { Key, uploadURL } = await (await axios.get(baseUrl)).data;
-        const { url } = await (await axios.put(uploadURL, files[i])).config;
-        const objectUrl = `${objectBaseUrl}/${Key}`;
-        console.log(objectUrl);
-        setImages(objectUrl);
+        const fileName = files[i].name;
+        const extension = fileName.split('.').pop();
+
+        const response = await axios.get(`${baseUrl}${extension}`);
+        const { obj_location, fields, upload_url } = response.data;
+        const formData = new FormData();
+        formData.append('key', fields?.key);
+        formData.append('policy', fields?.policy);
+        formData.append('x-amz-algorithm', fields['x-amz-algorithm']);
+        formData.append('x-amz-credential', fields['x-amz-credential']);
+        formData.append('x-amz-date', fields['x-amz-date']);
+        formData.append('x-amz-security-token', fields['x-amz-security-token']);
+        formData.append('x-amz-signature', fields['x-amz-signature']);
+        formData.append('file', files[i]);
+        await axios.post(upload_url, formData);
+
+        setImages(obj_location);
       }
     }
   };
@@ -94,7 +105,11 @@ const AccountInfo = (props: AccountInfoProps) => {
                   <button type="button" className="remove-image">
                     <i className="times-icon"></i>
                   </button>
-                  <img src={images} alt="" style={{ borderRadius: '50%' }} />
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${images}`}
+                    alt=""
+                    style={{ borderRadius: '50%' }}
+                  />
                 </figure>
               </div>
             ) : (

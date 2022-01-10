@@ -254,7 +254,10 @@ const StockStatus = () => {
                       >
                         <FaTimes />
                       </button>
-                      <img src={stocks[key].image} alt="" />
+                      <img
+                        src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${stocks[key].image}`}
+                        alt=""
+                      />
                     </figure>
                   ) : (
                     <BoxFileupload

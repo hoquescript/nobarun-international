@@ -23,6 +23,19 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(7.1rem, 1fr));
   grid-gap: 1rem;
+  .gallery-video {
+    position: relative;
+    & > svg {
+      position: absolute;
+      top: 50%;
+      z-index: 1000;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      height: 3rem;
+      width: 3rem;
+      color: rgba(255, 255, 255, 0.75);
+    }
+  }
 
   figure {
     position: relative;
@@ -33,7 +46,8 @@
       padding-top: 100%;
     }
 
-    img {
+    img,
+    video {
       position: absolute;
       top: 0;
       left: 0;

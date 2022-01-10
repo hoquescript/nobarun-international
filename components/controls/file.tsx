@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCheck, FaPlus, FaTimes } from 'react-icons/fa';
+import { FaCheck, FaPlus, FaTimes, FaVideo } from 'react-icons/fa';
 import getYoutubeId from '../../helpers/getYoutubeId';
 import {
   useTypedDispatch,
@@ -15,6 +15,7 @@ import {
   deleteMedia,
   featuredMedia,
   setGlobalPage,
+  setProductPage,
   toggleToolbar,
 } from '../../store/slices/ui';
 const objectBaseUrl =
@@ -115,42 +116,66 @@ const FileButton = (props: FileButtonProps) => {
       {showMedia &&
         media &&
         media.images &&
-        media.images.map((src, idx) => (
-          <figure
-            key={src + idx}
-            className={`${media.featured === src ? 'isFeatured' : ''} ${
-              ![
-                'pCollection',
-                'pKeypoint',
-                'bPostSection',
-                'bCategory',
-                'client',
-                'contact',
-                'query',
-                'contactLogo',
-              ].includes(page)
-                ? ''
-                : 'hideFeaturedOption'
-            } ${page === 'contact' ? 'contact__figure' : ''}
+        media.images.map((src, idx) => {
+          const isVideo = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(
+            src?.slice(17)?.toLowerCase(),
+          );
+          return (
+            <figure
+              key={src + idx}
+              className={`${media.featured === src ? 'isFeatured' : ''} ${
+                isVideo ? 'gallery-video' : ''
+              } ${
+                ![
+                  'pCollection',
+                  'pKeypoint',
+                  'bPostSection',
+                  'bCategory',
+                  'client',
+                  'contact',
+                  'query',
+                  'contactLogo',
+                  'pCategory',
+                  'pCategoryFeatured',
+                ].includes(page)
+                  ? ''
+                  : 'hideFeaturedOption'
+              } ${page === 'contact' ? 'contact__figure' : ''} 
             `}
-          >
-            <button
-              type="button"
-              className="featured-image"
-              onClick={() => featureImageHandler(page, src)}
             >
-              <FaCheck />
-            </button>
-            <button
-              type="button"
-              className="remove-image"
-              onClick={() => deleteImageHandler('images', page, idx)}
-            >
-              <FaTimes />
-            </button>
-            <img src={`${objectBaseUrl}/${src}`} alt="" />
-          </figure>
-        ))}
+              <button
+                type="button"
+                className="featured-image"
+                onClick={() => featureImageHandler(page, src)}
+              >
+                <FaCheck />
+              </button>
+              <button
+                type="button"
+                className="remove-image"
+                onClick={() => deleteImageHandler('images', page, idx)}
+              >
+                <FaTimes />
+              </button>
+              {isVideo ? (
+                <>
+                  <FaVideo />
+                  <video
+                    src={`${objectBaseUrl}/${src}`}
+                    controls={false}
+                    autoPlay={false}
+                    muted
+                    style={{ height: '7.5rem', width: '7.5rem' }}
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                </>
+              ) : (
+                <img src={`${objectBaseUrl}/${src}`} alt="" />
+              )}
+            </figure>
+          );
+        })}
       {showMedia &&
         media &&
         media.videos &&
@@ -195,7 +220,7 @@ const FileButton = (props: FileButtonProps) => {
             </figure>
           );
         })}
-      {([
+      {[
         'pKeypoint',
         'pCollection',
         'bPostSection',
@@ -204,14 +229,12 @@ const FileButton = (props: FileButtonProps) => {
         'client',
         'contact',
         'contactLogo',
+        'pCategory',
+        'pCategoryFeatured',
       ].includes(page) &&
-        media &&
-        media.images &&
-        media.images.length === 1) ||
-      (page === 'pCategory' &&
-        media &&
-        media.images &&
-        media.images.length === 2) ? (
+      media &&
+      media.images &&
+      media.images.length === 1 ? (
         ''
       ) : (
         <button
@@ -225,6 +248,13 @@ const FileButton = (props: FileButtonProps) => {
             } else {
               dispatch(setGlobalPage(''));
             }
+
+            if (page === 'pMain') {
+              dispatch(setProductPage({ value: true }));
+            } else {
+              dispatch(setProductPage({ value: false }));
+            }
+
             dispatch(toggleToolbar());
           }}
         >

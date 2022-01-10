@@ -237,18 +237,6 @@ const CategoryForm = () => {
                 </div>
               )}
               <div
-                className={isEditMode ? 'col-3 mt-20' : 'col-3 ml-60'}
-                style={{
-                  transform: isEditMode ? '' : 'translateY(15px)',
-                  flexDirection: 'row',
-                }}
-              >
-                <div className={`field`}>
-                  <label>Category Image</label>
-                  <FileButton showMedia page="pCategory" />
-                </div>
-              </div>
-              <div
                 className={isEditMode ? 'col-2 mt-20' : 'col-2'}
                 style={{
                   transform: isEditMode ? '' : 'translateY(15px)',
@@ -256,8 +244,21 @@ const CategoryForm = () => {
                 }}
               >
                 <div className={`field`}>
-                  <label>Featured Image</label>
+                  <label>Category Image</label>
                   <FileButton showMedia page="pCategoryFeatured" />
+                </div>
+              </div>
+
+              <div
+                className={isEditMode ? 'col-3 mt-20' : 'col-3 ml-60'}
+                style={{
+                  transform: isEditMode ? '' : 'translateY(15px)',
+                  flexDirection: 'row',
+                }}
+              >
+                <div className={`field`}>
+                  <label>Category Icon</label>
+                  <FileButton showMedia page="pCategory" />
                 </div>
               </div>
               <div className="col-12 mt-30">

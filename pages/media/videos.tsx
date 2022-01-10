@@ -37,6 +37,7 @@ const Videos = () => {
   const [deleteVideo] = useMutation(DELETE_VIDEO);
 
   const dispatch = useTypedDispatch();
+
   useEffect(() => {
     if (links.length === 0) {
       setLoading(true);
@@ -45,13 +46,14 @@ const Videos = () => {
         setLoading(false);
       });
     }
-  }, [links]);
+  }, []);
 
   const youtubeLinkHandler = () => {
     dispatch(
       addYoutubeLink({
         name: 'Tube-1',
         src: link,
+        genre: 'youtube',
       }),
     );
     addMedia({
@@ -62,6 +64,7 @@ const Videos = () => {
             {
               name: 'Tube-1',
               src: link,
+              genre: 'youtube',
             },
           ],
         },
@@ -72,15 +75,15 @@ const Videos = () => {
 
   const deleteHandler = async (name: string, url: string, type: string) => {
     dispatch(deleteMediaGallery({ src: url, type }));
-    if (type === 'video')
-      deleteVideo({
-        variables: {
-          data: {
-            name,
-            src: url,
-          },
+    deleteVideo({
+      variables: {
+        data: {
+          name,
+          src: url,
+          genre: 'youtube',
         },
-      });
+      },
+    });
   };
 
   return (
@@ -88,7 +91,7 @@ const Videos = () => {
       {loading && <Loader />}
       <div className="row mb-60">
         <div className="col-6">
-          <h1 className="heading-primary">Video Gallery</h1>
+          <h1 className="heading-primary">Video Gallery ({links.length})</h1>
         </div>
         <div className="col-6">
           <div
