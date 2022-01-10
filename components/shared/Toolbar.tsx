@@ -147,7 +147,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
 
         // setImageLoaded(true);
 
-        addMedia({
+        await addMedia({
           variables: {
             data: {
               images: [
@@ -163,7 +163,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         });
 
         if (shouldHallmark) {
-          addHallmark({
+          await addHallmark({
             variables: {
               data: {
                 key: obj_location.replace('media/', ''),

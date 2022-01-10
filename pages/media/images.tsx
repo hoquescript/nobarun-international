@@ -108,7 +108,7 @@ const Images = () => {
 
         // setImageLoaded(true);
 
-        addMedia({
+        await addMedia({
           variables: {
             data: {
               images: [

@@ -86,9 +86,10 @@ const AddAdmin = () => {
   useEffect(() => {
     if (aid !== 'add') {
       setIsEditMode(true);
-      useAdminById(aid, token).then((data) => {
+      useAdminById(aid, token).then((data: any) => {
         methods.reset(data.account);
         setPermission(data.permission);
+        setImages(data.image);
       });
     }
   }, [token]);

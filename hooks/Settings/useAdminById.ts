@@ -7,6 +7,7 @@ const GET_ADMIN_BY_ID = gql`
       firstName
       lastName
       displayName
+      image
       address
       email
       number
@@ -64,6 +65,7 @@ const useAdminById = async (aid, token) => {
       displayName: accounts.displayName,
       address: accounts.address,
       email: accounts.email,
+      image: accounts.image,
       number: accounts.number,
       notes: accounts.notes,
       password: 'Hello1997',

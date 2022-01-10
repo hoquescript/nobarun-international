@@ -16,6 +16,8 @@ const useProductCategoryTree = async () => {
     name: category.name,
     description: category.description,
     image: category.image,
+    icon: category.icon,
+    isFeatured: category.isFeatured,
     slug: category.slug,
     children: category.children,
     isPublished: category.isPublished,

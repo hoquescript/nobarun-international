@@ -102,13 +102,23 @@ const AccountInfo = (props: AccountInfoProps) => {
             {images ? (
               <div className="product-images">
                 <figure style={{ height: '20rem', width: '20rem' }}>
-                  <button type="button" className="remove-image">
+                  <button
+                    type="button"
+                    className="remove-image"
+                    onClick={() => {
+                      setImages('');
+                    }}
+                  >
                     <i className="times-icon"></i>
                   </button>
                   <img
                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${images}`}
                     alt=""
-                    style={{ borderRadius: '50%' }}
+                    style={{
+                      borderRadius: '50%',
+                      width: '20rem',
+                      height: '20rem',
+                    }}
                   />
                 </figure>
               </div>
