@@ -21,7 +21,9 @@ const Product = (props: ProductProps) => {
       <a>
         <div className={styles.product}>
           <img
-            src={product.images && product.images[0]}
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}/${
+              product.images && product.images[0]
+            }`}
             alt="Product"
             className={styles.product__image}
           />

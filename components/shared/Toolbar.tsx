@@ -95,14 +95,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     });
   }, []);
 
-  const imageUploadHandler = (e) => {
-    const { files } = e.target;
-    if (files) {
-      setImageFile(files);
-    }
-  };
-
-  const uploadImages = async () => {
+  const imageUploadHandler = async (e) => {
+    const { files: imageFile } = e.target;
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
         const fileName = imageFile[i].name;
@@ -119,8 +113,8 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         }
 
         const response = await axios.get(`${baseUrl}${extension}`);
-        const { obj_location, fields, upload_url } = response.data;
-        const formData = new FormData();
+        const { obj_location, fields, upload_url } = await response.data;
+        const formData = await new FormData();
         formData.append('key', fields?.key);
         formData.append('policy', fields?.policy);
         formData.append('x-amz-algorithm', fields['x-amz-algorithm']);
@@ -137,7 +131,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
           ? 'video'
           : 'image';
 
-        dispatch(
+        await dispatch(
           addImage({
             src: obj_location,
             name: fileName,
@@ -174,6 +168,7 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         }
       }
     }
+    setImageFile(null);
   };
 
   const deleteHandler = async (
@@ -259,10 +254,6 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
       dispatch(selectVideo({ src: videoSrc, path: router.asPath }));
     }
   };
-
-  useEffect(() => {
-    uploadImages();
-  }, [imageFile]);
 
   const toolbarRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
