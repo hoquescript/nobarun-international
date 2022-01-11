@@ -19,7 +19,7 @@ import styles from '../../styles/pages/query-report.module.scss';
 import ProductCode from '../../components/shared/ProductCode';
 import FileButton from '../../components/controls/file';
 import Toolbar from '../../components/shared/Toolbar';
-import { resetMediaSelection } from '../../store/slices/ui';
+import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -131,6 +131,7 @@ const AddNewQuery = () => {
         methods.reset(data);
         setProductCode(data.productCode);
         //! Attachment Resetting
+        dispatch(setMedia({ path: router.asPath, src: data.attachment }));
         // setAttachment(data.attachment);
       });
     }

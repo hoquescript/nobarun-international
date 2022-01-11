@@ -118,7 +118,7 @@ const FileButton = (props: FileButtonProps) => {
         media.images &&
         media.images.map((src, idx) => {
           const isVideo = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(
-            src?.slice(17)?.toLowerCase(),
+            src?.slice(25)?.toLowerCase(),
           );
           return (
             <figure
@@ -231,6 +231,7 @@ const FileButton = (props: FileButtonProps) => {
         'contactLogo',
         'pCategory',
         'pCategoryFeatured',
+        'query',
       ].includes(page) &&
       media &&
       media.images &&

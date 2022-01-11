@@ -74,13 +74,10 @@ const CategoryForm = () => {
   const dispatch = useTypedDispatch();
 
   const token = useTypedSelector((state) => state.ui.token);
-  const images = useTypedSelector(
+  const icons = useTypedSelector(
     (state) => state.ui.productCategoryMedia.images,
   );
-  const icon = useTypedSelector(
-    (state) => state.ui.productCategoryMedia.featured,
-  );
-  const featured = useTypedSelector(
+  const images = useTypedSelector(
     (state) => state.ui.productCategoryCoverMedia.images,
   );
 
@@ -90,7 +87,7 @@ const CategoryForm = () => {
       useProductCategoryById(fid, token).then((data: any) => {
         methods.reset(data);
         dispatch(
-          setMedia({ path: asPath, src: data.images, featured: data.featured }),
+          setMedia({ path: asPath, image: data.images, icons: data.icons }),
         );
         setDescription(data.description);
       });
@@ -104,17 +101,12 @@ const CategoryForm = () => {
   };
   const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
-    if (!icon) {
-      alert.error('Please set a Featured Image');
-      return;
-    }
 
     const category = {
       name: categoryName,
       description,
       image: images[0],
-      featuredImage: featured[0],
-      icon,
+      icon: icons[0],
       isPublished: data.isPublished,
       isFeatured: data.isFeatured,
       parentCategory: parentCategory,

@@ -12,7 +12,6 @@ import Toolbar from '../../components/shared/Toolbar';
 import Textfield from '../../components/controls/textfield';
 import Togglebar from '../../components/controls/togglebar';
 import FileButton from '../../components/controls/file';
-import ProductCode from '../../components/shared/ProductCode';
 
 import {
   useTypedDispatch,
@@ -21,6 +20,7 @@ import {
 import useReviewById from '../../hooks/Review/useReviewById';
 import { resetMediaSelection, setMedia } from '../../store/slices/ui';
 import TextEditor from '../../components/shared/TextEditor';
+import ReviewCode from '../../components/shared/ReviewCode';
 
 const CREATE_REVIEW = gql`
   mutation createReview($data: CreateNewReview!) {
@@ -94,7 +94,7 @@ const AddReview = () => {
       },
       featuredImage,
     };
-    console.log(review);
+
     if (!data.createdAt) {
       delete review.createdAt;
     }
@@ -130,6 +130,7 @@ const AddReview = () => {
         });
         if (!createState.error) {
           formReset();
+          setReviewText('');
           alert.success('Posted Review Successfully');
         } else {
           throw createState.error.message;
@@ -139,6 +140,7 @@ const AddReview = () => {
           alert.error(error.message);
         } else {
           formReset();
+          setReviewText('');
           alert.success('Posted Review Successfully');
         }
       }
@@ -262,7 +264,7 @@ const AddReview = () => {
                     />
                   </div>
                   <div className="col-6 mb-20">
-                    <ProductCode
+                    <ReviewCode
                       required
                       productCode={productCode}
                       setProductCode={setProductCode}

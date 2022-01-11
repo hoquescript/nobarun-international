@@ -148,10 +148,10 @@ const AddProduct = () => {
   };
 
   const handleAddProduct = async (data: any) => {
-    // if (!productMedia.featured) {
-    //   alert.error('Please set a Featured Image');
-    //   return;
-    // }
+    if (!productMedia.featured) {
+      alert.error('Please set a Featured Image');
+      return;
+    }
     if (info.slugs.some((row) => row.slug === data.slug && data.slug !== pid)) {
       alert.error('Duplicate Product Slug');
       return;

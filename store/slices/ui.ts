@@ -224,10 +224,10 @@ export const uiSlice = createSlice({
     },
     setMedia: (state, action) => {
       if (action.payload.path.startsWith('/product/categories/')) {
-        state.productCategoryMedia.images = action.payload.src;
-        state.productCategoryMedia.featured =
-          action.payload.src && action.payload.src[1];
-        state.productCategoryCoverMedia.images = action.payload.featured;
+        // CATEGORY ICONS
+        state.productCategoryMedia.images = action.payload.icons;
+        // CATEGORY COVER IMAGE
+        state.productCategoryCoverMedia.images = action.payload.image;
       }
       if (action.payload.path.startsWith('/product/collections/')) {
         state.productCollectionMedia.images = [action.payload.src];

@@ -37,7 +37,10 @@ const useQueryById = async (qid, token) => {
       number: queryById.phone,
       address: queryById.address,
       productCode: queryById.productCode,
-      attachment: queryById.attachment,
+      attachment: {
+        images: [queryById.attachment],
+        videos: [],
+      },
     };
     return query;
   } else return {};
