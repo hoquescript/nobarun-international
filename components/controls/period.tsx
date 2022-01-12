@@ -75,7 +75,7 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
             timePeriod === 'Custom Range' && styles.period__picker_active
           }`}
         >
-          <DateRangePicker
+          {/* <DateRangePicker
             showDateDisplay={screenWidth > 465}
             className={timePeriod === 'Custom Range' ? 'custom-date-range' : ''}
             ranges={selectionRange}
@@ -199,7 +199,7 @@ const TimePeriod = React.memo((props: TimePeriodProps) => {
                 isSelected: () => false,
               },
             ]}
-          />
+          /> */}
         </div>
       )}
     </div>
