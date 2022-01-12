@@ -102,10 +102,10 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         const fileName = imageFile[i].name;
         const extension = fileName.split('.').pop();
 
-        if (imageFile[i].size > 2097152) {
-          alert.error(`${fileName} is more than 2MB`);
-          break;
-        }
+        // if (imageFile[i].size > 2097152) {
+        //   alert.error(`${fileName} is more than 2MB`);
+        //   break;
+        // }
         const isDuplicate = images.some((image) => image.name === fileName);
         if (isDuplicate) {
           alert.error(`${fileName} was Already Uploaded`);
