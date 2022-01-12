@@ -2,6 +2,7 @@ import React from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
 import { gql } from 'graphql-request';
 import Client from '../../config/GraphqlClient';
+import { useAlert } from 'react-alert';
 
 import Textfield from '../../components/controls/textfield';
 import styles from '../../styles/pages/auth.module.scss';
@@ -14,10 +15,15 @@ const POST_FORGET_PASSWORD = gql`
 
 const ForgetPassword = () => {
   const methods = useForm();
+  const alert = useAlert();
+
   const onSubmit = async (data) => {
-    // console.log(data);
-    // console.log(data);
-    await Client.request(POST_FORGET_PASSWORD, data);
+    try {
+      await Client.request(POST_FORGET_PASSWORD, data);
+      alert.info('A password resetting mail has been sent to your email');
+    } catch (error) {
+      alert.error('Your provided User Email Address is not Correct');
+    }
   };
   return (
     <div className={styles.auth}>
@@ -40,6 +46,7 @@ const ForgetPassword = () => {
           </div>
           <Textfield
             name="email"
+            type="email"
             label="Email"
             placeholder="Enter your Email Address"
           />

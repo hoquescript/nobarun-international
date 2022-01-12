@@ -6,6 +6,7 @@ import { signIn } from 'next-auth/client';
 import Textfield from '../../components/controls/textfield';
 
 import styles from '../../styles/pages/auth.module.scss';
+import Loader from '../../components/shared/Loader';
 
 const defaultValues = { email: '', password: '' };
 
@@ -27,11 +28,12 @@ const Login = () => {
       callbackUrl: `${window.location.origin}/`,
     });
 
-    setLoading(false);
     methods.reset();
+    setLoading(false);
   };
   return (
     <div className={styles.auth}>
+      {loading && <Loader />}
       <FormProvider {...methods}>
         <form
           className={styles.auth__form}

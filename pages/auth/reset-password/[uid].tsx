@@ -3,6 +3,7 @@ import { gql, useMutation } from '@apollo/client';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useAlert } from 'react-alert';
 
 import Textfield from '../../../components/controls/textfield';
 import styles from '../../../styles/pages/auth.module.scss';
@@ -14,22 +15,29 @@ const RESET_PASSWORD = gql`
 `;
 const ResetPassword = () => {
   const methods = useForm();
+  const alert = useAlert();
+
   const { uid } = useRouter().query;
   const [resetPassword] = useMutation(RESET_PASSWORD);
 
   const [error, setError] = useState(false);
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (data.password !== data.confirmPassword) {
       setError(true);
     } else {
-      resetPassword({
-        variables: {
-          data: {
-            token: uid,
-            password: data.password,
+      try {
+        await resetPassword({
+          variables: {
+            data: {
+              token: uid,
+              password: data.password,
+            },
           },
-        },
-      });
+        });
+        alert.info('Password resetted successfully. 😃');
+      } catch (err) {
+        alert.error("Sorry, We couldn't reset your password. 😟");
+      }
     }
   };
   return (
