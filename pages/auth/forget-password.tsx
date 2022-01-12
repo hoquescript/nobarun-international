@@ -7,8 +7,8 @@ import Textfield from '../../components/controls/textfield';
 import styles from '../../styles/pages/auth.module.scss';
 
 const POST_FORGET_PASSWORD = gql`
-  query forgetPassword {
-    forgetPassword(email: "wahidhoquee@gmail.com")
+  query forgetPassword($email: String!) {
+    forgetPassword(email: $email)
   }
 `;
 
@@ -44,12 +44,6 @@ const ForgetPassword = () => {
             placeholder="Enter your Email Address"
           />
           <input type="submit" className={styles.auth__button} value="Send" />
-          {/* <button
-            className={styles.auth__button}
-            onClick={methods.handleSubmit(onSubmit)}
-          >
-            Send
-          </button> */}
         </form>
       </FormProvider>
     </div>

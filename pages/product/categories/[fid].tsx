@@ -24,6 +24,7 @@ import { resetMediaSelection, setMedia } from '../../../store/slices/ui';
 import CategorySlug from '../../../components/products/CategorySlug';
 import Togglebar from '../../../components/controls/togglebar';
 import Checkbox from '../../../components/controls/checkbox';
+import Textarea from '../../../components/controls/textarea';
 
 const CREATE_CATEGORY = gql`
   mutation addNewCategory($data: CreateNewCategoryInput!) {
@@ -59,7 +60,6 @@ const CategoryForm = () => {
   });
 
   const [isEditMode, setIsEditMode] = useState(false);
-  const [description, setDescription] = useState('');
   const [categories, setCategories] = useState([]);
 
   const [createCategory, createState] = useMutation(CREATE_CATEGORY);
@@ -89,7 +89,6 @@ const CategoryForm = () => {
         dispatch(
           setMedia({ path: asPath, image: data.images, icons: data.icons }),
         );
-        setDescription(data.description);
       });
     }
   }, [token]);
@@ -97,14 +96,13 @@ const CategoryForm = () => {
   const formReset = () => {
     methods.reset(defaultValues);
     dispatch(resetMediaSelection());
-    setDescription('');
   };
   const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
 
     const category = {
       name: categoryName,
-      description,
+      description: data.description,
       image: images[0],
       icon: icons[0],
       isPublished: data.isPublished,
@@ -260,16 +258,8 @@ const CategoryForm = () => {
           </div>
         </div>
         <div className="wrapper-section">
-          <div className="wrapper-section__title flex sb">
-            <h3 className="heading-secondary">Description</h3>
-          </div>
           <div className="wrapper-section__content">
-            <div className="field mt-20">
-              <TextEditor
-                value={description}
-                onChange={(content: string) => setDescription(content)}
-              />
-            </div>
+            <Textarea name="description" label="Description" />
           </div>
         </div>
         <div className="center mt-30">
