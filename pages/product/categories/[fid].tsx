@@ -44,6 +44,7 @@ const defaultValues = {
   categoryName: '',
   categorySlug: '',
   parentCategory: '',
+  description: '',
   isPublished: false,
   isFeatured: false,
 };
@@ -99,7 +100,7 @@ const CategoryForm = () => {
   };
   const onSubmit = async (data) => {
     const { categoryName, categorySlug, parentCategory } = data;
-
+    // console.log(data);
     const category = {
       name: categoryName,
       description: data.description,
@@ -109,11 +110,12 @@ const CategoryForm = () => {
       isFeatured: data.isFeatured,
       parentCategory: parentCategory,
       slug: categorySlug,
-      id: uuid(),
+      id: '',
     };
 
     if (isEditMode) {
       delete category.parentCategory;
+      category.id = data.id;
       try {
         await editCategory({
           variables: {
@@ -137,6 +139,7 @@ const CategoryForm = () => {
         }
       }
     } else {
+      category.id = uuid();
       try {
         await createCategory({
           variables: {
@@ -194,6 +197,7 @@ const CategoryForm = () => {
               className="btn-icon-white ml-20"
               onClick={() => {
                 formReset();
+                setIsEditMode(false);
                 push('/product/categories/add');
               }}
             >

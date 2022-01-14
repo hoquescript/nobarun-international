@@ -99,13 +99,15 @@ const AddCategory = () => {
       slug: data.slug,
       isPublished: data.isPublished,
       parentCategory: data.parentCategory,
-      id: uuid(),
+      id: '',
     };
 
     if (isEditMode) {
       // @ts-ignore
       delete category.id;
       delete category.parentCategory;
+      category.id = data.id;
+
       try {
         editCategory({
           variables: {
@@ -129,6 +131,7 @@ const AddCategory = () => {
       }
     } else {
       try {
+        category.id = uuid();
         createCategory({
           variables: {
             data: category,

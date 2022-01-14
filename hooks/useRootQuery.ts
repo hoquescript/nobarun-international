@@ -10,7 +10,7 @@ const GET_ROOT_QUERY = gql`
       totalReviews
       topProductEnquery {
         product {
-          id
+          id: slug
           productName
           title
           images
@@ -20,7 +20,7 @@ const GET_ROOT_QUERY = gql`
       }
       recentProduct {
         product {
-          id
+          id: slug
           productName
           title
           images
@@ -30,7 +30,7 @@ const GET_ROOT_QUERY = gql`
       }
       recentReviews {
         product {
-          id
+          id: slug
           productName
           title
           images
