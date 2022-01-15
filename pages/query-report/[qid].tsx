@@ -20,6 +20,7 @@ import ProductCode from '../../components/shared/ProductCode';
 import FileButton from '../../components/controls/file';
 import Toolbar from '../../components/shared/Toolbar';
 import { resetMediaSelection, setMedia } from '../../store/slices/ui';
+import QueryCode from '../../components/shared/QueryCode';
 
 const ADD_NEW_QUERY = gql`
   mutation addNewQuery($data: AddQueryUserInput!) {
@@ -184,7 +185,7 @@ const AddNewQuery = () => {
           />
         </div>
         <div className="grid three mt-30 mb-30">
-          <ProductCode
+          <QueryCode
             productCode={productCode}
             setProductCode={setProductCode}
           />

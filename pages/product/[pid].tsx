@@ -180,7 +180,7 @@ const AddProduct = () => {
     const product = {
       ...data,
       price: +data.price,
-      originalPrice: +data.price,
+      originalPrice: +data.originalPrice,
       discount: +data.discount,
       categories: relatedCategories.map((category) => category.value),
       relatedProducts: relatedProducts.map((product) => product.value),

@@ -178,7 +178,7 @@ const Product = (props) => {
           </a>
           <span className={styles.product__meta}>
             <FaStar className="mr-10 mb-5" />
-            {avgRating} ({noOfReview})
+            {avgRating.toFixed(1)} ({noOfReview})
           </span>
         </div>
       </div>

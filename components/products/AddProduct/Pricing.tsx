@@ -28,12 +28,13 @@ const Details = (props: PricingProps) => {
   // We have to change both the price and the discount
   const originalPriceHandler = (e) => {
     const originalPrice = +e.target.value;
+    setValue('originalPrice', originalPrice);
+
     const currentPrice = +getValues('price');
     const discount = +getValues('discount');
     console.log(originalPrice, currentPrice);
 
     if (currentPrice >= originalPrice) {
-      return setValue('discount', 0);
     }
     // Setting Discount based on OP and CP
     if (currentPrice < originalPrice && discount <= 100) {

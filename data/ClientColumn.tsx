@@ -36,7 +36,14 @@ export const COLUMNS = [
     Header: 'Attachment',
     accessor: 'logo',
     Cell: ({ value }) => (
-      <img style={{ textAlign: 'center' }} src={value} height={50} width={50} />
+      <img
+        style={{ textAlign: 'center' }}
+        src={
+          'https://nobarunawsvideouploader.s3.ap-south-1.amazonaws.com/' + value
+        }
+        height={50}
+        width={50}
+      />
     ),
   },
 ];

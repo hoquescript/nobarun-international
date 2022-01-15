@@ -121,59 +121,61 @@ const FileButton = (props: FileButtonProps) => {
             src?.slice(25)?.toLowerCase(),
           );
           return (
-            <figure
-              key={src + idx}
-              className={`${media.featured === src ? 'isFeatured' : ''} ${
-                isVideo ? 'gallery-video' : ''
-              } ${
-                ![
-                  'pCollection',
-                  'pKeypoint',
-                  'bPostSection',
-                  'bCategory',
-                  'client',
-                  'contact',
-                  'query',
-                  'contactLogo',
-                  'pCategory',
-                  'pCategoryFeatured',
-                ].includes(page)
-                  ? ''
-                  : 'hideFeaturedOption'
-              } ${page === 'contact' ? 'contact__figure' : ''} 
+            src && (
+              <figure
+                key={src + idx}
+                className={`${media.featured === src ? 'isFeatured' : ''} ${
+                  isVideo ? 'gallery-video' : ''
+                } ${
+                  ![
+                    'pCollection',
+                    'pKeypoint',
+                    'bPostSection',
+                    'bCategory',
+                    'client',
+                    'contact',
+                    'query',
+                    'contactLogo',
+                    'pCategory',
+                    'pCategoryFeatured',
+                  ].includes(page)
+                    ? ''
+                    : 'hideFeaturedOption'
+                } ${page === 'contact' ? 'contact__figure' : ''} 
             `}
-            >
-              <button
-                type="button"
-                className="featured-image"
-                onClick={() => featureImageHandler(page, src)}
               >
-                <FaCheck />
-              </button>
-              <button
-                type="button"
-                className="remove-image"
-                onClick={() => deleteImageHandler('images', page, idx)}
-              >
-                <FaTimes />
-              </button>
-              {isVideo ? (
-                <>
-                  <FaVideo />
-                  <video
-                    src={`${objectBaseUrl}/${src}`}
-                    controls={false}
-                    autoPlay={false}
-                    muted
-                    style={{ height: '7.5rem', width: '7.5rem' }}
-                  >
-                    Your browser does not support the video tag.
-                  </video>
-                </>
-              ) : (
-                <img src={`${objectBaseUrl}/${src}`} alt="" />
-              )}
-            </figure>
+                <button
+                  type="button"
+                  className="featured-image"
+                  onClick={() => featureImageHandler(page, src)}
+                >
+                  <FaCheck />
+                </button>
+                <button
+                  type="button"
+                  className="remove-image"
+                  onClick={() => deleteImageHandler('images', page, idx)}
+                >
+                  <FaTimes />
+                </button>
+                {isVideo ? (
+                  <>
+                    <FaVideo />
+                    <video
+                      src={`${objectBaseUrl}/${src}`}
+                      controls={false}
+                      autoPlay={false}
+                      muted
+                      style={{ height: '7.5rem', width: '7.5rem' }}
+                    >
+                      Your browser does not support the video tag.
+                    </video>
+                  </>
+                ) : (
+                  <img src={`${objectBaseUrl}/${src}`} alt="" />
+                )}
+              </figure>
+            )
           );
         })}
       {showMedia &&
