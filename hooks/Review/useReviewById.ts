@@ -34,6 +34,9 @@ const useReviewById = async (qid, token) => {
       requestHeaders,
     );
     const reviewById = data.getSingleReview;
+    const reviewMediaImages = reviewById?.featuredImage
+      ? [reviewById.featuredImage, ...reviewById.reviewMedia.images]
+      : [...reviewById.reviewMedia.images];
     const review = {
       title: reviewById.title,
       name: reviewById.name,
@@ -43,7 +46,7 @@ const useReviewById = async (qid, token) => {
       productCode: reviewById.productCode,
       featuredImage: reviewById.featuredImage,
       reviewMedia: {
-        images: [reviewById.featuredImage, ...reviewById.reviewMedia.images],
+        images: reviewMediaImages,
         videos: reviewById.reviewMedia.videos,
       },
       isPublished: reviewById.isPublished,
