@@ -2,16 +2,26 @@ import { format } from 'date-fns';
 
 export const QUERY_COLUMNS = [
   {
+    Header: 'Date',
+    Footer: 'Date',
+    accessor: 'createdAt',
+    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
+  },
+  {
     Header: 'Full Name',
     Footer: 'Full Name',
     accessor: 'name',
     sticky: 'left',
   },
   {
-    Header: 'Date',
-    Footer: 'Date',
-    accessor: 'createdAt',
-    Cell: ({ value }) => format(new Date(value), 'do MMMM, yyyy'),
+    Header: 'Phone',
+    Footer: 'Phone',
+    accessor: 'phone',
+  },
+  {
+    Header: 'Email ID',
+    Footer: 'Email ID',
+    accessor: 'email',
   },
   {
     Header: 'Message',
@@ -22,16 +32,6 @@ export const QUERY_COLUMNS = [
     Header: 'Address',
     Footer: 'Address',
     accessor: 'address',
-  },
-  {
-    Header: 'Email ID',
-    Footer: 'Email ID',
-    accessor: 'email',
-  },
-  {
-    Header: 'Phone',
-    Footer: 'Phone',
-    accessor: 'phone',
   },
   {
     Header: 'SKU',
