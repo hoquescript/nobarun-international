@@ -198,7 +198,10 @@ const AddProduct = () => {
     };
 
     if (data.collectionName === '') delete product.collectionName;
-    if (data.stockStatus === '') delete product.stockStatus;
+    if (!data.stockStatus){
+      data.stockStatus=null;
+      product.stockStatus=null;
+    }
     if (data.contactPerson === '') delete product.contactPerson;
     if (isEditMode) {
       delete product.id;
