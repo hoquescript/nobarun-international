@@ -196,7 +196,10 @@ export const uiSlice = createSlice({
         state.blogCategoryMedia[type].splice(index, 1);
       }
       if (page === 'review') {
-        state.reviewMedia[type].splice(index, 1);
+        let deleteMedia=state.reviewMedia[type].splice(index, 1);
+        if(deleteMedia[0] && state.reviewMedia.featured && state.reviewMedia.featured==deleteMedia[0]){
+          state.reviewMedia.featured="";
+        }
       }
       if (page === 'client') {
         state.clientMedia[type].splice(index, 1);
