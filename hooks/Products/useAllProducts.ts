@@ -34,21 +34,27 @@ const GET_ALL_PRODUCTS = gql`
 `;
 
 const useAllProducts = async () => {
-  const data = await Client.request(GET_ALL_PRODUCTS);
-  return data.getAllThePopulatedProducts.map(({ productData }) => ({
-    ...productData.product,
-    category: productData.product.populatedCategory
-      ? productData.product.populatedCategory.name
-      : '',
-    contactPerson: productData.product.contactPerson
-      ? productData.product.contactPerson.name
-      : '',
-    author: productData.product.author
-      ? productData.product.author.displayName
-      : '',
-    noOfReview: productData.reviewCount,
-    avgRating: productData.ratingAverage,
-  }));
+  try {
+    const data = await Client.request(GET_ALL_PRODUCTS);
+    return data.getAllThePopulatedProducts.map(({ productData }) => ({
+      ...productData.product,
+      category: productData.product.populatedCategory
+        ? productData.product.populatedCategory.name
+        : '',
+      contactPerson: productData.product.contactPerson
+        ? productData.product.contactPerson.name
+        : '',
+      author: productData.product.author
+        ? productData.product.author.displayName
+        : '',
+      noOfReview: productData.reviewCount,
+      avgRating: productData.ratingAverage,
+    }));
+  }
+  catch (e) {
+    console.log(e);
+    return []
+  }
 };
 
 export default useAllProducts;
