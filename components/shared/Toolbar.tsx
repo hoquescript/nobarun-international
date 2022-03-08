@@ -96,22 +96,30 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
   }, []);
 
   const imageUploadHandler = async (e) => {
-    const { files: imageFile } = e.target;
+    let { files: imageFile } = e.target;
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
         const fileName = imageFile[i].name;
         const extension = fileName.split('.').pop();
-
+        //
         // if (imageFile[i].size > 2097152) {
         //   alert.error(`${fileName} is more than 2MB`);
         //   break;
         // }
+        //Replace File
+        let file=imageFile[i];
+        //Convert to webp
+        if(extension=='jpg' || extension=='jpeg' || extension=='png'){
+          extension="webp";
+          file = new File([imageFile[i]], 'fileName',{type: 'image/webp'});
+        }
+        //
         const isDuplicate = images.some((image) => image.name === fileName);
         if (isDuplicate) {
           alert.error(`${fileName} was Already Uploaded`);
           break;
         }
-
+        //
         const response = await axios.get(`${baseUrl}${extension}`);
         const { obj_location, fields, upload_url } = await response.data;
         const formData = await new FormData();
@@ -122,15 +130,12 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
         formData.append('x-amz-date', fields['x-amz-date']);
         formData.append('x-amz-security-token', fields['x-amz-security-token']);
         formData.append('x-amz-signature', fields['x-amz-signature']);
-        formData.append('file', imageFile[i]);
+        // formData.append('file', imageFile[i]);
+        formData.append('file', file);
         await axios.post(upload_url, formData);
-
-        const fileType = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(
-          extension!?.toLowerCase(),
-        )
-          ? 'video'
-          : 'image';
-
+        //
+        const fileType = ['mp4', 'mov', 'wmv', 'avi', 'mkv']?.includes(extension!?.toLowerCase(),) ? 'video' : 'image';
+        //
         await dispatch(
           addImage({
             src: obj_location,
