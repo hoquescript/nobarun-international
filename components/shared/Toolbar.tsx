@@ -99,8 +99,9 @@ const Toolbar = forwardRef((props: ToolbarProps, ref) => {
     let { files: imageFile } = e.target;
     if (imageFile) {
       for (let i = 0; i < imageFile?.length; i++) {
-        const fileName = imageFile[i].name;
-        let extension = fileName.split('.').pop();
+        // const fileName = imageFile[i].name;
+        let fileName = new Date().getTime().toString();
+        let extension = imageFile[i].name.split('.').pop();
         //
         // if (imageFile[i].size > 2097152) {
         //   alert.error(`${fileName} is more than 2MB`);
