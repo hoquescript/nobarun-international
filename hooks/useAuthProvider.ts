@@ -25,7 +25,8 @@ export default function useAuthProvider() {
 
   const createApolloClient = () => {
     const link = new HttpLink({
-      uri: 'https://naubaun.herokuapp.com/graphql',
+      // uri: 'https://naubaun.herokuapp.com/graphql',
+      uri: 'https://api.biznian.com/graphql',
       headers: getAuthHeaders(),
     });
     return new ApolloClient({

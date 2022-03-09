@@ -13,13 +13,15 @@ const getAuthHeaders = async () => {
 };
 
 const link = new HttpLink({
-  uri: 'https://naubaun.herokuapp.com/graphql',
+  // uri: 'https://naubaun.herokuapp.com/graphql',
+  uri: 'https://api.biznian.com/graphql',
   headers: getAuthHeaders().then((res) => res),
 });
 // console.log(link);
 
 const client = new ApolloClient({
-  uri: 'https://naubaun.herokuapp.com/graphql',
+  // uri: 'https://naubaun.herokuapp.com/graphql',
+  uri: 'https://api.biznian.com/graphql',
   cache: new InMemoryCache(),
 });
 
