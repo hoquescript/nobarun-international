@@ -84,8 +84,6 @@ function useProvideAuth() {
     //   variables: { username, password },
     // });
 
-    console.log(res);
-
     // if (result?.data?.login?.token) {
     //   setAuthToken(result.data.login.token);
     // }

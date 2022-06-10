@@ -1,7 +1,7 @@
 import { HttpLink, ApolloClient, InMemoryCache, gql } from '@apollo/client';
 import { getSession } from 'next-auth/client';
 import { useState, useEffect } from 'react';
-
+//
 export default function useProvideAuth() {
   const [authToken, setAuthToken] = useState<string | null>(null);
 

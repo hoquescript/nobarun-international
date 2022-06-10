@@ -1,6 +1,6 @@
 import { HttpLink, ApolloClient, InMemoryCache } from '@apollo/client';
 import { getSession } from 'next-auth/client';
-
+//
 const getAuthHeaders = async () => {
   const session = await getSession();
   const authToken = session?.accessToken;
