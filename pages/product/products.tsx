@@ -56,19 +56,20 @@ const Products = () => {
       setLoading(false);
     });
   }, []);
-
+  //
   const filterData = (rows, ids, query) => {
     const param = query.search.toLowerCase();
     const sortBy = query.sortBy;
     return rows
       .filter((row) => {
-        console.log(row.values);
+        // console.log(row.values);
         return (
-          row.values?.productName.toLowerCase().includes(param) &&
-          isWithinInterval(new Date(row.values?.createdAt), {
-            start: query.range.startDate,
-            end: query.range.endDate,
-          })
+          row.values?.productName.toLowerCase().includes(param)
+          // &&
+          // isWithinInterval(new Date(row.values?.createdAt), {
+          //   start: query.range.startDate,
+          //   end: query.range.endDate,
+          // })
         );
       })
       .sort((firstEl, secondEl) => {
@@ -77,6 +78,10 @@ const Products = () => {
         return 0;
       });
   };
+  //
+  const caseInsensetiveSearch=(string,value)=>{
+    return string.toLowerCase().includes(value.toLowerCase());
+  }
 
   return (
     <div className="container-fluid center">
@@ -86,15 +91,14 @@ const Products = () => {
           <Search search={search} setSearch={setSearch} />
         </div>
         <div className="col-2">
-          <TimePeriod
-            period={period}
-            setPeriod={setPeriod}
-            selectionRange={selectionRange}
-            setSelectionRange={setSelectionRange}
-          />
+          {/*<TimePeriod*/}
+            {/*period={period}*/}
+            {/*setPeriod={setPeriod}*/}
+            {/*selectionRange={selectionRange}*/}
+            {/*setSelectionRange={setSelectionRange}*/}
+          {/*/>*/}
         </div>
       </div>
-
       <div className={styles.products__header}>
         <h2 className="heading-primary">{products.length} Results</h2>
         <div className={styles.products__viewWrapper}>
@@ -145,11 +149,12 @@ const Products = () => {
               products
                 .filter((product) => {
                   return (
-                    fuzzyMatch(product.productName, search) &&
-                    isWithinInterval(new Date(product.createdAt), {
-                      start: selectionRange[0].startDate,
-                      end: selectionRange[0].endDate,
-                    })
+                    caseInsensetiveSearch(product.productName, search)
+                    // fuzzyMatch(product.productName, search) &&
+                    // isWithinInterval(new Date(product.createdAt), {
+                    //   start: selectionRange[0].startDate,
+                    //   end: selectionRange[0].endDate,
+                    // })
                   );
                 })
                 .reverse()
