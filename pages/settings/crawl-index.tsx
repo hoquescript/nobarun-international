@@ -4,10 +4,11 @@ import { FaSave, FaEdit, FaPlusCircle, FaTrash } from 'react-icons/fa';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import axios from 'axios';
+import { any } from 'prop-types';
 
 const AddScript = () => {
   const alert = useAlert();
-  const [state,setState]=useState([]);
+  const [state,setState]=useState<any>([]);
   //
   const addHandler=()=>{
     setState([...state,{url:''}])
@@ -23,9 +24,9 @@ const AddScript = () => {
     setState([..._state])
   };
   //
-  const saveHandler = async (id: string) => {
+  const saveHandler = () => {
     if(state && state.length){
-      let data_array=state.filter((item)=>item && item.url)
+      let data_array=state.filter((item)=>item && item.url);
       if(data_array){
         axios
           .post('https://nobarun.xyz/crawl-index', data_array)
