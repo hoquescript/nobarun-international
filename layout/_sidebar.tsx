@@ -25,6 +25,7 @@ const MENU: { [key: string]: string[] } = {
   Media: ['Images', 'Videos'],
   Settings: [
     'Accounts',
+    'Crawl Index',
     'Contact Person',
     'Stock Status',
     'Add Script',
