@@ -168,8 +168,8 @@ const Product = (props) => {
             <span></span>
             <h5 style={{ color: '#e81f1f' }}>{contactPerson || 'Anonymous'}</h5>
           </span>
-          <a
-            href={`https://nobarunbd.vercel.app/${slug}`}
+          {/*<a href={`https://nobarunbd.vercel.app/${slug}`}*/}
+          <a href={`https://nobarunbd.com/${slug}`}
             target="_blank"
             className={styles.product__meta}
           >
