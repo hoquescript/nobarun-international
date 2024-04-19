@@ -1,0 +1,117 @@
+.heading-primary {
+  font-size: 2.5rem;
+  font-weight: 600;
+}
+
+.heading-secondary {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.heading-tertiary {
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+%btn {
+  outline: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  font-family: $font;
+  padding: 0 25px;
+  height: 45px;
+  border-radius: 5px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: 0.3s;
+}
+
+.btn-big {
+  @extend %btn;
+  height: 70px;
+  padding: 0 65px;
+  font-size: 20px;
+  font-weight: 500;
+  @include maxBreakpoint($mobilexLarge) {
+    font-size: 18px;
+    height: 50px;
+    padding: 0 30px;
+  }
+}
+
+.btn-green {
+  @extend %btn;
+  background: $primaryColor;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $primaryColor, $amount: 5);
+  }
+}
+
+.btn-darkBlue {
+  @extend %btn;
+  background: $darkBlue;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $darkBlue, $amount: 5);
+  }
+}
+
+.btn-white {
+  @extend %btn;
+  background-color: white;
+  color: $primaryColor;
+  border: 1px solid transparent;
+  &:hover {
+    background-color: darken($color: white, $amount: 5);
+  }
+}
+
+.btn-grey {
+  @extend %btn;
+  // background-color: $lightBgGrey;
+  color: $darkBlue;
+  border: 1px solid $darkGrey;
+  &:hover {
+    background-color: darken($color: $lightBgGrey, $amount: 5);
+  }
+}
+
+%btn-outline {
+  @extend %btn;
+  background-color: white;
+  border: 1px solid transparent;
+}
+
+.btn-outline-green {
+  @extend %btn-outline;
+  border-color: $primaryColor;
+  color: $primaryColor;
+  transition: 0.3s;
+  &:hover {
+    background: $primaryColor;
+    color: white;
+    border: 1px solid transparent;
+  }
+}
+
+.btn-outline-weight {
+  @extend %btn-outline;
+  border-color: $darkGrey;
+  color: $primaryColor;
+  transition: 0.3s;
+  &:hover {
+    background: $primaryColor;
+    color: white;
+    border: 1px solid transparent;
+  }
+}
+
+.btn-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+  margin-right: 1rem;
+}

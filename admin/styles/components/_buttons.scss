@@ -1,0 +1,219 @@
+%btn {
+  outline: 0;
+  border: 0;
+  background: none;
+  appearance: none;
+  font-family: $font;
+  padding: 0 25px;
+  height: 4.5rem;
+  border-radius: 5px;
+  font-size: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  i {
+    margin-right: 1rem;
+    &::before {
+      font-weight: 400 !important;
+    }
+  }
+}
+
+.btn-group {
+  display: flex;
+  > * + * {
+    margin-left: 1rem;
+  }
+}
+
+.btn-tabs {
+  box-shadow: 1px 2px 4px $shadowGrey;
+  border: 1px solid $lightBgGrey;
+  background-color: white;
+  border-radius: 0.8rem;
+  display: flex;
+  > * {
+    border-radius: 0;
+    flex: 1;
+
+    &.active {
+      background-color: $primaryColor;
+      color: white;
+      pointer-events: none;
+    }
+    &:first-child {
+      border-radius: 0.8rem 0 0 0.8rem;
+    }
+    &:last-child {
+      border-radius: 0 0.8rem 0.8rem 0;
+    }
+  }
+}
+
+.btn-big {
+  @extend %btn;
+  height: 70px;
+  padding: 0 65px;
+  font-size: 20px;
+  font-weight: 500;
+  @include maxBreakpoint($mobilexLarge) {
+    font-size: 18px;
+    height: 50px;
+    padding: 0 30px;
+  }
+}
+
+// Solid Buttons
+.btn-green {
+  @extend %btn;
+  background: $primaryColor;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $primaryColor, $amount: 5);
+  }
+}
+
+.btn-darkBlue {
+  @extend %btn;
+  background: $darkBlue;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $darkBlue, $amount: 5);
+  }
+}
+
+.btn-white {
+  @extend %btn;
+  background-color: white;
+  color: $primaryColor;
+  border: 1px solid transparent;
+  &:hover {
+    background-color: darken($color: white, $amount: 5);
+  }
+}
+
+.btn-grey {
+  @extend %btn;
+  background-color: $lightBgGrey;
+  color: $darkBlue;
+  border: 1px solid $darkGrey;
+  &:hover {
+    background-color: darken($color: $lightBgGrey, $amount: 5);
+  }
+}
+
+// Outline Buttons
+%btn-outline {
+  @extend %btn;
+  background-color: white;
+  border: 1px solid transparent;
+}
+
+.btn-outline-green {
+  @extend %btn-outline;
+  border-color: $primaryColor;
+  color: $primaryColor;
+  transition: 0.3s;
+  &:hover {
+    background-color: $primaryColor;
+    color: white;
+    border: 1px solid transparent;
+  }
+}
+
+.btn-outline-red {
+  @extend %btn-outline;
+  border-color: $red;
+  color: $red;
+  transition: 0.3s;
+  &:hover {
+    background-color: $red;
+    color: white;
+    border: 1px solid transparent;
+  }
+}
+
+.btn-outline-weight {
+  @extend %btn-outline;
+  border-color: $darkGrey;
+  color: $primaryColor;
+  transition: 0.3s;
+  &:hover {
+    background-color: $primaryColor;
+    color: white;
+    border: 1px solid transparent;
+  }
+}
+
+// Icon Buttons
+.btn-icon {
+  @extend %btn;
+  min-width: 4.5rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  padding: 0;
+  transition: 0.3s;
+  i {
+    margin-right: 0;
+    &::before {
+      font-weight: 300 !important;
+    }
+  }
+}
+
+.btn-icon-small {
+  @extend .btn-icon;
+  min-width: 3rem;
+  width: 3rem;
+  height: 3rem;
+  font-size: 1.4rem;
+}
+
+.btn-icon-fade {
+  @extend .btn-icon;
+  color: $textColor;
+  &:hover {
+    background-color: rgba($color: $textColor, $alpha: 0.1);
+  }
+}
+.btn-icon-white {
+  @extend .btn-icon;
+  color: $textColor;
+  background-color: white;
+  box-shadow: 1px 2px 4px $shadowGrey;
+  &:hover {
+    background-color: darken($color: white, $amount: 10);
+  }
+}
+.btn-icon-green {
+  @extend .btn-icon;
+  border-color: $primaryColor;
+  background-color: $primaryColor;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $primaryColor, $amount: 5);
+  }
+}
+.btn-icon-red {
+  @extend .btn-icon;
+  border-color: $red;
+  background-color: $red;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $red, $amount: 5);
+  }
+}
+.btn-icon-darkBlue {
+  @extend .btn-icon;
+  border-color: $darkBlue;
+  background-color: $darkBlue;
+  color: white;
+  &:hover {
+    background-color: lighten($color: $darkBlue, $amount: 5);
+  }
+}
+
+

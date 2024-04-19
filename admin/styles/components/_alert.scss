@@ -1,0 +1,47 @@
+.alert {
+  display: flex;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 15px 8px #eee;
+  & > span {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & > svg {
+      color: #fff;
+      height: 2.5rem;
+      width: 2.5rem;
+    }
+  }
+  &__button {
+    border: none;
+    background-color: transparent;
+    color: #666;
+    font-size: 1.2rem;
+  }
+  &_success {
+    border: 1px solid #cae0ce;
+    background-color: #eaf7ee;
+    & > span {
+      background-color: #39b45b;
+    }
+  }
+  &_info {
+    border: 1px solid #bfd2e6;
+    background-color: #e6effa;
+    & > span {
+      background-color: #016be2;
+    }
+  }
+  &_error {
+    border: 1px solid #e9cec9;
+    background-color: #fcede9;
+    & > span {
+      background-color: #e94f2c;
+    }
+  }
+}

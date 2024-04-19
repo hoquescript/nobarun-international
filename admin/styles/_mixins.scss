@@ -1,0 +1,67 @@
+/*
+    Breakpoint argument choices
+    - Extra Small (xsm): =< 360px = =<22.5em
+    - Small (sm): =<576px = =<36em
+    - Medium (md): =<768px = =<48em
+    - Large (lg): =<992px = =<62em
+    - Extra Large (xl): =<1200px = =<75em
+    - Extra Extra Large (xxl): =< 1400px = =<87.5em
+    - Full Large: > 1400
+*/
+
+@mixin respond($breakpoint) {
+  @if $breakpoint == xsm {
+    @media (max-width: 22.5em) {
+      @content;
+    }
+  }
+  @if $breakpoint == sm {
+    @media (max-width: 36em) {
+      @content;
+    }
+  }
+  @if $breakpoint == md {
+    @media (max-width: 48em) {
+      @content;
+    }
+  }
+  @if $breakpoint == lg {
+    @media (max-width: 62em) {
+      @content;
+    }
+  }
+  @if $breakpoint == xl {
+    @media (max-width: 75em) {
+      @content;
+    }
+  }
+  @if $breakpoint == xxl {
+    @media (max-width: 87.5em) {
+      @content;
+    }
+  } @else {
+    @media (max-width: $breakpoint) {
+      @content;
+    }
+  }
+}
+
+@mixin minBreakpoint($size) {
+  @media screen and (min-width: $size) {
+    @content;
+  }
+}
+
+@mixin maxBreakpoint($size) {
+  @media screen and (max-width: $size) {
+    @content;
+  }
+}
+
+@mixin buttonReset() {
+  outline: 0;
+  border: 0;
+  background: none;
+  padding: 0;
+  appearance: none;
+}

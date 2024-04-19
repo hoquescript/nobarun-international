@@ -1,0 +1,54 @@
+.addNewQuery {
+  max-width: 140rem;
+  margin: 5rem auto 5rem;
+  padding: 0 2rem;
+}
+
+.query {
+  max-width: 160rem;
+  margin: 5rem auto;
+  padding: 0 2rem;
+  &__btnWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+// const DatePickerWrapper = styled.div<{ isCustomRange: boolean }>`
+// //   position: absolute;
+// //   top: 4.4rem;
+// //   border: 1px solid #ccc;
+// //   background-color: #fff;
+// //   z-index: 1100;
+// //   @media (max-width: 1160px) {
+// //     right: ${(props) => props.isCustomRange && '-240px'};
+// //   }
+// //   @media (max-width: 890px) {
+// //     right: ${(props) => props.isCustomRange && '-160px'};
+// //   }
+// //   @media (max-width: 780px) {
+// //     right: ${(props) => props.isCustomRange && '-35px'};
+// //   }
+// //   @media (max-width: 675px) {
+// //     right: ${(props) => props.isCustomRange && '30px'};
+// //   }
+// //   @media (max-width: 644px) {
+// //     right: ${(props) => props.isCustomRange && '-232px'};
+// //   }
+// //   @media (max-width: 465px) {
+// //     right: ${(props) => props.isCustomRange && '-80px'};
+// //   }
+// //   @media (max-width: 385px) {
+// //     right: ${(props) => props.isCustomRange && '-35px'};
+// //   }
+// //   @media (max-width: 355px) {
+// //     right: ${(props) => props.isCustomRange && '-25px'};
+// //   }
+// //   @media (max-width: 345px) {
+// //     right: ${(props) => props.isCustomRange && '-88px'};
+// //   }
+// // `;
+
+// const DefinedRangeButton = styled.button<{ isActive: boolean }>`
+// `;

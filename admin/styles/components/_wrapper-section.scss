@@ -1,0 +1,20 @@
+.wrapper-section {
+  background-color: white;
+  box-shadow: 0px 2px 8px -2px #ccc;
+  border-radius: 1.6rem;
+  padding: 2rem;
+
+  & + .wrapper-section {
+    margin-top: 4rem;
+  }
+}
+
+.wrapper-section__title {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.wrapper-section__actions {
+  margin-left: auto;
+}

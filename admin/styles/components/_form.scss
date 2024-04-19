@@ -1,0 +1,249 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  label {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+}
+
+.custom-input {
+  text-align: left;
+  border: 1px solid $darkGrey;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px;
+  transition: 0.3s;
+  font-family: $font;
+  background-color: #fff;
+  &:disabled {
+    background-color: #ddd;
+  }
+  &::placeholder {
+    color: rgba($color: $lightTextColor, $alpha: 0.7);
+  }
+
+  &:focus {
+    border-color: $primaryColor;
+  }
+  &.small {
+    height: 2rem;
+  }
+  &.medium {
+    width: 17rem;
+    display: block;
+  }
+  &.large {
+    font-size: 2rem;
+    width: 60rem;
+    &::placeholder {
+      color: #433;
+      font-weight: 600;
+    }
+  }
+}
+
+.custom-radio {
+  display: flex;
+  align-items: flex-start;
+  input {
+    display: none;
+    &:disabled {
+      background-color: #ddd;
+    }
+
+    &:checked ~ .content:after {
+      transform: scale(0.5);
+    }
+  }
+
+  .content {
+    padding-left: 45px;
+    position: relative;
+    line-height: 30px;
+
+    h5 {
+      font-size: 20px;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      color: #666666;
+    }
+
+    &::before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 2px solid $primaryColor;
+      background-color: white;
+      border-radius: 50%;
+      left: 0;
+      top: 0;
+    }
+
+    &:after {
+      background-color: $primaryColor;
+      transform: scale(0);
+      transition: 0.3s;
+    }
+  }
+}
+
+.custom-checkbox {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  input {
+    display: none;
+
+    &:checked ~ .content:after {
+      transform: scale(1);
+    }
+  }
+
+  .content {
+    padding-left: 45px;
+    position: relative;
+    line-height: 30px;
+
+    a {
+      color: $primaryColor;
+    }
+
+    h5 {
+      font-size: 20px;
+      margin: 0;
+    }
+    p {
+      font-size: 16px;
+      color: #666666;
+    }
+
+    &::before,
+    &:after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      border: 1px solid $darkGrey;
+      background-color: white;
+      border-radius: 5px;
+      left: 0;
+      top: 0;
+    }
+
+    &:after {
+      background: $primaryColor url(../../public/images/checkmark.svg) no-repeat
+        center;
+      border-color: $primaryColor;
+      transform: scale(0);
+      transition: 0.3s;
+    }
+  }
+}
+
+textarea.custom-input {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.big-field {
+  padding-bottom: 30px;
+  border-bottom: 1px solid $darkGrey;
+  margin-bottom: 30px;
+}
+
+.custom-switch {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  & input {
+    display: none;
+  }
+  & input:checked ~ span::before {
+    background-color: $primaryColor;
+  }
+  & input:checked ~ span::after {
+    right: 0.5rem;
+  }
+  & span {
+    position: relative;
+    padding-right: 6rem;
+    line-height: 2.5rem;
+  }
+  & span::before {
+    content: '';
+    width: 5rem;
+    height: 2.5rem;
+    border-radius: 2.5rem;
+    background-color: #dbdbdb;
+    position: absolute;
+    right: 0;
+    top: -0.3rem;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+  & span::after {
+    content: '';
+    position: absolute;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background-color: white;
+    right: 3rem;
+    top: 0.2rem;
+    -webkit-transition: 0.3s;
+    transition: 0.3s;
+  }
+}
+
+// .custom-switch input {
+//   display: none;
+// }
+
+// .custom-switch input:checked ~ span::before {
+//   background-color: #80c627;
+// }
+
+// .custom-switch input:checked ~ span::after {
+//   right: 0.5rem;
+// }
+
+// .custom-switch span {
+//   position: relative;
+//   padding-right: 6rem;
+//   line-height: 2.5rem;
+// }
+
+// .custom-switch span::before {
+//   content: '';
+//   width: 5rem;
+//   height: 2.5rem;
+//   border-radius: 2.5rem;
+//   background-color: #dbdbdb;
+//   position: absolute;
+//   right: 0;
+//   top: -0.3rem;
+//   -webkit-transition: 0.3s;
+//   transition: 0.3s;
+// }
+
+// .custom-switch span::after {
+//   content: '';
+//   position: absolute;
+//   width: 1.5rem;
+//   height: 1.5rem;
+//   border-radius: 50%;
+//   background-color: white;
+//   right: 3rem;
+//   top: 0.2rem;
+//   -webkit-transition: 0.3s;
+//   transition: 0.3s;
+// }

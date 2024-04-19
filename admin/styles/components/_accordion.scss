@@ -1,0 +1,148 @@
+.accordion__title {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid $darkGrey;
+  padding: 2rem 0;
+  cursor: pointer;
+  h5 {
+    font-weight: 500;
+  }
+  > i {
+    margin-left: auto;
+    transition: 0.3s;
+  }
+  &.active {
+    i {
+      transform: rotate(90deg);
+    }
+  }
+  &.has-actions {
+    padding: 1rem 0;
+  }
+}
+.accordion__content {
+  display: none;
+  padding-bottom: 3rem;
+  padding-top: 1.5rem;
+}
+
+.menu-accordion {
+  &__title {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: #f1f1f1;
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    &:hover {
+      background-color: #dbdbdb;
+    }
+    h4 {
+      font-weight: 500;
+    }
+    > svg {
+      height: 2rem;
+      width: 2rem;
+      margin-left: 2rem;
+      transform: translateY(-0.5rem);
+    }
+    &.active {
+      svg {
+        transform: rotate(180deg) translateY(-0.5rem);
+      }
+    }
+    &.has-actions {
+      padding: 1rem 0;
+    }
+  }
+  &__content {
+    display: none;
+    padding: 1.5rem 2rem 2rem;
+    background-color: #f9f9f9;
+    &.active {
+      display: block;
+    }
+  }
+  &__input {
+    text-align: left;
+    margin-bottom: 1rem;
+    & label {
+      font-size: 1.6rem;
+      font-weight: 400;
+    }
+    & input {
+      height: 4rem;
+    }
+  }
+  &__btn_wrapper {
+    margin-top: 1.5rem;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    & button {
+      border: none;
+      background: transparent;
+      font-weight: 600;
+      font-family: inherit;
+      color: #666;
+      transition: all 0.2s;
+      cursor: pointer;
+      &:hover {
+        color: #ec1c22;
+      }
+    }
+  }
+  &__btn_seperator {
+    height: 1.5rem;
+    width: 2px;
+    margin: 1rem;
+    display: inline-block;
+    background-color: #666;
+  }
+}
+
+.form_accordion {
+  box-shadow: 0px 0px 5px 0px #ccc;
+  &:not(:last-of-type) {
+    margin-bottom: 2rem;
+  }
+  &__title {
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 1rem 2rem 1rem 2rem;
+    cursor: pointer;
+    h5 {
+      font-weight: 500;
+    }
+    > i {
+      margin-left: auto;
+      transition: 0.3s;
+    }
+    &.active {
+      i {
+        transform: rotate(90deg);
+      }
+    }
+    &.has-actions {
+      padding: 1rem 0;
+    }
+  }
+  &__content {
+    padding-bottom: 10px;
+    display: none;
+    &.active {
+      display: block;
+    }
+    & > div {
+      border: none !important;
+      padding: 0 1rem;
+    }
+    & .editor__body {
+      border: 1px solid #f1f1f1;
+      border-top: none;
+      margin-top: 0;
+      padding: 1rem;
+    }
+  }
+}

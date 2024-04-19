@@ -1,0 +1,7 @@
+schema: 'api/src/schema.graphql'
+extensions:
+  endpoints:
+    default:
+      url: https://nobarun.xyz/graphql
+#      url: https://api.biznian.com/graphql
+#      url: http://naubaun.herokuapp.com/graphql

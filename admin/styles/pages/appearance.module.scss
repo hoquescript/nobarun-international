@@ -1,0 +1,127 @@
+@import '../mixins';
+.menu {
+  &__search {
+    display: flex;
+    align-items: center;
+    background-color: #3a9acd;
+    padding: 0 2rem;
+    position: relative;
+    & > input {
+      background-color: transparent;
+      border: none;
+      color: #fff;
+      margin-right: 5rem;
+      &::placeholder {
+        color: #fff;
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+    & > svg {
+      height: 2rem;
+      width: 2rem;
+      font-size: large;
+      position: absolute;
+      right: 2rem;
+      color: #fff;
+    }
+  }
+  &__wrapper {
+    border: 1px solid #777;
+    padding: 1.5rem 1rem;
+    max-height: 40rem;
+    overflow-y: auto;
+  }
+  &__tab_wrapper {
+    display: flex;
+    margin-bottom: 2rem;
+    & > li {
+      margin: 0 2rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      &:hover {
+        color: #111;
+        font-weight: 600;
+      }
+      &.active {
+        color: #111;
+        font-weight: 600;
+      }
+    }
+  }
+  &__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 2rem;
+    text-align: left;
+  }
+  &__item {
+    padding: 0.5rem;
+    text-transform: capitalize;
+    & > label {
+      cursor: pointer;
+      display: block;
+      & > input {
+        margin-right: 1.5rem;
+      }
+    }
+  }
+  &__custom {
+    margin-top: 2rem;
+    &_title {
+      background-color: #3a9acd;
+      padding: 2rem;
+      font-size: 1.6rem;
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      text-align: left;
+      padding-left: 4.5rem;
+    }
+    &_wrapper {
+      border: 1px solid #777;
+      padding: 1.5rem 2rem;
+    }
+    &_input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      & > label {
+        font-size: 1.6rem;
+        margin-right: 2rem;
+      }
+      & > input {
+        max-width: 25rem;
+        height: 4rem;
+        @include respond(1700px) {
+          max-width: 23rem;
+        }
+        @include respond(1400px) {
+          max-width: 20rem;
+        }
+        @include respond(1250px) {
+          max-width: 19rem;
+        }
+        @include respond(1180px) {
+          max-width: 17rem;
+        }
+      }
+    }
+  }
+  &__sub_list {
+    padding-left: 1rem;
+    padding: 0.8rem 0rem 0.8rem 1.5rem;
+  }
+  &__sub_item {
+    padding: 0.3rem 0;
+    & > label {
+      cursor: pointer;
+      display: block;
+      & > input {
+        margin-right: 1.5rem;
+      }
+    }
+  }
+}

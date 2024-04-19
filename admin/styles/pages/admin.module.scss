@@ -1,0 +1,73 @@
+.addAdmin {
+  margin: 5rem 10rem;
+  &__wrapper {
+    display: flex;
+  }
+  &__form {
+    flex-basis: 75%;
+  }
+  &__upload {
+    flex-basis: 25%;
+  }
+  &__seperator {
+    border-left: 1px solid #ddd;
+    margin: 0 15rem 0 8rem;
+    transform: translateY(-30px);
+  }
+  &__image_upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border-radius: 50%;
+    height: 15rem;
+    width: 15rem;
+    border: 1px dashed #333;
+    cursor: pointer;
+    & > svg {
+      height: 3rem;
+      width: 3rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+.pagination {
+  margin: 5rem 0;
+  &__list {
+    display: inline-flex;
+  }
+  &__item {
+    margin: 0 1rem;
+  }
+  &__button {
+    background-color: #dbdbdb;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+    font-weight: 600;
+    color: #777;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s;
+    &:disabled {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
+    &:hover {
+      background-color: #ababab;
+      color: #fff;
+    }
+    &:focus {
+      outline: none;
+    }
+    &_active {
+      background-color: #ababab;
+      color: #fff;
+    }
+  }
+}

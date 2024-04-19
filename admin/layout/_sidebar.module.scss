@@ -1,0 +1,77 @@
+@import '../styles/mixins';
+
+.sidebar {
+  height: calc(100vh - 7rem);
+  width: 35rem;
+  overflow-y: auto;
+  @include respond(1400px) {
+    width: 32rem;
+  }
+  box-shadow: 1px 3px 6px #ececec;
+  &__list {
+    padding: 3rem 2rem;
+    @include respond(1400px) {
+      padding: 2.5rem 1rem;
+    }
+  }
+  &__item {
+    cursor: pointer;
+    margin-bottom: 1rem;
+  }
+  &__item_active > &__link {
+    background-color: #eee;
+    border-radius: 8px;
+  }
+  &__item:hover > &__link {
+    background-color: #eee;
+    border-radius: 8px;
+  }
+  &__link {
+    transition: background-color 0.5s;
+    padding: 1.7rem 1.8rem 1.7rem 1rem;
+    color: #968c8c;
+    font-size: 1.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    & > div {
+      display: flex;
+      align-items: center;
+      & > span {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 2rem;
+        & > svg {
+          height: 2.5rem;
+          width: 2.5rem;
+          color: #1e8cc5;
+        }
+      }
+    }
+  }
+  &__sublist {
+    background-color: #fff;
+    margin-left: 2rem;
+    margin-top: 0.5rem;
+    height: 0;
+    transform: scaleY(0);
+    transition: height 0.2s ease-in;
+    &_active {
+      transform: scaleY(1);
+      height: auto;
+    }
+  }
+  &__subitem {
+    padding: 1rem 0;
+  }
+  &__sublink {
+    padding: 0.1rem 2rem !important;
+    transition: color 0.2s;
+    &:hover {
+      color: #333;
+    }
+  }
+  &_collapse_icon {
+  }
+}

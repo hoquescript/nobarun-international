@@ -1,0 +1,48 @@
+// CSS variables
+@import './variables';
+
+// To create responsive breakpoints
+@import './mixins';
+
+// To create base css styles
+@import './reset';
+@import './base';
+
+// To declare global css rules
+@import './global';
+
+// To declare grid layout
+@import './grid';
+@import './grids';
+
+// To override library styles
+@import './library';
+
+// Some common components reusable css styles
+@import './components/component';
+@import './components/form';
+@import './components/table';
+@import './components/tables';
+@import './components/product';
+@import './components/dropdown';
+@import './components/wrapper-section';
+@import './components/product-edit';
+@import './components/product-details';
+@import './components/coupon';
+@import './components/sidebar';
+@import './components/buttons';
+@import './components/chips';
+@import './components/tabs';
+@import './components/main';
+@import './components/accordion';
+@import './components/editor';
+@import './components/side-panels';
+@import './components/toolbar';
+@import './components/modal';
+@import './components/alert';
+@import './components/loader';
+// @import './components/icons';
+
+// Utils classes
+@import './utils';
+@import '../node_modules/react-keyed-file-browser/dist/react-keyed-file-browser.css';
