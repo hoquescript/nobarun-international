@@ -1,7 +1,6 @@
-import React from 'react';
 import type { NextPage } from 'next';
-import { getSession } from 'next-auth/client';
 import { GetServerSideProps } from 'next';
+import { getSession } from 'next-auth/client';
 
 import styles from '../styles/pages/dashboard.module.scss';
 
@@ -22,6 +21,7 @@ interface HomeProps {
 }
 const Home: NextPage<HomeProps> = (props) => {
   const { summary, enquiries, recentProducts, recentReviews } = props;
+  console.log(summary);
   return (
     <div className="container center">
       <div className="row">
