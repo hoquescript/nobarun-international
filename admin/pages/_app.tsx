@@ -1,20 +1,20 @@
-import type { AppProps } from 'next/app';
-import { Provider as SessionProvider } from 'next-auth/client';
-import { useRouter } from 'next/router';
-import { Provider } from 'react-redux';
 import { ApolloProvider } from '@apollo/client';
-import { transitions, positions, Provider as AlertProvider } from 'react-alert';
+import { Provider as SessionProvider } from 'next-auth/client';
+import type { AppProps } from 'next/app';
+import { useRouter } from 'next/router';
+import { Provider as AlertProvider, positions, transitions } from 'react-alert';
+import { Provider } from 'react-redux';
 
-import Layout from '../layout';
 import Alert from '../components/shared/Alert';
+import Layout from '../layout';
 
-import useAuthProvider from '../hooks/useAuthProvider';
+import useApolloClient from '../hooks/useApolloClient';
 import store from '../store/configureStore';
 
-import '../styles/main.scss';
-import 'react-nestable/dist/styles/index.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import 'react-nestable/dist/styles/index.css';
 import 'react-quill/dist/quill.snow.css';
+import '../styles/main.scss';
 
 // optional configuration
 const options = {
@@ -28,7 +28,7 @@ const options = {
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const { createApolloClient } = useAuthProvider();
+  const createApolloClient = useApolloClient();
 
   return (
     <SessionProvider session={pageProps.session}>

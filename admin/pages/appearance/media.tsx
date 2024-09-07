@@ -1,9 +1,7 @@
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/client';
 import dynamic from 'next/dynamic';
-import React from 'react';
 import { useState } from 'react';
-import { Icons } from 'react-keyed-file-browser';
 
 const FileBrowser = dynamic(() => import('react-keyed-file-browser'), {
   ssr: false,
@@ -185,8 +183,8 @@ const Media = () => {
     <div className="container">
       <div className="row">
         <div className="col-4">
+          {/* @ts-ignore */}
           <FileBrowser
-            // @ts-ignore
             files={files}
             onCreateFolder={handleCreateFolder}
             onCreateFiles={handleCreateFiles}

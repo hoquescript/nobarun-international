@@ -10,12 +10,13 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.10",
+    "@graphql-tools/mock": "^9.0.4",
+    "@graphql-tools/schema": "^10.0.6",
     "@reduxjs/toolkit": "^1.6.1",
     "axios": "^0.21.4",
     "date-fns": "^2.23.0",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",
-
     "graphql": "^15.5.2",
     "graphql-request": "^3.5.0",
     "html-to-draftjs": "1.4.0",
@@ -77,5 +78,8 @@
   },
   "Backup": {
     "fs-web": "^1.0.1"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }

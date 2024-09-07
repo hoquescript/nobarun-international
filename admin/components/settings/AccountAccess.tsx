@@ -1,7 +1,7 @@
-import React from 'react';
-import { UseFormHandleSubmit, FieldValues } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
+import React from 'react';
 import { useAlert } from 'react-alert';
+import { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
 interface PermissionProps {
   (key: string): {

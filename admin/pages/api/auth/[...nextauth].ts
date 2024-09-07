@@ -1,10 +1,9 @@
-import NextAuth from 'next-auth';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import NextAuth from 'next-auth';
 
 import { gql } from '@apollo/client';
 
 import Providers from 'next-auth/providers';
-import client from '../../../apollo-client';
 import useUserInfo from '../../../hooks/useLoginData';
 
 const LOGIN_QUERY = gql`

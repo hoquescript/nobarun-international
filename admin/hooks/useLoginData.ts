@@ -1,6 +1,5 @@
-import { useRouter } from 'next/router';
 import { gql } from '@apollo/client';
-import client from '../apollo-client';
+import Client from '../config/GraphqlClient';
 
 const GET_LOGIN_DATA = gql`
   query getLoginData($data: LoginInput!) {
@@ -47,8 +46,7 @@ const GET_LOGIN_DATA = gql`
 `;
 
 const useUserInfo = async (email, password) => {
-  const user = await client.query({
-    query: GET_LOGIN_DATA,
+  const user = await Client.request(GET_LOGIN_DATA, {
     variables: { data: { email, password } },
   });
   return user.data?.login;
